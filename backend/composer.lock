@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f01539534831c914d9c3fdc2fb2e26f",
+    "content-hash": "19503d82971bd7e90d1e4979585397b3",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7615,6 +7615,51 @@
             "time": "2020-07-09T08:09:16+00:00"
         },
         {
+            "name": "hurie/laravel-model-generator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://git.dev.siap.id/azhar/laravel-model-generator.git",
+                "reference": "16838fee91c4f0163979ac4e70446efc362f286c"
+            },
+            "require": {
+                "illuminate/support": "^8.12",
+                "nikic/php-parser": "^4.10",
+                "php": "^7.3|^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Hurie\\ModelGenerator\\ModelGeneratorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hurie\\ModelGenerator\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Azhar Mashuri",
+                    "email": "azhar@jayantara.co.id"
+                }
+            ],
+            "description": "Laravel eloquent model generator",
+            "homepage": "https://github.com/hurie/laravel-model-generator",
+            "keywords": [
+                "generator",
+                "laravel",
+                "model"
+            ],
+            "time": "2021-02-09T21:41:40+00:00"
+        },
+        {
             "name": "justinrainbow/json-schema",
             "version": "5.2.10",
             "source": {
@@ -9959,7 +10004,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "yaumil/log-akses": 20
+        "yaumil/log-akses": 20,
+        "hurie/laravel-model-generator": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -25,6 +25,7 @@
         "barryvdh/laravel-ide-helper": "^2.9",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
+        "hurie/laravel-model-generator": "dev-master",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
@@ -75,6 +76,10 @@
         {
             "type": "vcs",
             "url": "https://git.dev.siap.id/yaumil/log-akses.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://git.dev.siap.id/azhar/laravel-model-generator.git"
         }
     ]
 }
