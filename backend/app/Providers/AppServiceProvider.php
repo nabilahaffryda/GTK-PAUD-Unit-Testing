@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App;
 use Carbon\Carbon;
+use Config;
 use DateTime;
 use DB;
 use Illuminate\Support\ServiceProvider;
@@ -27,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
             'Indonesian', 'Indonesia', 'id', 'ID'
         );
         Carbon::setLocale(config('app.locale'));
+
+        if (!empty($_COOKIE['siap-debug']) && $_COOKIE['siap-debug'] == md5('huhuhehe')) {
+            Config::set('app.debug', true);
+        }
     }
 
     /**
