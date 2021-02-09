@@ -22,7 +22,8 @@ return [
      */
     'only'    => [
         'akun',
-        'ptk'
+        'instansi',
+        'ptk',
     ],
 
     /*
