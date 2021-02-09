@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+use Log;
+use Monolog\Handler\StreamHandler;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if (App::runningInConsole()) {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $logger = Log::getLogger();
+            $logger->pushHandler(new StreamHandler("php://stdout"));
+        }
     }
 }
