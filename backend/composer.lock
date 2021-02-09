@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7a5a7e71e676825522c10f40a2c7473",
+    "content-hash": "a812f4bcc3c98357851d765c11ab2dcf",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4862,6 +4862,50 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.9.1"
             },
             "time": "2020-07-08T17:02:28+00:00"
+        },
+        {
+            "name": "yaumil/log-akses",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://git.dev.siap.id/yaumil/log-akses.git",
+                "reference": "e87b53bd2e9f82d3ea83d4f8615a2ff93d211e07"
+            },
+            "require": {
+                "laravel/framework": ">=5.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LogAkses\\LogAksesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LogAkses\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "yaumil",
+                    "email": "yaumil@jayantara.co.id"
+                }
+            ],
+            "description": "User Activity and Laravel Eloquent model data modification logs",
+            "keywords": [
+                "devtools",
+                "laravel",
+                "logging",
+                "lumen",
+                "slim"
+            ],
+            "time": "2020-06-01T05:43:30+00:00"
         }
     ],
     "packages-dev": [
@@ -8559,11 +8603,13 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "yaumil/log-akses": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3|^8.0"
+        "php": "^8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
