@@ -9,6 +9,7 @@ use DB;
 use Illuminate\Support\ServiceProvider;
 use Log;
 use Monolog\Handler\StreamHandler;
+use Sentry;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -62,5 +63,11 @@ class AppServiceProvider extends ServiceProvider
                 Log::debug('SQL: ' . $query);
             });
         }
+
+        Sentry\configureScope(function (Sentry\State\Scope $scope): void {
+            $scope->setTags([
+                'app' => App::runningInConsole() ? 'console' : 'backend',
+            ]);
+        });
     }
 }
