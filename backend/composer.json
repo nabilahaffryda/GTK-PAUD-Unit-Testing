@@ -50,13 +50,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "scripts": {
-            "post-update-cmd": [
-                "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-                "@php artisan ide-helper:generate",
-                "@php artisan ide-helper:meta"
-            ]
-        },
+        "post-update-cmd": [
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
