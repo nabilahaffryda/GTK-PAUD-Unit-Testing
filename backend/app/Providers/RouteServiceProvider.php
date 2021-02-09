@@ -46,6 +46,11 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+
+            Route::prefix('i/{INSTANSI_ID}')
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/instansi.php'));
         });
     }
 
