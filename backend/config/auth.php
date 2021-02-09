@@ -38,13 +38,18 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'akun',
         ],
 
         'api' => [
             'driver' => 'token',
-            'provider' => 'users',
+            'provider' => 'akun',
             'hash' => false,
+        ],
+
+        'ptk' => [
+            'driver' => 'session',
+            'provider' => 'ptk',
         ],
     ],
 
@@ -66,15 +71,15 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'akun' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Akun::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'ptk' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Ptk::class,
+        ],
     ],
 
     /*
