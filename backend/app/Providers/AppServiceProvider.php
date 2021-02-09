@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +14,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        setlocale(LC_TIME,
+            'id_ID.UTF8', 'id_ID.UTF-8', 'id_ID.8859-1', 'id_ID',
+            'IND.UTF8', 'IND.UTF-8', 'IND.8859-1', 'IND',
+            'Indonesian.UTF8', 'Indonesian.UTF-8', 'Indonesian.8859-1',
+            'Indonesian', 'Indonesia', 'id', 'ID'
+        );
+        Carbon::setLocale(config('app.locale'));
     }
 
     /**
