@@ -15077,6 +15077,168 @@
      
 }
 
+    namespace Subfission\Cas\Facades { 
+            /**
+     * 
+     *
+     */ 
+        class Cas {
+                    /**
+         * Authenticates the user based on the current request.
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function authenticate()
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->authenticate();
+        }
+                    /**
+         * Returns the current config.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getConfig()
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->getConfig();
+        }
+                    /**
+         * Retrieve authenticated credentials.
+         * 
+         * Returns either the masqueraded account or the phpCAS user.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function user()
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->user();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getCurrentUser()
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->getCurrentUser();
+        }
+                    /**
+         * Retrieve a specific attribute by key name.  The
+         * attribute returned can be either a string or
+         * an array based on matches.
+         *
+         * @param $key
+         * @return mixed 
+         * @static 
+         */ 
+        public static function getAttribute($key)
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->getAttribute($key);
+        }
+                    /**
+         * Check for the existence of a key in attributes.
+         *
+         * @param $key
+         * @return boolean 
+         * @static 
+         */ 
+        public static function hasAttribute($key)
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->hasAttribute($key);
+        }
+                    /**
+         * Logout of the CAS session and redirect users.
+         *
+         * @param string $url
+         * @param string $service
+         * @static 
+         */ 
+        public static function logout($url = '', $service = '')
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->logout($url, $service);
+        }
+                    /**
+         * Logout the user using the provided URL.
+         *
+         * @param $url
+         * @static 
+         */ 
+        public static function logoutWithUrl($url)
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->logoutWithUrl($url);
+        }
+                    /**
+         * Get the attributes for for the currently connected user. This method
+         * can only be called after authenticate() or an error wil be thrown.
+         *
+         * @return mixed 
+         * @static 
+         */ 
+        public static function getAttributes()
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->getAttributes();
+        }
+                    /**
+         * Checks to see is user is authenticated locally
+         *
+         * @return boolean 
+         * @static 
+         */ 
+        public static function isAuthenticated()
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->isAuthenticated();
+        }
+                    /**
+         * Checks to see is user is globally in CAS
+         *
+         * @return boolean 
+         * @static 
+         */ 
+        public static function checkAuthentication()
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->checkAuthentication();
+        }
+                    /**
+         * Checks to see if masquerading is enabled
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function isMasquerading()
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->isMasquerading();
+        }
+                    /**
+         * Set the attributes for a user when masquerading. This
+         * method has no effect when not masquerading.
+         *
+         * @param array $attr : the attributes of the user.
+         * @static 
+         */ 
+        public static function setAttributes($attr)
+        {
+                        /** @var \Subfission\Cas\CasManager $instance */
+                        return $instance->setAttributes($attr);
+        }
+         
+    }
+     
+}
+
     namespace Illuminate\Http { 
             /**
      * 
@@ -18291,6 +18453,7 @@ namespace  {
             class View extends \Illuminate\Support\Facades\View {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
             class Clockwork extends \Clockwork\Support\Laravel\Facade {}
+            class Cas extends \Subfission\Cas\Facades\Cas {}
      
 }
 
