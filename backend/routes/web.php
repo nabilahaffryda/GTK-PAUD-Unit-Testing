@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function (\Illuminate\Http\Request $request) {
+    return response()->json([
+        'data' => [
+            'domain' => $request->getHost(),
+            'time'   => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
+        ],
+    ]);
 });
