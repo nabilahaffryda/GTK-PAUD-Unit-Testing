@@ -121,6 +121,7 @@ class Akun extends Authenticatable
      * @var array
      */
     protected $casts = [
+        'akun_id'             => 'int',
         'nip'                 => 'string',
         'nama'                => 'string',
         'passwd'              => 'string',

@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 /**
  * App\Models\Ptk
  *
@@ -134,6 +135,7 @@ class Ptk extends Authenticatable
      * @var array
      */
     protected $casts = [
+        'ptk_id'              => 'int',
         'nuptk'               => 'string',
         'nrg'                 => 'string',
         'k_sumber'            => 'int',
