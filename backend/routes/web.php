@@ -21,3 +21,6 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
         ],
     ]);
 });
+
+Route::match(['get', 'post'], 'auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
+Route::match(['get', 'post'], 'auth/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
