@@ -9,5 +9,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => ['cas', 'auth:web', 'forcejson', 'dbtransaction']], function () {
-    Route::get('preferensi', [\App\Http\Controllers\Admin\PreferensiController::class, 'index']);
+    Route::get('preferensi', [\App\Http\Controllers\Instansi\PreferensiController::class, 'index']);
 });
