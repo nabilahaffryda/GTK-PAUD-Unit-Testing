@@ -191,6 +191,7 @@ class Ptk extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'ptk_id',
         'nuptk',
         'nrg',
         'k_sumber',

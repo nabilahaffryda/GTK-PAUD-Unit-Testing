@@ -172,6 +172,7 @@ class Akun extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'akun_id',
         'nip',
         'nama',
         'passwd',
