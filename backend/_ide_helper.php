@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 8.27.0.
+ * Generated for Laravel 8.33.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -254,6 +254,20 @@
         {
                         /** @var \Illuminate\Foundation\Application $instance */
                         return $instance->resourcePath($path);
+        }
+                    /**
+         * Get the path to the views directory.
+         * 
+         * This method returns the first configured path in the array of view paths.
+         *
+         * @param string $path
+         * @return string 
+         * @static 
+         */ 
+        public static function viewPath($path = '')
+        {
+                        /** @var \Illuminate\Foundation\Application $instance */
+                        return $instance->viewPath($path);
         }
                     /**
          * Get the path to the environment file directory.
@@ -1241,6 +1255,7 @@
          * @param \Closure|string $concrete
          * @return mixed 
          * @throws \Illuminate\Contracts\Container\BindingResolutionException
+         * @throws \Illuminate\Contracts\Container\CircularDependencyException
          * @static 
          */ 
         public static function build($concrete)
@@ -1883,6 +1898,7 @@
          * @param string $password
          * @param string $attribute
          * @return bool|null 
+         * @throws \Illuminate\Auth\AuthenticationException
          * @static 
          */ 
         public static function logoutOtherDevices($password, $attribute = 'password')
@@ -5062,7 +5078,7 @@
          * Register an event listener with the dispatcher.
          *
          * @param \Closure|string|array $events
-         * @param \Closure|string|null $listener
+         * @param \Closure|string|array|null $listener
          * @return void 
          * @static 
          */ 
@@ -6341,6 +6357,7 @@
      * @method static \Illuminate\Http\Client\PendingRequest bodyFormat(string $format)
      * @method static \Illuminate\Http\Client\PendingRequest contentType(string $contentType)
      * @method static \Illuminate\Http\Client\PendingRequest retry(int $times, int $sleep = 0)
+     * @method static \Illuminate\Http\Client\PendingRequest sink($to)
      * @method static \Illuminate\Http\Client\PendingRequest stub(callable $callback)
      * @method static \Illuminate\Http\Client\PendingRequest timeout(int $seconds)
      * @method static \Illuminate\Http\Client\PendingRequest withBasicAuth(string $username, string $password)
@@ -6352,6 +6369,8 @@
      * @method static \Illuminate\Http\Client\PendingRequest withToken(string $token, string $type = 'Bearer')
      * @method static \Illuminate\Http\Client\PendingRequest withoutRedirecting()
      * @method static \Illuminate\Http\Client\PendingRequest withoutVerifying()
+     * @method static \Illuminate\Http\Client\PendingRequest dump()
+     * @method static \Illuminate\Http\Client\PendingRequest dd()
      * @method static \Illuminate\Http\Client\Response delete(string $url, array $data = [])
      * @method static \Illuminate\Http\Client\Response get(string $url, array $query = [])
      * @method static \Illuminate\Http\Client\Response head(string $url, array $query = [])
@@ -7103,7 +7122,7 @@
          * Get a mailer instance by name.
          *
          * @param string|null $name
-         * @return \Illuminate\Mail\Mailer 
+         * @return \Illuminate\Contracts\Mail\Mailer 
          * @static 
          */ 
         public static function mailer($name = null)
@@ -7663,7 +7682,7 @@
      * 
      *
      * @method static mixed reset(array $credentials, \Closure $callback)
-     * @method static string sendResetLink(array $credentials)
+     * @method static string sendResetLink(array $credentials, \Closure $callback = null)
      * @method static \Illuminate\Contracts\Auth\CanResetPassword getUser(array $credentials)
      * @method static string createToken(\Illuminate\Contracts\Auth\CanResetPassword $user)
      * @method static void deleteToken(\Illuminate\Contracts\Auth\CanResetPassword $user)
@@ -8148,7 +8167,7 @@
                     /**
          * Register a callback to be executed when creating job payloads.
          *
-         * @param callable $callback
+         * @param callable|null $callback
          * @return void 
          * @static 
          */ 
@@ -9800,7 +9819,7 @@
                         return $instance->getAcceptableContentTypes();
         }
                     /**
-         * Returns true if the request is a XMLHttpRequest.
+         * Returns true if the request is an XMLHttpRequest.
          * 
          * It works if your JavaScript library sets an X-Requested-With HTTP header.
          * It is known to work with common JavaScript frameworks:
@@ -11182,6 +11201,17 @@
         {
                         /** @var \Illuminate\Routing\Router $instance */
                         return $instance->pushMiddlewareToGroup($group, $middleware);
+        }
+                    /**
+         * Flush the router's middleware groups.
+         *
+         * @return \Illuminate\Routing\Router 
+         * @static 
+         */ 
+        public static function flushMiddlewareGroups()
+        {
+                        /** @var \Illuminate\Routing\Router $instance */
+                        return $instance->flushMiddlewareGroups();
         }
                     /**
          * Add a new route parameter binder.
@@ -15156,7 +15186,7 @@
                     /**
          * Binds the given client to the current scope.
          *
-         * @param \Sentry\State\ClientInterface $client The client
+         * @param \Sentry\ClientInterface $client The client
          * @static 
          */ 
         public static function bindClient($client)
@@ -15168,30 +15198,32 @@
          * Captures a message event and sends it to Sentry.
          *
          * @param string $message The message
-         * @param \Sentry\State\Severity $level The severity level of the message
+         * @param \Sentry\Severity|null $level The severity level of the message
+         * @param \Sentry\EventHint|null $hint Object that can contain additional information about the event
          * @static 
          */ 
-        public static function captureMessage($message, $level = null)
+        public static function captureMessage($message, $level = null, $hint = null)
         {
                         /** @var \Sentry\State\Hub $instance */
-                        return $instance->captureMessage($message, $level);
+                        return $instance->captureMessage($message, $level, $hint);
         }
                     /**
          * Captures an exception event and sends it to Sentry.
          *
          * @param \Throwable $exception The exception
+         * @param \Sentry\EventHint|null $hint Object that can contain additional information about the event
          * @static 
          */ 
-        public static function captureException($exception)
+        public static function captureException($exception, $hint = null)
         {
                         /** @var \Sentry\State\Hub $instance */
-                        return $instance->captureException($exception);
+                        return $instance->captureException($exception, $hint);
         }
                     /**
          * Captures a new event using the provided data.
          *
          * @param \Event $event The event being captured
-         * @param \Sentry\State\EventHint|null $hint May contain additional information about the event
+         * @param \Sentry\EventHint|null $hint May contain additional information about the event
          * @static 
          */ 
         public static function captureEvent($event, $hint = null)
@@ -15202,19 +15234,20 @@
                     /**
          * Captures an event that logs the last occurred error.
          *
+         * @param \Sentry\EventHint|null $hint Object that can contain additional information about the event
          * @static 
          */ 
-        public static function captureLastError()
+        public static function captureLastError($hint = null)
         {
                         /** @var \Sentry\State\Hub $instance */
-                        return $instance->captureLastError();
+                        return $instance->captureLastError($hint);
         }
                     /**
          * Records a new breadcrumb which will be attached to future events. They
          * will be added to subsequent events to provide more context on user's
          * actions prior to an error or crash.
          *
-         * @param \Sentry\State\Breadcrumb $breadcrumb The breadcrumb to record
+         * @param \Sentry\Breadcrumb $breadcrumb The breadcrumb to record
          * @return bool Whether the breadcrumb was actually added to the current scope
          * @static 
          */ 
@@ -15253,7 +15286,7 @@
          * Sentry.
          *
          * @param \Sentry\State\array<string,  mixed> $customSamplingContext Additional context that will be passed to the {@see SamplingContext}
-         * @param \Sentry\State\TransactionContext $context Properties of the new transaction
+         * @param \Sentry\Tracing\TransactionContext $context Properties of the new transaction
          * @param \Sentry\State\array<string,  mixed> $customSamplingContext Additional context that will be passed to the {@see SamplingContext}
          * @static 
          */ 
@@ -15277,7 +15310,7 @@
                     /**
          * Sets the span on the Hub.
          *
-         * @param \Sentry\State\Span|null $span The span
+         * @param \Sentry\Tracing\Span|null $span The span
          * @static 
          */ 
         public static function setSpan($span)
