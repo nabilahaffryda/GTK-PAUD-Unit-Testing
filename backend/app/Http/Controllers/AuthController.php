@@ -3,61 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\FlowException;
-use App\Models\Akun;
-use App\Models\Ptk;
+use Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Subfission\Cas\Facades\Cas;
 
 class AuthController extends Controller
 {
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     * @throws FlowException
+     */
     public function login(Request $request)
     {
-        $instansiId = $request->get('instansi_id');
-
         Cas::authenticate();
-        if (Cas::isAuthenticated()) {
-            $pasporId = Cas::getCurrentUser();
+        $pasporId = Cas::user();
 
-            if (Auth::guard('web')->check() && Auth::guard('web')->id() != $pasporId) {
-                Auth::guard('web')->logout();
-            }
-
-            if (Auth::guard('ptk')->check() && ptk()->paspor_id != $pasporId) {
-                Auth::guard('ptk')->logout();
-            }
-
-            if ($akun = Akun::wherePasporId($pasporId)->first()) {
-               Auth::guard('web')->login($akun);
-               app('log-akses')->logAkses();
-            }
-
-            if ($ptk = Ptk::wherePasporId($pasporId)->first()) {
-                Auth::guard('ptk')->login($ptk);
-                app('log-akses')->logAkses();
-            }
-
-            if (Auth::guard('web')->check()) {
-                if ($instansiId) {
-                    return redirect(config('app.ui_url') . '/i/' . $instansiId . '/home');
-                }
-
-                return redirect(config('app.ui_url'));
-            }
-
-            if (Auth::guard('ptk')->check()) {
-                $ptk = ptk();
-
-                // TODO: cek syarat
-
-                return redirect(config('app.ui_url'));
-            }
+        if ($akun = Auth::guard('web')->loginUsingId($pasporId)) {
+            app('log-akses')->logAkses();
         }
 
-        request()->merge(['format' => 'html']);
+        if ($ptk = Auth::guard('ptk')->loginUsingId($pasporId)) {
+            app('log-akses')->logAkses();
+        }
 
-        $error = "Untuk masuk silakan menggunakan akun Admin Program Sekolah Penggerak";
-        throw new FlowException($error);
+        if (!$akun && !$ptk) {
+            $error = "Untuk masuk silakan menggunakan akun Program Diklat GTK PAUD";
+            throw new FlowException($error);
+        }
+
+        if ($akun) {
+            $instansiId = $request->get('instansi_id');
+            if ($instansiId) {
+                return redirect(config('app.ui_url') . '/i/' . $instansiId . '/home');
+            }
+
+            return redirect(config('app.ui_url'));
+        }
+
+        // TODO: cek syarat GTK
+        return redirect(config('app.ui_url'));
     }
 
     public function logout(Request $request)
