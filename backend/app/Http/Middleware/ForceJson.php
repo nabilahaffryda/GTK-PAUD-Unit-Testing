@@ -20,7 +20,10 @@ class ForceJson
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        $request->headers->set('Accept', 'application/json');
+        if (!$request->has('format') || $request->get('format') == 'json') {
+            $request->headers->set('Accept', 'application/json');
+        }
+
         return $next($request);
     }
 }
