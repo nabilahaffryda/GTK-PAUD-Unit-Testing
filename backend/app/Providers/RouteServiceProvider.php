@@ -47,6 +47,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
 
+            Route::prefix('gtk')
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/gtk.php'));
+
             Route::prefix('i/{INSTANSI_ID}')
                 ->middleware('web')
                 ->namespace($this->namespace)
