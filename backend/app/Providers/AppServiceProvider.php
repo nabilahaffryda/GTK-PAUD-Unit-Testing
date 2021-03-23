@@ -47,8 +47,12 @@ class AppServiceProvider extends ServiceProvider
             $logger->pushHandler(new StreamHandler("php://stdout"));
         }
 
-        if (App::runningInConsole() && config('app.debug')) {
+        if (App::runningInConsole()) {
             DB::listen(function ($event) {
+                if (!config('app.debug')) {
+                    return;
+                }
+
                 // Format binding data for sql insertion
                 $bindings = [];
                 foreach ($event->bindings as $binding) {
