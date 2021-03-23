@@ -236,4 +236,14 @@ class Ptk extends Authenticatable
         'is_aktif',
         'akun_id',
     ];
+
+    /**
+     * Get the name of the unique identifier for the user.
+     *
+     * @return string
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'paspor_id';
+    }
 }

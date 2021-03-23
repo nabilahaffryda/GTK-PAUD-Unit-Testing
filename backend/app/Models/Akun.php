@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
@@ -47,6 +49,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $is_aktif
  * @property null|string $admin_id
  *
+ * @property-read Collection|AkunInstansi[] $akunInstansis
+ *
  * @method static Builder|Akun whereAkunId($value)
  * @method static Builder|Akun whereNip($value)
  * @method static Builder|Akun whereNama($value)
@@ -84,6 +88,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static Builder|Akun whereGelarBelakang($value)
  * @method static Builder|Akun whereIsAktif($value)
  * @method static Builder|Akun whereAdminId($value)
+ *
+ * @method static Akun findOrFail($id, $columns = [])
  */
 class Akun extends Authenticatable
 {
@@ -210,4 +216,22 @@ class Akun extends Authenticatable
         'is_aktif',
         'admin_id',
     ];
+
+    /**
+     * @return HasMany|Builder|AkunInstansi
+     */
+    public function akunInstansis()
+    {
+        return $this->hasMany('App\Models\AkunInstansi', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * Get the name of the unique identifier for the user.
+     *
+     * @return string
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'paspor_id';
+    }
 }
