@@ -9,6 +9,6 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::group(['middleware' => ['auth:web', 'forcejson', 'instansi', 'dbtransaction']], function () {
+Route::group(['middleware' => ['auth:web', 'forcejson', 'valid.instansi', 'valid.akses', 'dbtransaction']], function () {
     Route::get('preferensi', [PreferensiController::class, 'index']);
 });

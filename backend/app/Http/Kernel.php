@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'dbtransaction' => \App\Http\Middleware\DBTransaction::class,
         'forcejson' => \App\Http\Middleware\ForceJson::class,
-        'instansi' => \App\Http\Middleware\ValidateInstansi::class,
+        'valid.akses' => \App\Http\Middleware\ValidateAkses::class,
+        'valid.instansi' => \App\Http\Middleware\ValidateInstansi::class,
     ];
 }
