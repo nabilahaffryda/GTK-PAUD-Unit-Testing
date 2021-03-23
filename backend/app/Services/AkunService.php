@@ -23,43 +23,43 @@ class AkunService
     public function kGroups()
     {
         return [
-            MGroup::AI_PUSAT,
-            MGroup::AP_PSP_PUSAT,
-            MGroup::ADM_PSP_PUSAT,
-            MGroup::TIM_VERVAL_KS_PSP,
-            MGroup::TIM_VERVAL_PA_PSP,
-            MGroup::PEMANTAU_PSP_PUSAT,
-            MGroup::PEMANTAU_ASESOR_KS_PSP,
-            MGroup::PEMANTAU_ASESOR_PA_PSP,
-            MGroup::ASESOR_KS_PSP,
-            MGroup::ASESOR_PA_PSP,
+            // MGroup::AI_PUSAT,
+            // MGroup::AP_PSP_PUSAT,
+            // MGroup::ADM_PSP_PUSAT,
+            // MGroup::TIM_VERVAL_KS_PSP,
+            // MGroup::TIM_VERVAL_PA_PSP,
+            // MGroup::PEMANTAU_PSP_PUSAT,
+            // MGroup::PEMANTAU_ASESOR_KS_PSP,
+            // MGroup::PEMANTAU_ASESOR_PA_PSP,
+            // MGroup::ASESOR_KS_PSP,
+            // MGroup::ASESOR_PA_PSP,
         ];
     }
 
     public static function childGroup($kGroup)
     {
         $groups = [
-            MGroup::AI_PUSAT      => [
-                MGroup::AP_PSP_PUSAT,
-            ],
-            MGroup::AP_PSP_PUSAT  => [
-                MGroup::ADM_PSP_PUSAT,
-                MGroup::PEMANTAU_PSP_PUSAT,
-                MGroup::TIM_VERVAL_KS_PSP,
-                MGroup::TIM_VERVAL_PA_PSP,
-                MGroup::PEMANTAU_ASESOR_KS_PSP,
-                MGroup::PEMANTAU_ASESOR_PA_PSP,
-                MGroup::ASESOR_KS_PSP,
-                MGroup::ASESOR_PA_PSP
-            ],
-            MGroup::ADM_PSP_PUSAT => [
-                MGroup::TIM_VERVAL_KS_PSP,
-                MGroup::TIM_VERVAL_PA_PSP,
-                MGroup::PEMANTAU_ASESOR_KS_PSP,
-                MGroup::PEMANTAU_ASESOR_PA_PSP,
-                MGroup::ASESOR_KS_PSP,
-                MGroup::ASESOR_PA_PSP
-            ],
+            // MGroup::AI_PUSAT      => [
+            //     MGroup::AP_PSP_PUSAT,
+            // ],
+            // MGroup::AP_PSP_PUSAT  => [
+            //     MGroup::ADM_PSP_PUSAT,
+            //     MGroup::PEMANTAU_PSP_PUSAT,
+            //     MGroup::TIM_VERVAL_KS_PSP,
+            //     MGroup::TIM_VERVAL_PA_PSP,
+            //     MGroup::PEMANTAU_ASESOR_KS_PSP,
+            //     MGroup::PEMANTAU_ASESOR_PA_PSP,
+            //     MGroup::ASESOR_KS_PSP,
+            //     MGroup::ASESOR_PA_PSP
+            // ],
+            // MGroup::ADM_PSP_PUSAT => [
+            //     MGroup::TIM_VERVAL_KS_PSP,
+            //     MGroup::TIM_VERVAL_PA_PSP,
+            //     MGroup::PEMANTAU_ASESOR_KS_PSP,
+            //     MGroup::PEMANTAU_ASESOR_PA_PSP,
+            //     MGroup::ASESOR_KS_PSP,
+            //     MGroup::ASESOR_PA_PSP
+            // ],
         ];
 
         return $groups[$kGroup] ?? [];
