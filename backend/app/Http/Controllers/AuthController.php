@@ -73,7 +73,5 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         cas()->logout(config('simpkb.url'));
-
-        return redirect('/');
     }
 }
