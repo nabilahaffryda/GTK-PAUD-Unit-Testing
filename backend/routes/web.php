@@ -14,12 +14,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function (\Illuminate\Http\Request $request) {
-    return response()->json([
+    $response = [
         'data' => [
             'domain' => $request->getHost(),
             'time'   => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
         ],
-    ]);
+    ];
+
+    if (akun()) {
+        $response['data']['akun'] = akun();
+    }
+
+    if (ptk()) {
+        $response['data']['ptk'] = ptk();
+    }
+
+    return response()->json($response);
 });
 
 Route::match(['get', 'post'], 'auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
