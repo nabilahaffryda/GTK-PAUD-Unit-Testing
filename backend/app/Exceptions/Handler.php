@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use DB;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -34,7 +35,9 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            if (app()->bound('sentry')) {
+            DB::rollBack(0);
+
+            if (app()->bound('sentry') && $this->shouldReport($e)) {
                 app('sentry')->captureException($e);
             }
         });
