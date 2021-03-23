@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Auth\CasUserProvider;
+use Auth;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -25,6 +27,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Auth::provider('cas', function ($app, array $config) {
+            return new CasUserProvider($config['model']);
+        });
     }
 }

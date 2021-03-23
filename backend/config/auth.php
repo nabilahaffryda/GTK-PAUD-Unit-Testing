@@ -72,12 +72,12 @@ return [
 
     'providers' => [
         'akun' => [
-            'driver' => 'eloquent',
+            'driver' => 'cas',
             'model' => App\Models\Akun::class,
         ],
 
         'ptk' => [
-            'driver' => 'eloquent',
+            'driver' => 'cas',
             'model' => App\Models\Ptk::class,
         ],
     ],
