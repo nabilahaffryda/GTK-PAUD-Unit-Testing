@@ -135,14 +135,15 @@ class Ptk extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'ptk_id'              => 'int',
         'nuptk'               => 'string',
         'nrg'                 => 'string',
         'k_sumber'            => 'int',
         'nama'                => 'string',
         'tmp_lahir'           => 'string',
+        'tgl_lahir'           => 'date:Y-m-d',
         'kelamin'             => 'string',
         'golongan'            => 'string',
+        'tmt_angkat'          => 'date:Y-m-d',
         'k_pegawai'           => 'int',
         'k_kualifikasi'       => 'int',
         'jenjang'             => 'string',
@@ -174,6 +175,7 @@ class Ptk extends Authenticatable
         'dapodik_ptk_id'      => 'string',
         'dapodik_nama'        => 'string',
         'kebutuhan_khusus_id' => 'int',
+        'wkt_sinkron'         => 'datetime',
         'is_aktif'            => 'int',
         'akun_id'             => 'string',
     ];

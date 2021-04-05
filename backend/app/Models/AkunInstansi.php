@@ -56,13 +56,14 @@ class AkunInstansi extends Eloquent
      * @var array
      */
     protected $casts = [
-        'akun_instansi_id' => 'int',
-        'akun_id'          => 'string',
-        'k_group'          => 'int',
-        'instansi_id'      => 'int',
-        'token'            => 'string',
-        'is_aktif'         => 'string',
-        'admin_id'         => 'string',
+        'akun_id'     => 'string',
+        'k_group'     => 'int',
+        'instansi_id' => 'int',
+        'token'       => 'string',
+        'is_aktif'    => 'string',
+        'admin_id'    => 'string',
+        'created_at'  => 'datetime',
+        'updated_at'  => 'datetime',
     ];
 
     /**
@@ -104,4 +105,3 @@ class AkunInstansi extends Eloquent
         return $this->belongsTo('App\Models\MGroup', 'k_group', 'k_group');
     }
 }
-

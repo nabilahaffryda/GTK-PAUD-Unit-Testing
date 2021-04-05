@@ -44,10 +44,9 @@ class PaudGroupAkses extends Eloquent
      * @var array
      */
     protected $casts = [
-        'paud_group_akses_id' => 'int',
-        'paud_akses_id'       => 'int',
-        'k_group'             => 'int',
-        'is_aktif'            => 'int',
+        'paud_akses_id' => 'int',
+        'k_group'       => 'int',
+        'is_aktif'      => 'int',
     ];
 
     /**

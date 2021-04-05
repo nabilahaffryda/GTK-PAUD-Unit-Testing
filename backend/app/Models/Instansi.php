@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $nama_rkakl
  *
  * @property-read Collection|AkunInstansi[] $akunInstansis
+ * @property-read Collection|PaudInstansi[] $paudInstansisPaud
  *
  * @method static Builder|Instansi whereInstansiId($value)
  * @method static Builder|Instansi whereKJenisInstansi($value)
@@ -79,7 +80,6 @@ class Instansi extends Eloquent
      * @var array
      */
     protected $casts = [
-        'instansi_id'        => 'int',
         'k_jenis_instansi'   => 'int',
         'nama'               => 'string',
         'alamat'             => 'string',
@@ -138,5 +138,13 @@ class Instansi extends Eloquent
     public function akunInstansis()
     {
         return $this->hasMany('App\Models\AkunInstansi', 'instansi_id', 'instansi_id');
+    }
+
+    /**
+     * @return HasMany|Builder|PaudInstansi
+     */
+    public function paudInstansisPaud()
+    {
+        return $this->hasMany('App\Models\PaudInstansi', 'paud_instansi_id', 'instansi_id');
     }
 }

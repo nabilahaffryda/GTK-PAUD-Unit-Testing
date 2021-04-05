@@ -236,6 +236,7 @@ class MGroup extends Eloquent
      * @var string[]
      */
     protected $fillable = [
+        'k_group',
         'singkat',
         'keterangan',
         'k_jenis_instansi',

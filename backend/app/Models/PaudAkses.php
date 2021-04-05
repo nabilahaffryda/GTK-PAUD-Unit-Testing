@@ -46,11 +46,10 @@ class PaudAkses extends Eloquent
      * @var array
      */
     protected $casts = [
-        'paud_akses_id' => 'int',
-        'akses'         => 'string',
-        'label'         => 'string',
-        'guard'         => 'string',
-        'is_aktif'      => 'int',
+        'akses'    => 'string',
+        'label'    => 'string',
+        'guard'    => 'string',
+        'is_aktif' => 'int',
     ];
 
     /**
