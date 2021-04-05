@@ -25,7 +25,7 @@
         "barryvdh/laravel-ide-helper": "^2.9",
         "facade/ignition": "^2.7",
         "fakerphp/faker": "^1.14",
-        "hurie/laravel-model-generator": "dev-master",
+        "hurie/laravel-generator": "dev-master",
         "mockery/mockery": "^1.4",
         "nunomaduro/collision": "^5.3",
         "phpunit/phpunit": "^9.5"
@@ -81,7 +81,7 @@
         },
         {
             "type": "vcs",
-            "url": "https://git.dev.siap.id/azhar/laravel-model-generator.git"
+            "url": "https://git.dev.siap.id/azhar/laravel-generator.git"
         }
     ]
 }

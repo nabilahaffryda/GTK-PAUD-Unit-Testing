@@ -2,7 +2,7 @@
 /public/hot
 /public/storage
 /storage/*.key
-/storage/model
+/storage/generator/*
 /storage/clockwork.sqlite
 /vendor
 .env
