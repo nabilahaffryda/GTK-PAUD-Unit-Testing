@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|int $k_jenis_instansi
  *
  * @property-read Collection|AkunInstansi[] $akunInstansis
+ * @property-read Collection|PaudAdmin[] $paudAdmins
  * @property-read Collection|PaudGroupAkses[] $paudGroupAkseses
  *
  * @method static Builder|MGroup whereKGroup($value)
@@ -248,6 +249,14 @@ class MGroup extends Eloquent
     public function akunInstansis()
     {
         return $this->hasMany('App\Models\AkunInstansi', 'k_group', 'k_group');
+    }
+
+    /**
+     * @return HasMany|Builder|PaudAdmin
+     */
+    public function paudAdmins()
+    {
+        return $this->hasMany('App\Models\PaudAdmin', 'k_group', 'k_group');
     }
 
     /**

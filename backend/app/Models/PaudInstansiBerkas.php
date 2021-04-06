@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $paud_instansi_berkas_id
  * @property int $paud_instansi_id
+ * @property null|int $instansi_id
+ * @property null|int $tahun
+ * @property null|int $angkatan
  * @property int $k_berkas_paud
  * @property null|string $nama
  * @property null|string $file
@@ -19,11 +22,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  *
+ * @property-read Instansi $instansi
  * @property-read MBerkasPaud $mBerkasPaud
  * @property-read PaudInstansi $paudInstansi
  *
  * @method static Builder|PaudInstansiBerkas wherePaudInstansiBerkasId($value)
  * @method static Builder|PaudInstansiBerkas wherePaudInstansiId($value)
+ * @method static Builder|PaudInstansiBerkas whereInstansiId($value)
+ * @method static Builder|PaudInstansiBerkas whereTahun($value)
+ * @method static Builder|PaudInstansiBerkas whereAngkatan($value)
  * @method static Builder|PaudInstansiBerkas whereKBerkasPaud($value)
  * @method static Builder|PaudInstansiBerkas whereNama($value)
  * @method static Builder|PaudInstansiBerkas whereFile($value)
@@ -48,19 +55,15 @@ class PaudInstansiBerkas extends Eloquent
     protected $primaryKey = 'paud_instansi_berkas_id';
 
     /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
      * The attributes that should be cast.
      *
      * @var array
      */
     protected $casts = [
         'paud_instansi_id' => 'int',
+        'instansi_id'      => 'int',
+        'tahun'            => 'int',
+        'angkatan'         => 'int',
         'k_berkas_paud'    => 'int',
         'nama'             => 'string',
         'file'             => 'string',
@@ -77,11 +80,22 @@ class PaudInstansiBerkas extends Eloquent
     protected $fillable = [
         'paud_instansi_berkas_id',
         'paud_instansi_id',
+        'instansi_id',
+        'tahun',
+        'angkatan',
         'k_berkas_paud',
         'nama',
         'file',
         'diklat',
     ];
+
+    /**
+     * @return BelongsTo|Builder|Instansi
+     */
+    public function instansi()
+    {
+        return $this->belongsTo('App\Models\Instansi', 'instansi_id', 'instansi_id');
+    }
 
     /**
      * @return BelongsTo|Builder|MBerkasPaud

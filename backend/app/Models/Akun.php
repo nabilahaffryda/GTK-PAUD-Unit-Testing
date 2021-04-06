@@ -50,6 +50,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property null|string $admin_id
  *
  * @property-read Collection|AkunInstansi[] $akunInstansis
+ * @property-read Collection|PaudAdmin[] $paudAdmins
  *
  * @method static Builder|Akun whereAkunId($value)
  * @method static Builder|Akun whereNip($value)
@@ -223,6 +224,14 @@ class Akun extends Authenticatable
     public function akunInstansis()
     {
         return $this->hasMany('App\Models\AkunInstansi', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return HasMany|Builder|PaudAdmin
+     */
+    public function paudAdmins()
+    {
+        return $this->hasMany('App\Models\PaudAdmin', 'akun_id', 'akun_id');
     }
 
     /**

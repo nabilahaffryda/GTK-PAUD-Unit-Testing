@@ -30,7 +30,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $nama_rkakl
  *
  * @property-read Collection|AkunInstansi[] $akunInstansis
- * @property-read Collection|PaudInstansi[] $paudInstansisPaud
+ * @property-read Collection|PaudAdmin[] $paudAdmins
+ * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
+ * @property-read Collection|PaudInstansi[] $paudInstansis
  *
  * @method static Builder|Instansi whereInstansiId($value)
  * @method static Builder|Instansi whereKJenisInstansi($value)
@@ -138,6 +140,30 @@ class Instansi extends Eloquent
     public function akunInstansis()
     {
         return $this->hasMany('App\Models\AkunInstansi', 'instansi_id', 'instansi_id');
+    }
+
+    /**
+     * @return HasMany|Builder|PaudAdmin
+     */
+    public function paudAdmins()
+    {
+        return $this->hasMany('App\Models\PaudAdmin', 'instansi_id', 'instansi_id');
+    }
+
+    /**
+     * @return HasMany|Builder|PaudInstansiBerkas
+     */
+    public function paudInstansiBerkases()
+    {
+        return $this->hasMany('App\Models\PaudInstansiBerkas', 'instansi_id', 'instansi_id');
+    }
+
+    /**
+     * @return HasMany|Builder|PaudInstansi
+     */
+    public function paudInstansis()
+    {
+        return $this->hasMany('App\Models\PaudInstansi', 'instansi_id', 'instansi_id');
     }
 
     /**

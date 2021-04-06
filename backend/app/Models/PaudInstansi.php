@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * App\Models\PaudInstansi
  *
  * @property int $paud_instansi_id
+ * @property int $instansi_id
+ * @property null|int $tahun
+ * @property null|int $angkatan
  * @property int $k_verval_paud
  * @property null|string $kodepos
  * @property null|string $nama_penanggung_jawab
@@ -25,11 +28,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  *
+ * @property-read Instansi $instansi
  * @property-read MVervalPaud $mVervalPaud
- * @property-read Instansi $paudInstansi
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
  *
  * @method static Builder|PaudInstansi wherePaudInstansiId($value)
+ * @method static Builder|PaudInstansi whereInstansiId($value)
+ * @method static Builder|PaudInstansi whereTahun($value)
+ * @method static Builder|PaudInstansi whereAngkatan($value)
  * @method static Builder|PaudInstansi whereKVervalPaud($value)
  * @method static Builder|PaudInstansi whereKodepos($value)
  * @method static Builder|PaudInstansi whereNamaPenanggungJawab($value)
@@ -59,18 +65,14 @@ class PaudInstansi extends Eloquent
     protected $primaryKey = 'paud_instansi_id';
 
     /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
      * The attributes that should be cast.
      *
      * @var array
      */
     protected $casts = [
+        'instansi_id'           => 'int',
+        'tahun'                 => 'int',
+        'angkatan'              => 'int',
         'k_verval_paud'         => 'int',
         'kodepos'               => 'string',
         'nama_penanggung_jawab' => 'string',
@@ -91,6 +93,9 @@ class PaudInstansi extends Eloquent
      */
     protected $fillable = [
         'paud_instansi_id',
+        'instansi_id',
+        'tahun',
+        'angkatan',
         'k_verval_paud',
         'kodepos',
         'nama_penanggung_jawab',
@@ -103,6 +108,14 @@ class PaudInstansi extends Eloquent
     ];
 
     /**
+     * @return BelongsTo|Builder|Instansi
+     */
+    public function instansi()
+    {
+        return $this->belongsTo('App\Models\Instansi', 'instansi_id', 'instansi_id');
+    }
+
+    /**
      * @return BelongsTo|Builder|MVervalPaud
      */
     public function mVervalPaud()
@@ -111,18 +124,18 @@ class PaudInstansi extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|Instansi
-     */
-    public function paudInstansi()
-    {
-        return $this->belongsTo('App\Models\Instansi', 'paud_instansi_id', 'instansi_id');
-    }
-
-    /**
      * @return HasMany|Builder|PaudInstansiBerkas
      */
     public function paudInstansiBerkases()
     {
         return $this->hasMany('App\Models\PaudInstansiBerkas', 'paud_instansi_id', 'paud_instansi_id');
+    }
+
+    /**
+     * @return BelongsTo|Builder|Instansi
+     */
+    public function paudInstansi()
+    {
+        return $this->belongsTo('App\Models\Instansi', 'paud_instansi_id', 'instansi_id');
     }
 }
