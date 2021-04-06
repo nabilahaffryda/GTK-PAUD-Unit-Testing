@@ -23,7 +23,7 @@ export const actions = {
   async getPreferensi({ commit, rootState }, reset) {
     if (state.data && !reset) return Promise.resolve(state.data);
     const id = rootState.auth.instansi_id;
-    const responses = await http.get(`psp/i/${id}/preferensi`, { params: {} }).then(({ data }) => data);
+    const responses = await http.get(`i/${id}/preferensi`, { params: {} }).then(({ data }) => data);
     commit('SET_DATA', responses ?? null);
     return Promise.resolve(responses ?? null);
   },

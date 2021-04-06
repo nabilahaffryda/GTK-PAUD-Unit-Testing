@@ -5,7 +5,6 @@ import { isObject } from '@utils/format';
 import routesAuth from './routes/auth';
 import MenusGtk from '@configs/menus.gtk';
 import MenusIns from '@configs/menus.instansi';
-import { duration, getDeepObj } from '@/utils/format';
 
 const roleMenus = {
   gtk: MenusGtk,
@@ -38,117 +37,15 @@ router.beforeEach((to, from, next) => {
   // Page yang perlu login
   // perlu pengecekan user login
   async function isUserLogin() {
-    const logon = await store.dispatch('auth/checkUser');
-    return logon;
+    return await store.dispatch('auth/checkUser');
   }
 
   async function getPreferensi(id) {
-    const preferensi = await store.dispatch('auth/userPreferensi', id);
-    return preferensi;
+    return await store.dispatch('auth/userPreferensi', id);
   }
 
-  function getMenuGtk(preferensi) {
-    // Belum register
-    const isKasek = isObject(preferensi?.kasek ?? {});
-    const isRegistered = isKasek ? isObject(preferensi?.peserta ?? {}) : isObject(preferensi?.instruktur ?? {});
-    const syarat = preferensi?.peserta_status?.syarat ?? {};
-
-    if (!isRegistered || (isKasek && !syarat?.jenjang)) return [];
-
-    // Sudah
-    const tahap = isKasek
-      ? preferensi.peserta && Number(preferensi.peserta.lulus_tahap) === 1
-        ? 2
-        : 1
-      : preferensi?.instruktur?.gelombang ?? 1;
-
-    const roleMenu = ((roleMenus['gtk'] && roleMenus['gtk'][tahap]) || []).filter((item) => {
-      return item.key !== (!isKasek ? 'tbs' : '');
-    });
-
-    const menus = roleMenu.map((item) => {
-      let temp = Object.assign({}, item);
-      const isTutup = isKasek
-        ? preferensi?.peserta_status.tutup ?? false
-        : preferensi?.instruktur_status?.tutup ?? false;
-      const kVerval = isKasek
-        ? getDeepObj(preferensi, 'peserta.k_verval_psp')
-        : getDeepObj(preferensi, 'instruktur.k_verval_psp');
-
-      if (temp.akses && ['cv', 'esai'].includes(item.key)) {
-        temp['desc'] = item.desc + (isTutup ? ` - <span class="info--text">${isTutup}</span>` : '');
-      }
-
-      // atur menu tbs dan tbs-demo
-      const prefTbs = preferensi?.peserta?.psp_profil_tbses ?? [];
-
-      if (prefTbs.length) {
-        const configTbs = prefTbs.filter((item) => !!Number(item.is_demo) === false)[0] || {};
-        const configTbsDemo = prefTbs.filter((item) => !!Number(item.is_demo) === true)[0] || {};
-        const isBukaTbsDemo = configTbsDemo.is_berlangsung;
-        const isBukaTbs = configTbs.is_berlangsung;
-        const timezone = 'WIB';
-        const vervalTolak = kVerval === 4;
-
-        if (temp.akses && !vervalTolak && ['tbs-demo'].includes(item.key)) temp['disable'] = !isBukaTbsDemo;
-        if (temp.akses && !vervalTolak && ['tbs'].includes(item.key)) temp['disable'] = !isBukaTbs;
-
-        if (['tbs-demo'].includes(item.key)) {
-          temp.subtitle = isObject(configTbsDemo)
-            ? duration(configTbsDemo.wkt_mulai, configTbsDemo.wkt_selesai)
-            : 'Belum ada Jadwal';
-
-          temp.desc = isObject(configTbsDemo)
-            ? `
-            Pelaksanaan <b>uji coba</b> Tes Bakat Skolastik ini akan tersedia pada tanggal
-            <b>
-            ${duration(configTbs.wkt_mulai, configTbs.wkt_selesai, {
-              useTime: true,
-              timeSeparator: ' s.d ',
-              timeprefix: 'mulai',
-              zone: timezone,
-            })}
-            </b>
-          `
-            : 'Pelaksanaan <b>uji coba</b> Tes Bakat Skolastik ini akan menunggu jadwal dari Pusat';
-        }
-
-        if (['tbs'].includes(item.key) && isObject(configTbs)) {
-          temp.desc = `
-            Tes ini akan tersedia pada tanggal
-            <b>
-            ${duration(configTbs.wkt_mulai, configTbs.wkt_selesai, {
-              useTime: true,
-              timeSeparator: ' s.d ',
-              timeprefix: 'mulai',
-              zone: timezone,
-            })}</b>. Informasi akan kami berikan melalui surel/email
-            `;
-        }
-      } else {
-        if (['tbs-demo'].includes(item.key)) temp['akses'] = false;
-      }
-
-      if (temp && temp.href) {
-        temp.href = temp.href.replace(
-          /#PORTAL_URL#/g,
-          'https://sekolah.penggerak.kemdikbud.go.id/programsekolahpenggerak/'
-        );
-        temp.href = temp.href.replace(/#SIM_PKB_URL#/g, preferensi?.simpkb);
-      }
-
-      if (temp && temp.key === 'microteaching') {
-        temp.disable = Number(preferensi.peserta.k_proses_simulasi_psp) < 3;
-        const wktSimulasi = duration(
-          getDeepObj(preferensi, `config.peserta.simulasi.${preferensi?.peserta?.gelombang ?? 1}.tgl_buka`),
-          getDeepObj(preferensi, `config.peserta.simulasi.${preferensi?.peserta?.gelombang ?? 1}.tgl_tutup`)
-        );
-        temp.desc = `Tes ini akan berlangsung pada tanggal <b>${wktSimulasi || 'menunggu jadwal dari Pusat'}</b>`;
-      }
-
-      return temp;
-    });
-    return menus;
+  function getMenuGtk() {
+    return [];
   }
 
   function getMenuIns(preferensi) {

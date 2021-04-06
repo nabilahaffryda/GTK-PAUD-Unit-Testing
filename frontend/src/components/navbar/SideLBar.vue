@@ -8,8 +8,7 @@
     <v-list class="blue darken-4">
       <v-list-item>
         <v-list-item-content>
-          <span class="white--text">Selamat Datang di Aplikasi<br /></span>
-          <h2 class="white--text">Sekolah Penggerak</h2><br />
+          <span class="white--text">Selamat Datang</span>
         </v-list-item-content>
       </v-list-item>
     </v-list>

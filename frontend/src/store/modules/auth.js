@@ -94,14 +94,16 @@ export const actions = {
       return Promise.resolve(done);
     }
 
-    const { login, ...data } = await $get.get('/');
+    const resp = await $http.get('/');
+    const { data } = resp.data || {};
+    const isLogin =
+      (state && state.isLogin) || (data?.akun && isObject(data?.akun)) || (data?.ptk && isObject(data?.ptk));
     // Error belum login
-    if (!login) return Promise.reject(new Error('User belum login!'));
-    commit('SET_LOGIN', login);
+    if (!isLogin) return Promise.reject(new Error('User belum login!'));
+    commit('SET_LOGIN', isLogin);
     commit('SET_AKUN', data?.akun);
     commit('SET_PTK', data?.ptk);
-    commit('SET_ENV', data?.env);
-    commit('SET_INSTANSI_ID', data?.instansi_id);
+    commit('SET_INSTANSI_ID', data?.instansi_id || 800001);
 
     const role = data?.akun && isObject(data?.akun) ? 'instansi' : 'gtk';
     const done = await dispatch('setRole', role);
