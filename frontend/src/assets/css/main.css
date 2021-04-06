@@ -1,0 +1,308 @@
+html {
+    height: 100%;
+}
+body {
+    min-height: 100vh !important;
+}
+
+a{
+    text-decoration: none;
+}
+
+#inspire {
+    background: #f0f0f0;
+}
+.hidden {
+    display: none;
+}
+
+.page-header {
+    padding-bottom: 9px;
+    margin: 0 0 20px;
+    border-bottom: 1px solid #eee;
+}
+.box-card {
+    position: relative;
+}
+.overflow-hidden {
+    overflow: hidden;
+}
+.breadcum-custom li{
+    font-size: 26px !important;
+}
+.custom-select {
+  width: 100%;
+  padding: 5px 35px 5px 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  height: 34px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  /* background: url(http://www.stackoverflow.com/favicon.ico) 96% / 15% no-repeat #eee; */
+}
+
+.custom-select:before {
+  content: "\f0d7";
+  font-family: 'FontAwesome';
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+/*--adjust as necessary--*/
+  color: #000;
+  font-size: 18px;
+  padding-right: 0.5em;
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+
+/* target Internet Explorer 9 to undo the custom arrow */
+@media screen and (min-width:0\0) {
+  .custom-select {
+    background:none\9;
+    padding: 5px\9;
+  }
+}
+
+.profpic {
+    position: absolute;
+    z-index: 1;
+    right: 3%;
+    top: 7%;
+}
+
+.alamat-format {
+    line-height: 1.2;
+}
+
+/*loade*/
+#loader-wrapper {
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+#loader {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    animation: 2s linear 0s normal none infinite running spin;
+    border-color: #3498db transparent transparent;
+    border-image: none;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 3px;
+    display: block;
+    height: 150px;
+    left: 50%;
+    margin: -75px 0 0 -75px;
+    position: relative;
+    top: 50%;
+    width: 150px;
+    z-index: 1001;
+}
+#loader::before {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    animation: 3s linear 0s normal none infinite running spin;
+    border-color: #e74c3c transparent transparent;
+    border-image: none;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 3px;
+    bottom: 5px;
+    content: "";
+    left: 5px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+#loader::after {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    animation: 1.5s linear 0s normal none infinite running spin;
+    border-color: #f9c922 transparent transparent;
+    border-image: none;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 3px;
+    bottom: 15px;
+    content: "";
+    left: 15px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+#loader-wrapper .loader-section {
+    background: #efebe9 none repeat scroll 0 0;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    transform: translateX(0px);
+    width: 51%;
+    z-index: 1000;
+}
+#loader-wrapper .loader-section.section-left {
+    left: 0;
+}
+#loader-wrapper .loader-section.section-right {
+    right: 0;
+}
+/* custom text color */
+.text-success {
+    color: #28a745!important;
+}
+
+.text-bold {
+    font-weight: bolder;
+}
+
+.bg-notif {
+    background-color: #fdf2ad !important;
+}
+
+.bg-error {
+    background-color: #FFCDD2 !important;
+}
+
+.bg-success {
+    background-color: #C8E6C9 !important;
+}
+
+.bg-info {
+    background-color: #E1F5FE !important;
+}
+
+.no-border .v-alert__border {
+    display: none !important;
+}
+
+/* override nprogress */
+#nprogress .bar {
+    /* background: #29d; */
+    background: #FF9800 !important;
+    height: 4px !important;
+}
+
+#nprogress .peg {
+    box-shadow: 0 0 10px #FF9800, 0 0 5px #FF9800 !important;
+}
+
+.radio-outline {
+    margin: 10px;
+}
+
+.radio-outline input[type='radio'] {
+    opacity: 0;
+    position: fixed;
+    width: 0;
+}
+
+.radio-outline label {
+    display: inline-block;
+    background-color: transparent;
+    color: #ff8425;
+    padding: 2px 30px;
+    font-family: sans-serif, Arial;
+    font-size: 12px;
+    border: 1px solid #ff8425;
+}
+
+.radio-outline label:hover {
+    cursor: pointer;
+    border-color: #ff8425;
+}
+
+.radio-outline input[type='radio']:focus + label {
+    border-color: #ff8425;
+}
+
+.radio-outline input[type='radio']:checked + label {
+    background-color: #ff8425;
+    color: white;
+    border-color: #ff8425;
+}
+
+/* ribbon */
+.corner-ribbon.blue {
+    background: #39d;
+}
+
+.corner-ribbon.orange {
+    background: #e82;
+}
+
+.corner-ribbon.red {
+    background: #e43;
+}
+
+.corner-ribbon.green {
+    background: #2c7;
+}
+
+.corner-ribbon.top-left {
+    top: 15px;
+    left: -50px;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+.corner-ribbon.top-right {
+    top: 0;
+    right: 65px;
+    writing-mode: vertical-rl;
+    display: inline-block;
+    text-orientation: upright;
+    width: 50px;
+}
+.corner-ribbon.shadow {
+    box-shadow: 1px 2px 3px #474747;
+}
+.corner-ribbon {
+    width: 150px;
+    background: pink;
+    position: fixed;
+    text-align: center;
+    letter-spacing: 1px;
+    color: #f0f0f0;
+    z-index: 10;
+    font-weight: 600;
+    font-size: 12px;
+    text-shadow: 1px 1px 1px #474747;
+    letter-spacing: .1em;
+}
+.inner-expand-no-margin > * {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.label--text {
+    font-size: 12px !important;
+    color: #9e9e9e !important;
+}
+
+.label--text + .v-chip {
+    margin-top: 2px !important;
+}
+
+.v-messages, .v-counter {
+    font-size: 15px !important;
+}

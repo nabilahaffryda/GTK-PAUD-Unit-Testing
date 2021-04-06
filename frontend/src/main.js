@@ -1,13 +1,37 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import './registerServiceWorker'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import VueGtag from 'vue-gtag';
+import vuetify from './plugins/vuetify';
+import mixins from '@mixins/global';
+import { mask } from 'vue-the-mask';
+import BaseModalFull from '@components/base/BaseModalFull';
+import './plugins/vee-validate';
+import './sentry';
+// css
+import 'roboto-fontface/css/roboto/roboto-fontface.css';
+import '@mdi/font/css/materialdesignicons.css';
+import '@assets/css/main.css';
 
-Vue.config.productionTip = false
+Vue.mixin(mixins);
+Vue.directive('mask', mask);
+Vue.component('base-modal-full', BaseModalFull);
+Vue.config.productionTip = false;
 
-new Vue({
+if (process.env.NODE_ENV !== 'development') {
+  Vue.use(
+    VueGtag,
+    {
+      config: { id: 'G-Z6NFYNHPP5' },
+    },
+    router
+  );
+}
+
+export default new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  vuetify,
+  render: (h) => h(App),
+}).$mount('#app');
