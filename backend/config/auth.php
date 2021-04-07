@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'akun',
         'passwords' => 'users',
     ],
 
@@ -36,20 +36,20 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'akun' => [
             'driver' => 'session',
             'provider' => 'akun',
+        ],
+
+        'ptk' => [
+            'driver' => 'session',
+            'provider' => 'ptk',
         ],
 
         'api' => [
             'driver' => 'token',
             'provider' => 'akun',
             'hash' => false,
-        ],
-
-        'ptk' => [
-            'driver' => 'session',
-            'provider' => 'ptk',
         ],
     ],
 

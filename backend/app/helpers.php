@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
  */
 function akun()
 {
-    return Auth::guard('web')->user();
+    return Auth::guard('akun')->user();
 }
 
 function akunId()

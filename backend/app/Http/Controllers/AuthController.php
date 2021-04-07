@@ -21,7 +21,7 @@ class AuthController extends Controller
         Cas::authenticate();
         $pasporId = Cas::user();
 
-        if ($akun = Auth::guard('web')->loginUsingId($pasporId)) {
+        if ($akun = Auth::guard('akun')->loginUsingId($pasporId)) {
             app('log-akses')->logAkses();
         }
 

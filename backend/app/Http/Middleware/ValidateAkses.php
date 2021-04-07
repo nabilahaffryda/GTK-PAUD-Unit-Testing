@@ -37,7 +37,7 @@ class ValidateAkses
             throw new AuthorizationException("Akun tidak memiliki Instansi yg diakses");
         }
 
-        $key   = $this->service->fromRequest($request, 'web');
+        $key   = $this->service->fromRequest($request, 'akun');
         $akses = PaudAkses::whereAkses($key)->where('is_aktif', '1')->first();
         if (!$akses) {
             return $next($request);
