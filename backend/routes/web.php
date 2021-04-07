@@ -13,24 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function (\Illuminate\Http\Request $request) {
-    $response = [
-        'data' => [
-            'domain' => $request->getHost(),
-            'time'   => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
-        ],
-    ];
-
-    if (akun()) {
-        $response['data']['akun'] = akun();
-    }
-
-    if (ptk()) {
-        $response['data']['ptk'] = ptk();
-    }
-
-    return response()->json($response);
-});
+Route::get('/', [\App\Http\Controllers\IndexController::class, 'index'])->name('home');
 
 Route::match(['get', 'post'], 'auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
 Route::match(['get', 'post'], 'auth/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
