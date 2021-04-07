@@ -26,7 +26,7 @@ export default [
         to: { name: 'admin-program' },
       },
       {
-        icon: 'mdi-account',
+        icon: 'mdi-account-cog',
         title: 'Kelola Operator LPD',
         desc: 'Pengelolaan data Operator LPD',
         color: 'blue',

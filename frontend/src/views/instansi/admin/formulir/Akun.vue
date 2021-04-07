@@ -2,18 +2,38 @@
   <v-card class="mx-auto" flat>
     <v-card-text>
       <v-container>
-        <v-stepper v-model="step">
-          <v-stepper-header>
-            <v-stepper-step step="1">
+        <v-stepper v-model="step" class="elevation-0">
+          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
+            <v-stepper-step :complete="step > 1" step="1">
               Data Admin Program
             </v-stepper-step>
+            <v-divider></v-divider>
             <v-stepper-step step="2">
               Konfirmasi Akun
             </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
-            <v-stepper-content step="1"> </v-stepper-content>
-            <v-stepper-content step="2"> </v-stepper-content>
+            <v-stepper-content step="1" style="padding: 0">
+              <v-card flat>
+                <v-card-text class="pa-0 pt-7">
+                  <base-form-generator :schema="schema.biodata.akun" v-model="form" />
+                </v-card-text>
+                <v-card-actions class="pa-0">
+                  <v-spacer></v-spacer>
+                  <v-btn right color="primary" @click="next">
+                    Lanjut
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-stepper-content>
+            <v-stepper-content step="2" style="padding: 0">
+              <v-card flat>
+                <v-card-text class="pa-0 pt-7">
+                  <h3>Konfirmasi Data</h3>
+                  <base-list-info class="px-0" :info="info"></base-list-info>
+                </v-card-text>
+              </v-card>
+            </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
       </v-container>
@@ -21,7 +41,10 @@
   </v-card>
 </template>
 <script>
+import BaseFormGenerator from '@components/base/BaseFormGenerator';
+import BaseListInfo from '@components/base/BaseListInfo';
 export default {
+  components: { BaseListInfo, BaseFormGenerator },
   props: {
     initValue: {
       default: () => null,
@@ -54,8 +77,9 @@ export default {
   data() {
     return {
       id: null,
+      step: 1,
       form: {},
-      biodata: {},
+      info: {},
     };
   },
   computed: {
@@ -111,21 +135,6 @@ export default {
             },
             {
               type: 'VTextField',
-              name: 'nip',
-              label: 'NIP',
-              hint: 'wajib diisi',
-              required: false,
-              hideDetails: false,
-              outlined: true,
-              dense: true,
-              singleLine: true,
-              mask: '####################',
-              counter: 20,
-              grid: { cols: 12, md: 6 },
-              labelColor: 'secondary',
-            },
-            {
-              type: 'VTextField',
               name: 'tmp_lahir',
               label: 'Tempat Lahir',
               hint: 'wajib diisi',
@@ -134,7 +143,7 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
-              grid: { cols: 12, md: 6 },
+              grid: { cols: 12, md: 4 },
               labelColor: 'secondary',
             },
             {
@@ -147,7 +156,7 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
-              grid: { cols: 12, md: 6 },
+              grid: { cols: 12, md: 4 },
               labelColor: 'secondary',
             },
             {
@@ -165,8 +174,22 @@ export default {
               dense: true,
               row: true,
               singleLine: false,
-              grid: { cols: 12, md: 6 },
+              grid: { cols: 12, md: 4 },
               labelColor: 'secondary',
+            },
+            {
+              type: 'VTextField',
+              name: 'email',
+              label: `Alamat Surel`,
+              labelColor: 'secondary',
+              hideDetails: false,
+              placeholder: 'Alamat Surel',
+              hint: 'wajib diisi',
+              grid: { cols: 12, md: 6 },
+              required: true,
+              outlined: true,
+              dense: true,
+              singleLine: true,
             },
             {
               type: 'VTextField',
@@ -183,6 +206,21 @@ export default {
               singleLine: true,
               mask: '##############',
               counter: 14,
+            },
+            {
+              type: 'VTextField',
+              name: 'nip',
+              label: 'NIP',
+              hint: 'wajib diisi',
+              required: false,
+              hideDetails: false,
+              outlined: true,
+              dense: true,
+              singleLine: true,
+              mask: '####################',
+              counter: 20,
+              grid: { cols: 12, md: 6 },
+              labelColor: 'secondary',
             },
             {
               type: 'VSelect',
@@ -211,7 +249,7 @@ export default {
     reset() {
       this.$set(this, 'id', null);
       this.$set(this, 'form', {});
-      this.biodata = {};
+      this.info = {};
       this.id = null;
     },
 
@@ -251,6 +289,51 @@ export default {
 
     onUncheck() {
       this.$emit('unCheck');
+    },
+
+    next() {
+      this.info = [
+        [
+          {
+            key: 'nama',
+            label: 'Nama',
+            value: this.$getDeepObj(this.form, 'nama') || '-',
+          },
+        ],
+        [
+          {
+            key: 'lahir',
+            label: 'Tempat, Tanggal Lahir',
+            value: [
+              this.$getDeepObj(this.form, 'tmp_lahir') || '-',
+              this.$localDate(this.$getDeepObj(this.form, 'tgl_lahir') || '-'),
+            ].join(', '),
+          },
+          {
+            key: 'kelamin',
+            label: 'Jenis Kelamin',
+            value:
+              this.$getDeepObj(this.form, 'kelamin') === 'L'
+                ? 'Laki - laki'
+                : this.$getDeepObj(this.form, 'kelamin') === 'P'
+                ? 'Perempuan'
+                : '',
+          },
+        ],
+        [
+          {
+            key: 'no_wa',
+            label: 'Nomor Telepon (terhubung WhatsApp)',
+            value: this.$getDeepObj(this.form, 'no_wa') || '-',
+          },
+          {
+            key: 'email',
+            label: 'Surel (untuk Kontak)',
+            value: this.$getDeepObj(this.form, 'ptk.data.alt_email') || '-',
+          },
+        ],
+      ];
+      this.step = 2;
     },
   },
   watch: {
