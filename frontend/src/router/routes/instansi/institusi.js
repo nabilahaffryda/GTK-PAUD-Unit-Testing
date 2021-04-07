@@ -3,9 +3,9 @@ export default [
   {
     path: '/i/:id(\\d+)/institusi',
     name: 'institusi',
-    component: () => lazyLoadView(import('@views/instansi/home/Index')),
+    component: () => lazyLoadView(import('@views/instansi/institusi/list/Index')),
     meta: {
-      title: 'Kelola Admin',
+      title: 'Kelola Institusi LPD',
     },
   },
 ];

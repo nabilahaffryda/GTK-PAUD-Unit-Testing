@@ -2,7 +2,7 @@
   <v-card flat width="100%">
     <v-card-text :class="!searchInput ? 'py-1' : ''">
       <v-row no-gutters>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="4" class="my-auto">
           <v-row no-gutters>
             <v-col>
               <v-list-item class="pa-0">
@@ -63,7 +63,7 @@
                 single-line
                 outlined
                 hide-details
-                class="mt-1 mr-1"
+                class="my-auto mr-1"
                 @keyup.enter="search"
                 @click:append="search"
               >
