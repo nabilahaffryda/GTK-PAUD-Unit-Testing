@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AkunInstansi;
+use App\Services\AkunService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -11,27 +11,25 @@ class IndexController extends Controller
     public function index(Request $request)
     {
         $response = [
-            'data' => [
-                'domain' => $request->getHost(),
-                'time'   => Carbon::now()->format('Y-m-d H:i:s'),
-            ],
+            'domain' => $request->getHost(),
+            'time'   => Carbon::now()->format('Y-m-d H:i:s'),
         ];
 
         $akun = akun();
         if (akun()) {
-            $akunInstansi = AkunInstansi::query()
-                ->where('akun_id', $akun->akun_id)
-                ->orderBy('instansi_id')
-                ->first();
+            $akunInstansi = app(AkunService::class)->akunInstansi($akun);
 
-            $response['data']['akun'] = $akun->toArray();
-            $response['data']['akun']['akun_instansi'] = $akunInstansi->toArray();
+            $response['akun']     = $akun;
+            $response['instansi'] = $akunInstansi->instansi;
+            $response['group']    = $akunInstansi->mGroup;
         }
 
         if (ptk()) {
-            $response['data']['ptk'] = ptk();
+            $response['ptk'] = ptk();
         }
 
-        return response()->json($response);
+        return response()->json([
+            'data' => $response,
+        ]);
     }
 }
