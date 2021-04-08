@@ -1,6 +1,6 @@
 <?php
 
-namespace App\JsonApi\PaudInstansiBerkas;
+namespace App\JsonApi\PaudInstansiBerkases;
 
 use App\Models\PaudInstansiBerkas;
 use CloudCreativity\LaravelJsonApi\Validation\AbstractValidators;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\JsonApi\PaudAkses;
+namespace App\JsonApi\PaudAkseses;
 
 use App\Models\PaudAkses;
 use Neomerx\JsonApi\Schema\SchemaProvider;

@@ -197,8 +197,8 @@ return [
         'm_kota' => [
             'class'  => 'MKota',
             'gramar' => [
-                'singular' => 'kota',
-                'plural'   => 'kotas',
+                'singular' => 'm_kota',
+                'plural'   => 'm_kotas',
             ],
         ],
 

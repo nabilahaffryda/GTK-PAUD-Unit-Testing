@@ -1,6 +1,6 @@
 <?php
 
-namespace App\JsonApi\PaudGroupAkses;
+namespace App\JsonApi\PaudGroupAkseses;
 
 use App\Models\PaudGroupAkses;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
