@@ -48,6 +48,7 @@ class Validators extends AbstractValidators
         'gelar_depan',
         'gelar_belakang',
         'is_aktif',
+        'k_status_email',
         'admin_id',
     ];
 
@@ -58,6 +59,10 @@ class Validators extends AbstractValidators
      *      the allowed paths, an empty array for none allowed, or null to allow all paths.
      */
     protected $allowedIncludePaths = [
+        'instansi_kota',
+        'instansi_propinsi',
+        'kota',
+        'm_propinsi',
     ];
 
     /**
@@ -103,6 +108,7 @@ class Validators extends AbstractValidators
         'gelar_depan',
         'gelar_belakang',
         'is_aktif',
+        'k_status_email',
         'admin_id',
     ];
 
@@ -155,6 +161,7 @@ class Validators extends AbstractValidators
         'gelar_depan',
         'gelar_belakang',
         'is_aktif',
+        'k_status_email',
         'admin_id',
     ];
 
@@ -205,6 +212,7 @@ class Validators extends AbstractValidators
             'gelar_depan'         => ['sometimes', 'nullable', 'string'],
             'gelar_belakang'      => ['sometimes', 'nullable', 'string'],
             'is_aktif'            => ['required', 'string'],
+            'k_status_email'      => ['required', 'integer'],
             'admin_id'            => ['sometimes', 'nullable', 'string'],
         ];
     }
@@ -252,6 +260,7 @@ class Validators extends AbstractValidators
             'filter.gelar_depan'         => ['sometimes', 'string'],
             'filter.gelar_belakang'      => ['sometimes', 'string'],
             'filter.is_aktif'            => ['sometimes', 'string'],
+            'filter.k_status_email'      => ['sometimes', 'integer'],
             'filter.admin_id'            => ['sometimes', 'string'],
             'page.number'                => ['integer', 'min:1'],
             'page.size'                  => ['integer', 'between:1,50'],

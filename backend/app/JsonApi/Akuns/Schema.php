@@ -65,6 +65,7 @@ class Schema extends SchemaProvider
             'gelar_depan'         => $resource->gelar_depan,
             'gelar_belakang'      => $resource->gelar_belakang,
             'is_aktif'            => $resource->is_aktif,
+            'k_status_email'      => $resource->k_status_email,
             'admin_id'            => $resource->admin_id,
         ];
     }
@@ -78,11 +79,43 @@ class Schema extends SchemaProvider
     public function getRelationships($resource, $isPrimary, array $includeRelationships)
     {
         return [
-            'akun_instansis' => [
+            'akun_instansis'    => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],
-            'paud_admins'    => [
+            'instansi_kota'     => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA    => isset($includeRelationships['instansi_kota']),
+                self::DATA         => function () use ($resource) {
+                    return $resource->instansiKota;
+                },
+            ],
+            'instansi_propinsi' => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA    => isset($includeRelationships['instansi_propinsi']),
+                self::DATA         => function () use ($resource) {
+                    return $resource->instansiPropinsi;
+                },
+            ],
+            'kota'              => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA    => isset($includeRelationships['kota']),
+                self::DATA         => function () use ($resource) {
+                    return $resource->kota;
+                },
+            ],
+            'm_propinsi'        => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA    => isset($includeRelationships['m_propinsi']),
+                self::DATA         => function () use ($resource) {
+                    return $resource->mPropinsi;
+                },
+            ],
+            'paud_admins'       => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],

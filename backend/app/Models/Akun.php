@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -47,8 +48,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property null|string $gelar_depan
  * @property null|string $gelar_belakang
  * @property string $is_aktif
+ * @property int $k_status_email
  * @property null|string $admin_id
  *
+ * @property-read MKota $instansiKota
+ * @property-read MPropinsi $instansiPropinsi
+ * @property-read MKota $kota
+ * @property-read MPropinsi $mPropinsi
  * @property-read Collection|AkunInstansi[] $akunInstansis
  * @property-read Collection|PaudAdmin[] $paudAdmins
  *
@@ -88,6 +94,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static Builder|Akun whereGelarDepan($value)
  * @method static Builder|Akun whereGelarBelakang($value)
  * @method static Builder|Akun whereIsAktif($value)
+ * @method static Builder|Akun whereKStatusEmail($value)
  * @method static Builder|Akun whereAdminId($value)
  *
  * @method static Akun findOrFail($id, $columns = [])
@@ -163,6 +170,7 @@ class Akun extends Authenticatable
         'gelar_depan'         => 'string',
         'gelar_belakang'      => 'string',
         'is_aktif'            => 'string',
+        'k_status_email'      => 'int',
         'admin_id'            => 'string',
     ];
 
@@ -215,6 +223,7 @@ class Akun extends Authenticatable
         'gelar_depan',
         'gelar_belakang',
         'is_aktif',
+        'k_status_email',
         'admin_id',
     ];
 
@@ -224,6 +233,38 @@ class Akun extends Authenticatable
     public function akunInstansis()
     {
         return $this->hasMany('App\Models\AkunInstansi', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return BelongsTo|Builder|MKota
+     */
+    public function instansiKota()
+    {
+        return $this->belongsTo('App\Models\MKota', 'instansi_k_kota', 'k_kota');
+    }
+
+    /**
+     * @return BelongsTo|Builder|MPropinsi
+     */
+    public function instansiPropinsi()
+    {
+        return $this->belongsTo('App\Models\MPropinsi', 'instansi_k_propinsi', 'k_propinsi');
+    }
+
+    /**
+     * @return BelongsTo|Builder|MKota
+     */
+    public function kota()
+    {
+        return $this->belongsTo('App\Models\MKota', 'k_kota', 'k_kota');
+    }
+
+    /**
+     * @return BelongsTo|Builder|MPropinsi
+     */
+    public function mPropinsi()
+    {
+        return $this->belongsTo('App\Models\MPropinsi', 'k_propinsi', 'k_propinsi');
     }
 
     /**

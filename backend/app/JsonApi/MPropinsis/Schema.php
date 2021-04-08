@@ -1,8 +1,8 @@
 <?php
 
-namespace App\JsonApi\MGroups;
+namespace App\JsonApi\MPropinsis;
 
-use App\Models\MGroup;
+use App\Models\MPropinsi;
 use Neomerx\JsonApi\Schema\SchemaProvider;
 
 class Schema extends SchemaProvider
@@ -10,10 +10,10 @@ class Schema extends SchemaProvider
     /**
      * @var string
      */
-    protected $resourceType = 'm_groups';
+    protected $resourceType = 'm_propinsis';
 
     /**
-     * @param MGroup $resource
+     * @param MPropinsi $resource
      *      the domain record being serialized.
      * @return string
      */
@@ -23,21 +23,22 @@ class Schema extends SchemaProvider
     }
 
     /**
-     * @param MGroup $resource
+     * @param MPropinsi $resource
      *      the domain record being serialized.
      * @return array
      */
     public function getAttributes($resource)
     {
         return [
-            'singkat'          => $resource->singkat,
-            'keterangan'       => $resource->keterangan,
-            'k_jenis_instansi' => $resource->k_jenis_instansi,
+            'singkat'    => $resource->singkat,
+            'keterangan' => $resource->keterangan,
+            'kode_ukg'   => $resource->kode_ukg,
+            'timezone'   => $resource->timezone,
         ];
     }
 
     /**
-     * @param MGroup $resource
+     * @param MPropinsi $resource
      * @param bool $isPrimary
      * @param array $includeRelationships
      * @return array[]
@@ -45,23 +46,23 @@ class Schema extends SchemaProvider
     public function getRelationships($resource, $isPrimary, array $includeRelationships)
     {
         return [
-            'akun_instansis'     => [
+            'akuns'                   => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],
-            'm_jenis_instansi'   => [
-                self::SHOW_SELF    => true,
-                self::SHOW_RELATED => true,
-                self::SHOW_DATA    => isset($includeRelationships['m_jenis_instansi']),
-                self::DATA         => function () use ($resource) {
-                    return $resource->mJenisInstansi;
-                },
-            ],
-            'paud_admins'        => [
+            'instansi_propinsi_akuns' => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],
-            'paud_group_akseses' => [
+            'instansis'               => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+            ],
+            'kotas'                   => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+            ],
+            'ptks'                    => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],

@@ -85,6 +85,22 @@ class Schema extends SchemaProvider
     public function getRelationships($resource, $isPrimary, array $includeRelationships)
     {
         return [
+            'kota'       => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA    => isset($includeRelationships['kota']),
+                self::DATA         => function () use ($resource) {
+                    return $resource->kota;
+                },
+            ],
+            'm_propinsi' => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA    => isset($includeRelationships['m_propinsi']),
+                self::DATA         => function () use ($resource) {
+                    return $resource->mPropinsi;
+                },
+            ],
         ];
     }
 }

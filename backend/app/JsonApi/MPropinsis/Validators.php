@@ -1,8 +1,8 @@
 <?php
 
-namespace App\JsonApi\MGroups;
+namespace App\JsonApi\MPropinsis;
 
-use App\Models\MGroup;
+use App\Models\MPropinsi;
 use CloudCreativity\LaravelJsonApi\Validation\AbstractValidators;
 
 class Validators extends AbstractValidators
@@ -15,7 +15,8 @@ class Validators extends AbstractValidators
     protected $attributes = [
         'singkat',
         'keterangan',
-        'k_jenis_instansi',
+        'kode_ukg',
+        'timezone',
     ];
 
     /**
@@ -25,7 +26,6 @@ class Validators extends AbstractValidators
      *      the allowed paths, an empty array for none allowed, or null to allow all paths.
      */
     protected $allowedIncludePaths = [
-        'm_jenis_instansi',
     ];
 
     /**
@@ -35,10 +35,11 @@ class Validators extends AbstractValidators
      *      the allowed fields, an empty array for none allowed, or null to allow all fields.
      */
     protected $allowedSortParameters = [
-        'k_group',
+        'k_propinsi',
         'singkat',
         'keterangan',
-        'k_jenis_instansi',
+        'kode_ukg',
+        'timezone',
     ];
 
     /**
@@ -54,16 +55,17 @@ class Validators extends AbstractValidators
      * @todo 3.0.0 make this `[]` by default, as we now loop through filter parameters.
      */
     protected $allowedFilteringParameters = [
-        'k_group',
+        'k_propinsi',
         'singkat',
         'keterangan',
-        'k_jenis_instansi',
+        'kode_ukg',
+        'timezone',
     ];
 
     /**
      * Get resource validation rules.
      *
-     * @param MGroup|null $record
+     * @param MPropinsi|null $record
      *      the record being updated, or null if creating a resource.
      * @param array $data
      *      the data being validated
@@ -72,9 +74,10 @@ class Validators extends AbstractValidators
     protected function rules($record, array $data): array
     {
         return [
-            'singkat'          => ['sometimes', 'nullable', 'string'],
-            'keterangan'       => ['sometimes', 'nullable', 'string'],
-            'k_jenis_instansi' => ['sometimes', 'nullable', 'integer'],
+            'singkat'    => ['sometimes', 'nullable', 'string'],
+            'keterangan' => ['sometimes', 'nullable', 'string'],
+            'kode_ukg'   => ['sometimes', 'nullable', 'string'],
+            'timezone'   => ['sometimes', 'nullable', 'integer'],
         ];
     }
 
@@ -86,11 +89,12 @@ class Validators extends AbstractValidators
     protected function queryRules(): array
     {
         return [
-            'filter.singkat'          => ['sometimes', 'string'],
-            'filter.keterangan'       => ['sometimes', 'string'],
-            'filter.k_jenis_instansi' => ['sometimes', 'integer'],
-            'page.number'             => ['integer', 'min:1'],
-            'page.size'               => ['integer', 'between:1,50'],
+            'filter.singkat'    => ['sometimes', 'string'],
+            'filter.keterangan' => ['sometimes', 'string'],
+            'filter.kode_ukg'   => ['sometimes', 'string'],
+            'filter.timezone'   => ['sometimes', 'integer'],
+            'page.number'       => ['integer', 'min:1'],
+            'page.size'         => ['integer', 'between:1,50'],
         ];
     }
 }

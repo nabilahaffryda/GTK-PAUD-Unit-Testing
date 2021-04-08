@@ -63,6 +63,30 @@ class Schema extends SchemaProvider
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],
+            'kota'                   => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA    => isset($includeRelationships['kota']),
+                self::DATA         => function () use ($resource) {
+                    return $resource->kota;
+                },
+            ],
+            'm_jenis_instansi'       => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA    => isset($includeRelationships['m_jenis_instansi']),
+                self::DATA         => function () use ($resource) {
+                    return $resource->mJenisInstansi;
+                },
+            ],
+            'm_propinsi'             => [
+                self::SHOW_SELF    => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA    => isset($includeRelationships['m_propinsi']),
+                self::DATA         => function () use ($resource) {
+                    return $resource->mPropinsi;
+                },
+            ],
             'paud_admins'            => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,

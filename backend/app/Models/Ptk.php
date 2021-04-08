@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
@@ -53,6 +54,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property null|Carbon $wkt_sinkron
  * @property null|int $is_aktif
  * @property null|string $akun_id
+ *
+ * @property-read MKota $kota
+ * @property-read MPropinsi $mPropinsi
  *
  * @method static Builder|Ptk wherePtkId($value)
  * @method static Builder|Ptk whereNuptk($value)
@@ -240,12 +244,18 @@ class Ptk extends Authenticatable
     ];
 
     /**
-     * Get the name of the unique identifier for the user.
-     *
-     * @return string
+     * @return BelongsTo|Builder|MKota
      */
-    public function getAuthIdentifierName()
+    public function kota()
     {
-        return 'paspor_id';
+        return $this->belongsTo('App\Models\MKota', 'k_kota', 'k_kota');
+    }
+
+    /**
+     * @return BelongsTo|Builder|MPropinsi
+     */
+    public function mPropinsi()
+    {
+        return $this->belongsTo('App\Models\MPropinsi', 'k_propinsi', 'k_propinsi');
     }
 }

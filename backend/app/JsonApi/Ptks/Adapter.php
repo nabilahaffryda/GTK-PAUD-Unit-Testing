@@ -99,4 +99,14 @@ class Adapter extends AbstractAdapter
     {
         $this->filterWithScopes($query, $filters);
     }
+
+    protected function kota()
+    {
+        return $this->hasOne();
+    }
+
+    protected function mPropinsi()
+    {
+        return $this->hasOne();
+    }
 }

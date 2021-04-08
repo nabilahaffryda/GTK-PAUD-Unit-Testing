@@ -1,8 +1,8 @@
 <?php
 
-namespace App\JsonApi\MGroups;
+namespace App\JsonApi\MKotas;
 
-use App\Models\MGroup;
+use App\Models\MKota;
 use CloudCreativity\LaravelJsonApi\Validation\AbstractValidators;
 
 class Validators extends AbstractValidators
@@ -13,9 +13,15 @@ class Validators extends AbstractValidators
      * @var array
      */
     protected $attributes = [
+        'k_propinsi',
         'singkat',
         'keterangan',
-        'k_jenis_instansi',
+        'kode_ukg',
+        'is_kota',
+        'is_ibukota',
+        'is_3t',
+        'timezone',
+        'is_aktif',
     ];
 
     /**
@@ -25,7 +31,7 @@ class Validators extends AbstractValidators
      *      the allowed paths, an empty array for none allowed, or null to allow all paths.
      */
     protected $allowedIncludePaths = [
-        'm_jenis_instansi',
+        'm_propinsi',
     ];
 
     /**
@@ -35,10 +41,16 @@ class Validators extends AbstractValidators
      *      the allowed fields, an empty array for none allowed, or null to allow all fields.
      */
     protected $allowedSortParameters = [
-        'k_group',
+        'k_kota',
+        'k_propinsi',
         'singkat',
         'keterangan',
-        'k_jenis_instansi',
+        'kode_ukg',
+        'is_kota',
+        'is_ibukota',
+        'is_3t',
+        'timezone',
+        'is_aktif',
     ];
 
     /**
@@ -54,16 +66,22 @@ class Validators extends AbstractValidators
      * @todo 3.0.0 make this `[]` by default, as we now loop through filter parameters.
      */
     protected $allowedFilteringParameters = [
-        'k_group',
+        'k_kota',
+        'k_propinsi',
         'singkat',
         'keterangan',
-        'k_jenis_instansi',
+        'kode_ukg',
+        'is_kota',
+        'is_ibukota',
+        'is_3t',
+        'timezone',
+        'is_aktif',
     ];
 
     /**
      * Get resource validation rules.
      *
-     * @param MGroup|null $record
+     * @param MKota|null $record
      *      the record being updated, or null if creating a resource.
      * @param array $data
      *      the data being validated
@@ -72,9 +90,15 @@ class Validators extends AbstractValidators
     protected function rules($record, array $data): array
     {
         return [
-            'singkat'          => ['sometimes', 'nullable', 'string'],
-            'keterangan'       => ['sometimes', 'nullable', 'string'],
-            'k_jenis_instansi' => ['sometimes', 'nullable', 'integer'],
+            'k_propinsi' => ['required', 'integer'],
+            'singkat'    => ['sometimes', 'nullable', 'string'],
+            'keterangan' => ['sometimes', 'nullable', 'string'],
+            'kode_ukg'   => ['sometimes', 'nullable', 'string'],
+            'is_kota'    => ['sometimes', 'nullable', 'integer'],
+            'is_ibukota' => ['sometimes', 'nullable', 'integer'],
+            'is_3t'      => ['sometimes', 'nullable', 'integer'],
+            'timezone'   => ['sometimes', 'nullable', 'integer'],
+            'is_aktif'   => ['sometimes', 'nullable', 'integer'],
         ];
     }
 
@@ -86,11 +110,17 @@ class Validators extends AbstractValidators
     protected function queryRules(): array
     {
         return [
-            'filter.singkat'          => ['sometimes', 'string'],
-            'filter.keterangan'       => ['sometimes', 'string'],
-            'filter.k_jenis_instansi' => ['sometimes', 'integer'],
-            'page.number'             => ['integer', 'min:1'],
-            'page.size'               => ['integer', 'between:1,50'],
+            'filter.k_propinsi' => ['sometimes', 'integer'],
+            'filter.singkat'    => ['sometimes', 'string'],
+            'filter.keterangan' => ['sometimes', 'string'],
+            'filter.kode_ukg'   => ['sometimes', 'string'],
+            'filter.is_kota'    => ['sometimes', 'integer'],
+            'filter.is_ibukota' => ['sometimes', 'integer'],
+            'filter.is_3t'      => ['sometimes', 'integer'],
+            'filter.timezone'   => ['sometimes', 'integer'],
+            'filter.is_aktif'   => ['sometimes', 'integer'],
+            'page.number'       => ['integer', 'min:1'],
+            'page.size'         => ['integer', 'between:1,50'],
         ];
     }
 }

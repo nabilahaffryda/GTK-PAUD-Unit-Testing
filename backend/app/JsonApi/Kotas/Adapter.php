@@ -1,8 +1,8 @@
 <?php
 
-namespace App\JsonApi\Instansis;
+namespace App\JsonApi\MKotas;
 
-use App\Models\Instansi;
+use App\Models\MKota;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Database\Eloquent\Builder;
@@ -87,7 +87,7 @@ class Adapter extends AbstractAdapter
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new Instansi(), $paging->withUnderscoredMetaKeys());
+        parent::__construct(new MKota(), $paging->withUnderscoredMetaKeys());
     }
 
     /**
@@ -100,19 +100,19 @@ class Adapter extends AbstractAdapter
         $this->filterWithScopes($query, $filters);
     }
 
-    protected function akunInstansis()
+    protected function akuns()
     {
         return $this->hasMany();
     }
 
-    protected function kota()
+    protected function instansiKotaAkuns()
     {
-        return $this->hasOne();
+        return $this->hasMany();
     }
 
-    protected function mJenisInstansi()
+    protected function instansis()
     {
-        return $this->hasOne();
+        return $this->hasMany();
     }
 
     protected function mPropinsi()
@@ -120,17 +120,7 @@ class Adapter extends AbstractAdapter
         return $this->hasOne();
     }
 
-    protected function paudAdmins()
-    {
-        return $this->hasMany();
-    }
-
-    protected function paudInstansiBerkases()
-    {
-        return $this->hasMany();
-    }
-
-    protected function paudInstansis()
+    protected function ptks()
     {
         return $this->hasMany();
     }

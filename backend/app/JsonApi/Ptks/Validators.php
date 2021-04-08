@@ -65,6 +65,8 @@ class Validators extends AbstractValidators
      *      the allowed paths, an empty array for none allowed, or null to allow all paths.
      */
     protected $allowedIncludePaths = [
+        'kota',
+        'm_propinsi',
     ];
 
     /**

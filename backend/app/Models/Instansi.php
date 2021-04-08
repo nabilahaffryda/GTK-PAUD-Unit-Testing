@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -29,6 +30,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $kode_rkakl
  * @property null|string $nama_rkakl
  *
+ * @property-read MKota $kota
+ * @property-read MJenisInstansi $mJenisInstansi
+ * @property-read MPropinsi $mPropinsi
  * @property-read Collection|AkunInstansi[] $akunInstansis
  * @property-read Collection|PaudAdmin[] $paudAdmins
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
@@ -143,6 +147,30 @@ class Instansi extends Eloquent
     }
 
     /**
+     * @return BelongsTo|Builder|MKota
+     */
+    public function kota()
+    {
+        return $this->belongsTo('App\Models\MKota', 'k_kota', 'k_kota');
+    }
+
+    /**
+     * @return BelongsTo|Builder|MJenisInstansi
+     */
+    public function mJenisInstansi()
+    {
+        return $this->belongsTo('App\Models\MJenisInstansi', 'k_jenis_instansi', 'k_jenis_instansi');
+    }
+
+    /**
+     * @return BelongsTo|Builder|MPropinsi
+     */
+    public function mPropinsi()
+    {
+        return $this->belongsTo('App\Models\MPropinsi', 'k_propinsi', 'k_propinsi');
+    }
+
+    /**
      * @return HasMany|Builder|PaudAdmin
      */
     public function paudAdmins()
@@ -164,13 +192,5 @@ class Instansi extends Eloquent
     public function paudInstansis()
     {
         return $this->hasMany('App\Models\PaudInstansi', 'instansi_id', 'instansi_id');
-    }
-
-    /**
-     * @return HasMany|Builder|PaudInstansi
-     */
-    public function paudInstansisPaud()
-    {
-        return $this->hasMany('App\Models\PaudInstansi', 'paud_instansi_id', 'instansi_id');
     }
 }

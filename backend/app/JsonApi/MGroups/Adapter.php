@@ -105,6 +105,11 @@ class Adapter extends AbstractAdapter
         return $this->hasMany();
     }
 
+    protected function mJenisInstansi()
+    {
+        return $this->hasOne();
+    }
+
     protected function paudAdmins()
     {
         return $this->hasMany();

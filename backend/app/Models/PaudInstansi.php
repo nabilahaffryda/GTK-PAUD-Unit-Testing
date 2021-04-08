@@ -130,12 +130,4 @@ class PaudInstansi extends Eloquent
     {
         return $this->hasMany('App\Models\PaudInstansiBerkas', 'paud_instansi_id', 'paud_instansi_id');
     }
-
-    /**
-     * @return BelongsTo|Builder|Instansi
-     */
-    public function paudInstansi()
-    {
-        return $this->belongsTo('App\Models\Instansi', 'paud_instansi_id', 'instansi_id');
-    }
 }
