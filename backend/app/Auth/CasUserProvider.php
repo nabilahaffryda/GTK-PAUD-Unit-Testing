@@ -37,12 +37,13 @@ class CasUserProvider implements UserProvider
 
         /** @var Authenticatable $model */
         $model = $this->createModel();
+        $key   = $model->getAuthIdentifierName();
 
         return $this
             ->newModelQuery($model)
             ->where([
-                $model->getAuthIdentifierName() => $pasporId,
-                'is_aktif'                      => '1',
+                $key       => $pasporId,
+                'is_aktif' => '1',
             ])
             ->first();
     }

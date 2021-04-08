@@ -72,8 +72,7 @@ return [
 
     'providers' => [
         'akun' => [
-            'driver' => 'cas',
-            'model' => App\Models\Akun::class,
+            'driver' => 'cas-akun',
         ],
 
         'ptk' => [
