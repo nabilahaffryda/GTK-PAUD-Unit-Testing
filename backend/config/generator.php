@@ -32,7 +32,7 @@ return [
             | null  = load from App/Models
             | other path = load from there
             */
-            'reference' => null,
+            'reference' => false,
 
             /*
             |--------------------------------------------------------------------------
@@ -56,6 +56,10 @@ return [
             'akun_instansi',
             'instansi',
             'm_group',
+            'm_jenis_instansi',
+            'm_kota',
+            'm_propinsi',
+            'm_status_email',
             'paud_*',
             'ptk',
             'remote_log',
@@ -126,8 +130,13 @@ return [
             'akun_instansi',
             'instansi',
             'm_group',
+            'm_jenis_instansi',
+            'm_kota',
+            'm_propinsi',
+            'm_status_email',
             'paud_*',
             'ptk',
+            'remote_log',
         ],
 
         /*
@@ -182,6 +191,32 @@ return [
         'm_group' => [
             'model' => [
                 'const' => ['k_group', 'singkat'],
+            ],
+        ],
+
+        'm_kota' => [
+            'class'  => 'MKota',
+            'gramar' => [
+                'singular' => 'kota',
+                'plural'   => 'kotas',
+            ],
+        ],
+
+        'm_jenis_instansi' => [
+            'model' => [
+                'const' => ['k_jenis_instansi', 'singkat'],
+            ],
+        ],
+
+        'm_verval_paud' => [
+            'model' => [
+                'const' => ['k_verval_paud', 'singkat'],
+            ],
+        ],
+
+        'm_status_email' => [
+            'model' => [
+                'const' => ['k_status_email', 'singkat'],
             ],
         ],
 
