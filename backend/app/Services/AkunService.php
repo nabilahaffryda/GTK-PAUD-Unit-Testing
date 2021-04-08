@@ -10,11 +10,9 @@ use App\Models\Instansi;
 use App\Models\MGroup;
 use App\Models\Ptk;
 use App\Remotes\Paspor\User;
-use DB;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent;
 use Illuminate\Support;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Log;
 
@@ -23,43 +21,37 @@ class AkunService
     public function kGroups()
     {
         return [
-            // MGroup::AI_PUSAT,
-            // MGroup::AP_PSP_PUSAT,
-            // MGroup::ADM_PSP_PUSAT,
-            // MGroup::TIM_VERVAL_KS_PSP,
-            // MGroup::TIM_VERVAL_PA_PSP,
-            // MGroup::PEMANTAU_PSP_PUSAT,
-            // MGroup::PEMANTAU_ASESOR_KS_PSP,
-            // MGroup::PEMANTAU_ASESOR_PA_PSP,
-            // MGroup::ASESOR_KS_PSP,
-            // MGroup::ASESOR_PA_PSP,
+            MGroup::AI_PUSAT,
+            MGroup::AP_DIKLAT_GTK_PAUD,
+            MGroup::AI_LPD_DIKLAT_PAUD,
+            MGroup::ADM_LPD_DIKLAT_PAUD,
+            MGroup::PENGAJAR_BIMTEK_DIKLAT_PAUD,
+            MGroup::PENGAJAR_DIKLAT_PAUD,
+            MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD,
+            MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD,
+            MGroup::ADM_KELAS_DIKLAT_GTK_PAUD,
         ];
     }
 
     public static function childGroup($kGroup)
     {
         $groups = [
-            // MGroup::AI_PUSAT      => [
-            //     MGroup::AP_PSP_PUSAT,
-            // ],
-            // MGroup::AP_PSP_PUSAT  => [
-            //     MGroup::ADM_PSP_PUSAT,
-            //     MGroup::PEMANTAU_PSP_PUSAT,
-            //     MGroup::TIM_VERVAL_KS_PSP,
-            //     MGroup::TIM_VERVAL_PA_PSP,
-            //     MGroup::PEMANTAU_ASESOR_KS_PSP,
-            //     MGroup::PEMANTAU_ASESOR_PA_PSP,
-            //     MGroup::ASESOR_KS_PSP,
-            //     MGroup::ASESOR_PA_PSP
-            // ],
-            // MGroup::ADM_PSP_PUSAT => [
-            //     MGroup::TIM_VERVAL_KS_PSP,
-            //     MGroup::TIM_VERVAL_PA_PSP,
-            //     MGroup::PEMANTAU_ASESOR_KS_PSP,
-            //     MGroup::PEMANTAU_ASESOR_PA_PSP,
-            //     MGroup::ASESOR_KS_PSP,
-            //     MGroup::ASESOR_PA_PSP
-            // ],
+            MGroup::AI_PUSAT            => [
+                MGroup::AP_DIKLAT_GTK_PAUD,
+            ],
+            MGroup::AP_DIKLAT_GTK_PAUD  => [
+                MGroup::AI_LPD_DIKLAT_PAUD,
+                MGroup::PENGAJAR_BIMTEK_DIKLAT_PAUD,
+                MGroup::PENGAJAR_DIKLAT_PAUD,
+            ],
+            MGroup::AI_LPD_DIKLAT_PAUD  => [
+                MGroup::ADM_LPD_DIKLAT_PAUD,
+            ],
+            MGroup::ADM_LPD_DIKLAT_PAUD => [
+                MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD,
+                MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD,
+                MGroup::ADM_KELAS_DIKLAT_GTK_PAUD,
+            ],
         ];
 
         return $groups[$kGroup] ?? [];
@@ -74,6 +66,7 @@ class AkunService
     public static function childGroups(Akun $akun, Instansi $instansi)
     {
         $akunInstansis = AkunInstansi::whereAkunId($akun->akun_id)
+            ->whereIsAktif('1')
             ->whereInstansiId($instansi->instansi_id)
             ->get();
 
@@ -103,38 +96,14 @@ class AkunService
     }
 
     /**
-     * @param Akun $akun
-     * @param array $params
-     *
-     * @return Instansi|Eloquent\Builder
-     */
-    public function queryInstansi(Akun $akun, $params)
-    {
-        $q = Instansi::query()
-            ->select(['instansi_id', 'nama'])
-            ->whereExists(function (Eloquent\Builder $query) use ($akun) {
-                $query->select(DB::raw(1))
-                    ->from('akun_instansi')
-                    ->where('akun_instansi.akun_id', '=', $akun->akun_id)
-                    ->whereIn('akun_instansi.k_group', $this->kGroups())
-                    ->whereRaw('instansi.instansi_id = akun_instansi.instansi_id');
-            });
-
-        if ($keyword = Arr::get($params, 'keyword')) {
-            $q->where('nama', 'like', "%$keyword%");
-        }
-
-        return $q;
-    }
-
-    /**
      * @param Instansi $instansi
      *
      * @return AkunInstansi[]|Eloquent\Collection
      */
     public function akunInstansis(Instansi $instansi)
     {
-        return akun()->akunInstansis()
+        return akun()
+            ->akunInstansis()
             ->whereIn('k_group', $this->kGroups())
             ->whereInstansiId($instansi->instansi_id)
             ->get();
