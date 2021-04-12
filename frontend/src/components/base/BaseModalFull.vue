@@ -143,6 +143,9 @@ export default {
     changeTabs(value) {
       this.$emit('tab', value);
     },
+    async onValidate() {
+      return await this.$refs.observer.validate();
+    },
   },
   watch: {
     tabs: 'changeTabs',

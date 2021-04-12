@@ -7,11 +7,14 @@ export default {
       'create',
       'update',
       'listGroups',
+      'listInstansis',
       'action',
       'lookup',
       'getDetail',
       'downloadList',
     ]),
+
+    ...mapActions('master', ['getMasters']),
 
     async getGroups() {
       const groups = await this.listGroups();
@@ -81,7 +84,7 @@ export default {
     onSave() {
       const isEdit = this.formulir.isEdit;
       const id = this.$refs.formulir.id;
-      const params = Object.assign({}, this.$refs.formulir.getValue());
+      const params = Object.assign({}, this.$refs.formulir.getValue(), { k_group: this.kGroup });
 
       this[isEdit ? 'update' : 'create']({ params, id })
         .then(({ data }) => {
@@ -193,6 +196,26 @@ export default {
           this.$downloadFile(url);
         });
       });
+    },
+
+    onValidate() {
+      this.$refs.modal.onValidate().then((valid) => {
+        if (valid) this.$refs.formulir.next(valid);
+      });
+    },
+
+    getInstansi() {
+      let mInstansi = {};
+      this.listInstansis()
+        .then((resp) => {
+          const instansi = resp || [];
+          instansi.forEach((item) => {
+            this.$set(mInstansi, this.$getDeepObj(item, 'instansi_id'), this.$getDeepObj(item, 'instansi.data.nama'));
+          });
+        })
+        .then(() => {
+          this.$set(this, 'instansis', mInstansi);
+        });
     },
   },
 };

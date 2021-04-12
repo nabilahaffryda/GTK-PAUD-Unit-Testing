@@ -6,6 +6,7 @@ export default [
     component: () => lazyLoadView(import('@views/instansi/admin/list/Program')),
     meta: {
       title: 'Kelola Akun Admin Program',
+      k_group: '171',
     },
   },
   {

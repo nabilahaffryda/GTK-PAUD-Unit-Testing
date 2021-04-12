@@ -13,7 +13,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "http-build-query": "^0.7.0",
-    "kitsu": "^9.1.18",
+    "kitsu": "^10.0.0-alpha.9",
     "pdfobject": "^2.2.4",
     "printd": "^1.4.2",
     "register-service-worker": "^1.7.1",

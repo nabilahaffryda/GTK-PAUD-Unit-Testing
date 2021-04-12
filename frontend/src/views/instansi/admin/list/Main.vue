@@ -51,7 +51,7 @@
         >
           <template slot-scope="{ item }">
             <td>
-              <slot :item="item" :index="i">
+              <slot :item="item">
                 <v-list-item dense class="px-0">
                   <v-list-item-content>
                     <v-row>
@@ -127,14 +127,18 @@
         :initValue="formulir.init"
         :errorEmail="formulir.errorEmail"
         :groups="groups"
+        :instansis="instansis"
+        :masters="masters"
         @check="onCheck"
         @unCheck="onUncheck"
+        @onValidate="onValidate"
       />
     </base-modal-full>
     <Akun ref="akun" :akun="akun" />
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 import FormAkun from '../formulir/Akun';
 import Akun from '@components/cetak/Akun';
 import mixin from './mixin';
@@ -164,9 +168,12 @@ export default {
       actions: actions,
       akun: {},
       groups: {},
+      instansis: {},
     };
   },
   computed: {
+    ...mapState('master', ['masters']),
+
     formFilter() {
       return [
         {
@@ -189,9 +196,15 @@ export default {
       }
       return label;
     },
+
+    kGroup() {
+      return this.$route.meta.k_group;
+    },
   },
   created() {
     this.getGroups();
+    this.getMasters('m_golongan');
+    this.getInstansi();
   },
   methods: {
     allow(action, data) {

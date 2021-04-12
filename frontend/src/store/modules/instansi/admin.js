@@ -16,7 +16,7 @@ export const actions = {
   async getDetail({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/psp/i/${id}/admin`,
+      baseURL: process.env.VUE_APP_API_URL + `//i/${id}/admin`,
     });
     return await $ajax.get(`/${payload.id}`);
   },
@@ -24,7 +24,7 @@ export const actions = {
   async lookup({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/psp/i/${id}/admin`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/admin`,
     });
     return await $ajax.get(`/email/${payload}`).then(({ data }) => data);
   },
@@ -32,14 +32,22 @@ export const actions = {
   async listGroups({ rootState }) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/psp/i/${id}/admin`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/admin`,
     });
     return await $ajax.get('/groups').then(({ data }) => data);
   },
 
+  async listInstansis({ rootState }) {
+    const id = rootState.auth.instansi_id;
+    $ajax = kitsu({
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/lpd`,
+    });
+    return await $ajax.get('/').then(({ data }) => data);
+  },
+
   create({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `psp/i/${id}/admin/create`;
+    const url = `/i/${id}/admin/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 
@@ -49,19 +57,19 @@ export const actions = {
 
   action({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `psp/i/${id}/admin/${payload.id}/${payload.type}`;
+    const url = `/i/${id}/admin/${payload.id}/${payload.type}`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 
   templateUpload({ rootState }) {
     const id = rootState.auth.instansi_id;
-    const url = `psp/i/${id}/admin/template`;
+    const url = `/i/${id}/admin/template`;
     return Promise.resolve(url);
   },
 
   upload({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `psp/i/${id}/admin/upload`;
+    const url = `/i/${id}/admin/upload`;
     return http.post(url, payload.params, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -71,7 +79,7 @@ export const actions = {
 
   downloadList({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `${process.env.VUE_APP_API_URL}/psp/i/${id}/admin/${payload.url}?${queryString(payload.params)}`;
+    const url = `${process.env.VUE_APP_API_URL}//i/${id}/admin/${payload.url}?${queryString(payload.params)}`;
     return Promise.resolve(url);
   },
 };

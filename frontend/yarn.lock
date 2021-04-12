@@ -4973,6 +4973,11 @@ is-plain-obj@^1.0.0:
   resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-1.1.0.tgz#71a50c8429dfca773c92a390a4a03b39fcd51d3e"
   integrity sha1-caUMhCnfync8kqOQpKA7OfzVHT4=
 
+is-plain-obj@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-2.1.0.tgz#45e42e37fccf1f40da8e5f76ee21515840c09287"
+  integrity sha512-YWnfyRwxL/+SsrWYfOpUtz5b3YD+nyfkHvjbcanzk8zgyO4ASD67uVMRt8k5bM4lLMDnXfriRhOpemw+NfT1eA==
+
 is-plain-obj@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-3.0.0.tgz#af6f2ea14ac5a646183a5bbdb5baabbc156ad9d7"
@@ -5229,18 +5234,19 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
-kitsu-core@^9.1.18:
-  version "9.1.18"
-  resolved "https://registry.yarnpkg.com/kitsu-core/-/kitsu-core-9.1.18.tgz#2f0a8f01a5bc3f04484e244eadd98f6704545155"
-  integrity sha512-3P5OMLtk5KhIhaVw6Oz78AzmnoqqMUpNeDusJYVpiwJdINOxTpN3RGlxf0kbiuoP+zSKaLYelIu3ELqDyCg1qw==
+kitsu-core@^10.0.0-alpha.10:
+  version "10.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/kitsu-core/-/kitsu-core-10.0.0-alpha.10.tgz#0978265c42554c14814b4a0df16a558bdb034b08"
+  integrity sha512-m4ueDD9Hi8I4RndxjiKtR2Q4s4NKiOPsoDcF0DhzRLrjBFsmCicOZPaMYq9q7xhE25uDkGlm5F2laluHSsF/Iw==
 
-kitsu@^9.1.18:
-  version "9.1.18"
-  resolved "https://registry.yarnpkg.com/kitsu/-/kitsu-9.1.18.tgz#09c78df9b64ee3632209580c2f77e76fdbfda7f4"
-  integrity sha512-fjHOE72kJh1HvK3ImZJZ4SQYW4dT8abPLpFyid7Exy96/jEgdxaLT8VSONU9KSBSUM4rYEXbrKw/HGysshoBsQ==
+kitsu@^10.0.0-alpha.9:
+  version "10.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/kitsu/-/kitsu-10.0.0-alpha.10.tgz#671a3f67833bc11543d5170a4d71ef218e55c380"
+  integrity sha512-esBUnDBtARMj/j6N7gmFnADuUiKAcJRaDun2c7obAAAO88ysWmR78cnDepDF7jIgESeLW5INUyLrdu+tdwD4RA==
   dependencies:
     axios "^0.21.1"
-    kitsu-core "^9.1.18"
+    kitsu-core "^10.0.0-alpha.10"
+    merge-options "^3.0.0"
     pluralize "^8.0.0"
 
 launch-editor-middleware@^2.2.1:
@@ -5477,6 +5483,13 @@ merge-descriptors@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/merge-descriptors/-/merge-descriptors-1.0.1.tgz#b00aaa556dd8b44568150ec9d1b953f3f90cbb61"
   integrity sha1-sAqqVW3YtEVoFQ7J0blT8/kMu2E=
+
+merge-options@^3.0.0:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/merge-options/-/merge-options-3.0.4.tgz#84709c2aa2a4b24c1981f66c179fe5565cc6dbb7"
+  integrity sha512-2Sug1+knBjkaMsMgf1ctR1Ujx+Ayku4EdJN4Z+C2+JzoeF7A3OZ9KM2GY0CpQS51NR61LTurMJrRKPhSs3ZRTQ==
+  dependencies:
+    is-plain-obj "^2.1.0"
 
 merge-source-map@^1.1.0:
   version "1.1.0"

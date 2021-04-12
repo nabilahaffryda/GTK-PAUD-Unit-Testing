@@ -14,24 +14,60 @@
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">
-              <v-card flat>
-                <v-card-text class="pa-0 pt-7">
-                  <base-form-generator :schema="schema.biodata.akun" v-model="form" />
-                </v-card-text>
-                <v-card-actions class="pa-0">
-                  <v-spacer></v-spacer>
-                  <v-btn right color="primary" @click="next">
-                    Lanjut
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
+              <template v-if="isChecked">
+                <v-card flat>
+                  <v-card-text class="pa-0 pt-7">
+                    <base-form-generator :schema="schema.biodata.akun" v-model="form" />
+                    <v-divider class="my-4" />
+                  </v-card-text>
+                  <v-card-actions class="pa-0">
+                    <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
+                    <v-spacer></v-spacer>
+                    <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')">
+                      Selanjutnya
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </template>
+              <template v-else>
+                <v-row class="mt-2">
+                  <v-col cols="12" md="10" sm="12">
+                    <base-form-generator :schema="schema.unchecked" v-model="form" />
+                  </v-col>
+                  <v-col cols="12" md="2" sm="12" class="py-1">
+                    <div class="white--text">d</div>
+                    <v-btn depressed color="secondary" @click="onCheck"> CEK SUREL </v-btn>
+                  </v-col>
+                </v-row>
+              </template>
             </v-stepper-content>
             <v-stepper-content step="2" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
-                  <h3>Konfirmasi Data</h3>
-                  <base-list-info class="px-0" :info="info"></base-list-info>
+                  <h2 class="primary--text">Admin Program LPD</h2>
+                  <span>
+                    <i>{{ instansis[form.instansi_id] }}</i>
+                  </span>
+                  <v-row class="my-2">
+                    <v-col cols="12" md="2" sm="12">
+                      <v-avatar color="primary" size="100">
+                        <v-icon dark size="80">mdi-account-circle</v-icon>
+                      </v-avatar>
+                    </v-col>
+                    <v-col cols="12" md="10" sm="12" class="px-0">
+                      <base-list-info class="px-0" :info="info"></base-list-info>
+                    </v-col>
+                    <v-col cols="12" md="12" sm="12">
+                      Selamat, <b>Admin Berhasil Baru Berhasil Ditambahkan.</b> Anda dapat mencetak data akun sebagai
+                      bukti pembuatan akun dengan menekan tombol dibawah ini.
+                    </v-col>
+                  </v-row>
                 </v-card-text>
+                <v-card-actions class="pa-0">
+                  <v-btn right color="primary" @click="step--">
+                    Sebelumnya
+                  </v-btn>
+                </v-card-actions>
               </v-card>
             </v-stepper-content>
           </v-stepper-items>
@@ -66,12 +102,16 @@ export default {
       default: null,
     },
     groups: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     jenis: {
       type: String,
       default: 'akun',
+    },
+    instansis: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -79,7 +119,8 @@ export default {
       id: null,
       step: 1,
       form: {},
-      info: {},
+      info: [],
+      isValid: false,
     };
   },
   computed: {
@@ -189,6 +230,7 @@ export default {
               required: true,
               outlined: true,
               dense: true,
+              disable: true,
               singleLine: true,
             },
             {
@@ -224,10 +266,26 @@ export default {
             },
             {
               type: 'VSelect',
-              name: 'k_group',
-              label: 'Peran',
+              name: 'k_golongan',
+              label: 'Golongan',
               hint: 'wajib diisi',
-              items: this.$mapForMaster(this.groups),
+              items: this.$mapForMaster(this.masters.m_golongan),
+              value: 'value',
+              text: 'text',
+              required: true,
+              hideDetails: false,
+              outlined: true,
+              dense: true,
+              singleLine: true,
+              grid: { cols: 12, md: 6 },
+              labelColor: 'secondary',
+            },
+            {
+              type: 'VSelect',
+              name: 'instansi_id',
+              label: 'Instansi',
+              hint: 'wajib diisi',
+              items: this.$mapForMaster(this.instansis),
               value: 'value',
               text: 'text',
               required: true,
@@ -249,7 +307,8 @@ export default {
     reset() {
       this.$set(this, 'id', null);
       this.$set(this, 'form', {});
-      this.info = {};
+      this.step = 1;
+      this.info = [];
       this.id = null;
     },
 
