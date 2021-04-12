@@ -33,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
         if (!empty($_COOKIE['siap-debug']) && $_COOKIE['siap-debug'] == md5('huhuhehe')) {
             Config::set('app.debug', true);
         }
+
+        $this->app->bind('Illuminate\Pagination\LengthAwarePaginator', 'App\Helpers\LengthAwarePaginator');
     }
 
     /**
