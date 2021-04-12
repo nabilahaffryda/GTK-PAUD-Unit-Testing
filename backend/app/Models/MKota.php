@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|Akun[] $akuns
- * @property-read Collection|Akun[] $instansiKotaAkuns
+ * @property-read Collection|Akun[] $instansiAkuns
  * @property-read Collection|Instansi[] $instansis
  * @property-read Collection|Ptk[] $ptks
  *
@@ -115,7 +115,7 @@ class MKota extends Eloquent
     /**
      * @return HasMany|Builder|Akun
      */
-    public function instansiKotaAkuns()
+    public function instansiAkuns()
     {
         return $this->hasMany('App\Models\Akun', 'instansi_k_kota', 'k_kota');
     }

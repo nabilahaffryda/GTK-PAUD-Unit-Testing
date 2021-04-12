@@ -105,7 +105,7 @@ class Adapter extends AbstractAdapter
         return $this->hasMany();
     }
 
-    protected function instansiKotaAkuns()
+    protected function instansiAkuns()
     {
         return $this->hasMany();
     }

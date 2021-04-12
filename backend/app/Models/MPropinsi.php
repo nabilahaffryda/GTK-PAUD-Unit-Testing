@@ -17,9 +17,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|int $timezone
  *
  * @property-read Collection|Akun[] $akuns
- * @property-read Collection|Akun[] $instansiPropinsiAkuns
+ * @property-read Collection|Akun[] $instansiAkuns
  * @property-read Collection|Instansi[] $instansis
- * @property-read Collection|MKota[] $kotas
+ * @property-read Collection|MKota[] $mKotas
  * @property-read Collection|Ptk[] $ptks
  *
  * @method static Builder|MPropinsi whereKPropinsi($value)
@@ -94,7 +94,7 @@ class MPropinsi extends Eloquent
     /**
      * @return HasMany|Builder|Akun
      */
-    public function instansiPropinsiAkuns()
+    public function instansiAkuns()
     {
         return $this->hasMany('App\Models\Akun', 'instansi_k_propinsi', 'k_propinsi');
     }
@@ -110,7 +110,7 @@ class MPropinsi extends Eloquent
     /**
      * @return HasMany|Builder|MKota
      */
-    public function kotas()
+    public function mKotas()
     {
         return $this->hasMany('App\Models\MKota', 'k_propinsi', 'k_propinsi');
     }

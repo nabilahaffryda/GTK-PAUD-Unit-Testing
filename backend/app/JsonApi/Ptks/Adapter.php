@@ -100,7 +100,7 @@ class Adapter extends AbstractAdapter
         $this->filterWithScopes($query, $filters);
     }
 
-    protected function kota()
+    protected function mKota()
     {
         return $this->hasOne();
     }

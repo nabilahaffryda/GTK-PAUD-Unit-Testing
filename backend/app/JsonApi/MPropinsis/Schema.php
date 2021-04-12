@@ -58,7 +58,7 @@ class Schema extends SchemaProvider
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],
-            'kotas'                   => [
+            'm_kotas'                 => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],

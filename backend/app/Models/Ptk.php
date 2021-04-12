@@ -55,7 +55,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property null|int $is_aktif
  * @property null|string $akun_id
  *
- * @property-read MKota $kota
+ * @property-read MKota $mKota
  * @property-read MPropinsi $mPropinsi
  *
  * @method static Builder|Ptk wherePtkId($value)
@@ -246,7 +246,7 @@ class Ptk extends Authenticatable
     /**
      * @return BelongsTo|Builder|MKota
      */
-    public function kota()
+    public function mKota()
     {
         return $this->belongsTo('App\Models\MKota', 'k_kota', 'k_kota');
     }

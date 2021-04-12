@@ -10,7 +10,7 @@ class Schema extends SchemaProvider
     /**
      * @var string
      */
-    protected $resourceType = 'kotas';
+    protected $resourceType = 'm_kotas';
 
     /**
      * @param MKota $resource
@@ -51,19 +51,19 @@ class Schema extends SchemaProvider
     public function getRelationships($resource, $isPrimary, array $includeRelationships)
     {
         return [
-            'akuns'               => [
+            'akuns'          => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],
-            'instansi_kota_akuns' => [
+            'instansi_akuns' => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],
-            'instansis'           => [
+            'instansis'      => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],
-            'm_propinsi'          => [
+            'm_propinsi'     => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA    => isset($includeRelationships['m_propinsi']),
@@ -71,7 +71,7 @@ class Schema extends SchemaProvider
                     return $resource->mPropinsi;
                 },
             ],
-            'ptks'                => [
+            'ptks'           => [
                 self::SHOW_SELF    => true,
                 self::SHOW_RELATED => true,
             ],

@@ -30,8 +30,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $kode_rkakl
  * @property null|string $nama_rkakl
  *
- * @property-read MKota $kota
  * @property-read MJenisInstansi $mJenisInstansi
+ * @property-read MKota $mKota
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|AkunInstansi[] $akunInstansis
  * @property-read Collection|PaudAdmin[] $paudAdmins
@@ -147,19 +147,19 @@ class Instansi extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MKota
-     */
-    public function kota()
-    {
-        return $this->belongsTo('App\Models\MKota', 'k_kota', 'k_kota');
-    }
-
-    /**
      * @return BelongsTo|Builder|MJenisInstansi
      */
     public function mJenisInstansi()
     {
         return $this->belongsTo('App\Models\MJenisInstansi', 'k_jenis_instansi', 'k_jenis_instansi');
+    }
+
+    /**
+     * @return BelongsTo|Builder|MKota
+     */
+    public function mKota()
+    {
+        return $this->belongsTo('App\Models\MKota', 'k_kota', 'k_kota');
     }
 
     /**

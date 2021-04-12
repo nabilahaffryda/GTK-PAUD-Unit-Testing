@@ -115,7 +115,7 @@ class Adapter extends AbstractAdapter
         return $this->hasMany();
     }
 
-    protected function kotas()
+    protected function mKotas()
     {
         return $this->hasMany();
     }

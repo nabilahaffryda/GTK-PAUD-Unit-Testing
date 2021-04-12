@@ -31,6 +31,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property null|string $instansi_asal
  * @property null|int $instansi_k_propinsi
  * @property null|int $instansi_k_kota
+ * @property null|int $instansi_k_kecamatan
  * @property null|string $instansi_alamat
  * @property null|string $instansi_kodepos
  * @property null|string $alamat
@@ -53,7 +54,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  *
  * @property-read MKota $instansiKota
  * @property-read MPropinsi $instansiPropinsi
- * @property-read MKota $kota
+ * @property-read MGolongan $mGolongan
+ * @property-read MKota $mKota
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|AkunInstansi[] $akunInstansis
  * @property-read Collection|PaudAdmin[] $paudAdmins
@@ -77,6 +79,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static Builder|Akun whereInstansiAsal($value)
  * @method static Builder|Akun whereInstansiKPropinsi($value)
  * @method static Builder|Akun whereInstansiKKota($value)
+ * @method static Builder|Akun whereInstansiKKecamatan($value)
  * @method static Builder|Akun whereInstansiAlamat($value)
  * @method static Builder|Akun whereInstansiKodepos($value)
  * @method static Builder|Akun whereAlamat($value)
@@ -135,43 +138,44 @@ class Akun extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'nip'                 => 'string',
-        'nama'                => 'string',
-        'passwd'              => 'string',
-        'tmp_lahir'           => 'string',
-        'tgl_lahir'           => 'date:Y-m-d',
-        'no_telpon'           => 'string',
-        'no_hp'               => 'string',
-        'email'               => 'string',
-        'kelamin'             => 'string',
-        'foto'                => 'string',
-        'k_golongan'          => 'int',
-        'moodle_id'           => 'int',
-        'paspor_id'           => 'int',
-        'token'               => 'string',
-        'jabatan'             => 'string',
-        'instansi_asal'       => 'string',
-        'instansi_k_propinsi' => 'int',
-        'instansi_k_kota'     => 'int',
-        'instansi_alamat'     => 'string',
-        'instansi_kodepos'    => 'string',
-        'alamat'              => 'string',
-        'k_propinsi'          => 'int',
-        'k_kota'              => 'int',
-        'kodepos'             => 'string',
-        'nik'                 => 'string',
-        'npwp'                => 'string',
-        'rekening_nama'       => 'string',
-        'rekening_bank'       => 'string',
-        'rekening_cabang'     => 'string',
-        'rekening_nomor'      => 'string',
-        'k_jabatan_guru'      => 'int',
-        'k_jabatan_dosen_ppg' => 'int',
-        'gelar_depan'         => 'string',
-        'gelar_belakang'      => 'string',
-        'is_aktif'            => 'string',
-        'k_status_email'      => 'int',
-        'admin_id'            => 'string',
+        'nip'                  => 'string',
+        'nama'                 => 'string',
+        'passwd'               => 'string',
+        'tmp_lahir'            => 'string',
+        'tgl_lahir'            => 'date:Y-m-d',
+        'no_telpon'            => 'string',
+        'no_hp'                => 'string',
+        'email'                => 'string',
+        'kelamin'              => 'string',
+        'foto'                 => 'string',
+        'k_golongan'           => 'int',
+        'moodle_id'            => 'int',
+        'paspor_id'            => 'int',
+        'token'                => 'string',
+        'jabatan'              => 'string',
+        'instansi_asal'        => 'string',
+        'instansi_k_propinsi'  => 'int',
+        'instansi_k_kota'      => 'int',
+        'instansi_k_kecamatan' => 'int',
+        'instansi_alamat'      => 'string',
+        'instansi_kodepos'     => 'string',
+        'alamat'               => 'string',
+        'k_propinsi'           => 'int',
+        'k_kota'               => 'int',
+        'kodepos'              => 'string',
+        'nik'                  => 'string',
+        'npwp'                 => 'string',
+        'rekening_nama'        => 'string',
+        'rekening_bank'        => 'string',
+        'rekening_cabang'      => 'string',
+        'rekening_nomor'       => 'string',
+        'k_jabatan_guru'       => 'int',
+        'k_jabatan_dosen_ppg'  => 'int',
+        'gelar_depan'          => 'string',
+        'gelar_belakang'       => 'string',
+        'is_aktif'             => 'string',
+        'k_status_email'       => 'int',
+        'admin_id'             => 'string',
     ];
 
     /**
@@ -206,6 +210,7 @@ class Akun extends Authenticatable
         'instansi_asal',
         'instansi_k_propinsi',
         'instansi_k_kota',
+        'instansi_k_kecamatan',
         'instansi_alamat',
         'instansi_kodepos',
         'alamat',
@@ -252,9 +257,17 @@ class Akun extends Authenticatable
     }
 
     /**
+     * @return BelongsTo|Builder|MGolongan
+     */
+    public function mGolongan()
+    {
+        return $this->belongsTo('App\Models\MGolongan', 'k_golongan', 'k_golongan');
+    }
+
+    /**
      * @return BelongsTo|Builder|MKota
      */
-    public function kota()
+    public function mKota()
     {
         return $this->belongsTo('App\Models\MKota', 'k_kota', 'k_kota');
     }

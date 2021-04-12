@@ -105,7 +105,7 @@ class Adapter extends AbstractAdapter
         return $this->hasMany();
     }
 
-    protected function instansiKotas()
+    protected function instansiKota()
     {
         return $this->hasOne();
     }
@@ -115,7 +115,12 @@ class Adapter extends AbstractAdapter
         return $this->hasOne();
     }
 
-    protected function kota()
+    protected function mGolongan()
+    {
+        return $this->hasOne();
+    }
+
+    protected function mKota()
     {
         return $this->hasOne();
     }
