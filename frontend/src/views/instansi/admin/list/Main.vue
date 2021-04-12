@@ -171,6 +171,11 @@ export default {
       instansis: {},
     };
   },
+  mounted() {
+    Object.assign(this.params, {
+      k_group: this.$route.meta && this.$route.meta.k_group,
+    });
+  },
   computed: {
     ...mapState('master', ['masters']),
 

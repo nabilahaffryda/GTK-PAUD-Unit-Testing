@@ -15,6 +15,7 @@ export default [
     component: () => lazyLoadView(import('@views/instansi/admin/list/Operator')),
     meta: {
       title: 'Kelola Operator LPD',
+      k_group: '172',
     },
   },
 ];

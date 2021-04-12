@@ -383,7 +383,7 @@ export default {
           {
             key: 'no_wa',
             label: 'Nomor Telepon (terhubung WhatsApp)',
-            value: this.$getDeepObj(this.form, 'no_wa') || '-',
+            value: this.$getDeepObj(this.form, 'no_hp') || '-',
           },
           {
             key: 'email',
