@@ -9,7 +9,11 @@ use App\Models\PaudInstansi;
 
 class InstansiService
 {
-    public function create(Instansi $instansi, PaudInstansi $paudInstansi)
+    /**
+     * @param array $data
+     * @return PaudInstansi
+     */
+    public function createLpd(array $data)
     {
         $prefix  = 72;
         $maxKode = (int)"{$prefix}9999";
@@ -25,15 +29,20 @@ class InstansiService
             $maxKode = (int)"{$prefix}9999";
         } while (true);
 
+        $instansi     = new Instansi($data);
+        $paudInstansi = new PaudInstansi($data);
+
         $instansi->instansi_id      = $instansiId;
         $instansi->k_jenis_instansi = MJenisInstansi::LPD_PAUD;
 
-        $paudInstansi->instansi_id           = $instansiId;
-        $paudInstansi->tahun                 = config('paud.tahun');
-        $paudInstansi->angkatan              = config('paud.angkatan');
-        $paudInstansi->k_verval_paud         = MVervalPaud::KANDIDAT;
+        $paudInstansi->instansi_id   = $instansiId;
+        $paudInstansi->tahun         = config('paud.tahun');
+        $paudInstansi->angkatan      = config('paud.angkatan');
+        $paudInstansi->k_verval_paud = MVervalPaud::KANDIDAT;
 
         $instansi->save();
         $paudInstansi->save();
+
+        return $paudInstansi;
     }
 }
