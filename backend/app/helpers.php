@@ -27,6 +27,11 @@ function ptk()
     return Auth::guard('ptk')->user();
 }
 
+function ptkId()
+{
+    return ptk()?->akun_id;
+}
+
 /**
  * @return Instansi|null
  */
