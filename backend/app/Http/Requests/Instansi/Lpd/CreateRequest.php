@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Instansi\PaudInstansi;
+namespace App\Http\Requests\Instansi\Lpd;
 
 use Illuminate\Foundation\Http\FormRequest;
 

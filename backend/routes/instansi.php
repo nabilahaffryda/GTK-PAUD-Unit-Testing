@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Instansi\IndexController;
-use App\Http\Controllers\Instansi\PaudInstansiController;
+use App\Http\Controllers\Instansi\LpdController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +14,5 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::get('preferensi', [IndexController::class, 'preferensi']);
     Route::get('master', [IndexController::class, 'master']);
 
-    Route::post('paud-instansi/create', [PaudInstansiController::class, 'create']);
+    Route::post('lpd/create', [LpdController::class, 'create']);
 });
