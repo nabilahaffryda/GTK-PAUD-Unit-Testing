@@ -7,6 +7,7 @@ use App\Exceptions\SaveException;
 use App\Models\Akun;
 use App\Models\AkunInstansi;
 use App\Models\Instansi;
+use App\Models\MGroup;
 use App\Models\MJenisInstansi;
 use App\Models\MStatusEmail;
 use App\Models\PaudAdmin;
@@ -44,6 +45,15 @@ class AdminService
      */
     public function query(Instansi $instansi, $params = [])
     {
+        $condition = [
+            'paud_admin.tahun'    => $params['tahun'] ?? config('paud.tahun'),
+            'paud_admin.angkatan' => $params['angkatan'] ?? config('paud.angkatan'),
+        ];
+
+        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD && ($params['k_group'] ?? 0) != MGroup::AI_LPD_DIKLAT_PAUD) {
+            $condition['paud_admin.instansi_id'] = $instansi->instansi_id;
+        }
+
         $query = PaudAdmin::query()
             ->join('akun', 'paud_admin.akun_id', '=', 'akun.akun_id')
             ->join('akun_instansi', function (JoinClause $query) {
@@ -54,11 +64,7 @@ class AdminService
                 ]);
             })
             ->select(['paud_admin.*'])
-            ->where([
-                'paud_admin.instansi_id' => $instansi->instansi_id,
-                'paud_admin.tahun'       => $params['tahun'] ?? config('paud.tahun'),
-                'paud_admin.angkatan'    => $params['angkatan'] ?? config('paud.angkatan'),
-            ])
+            ->where($condition)
             ->with([
                 'akun.mPropinsi',
                 'akun.mKota',
