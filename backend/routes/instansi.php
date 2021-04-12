@@ -15,7 +15,9 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::get('preferensi', [IndexController::class, 'preferensi']);
     Route::get('master', [IndexController::class, 'master']);
 
+    Route::get('lpd', [LpdController::class, 'index']);
     Route::post('lpd/create', [LpdController::class, 'create']);
+    Route::get('lpd/{paudInstansi}', [LpdController::class, 'fetch']);
 
     Route::get('admin', [AdminController::class, 'index']);
     Route::get('admin/download', [AdminController::class, 'download']);
