@@ -56,6 +56,7 @@ return [
             'akun_instansi',
             'instansi',
             'm_group',
+            'm_golongan',
             'm_jenis_instansi',
             'm_kota',
             'm_propinsi',
@@ -130,6 +131,7 @@ return [
             'akun_instansi',
             'instansi',
             'm_group',
+            'm_golongan',
             'm_jenis_instansi',
             'm_kota',
             'm_propinsi',
@@ -191,6 +193,12 @@ return [
         'm_group' => [
             'model' => [
                 'const' => ['k_group', 'singkat'],
+            ],
+        ],
+
+        'm_golongan' => [
+            'model' => [
+                'const' => ['k_golongan', 'singkat'],
             ],
         ],
 
