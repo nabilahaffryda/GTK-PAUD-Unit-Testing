@@ -103,7 +103,7 @@ export const actions = {
     commit('SET_LOGIN', isLogin);
     commit('SET_AKUN', data?.akun);
     commit('SET_PTK', data?.ptk);
-    commit('SET_INSTANSI_ID', data?.instansi_id || 800001);
+    commit('SET_INSTANSI_ID', data?.instansi?.instansi_id || 800001);
 
     const role = data?.akun && isObject(data?.akun) ? 'instansi' : 'gtk';
     const done = await dispatch('setRole', role);

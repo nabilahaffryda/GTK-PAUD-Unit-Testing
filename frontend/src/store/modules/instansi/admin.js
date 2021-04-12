@@ -8,7 +8,7 @@ export const actions = {
   async fetch({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/akuns`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/admin`,
     });
     return await $ajax.get('/', { params: payload.params });
   },
