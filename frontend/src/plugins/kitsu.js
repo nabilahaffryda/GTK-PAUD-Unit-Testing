@@ -79,7 +79,9 @@ let defaultConfig = {
     'X-Requested-With': 'XMLHttpRequest',
   },
   pluralize: false,
-  withCredentials: true,
+  axiosOptions: {
+    withCredentials: true,
+  },
 };
 
 export default (config = {}) => {
