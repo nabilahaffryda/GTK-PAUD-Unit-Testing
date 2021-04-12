@@ -21,7 +21,7 @@ class AkunService
     public function kGroups()
     {
         return [
-            MGroup::AI_PUSAT,
+            MGroup::AI_PAUD,
             MGroup::AP_DIKLAT_GTK_PAUD,
             MGroup::AI_LPD_DIKLAT_PAUD,
             MGroup::ADM_LPD_DIKLAT_PAUD,
@@ -36,7 +36,7 @@ class AkunService
     public static function childGroup($kGroup)
     {
         $groups = [
-            MGroup::AI_PUSAT            => [
+            MGroup::AI_PAUD             => [
                 MGroup::AP_DIKLAT_GTK_PAUD,
             ],
             MGroup::AP_DIKLAT_GTK_PAUD  => [
