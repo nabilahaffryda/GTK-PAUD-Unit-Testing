@@ -22,6 +22,7 @@ return [
         'jsonapi/*',
         'gtk/*',
         'i/*',
+        'akses/*',
     ],
 
     'allowed_methods' => ['*'],
