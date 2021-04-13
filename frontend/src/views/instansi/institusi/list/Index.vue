@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline info--text"> <strong>Daftar</strong> Institusi LPD </h1>
+            <h1 class="headline secondary--text"> <strong>Daftar</strong> Institusi LPD </h1>
           </v-col>
         </v-row>
       </v-card-text>
@@ -192,7 +192,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #bbdefb;
+  background: #f0e987;
   height: 100%;
 }
 .sc-notif {

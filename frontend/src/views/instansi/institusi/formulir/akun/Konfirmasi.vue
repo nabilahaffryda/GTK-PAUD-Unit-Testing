@@ -12,12 +12,8 @@
             </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
-            <v-stepper-content step="1">
-
-            </v-stepper-content>
-            <v-stepper-content step="2">
-
-            </v-stepper-content>
+            <v-stepper-content step="1"> </v-stepper-content>
+            <v-stepper-content step="2"> </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
       </v-container>

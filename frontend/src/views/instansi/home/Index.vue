@@ -9,7 +9,7 @@
                 <div class="bg-kiri"></div>
               </v-col>
               <v-col cols="10" class="pa-5">
-                <h1 class="headline">DIKLAT BERJENJANG GTK PAUD</h1>
+                <h1 class="headline secondary--text">DIKLAT BERJENJANG GTK PAUD</h1>
               </v-col>
             </v-row>
           </v-card-text>
@@ -68,7 +68,7 @@ export default {
 
 <style scoped>
 .bg-kiri {
-  background: #bbdefb;
+  background: #f0e987;
   height: 100%;
 }
 </style>
