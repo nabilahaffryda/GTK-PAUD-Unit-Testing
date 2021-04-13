@@ -20,7 +20,7 @@ class IndexController extends Controller
 
         $akunInstansi = $akunService->akunInstansis($instansi);
         $groups       = $akunService->getGroups($akunInstansi);
-        $akses        = $aksesService->getAkses($groups)->pluck('psp_akses_id', 'akses');
+        $akses        = $aksesService->getAkses($groups)->pluck('paud_akses_id', 'akses');
 
         $aktivasi = $akunService->isAktivasi($akunInstansi);
 
