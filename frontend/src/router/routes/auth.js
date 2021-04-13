@@ -9,14 +9,14 @@ export default [
       public: true,
     },
   },
-  // {
-  //   path: '/akses',
-  //   name: 'access',
-  //   component: () => lazyLoadView(import('@views/Access')),
-  //   meta: {
-  //     title: 'Pengaturan Hak Akses',
-  //   },
-  // },
+  {
+    path: '/akses',
+    name: 'access',
+    component: () => lazyLoadView(import('@views/Access')),
+    meta: {
+      title: 'Pengaturan Hak Akses',
+    },
+  },
   // {
   //   path: '/auth',
   //   component: () => lazyLoadView(import('@views/auth/Main')),

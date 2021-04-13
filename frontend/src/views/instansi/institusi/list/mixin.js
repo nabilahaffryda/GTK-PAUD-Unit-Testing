@@ -13,18 +13,10 @@ export default {
       'downloadList',
     ]),
 
-    async getGroups() {
-      const groups = await this.listGroups();
-      const temp = {};
-      for (const item of groups) {
-        temp[item.k_group] = item.keterangan;
-      }
-      this.groups = temp;
-    },
+    ...mapActions('master', ['getMasters']),
 
     onAdd() {
       this.$set(this.formulir, 'title', 'Tambah Data');
-      this.$set(this.formulir, 'isChecked', false);
       this.$set(this.formulir, 'isEdit', false);
       this.$refs.modal.open();
       this.$nextTick(() => {
@@ -45,28 +37,6 @@ export default {
           Object.assign({}, item?.akun?.data ?? {}, { k_group: item.k_group, akun_instansi_id: item.akun_instansi_id })
         );
       });
-    },
-
-    onCheck(email) {
-      this.$set(this.formulir, 'errorEmail', null);
-      this.lookup(email)
-        .then((resp) => {
-          this.$set(this.formulir, 'isChecked', true);
-          this.$set(this.formulir, 'init', this.$isObject(resp) ? resp : { email });
-          this.$set(this.formulir, 'isExist', this.$isObject(resp));
-        })
-        .catch((resp) => {
-          this.$set(this.formulir, 'isChecked', false);
-          this.$set(this.formulir, 'init', {});
-          this.$set(this.formulir, 'isExist', false);
-          this.$set(this.formulir, 'errorEmail', resp.error || 'Pastikan anda memasukan data email yang Valid');
-        });
-    },
-
-    onUncheck() {
-      this.$set(this.formulir, 'isChecked', false);
-      this.$set(this.formulir, 'init', {});
-      this.$set(this.formulir, 'isExist', false);
     },
 
     onDelete(item) {
@@ -131,68 +101,6 @@ export default {
       Object.assign(this.params, { page: 1 });
       this.fetchData();
       this.$refs.filter.close();
-    },
-
-    unduhTokenTemplate() {
-      this.downloadList({ url: 'download-aktivasi' }).then((url) => {
-        this.$downloadFile(url);
-      });
-    },
-
-    onDownload() {
-      const M_LAPORAN = [
-        {
-          key: 'download',
-          label: `Daftar Admin`,
-          acl: this.$allow('psp-admin.download'),
-        },
-        {
-          key: 'download-aktivasi',
-          label: `Daftar Aktivasi Admin`,
-          acl: this.$allow('psp-admin.download-aktivasi'),
-        },
-      ];
-
-      let url = {};
-      this.$confirm('Pilih jenis Berkas yang ingin di Unduh?', 'Unduh Berkas', {
-        tipe: 'warning',
-        form: {
-          desc: 'Laporan Berkas',
-          render: (h) => {
-            return h(
-              'select',
-              {
-                class: 'custom-select',
-                domProps: {
-                  value: '',
-                },
-                on: {
-                  input: function(event) {
-                    url.dokumen = event.target.value;
-                  },
-                },
-              },
-              [
-                h('option', { attrs: { value: '' } }, '-- Pilih Laporan Berkas --'),
-                M_LAPORAN.filter((laporan) => this.$allow(laporan.acl)).map((item) =>
-                  h('option', { attrs: { value: item.key } }, item.label)
-                ),
-              ]
-            );
-          },
-        },
-        lblConfirmButton: 'Unduh',
-      }).then(() => {
-        if (!url.dokumen) {
-          this.$error('Silakan pilih laporan yang ingin diunduh!');
-          return;
-        }
-
-        const params = Object.assign(this.params, this.$isObject(this.filters) ? this.filters : {});
-        this.downloadList({ params, url: url.dokumen }).then((url) => {
-          this.$downloadFile(url);
-        });
-      });
     },
   },
 };

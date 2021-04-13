@@ -113,29 +113,27 @@
       </v-card-actions>
     </v-card>
     <base-modal-full ref="modal" generalError :title="formulir.title" @save="onSave">
-      <form-akun
+      <form-lpd
         ref="formulir"
-        :isChecked="formulir.isChecked"
         :isEdit="formulir.isEdit"
         :initValue="formulir.init"
         :errorEmail="formulir.errorEmail"
-        :groups="groups"
-        @check="onCheck"
-        @unCheck="onUncheck"
+        :masters="masters"
       />
     </base-modal-full>
     <Akun ref="akun" :akun="akun" />
   </div>
 </template>
 <script>
-import FormAkun from '../formulir/Akun';
+import { mapState } from 'vuex';
+import FormLpd from '../formulir/Lpd';
 import Akun from '@components/cetak/Akun';
 import mixin from './mixin';
 import list from '@mixins/list';
 import actions from './actions';
 export default {
   mixins: [list, mixin],
-  components: { FormAkun, Akun },
+  components: { FormLpd, Akun },
   data() {
     return {
       formulir: {},
@@ -145,6 +143,10 @@ export default {
     };
   },
   computed: {
+    ...mapState('master', {
+      masters: (state) => Object.assign({}, state.masters),
+    }),
+
     formFilter() {
       return [
         {
@@ -167,6 +169,9 @@ export default {
       }
       return label;
     },
+  },
+  created() {
+    this.getMasters(['propinsi', 'kota'].join(';'));
   },
   methods: {
     allow(action, data) {
