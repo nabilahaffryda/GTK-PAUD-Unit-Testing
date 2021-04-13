@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-app-bar absolute color="primary darken-2" elevate-on-scroll scroll-target="#scrolling-techniques-7">
+    <v-app-bar absolute color="secondary darken-2" elevate-on-scroll scroll-target="#scrolling-techniques-7">
       <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
       <v-spacer />
       <v-btn dark text @click="onDownload">
@@ -98,9 +98,9 @@
           </template>
           <template v-slot:body="{ items }">
             <tbody>
-              <tr v-for="item in items" :key="item.psp_akses_id">
+              <tr v-for="item in items" :key="item.paud_akses_id">
                 <td>
-                  <v-checkbox v-model="selected" :value="item.psp_akses_id" hide-details />
+                  <v-checkbox v-model="selected" :value="item.paud_akses_id" hide-details />
                 </td>
                 <td>{{ item.akses }}</td>
                 <template v-for="id in form.k_group">
@@ -108,7 +108,7 @@
                     <base-switch
                       :isTutup="Number(item.is_tutup) === 1"
                       :isAktif="Number(item.is_aktif) === 1"
-                      v-model="akses[id][item.psp_akses_id]"
+                      v-model="akses[id][item.paud_akses_id]"
                     ></base-switch>
                   </td>
                 </template>
@@ -199,7 +199,7 @@ export default {
 
     checkAll(value) {
       if (value === 1) {
-        this.selected = this.akseses && (this.akseses || []).map((item) => item.psp_akses_id);
+        this.selected = this.akseses && (this.akseses || []).map((item) => item.paud_akses_id);
       } else {
         this.selected = [];
       }
@@ -256,7 +256,7 @@ export default {
     },
 
     onAktif() {
-      const akseses = this.akseses.filter((item) => this.selected.indexOf(item['psp_akses_id']) > -1);
+      const akseses = this.akseses.filter((item) => this.selected.indexOf(item['paud_akses_id']) > -1);
       const isAktif = akseses && akseses[0] && akseses[0]['is_aktif'] === 1 ? 0 : 1;
 
       const params = Object.assign(
