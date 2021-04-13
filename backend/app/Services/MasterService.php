@@ -13,8 +13,7 @@ class MasterService
 
         foreach ($tables as $index => $table) {
             if (substr($table, 0, 2) != 'm_') {
-                $result[$index] = [];
-                continue;
+                $table = "m_$table";
             }
 
             $field  = $fields[$index] ?? ['keterangan'];
@@ -22,6 +21,10 @@ class MasterService
 
             /** @var Eloquent $class */
             $class = '\\App\Models\\' . Str::camel($table);
+            if (!class_exists($class)) {
+                $result[$index] = [];
+                continue;
+            }
 
             $key = (new $class())->getKeyName();
 
