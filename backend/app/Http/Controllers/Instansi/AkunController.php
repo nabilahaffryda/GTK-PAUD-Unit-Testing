@@ -19,8 +19,10 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class AkunController extends Controller
 {
+    protected $kGroup;
+
     public function __construct(
         protected AdminService $service,
     )
@@ -33,9 +35,13 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
+        $params = array_merge($request->input('filter', []), [
+            'k_group' => $this->kGroup,
+        ]);
+
         return BaseCollection::make($this
             ->service
-            ->query(instansi(), $request->all())
+            ->query(instansi(), $params)
             ->select(['paud_admin.*', 'akun_instansi.token'])
             ->paginate((int)$request->get('count', 10))
             ->format(function (PaudAdmin $item) {
@@ -53,7 +59,11 @@ class AdminController extends Controller
      */
     public function download(Request $request)
     {
-        return $this->service->download(instansi(), $request->all());
+        $params = array_merge($request->input('filter', []), [
+            'k_group' => $this->kGroup,
+        ]);
+
+        return $this->service->download(instansi(), $params);
     }
 
     /**
@@ -64,17 +74,12 @@ class AdminController extends Controller
      */
     public function create(CreateRequest $request)
     {
-        $paudAdmin = $this->service->create(instansi(), $request->all());
-        return BaseResource::make($paudAdmin);
-    }
+        $params = array_merge($request->validated(), [
+            'k_group' => $this->kGroup,
+        ]);
 
-    /**
-     * @param $email
-     * @return BaseResource
-     */
-    public function email($email)
-    {
-        return BaseResource::make(Akun::whereEmail($email)->first());
+        $paudAdmin = $this->service->create(instansi(), $params);
+        return BaseResource::make($paudAdmin);
     }
 
     /**
@@ -83,6 +88,10 @@ class AdminController extends Controller
      */
     public function fetch(PaudAdmin $paudAdmin)
     {
+        if ($paudAdmin->k_group != $this->kGroup) {
+            abort(404);
+        }
+
         return BaseResource::make($this->service->fetch(instansi(), $paudAdmin));
     }
 
@@ -95,6 +104,10 @@ class AdminController extends Controller
      */
     public function update(UpdateRequest $request, PaudAdmin $paudAdmin)
     {
+        if ($paudAdmin->k_group != $this->kGroup) {
+            abort(404);
+        }
+
         return BaseResource::make($this->service->update(instansi(), $paudAdmin, $request->validated()));
     }
 
@@ -106,6 +119,10 @@ class AdminController extends Controller
      */
     public function delete(PaudAdmin $paudAdmin)
     {
+        if ($paudAdmin->k_group != $this->kGroup) {
+            abort(404);
+        }
+
         return BaseResource::make($this->service->delete(instansi(), $paudAdmin));
     }
 
@@ -118,7 +135,20 @@ class AdminController extends Controller
      */
     public function reset(PaudAdmin $paudAdmin)
     {
+        if ($paudAdmin->k_group != $this->kGroup) {
+            abort(404);
+        }
+
         return BaseResource::make($this->service->resetPasword(instansi(), $paudAdmin));
+    }
+
+    /**
+     * @param $email
+     * @return BaseResource
+     */
+    public function email($email)
+    {
+        return BaseResource::make(Akun::whereEmail($email)->first());
     }
 
     /**

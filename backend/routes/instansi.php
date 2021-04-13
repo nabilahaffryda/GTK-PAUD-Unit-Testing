@@ -1,6 +1,14 @@
 <?php
 
 use App\Http\Controllers\Instansi\AdminController;
+use App\Http\Controllers\Instansi\Akun\AdminKelasController;
+use App\Http\Controllers\Instansi\Akun\AdminProgramController;
+use App\Http\Controllers\Instansi\Akun\AdminProgramLpdController;
+use App\Http\Controllers\Instansi\Akun\OperatorLpdController;
+use App\Http\Controllers\Instansi\Akun\PembimbingPraktikController;
+use App\Http\Controllers\Instansi\Akun\PengajarController;
+use App\Http\Controllers\Instansi\Akun\PengajarTambahanController;
+use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Controllers\Instansi\IndexController;
 use App\Http\Controllers\Instansi\LpdController;
 use Illuminate\Support\Facades\Route;
@@ -20,14 +28,76 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::post('lpd/create', [LpdController::class, 'create']);
     Route::get('lpd/{paudInstansi}', [LpdController::class, 'fetch']);
 
-    Route::get('admin', [AdminController::class, 'index']);
-    Route::get('admin/download', [AdminController::class, 'download']);
-    Route::get('admin/groups', [AdminController::class, 'groups']);
-    Route::get('admin/email/{email}', [AdminController::class, 'email']);
-    Route::post('admin/create', [AdminController::class, 'create']);
+    Route::get('akun/groups', [AkunController::class, 'groups']);
+    Route::get('akun/email/{email}', [AkunController::class, 'email']);
 
-    Route::get('admin/{paudAdmin}', [AdminController::class, 'fetch']);
-    Route::post('admin/{paudAdmin}/update', [AdminController::class, 'update']);
-    Route::post('admin/{paudAdmin}/delete', [AdminController::class, 'delete']);
-    Route::post('admin/{paudAdmin}/reset', [AdminController::class, 'reset']);
+    Route::group(['prefix' => 'akun/admin-program'], function () {
+        Route::get('', [AdminProgramController::class, 'index']);
+        Route::get('download', [AdminProgramController::class, 'download']);
+        Route::post('create', [AdminProgramController::class, 'create']);
+        Route::get('{paudAdmin}', [AdminProgramController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [AdminProgramController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [AdminProgramController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [AdminProgramController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'akun/admin-program-lpd'], function () {
+        Route::get('', [AdminProgramLpdController::class, 'index']);
+        Route::get('download', [AdminProgramLpdController::class, 'download']);
+        Route::post('create', [AdminProgramLpdController::class, 'create']);
+        Route::get('{paudAdmin}', [AdminProgramLpdController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [AdminProgramLpdController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [AdminProgramLpdController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [AdminProgramLpdController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'akun/operator-lpd'], function () {
+        Route::get('', [OperatorLpdController::class, 'index']);
+        Route::get('download', [OperatorLpdController::class, 'download']);
+        Route::post('create', [OperatorLpdController::class, 'create']);
+        Route::get('{paudAdmin}', [OperatorLpdController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [OperatorLpdController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [OperatorLpdController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [OperatorLpdController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'akun/pengajar'], function () {
+        Route::get('', [PengajarController::class, 'index']);
+        Route::get('download', [PengajarController::class, 'download']);
+        Route::post('create', [PengajarController::class, 'create']);
+        Route::get('{paudAdmin}', [PengajarController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [PengajarController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [PengajarController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [PengajarController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'akun/pengajar-tambahan'], function () {
+        Route::get('', [PengajarTambahanController::class, 'index']);
+        Route::get('download', [PengajarTambahanController::class, 'download']);
+        Route::post('create', [PengajarTambahanController::class, 'create']);
+        Route::get('{paudAdmin}', [PengajarTambahanController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [PengajarTambahanController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [PengajarTambahanController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [PengajarTambahanController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'akun/pembimbing-praktik'], function () {
+        Route::get('', [PembimbingPraktikController::class, 'index']);
+        Route::get('download', [PembimbingPraktikController::class, 'download']);
+        Route::post('create', [PembimbingPraktikController::class, 'create']);
+        Route::get('{paudAdmin}', [PembimbingPraktikController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [PembimbingPraktikController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [PembimbingPraktikController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [PembimbingPraktikController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'akun/admin-kelas'], function () {
+        Route::get('', [AdminKelasController::class, 'index']);
+        Route::get('download', [AdminKelasController::class, 'download']);
+        Route::post('create', [AdminKelasController::class, 'create']);
+        Route::get('{paudAdmin}', [AdminKelasController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [AdminKelasController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [AdminKelasController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [AdminKelasController::class, 'reset']);
+    });
 });
