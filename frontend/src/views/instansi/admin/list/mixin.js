@@ -45,7 +45,11 @@ export default {
         this.$set(
           this.formulir,
           'init',
-          Object.assign({}, item?.akun?.data ?? {}, { k_group: item.k_group, instansi_id: item.instansi_id })
+          Object.assign({}, item?.akun?.data ?? {}, {
+            paud_admin_id: item.paud_admin_id,
+            k_group: item.k_group,
+            instansi_id: item.instansi_id,
+          })
         );
       });
     },

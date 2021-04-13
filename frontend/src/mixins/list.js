@@ -13,9 +13,7 @@ export default {
       attr: {},
       readMore: {},
       params: {
-        keyword: '',
         page: Number(this.$route.query.page) || 1,
-        limit: 10,
       },
       filters: {},
       listLaporan: [],
@@ -50,12 +48,11 @@ export default {
   methods: {
     fetchData: function() {
       return new Promise((resolve) => {
-        const params = Object.assign({}, this.params, this.$isObject(this.filters) ? this.filters : {});
+        const params = Object.assign({}, this.params, this.$isObject(this.filters) ? { filter: this.filters } : {});
         this.fetch({ params }).then(({ data, meta }) => {
           this.data = data || [];
           this.total = meta?.total || 0;
           this.pageTotal = meta?.last_page || 1;
-          this.params.limit = meta?.per_page || this.params.limit;
           this.statistik = meta?.statistik || {};
           resolve(true);
         });
@@ -132,7 +129,8 @@ export default {
     },
 
     onSearch(keyword) {
-      Object.assign(this.params, { keyword: keyword, page: 1 });
+      Object.assign(this.filters, { keyword: keyword });
+      Object.assign(this.params, { page: 1 });
       this.fetchData();
     },
 

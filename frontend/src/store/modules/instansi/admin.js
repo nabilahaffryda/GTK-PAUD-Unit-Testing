@@ -10,7 +10,7 @@ export const actions = {
     $ajax = kitsu({
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}/admin`,
     });
-    return await $ajax.get('/', { params: { filter: payload.params } });
+    return await $ajax.get('/', payload.params);
   },
 
   async getDetail({ rootState }, payload) {

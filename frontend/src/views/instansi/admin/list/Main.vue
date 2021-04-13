@@ -172,7 +172,8 @@ export default {
     };
   },
   mounted() {
-    Object.assign(this.params, {
+    // filter
+    Object.assign(this.filters, {
       k_group: this.$route.meta && this.$route.meta.k_group,
     });
   },
