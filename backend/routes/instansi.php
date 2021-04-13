@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'valid.akses', 'dbtransaction']], function () {
     Route::get('preferensi', [IndexController::class, 'preferensi']);
     Route::get('master', [IndexController::class, 'master']);
+    Route::get('instansi', [IndexController::class, 'instansi']);
 
     Route::get('lpd', [LpdController::class, 'index']);
     Route::post('lpd/create', [LpdController::class, 'create']);

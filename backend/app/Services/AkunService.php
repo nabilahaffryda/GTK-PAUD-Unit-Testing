@@ -10,8 +10,10 @@ use App\Models\Instansi;
 use App\Models\MGroup;
 use App\Models\Ptk;
 use App\Remotes\Paspor\User;
+use Arr;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent;
+use Illuminate\Database\Query;
 use Illuminate\Support;
 use Illuminate\Support\Str;
 use Log;
@@ -93,6 +95,31 @@ class AkunService
             ->where('is_aktif', '1')
             ->whereIn('k_group', $this->kGroups())
             ->first();
+    }
+
+    /**
+     * @param Akun $akun
+     * @param array $params
+     *
+     * @return Eloquent\Builder
+     */
+    public function queryInstansi(Akun $akun, $params)
+    {
+        $query = Instansi::query()
+            ->select(['instansi_id', 'nama'])
+            ->whereExists(function (Query\Builder $query) use ($akun) {
+                $query->selectRaw(1)
+                    ->from('akun_instansi')
+                    ->where('akun_instansi.akun_id', '=', $akun->akun_id)
+                    ->whereIn('akun_instansi.k_group', $this->kGroups())
+                    ->whereColumn('instansi.instansi_id', 'akun_instansi.instansi_id');
+            });
+
+        if ($keyword = Arr::get($params, 'filter.keyword')) {
+            $query->where('nama', 'like', "%$keyword%");
+        }
+
+        return $query;
     }
 
     /**
