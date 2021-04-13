@@ -15,7 +15,7 @@ use Route;
 class AksesService
 {
     protected $namespaces = [
-        'web' => 'App\\Http\\Controllers\\Instansi',
+        'akun' => 'App\\Http\\Controllers\\Instansi',
         'ptk'  => 'App\\Http\\Controllers\\Gtk'
     ];
 
@@ -96,7 +96,7 @@ class AksesService
         return strtolower(Str::snake($controller, '-'));
     }
 
-    public function fromRequest(Request $request, $guard = 'web')
+    public function fromRequest(Request $request, $guard = 'akun')
     {
         $controller = $request->route()->getActionName();
         return $this->fromController($guard, $controller);
