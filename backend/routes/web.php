@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AksesController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\IndexController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\IndexController::class, 'index'])->name('home');
+Route::get('/', [IndexController::class, 'index'])->name('home');
 
-Route::match(['get', 'post'], 'auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
-Route::match(['get', 'post'], 'auth/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+Route::match(['get', 'post'], 'auth/login', [AuthController::class, 'login'])->name('login');
+Route::match(['get', 'post'], 'auth/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth:akun', 'dbtransaction'])->group(function () {
     Route::get('akses', [AksesController::class, 'index']);
