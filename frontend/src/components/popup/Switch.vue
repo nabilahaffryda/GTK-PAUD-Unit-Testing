@@ -61,7 +61,7 @@ export default {
 
     fetchData: function() {
       const params = Object.assign(this.params, this.$isObject(this.filter) ? { filter: this.filter } : {});
-      this.getInstansi({ params: params }).then(({ data, meta, included }) => {
+      this.getInstansi({ params }).then(({ data, meta, included }) => {
         this.data = data || [];
         this.included = included || [];
         this.total = meta?.total || 0;

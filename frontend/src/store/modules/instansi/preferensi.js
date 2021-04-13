@@ -31,8 +31,8 @@ export const actions = {
   async getInstansi({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/psp/i/${id}/preferensi`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}`,
     });
-    return await $ajax.get('/instansi', { params: payload.params });
+    return await $ajax.get('/instansi', payload.params);
   },
 };
