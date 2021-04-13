@@ -43,7 +43,7 @@ class AksesController extends Controller
 
         $groups     = $this->service->groups($guard, $kGroups)->get();
         $akseses    = $this->service->akses($guard, $aksesId, $aksesKey)->get();
-        $groupAkses = $this->service->groupAkses($groups->pluck('k_group'), $akseses->pluck('psp_akses_id'));
+        $groupAkses = $this->service->groupAkses($groups->pluck('k_group'), $akseses->pluck('paud_akses_id'));
 
         return [
             'groups'      => $groups,
