@@ -5,7 +5,7 @@
         <v-img :height="'64px'" :src="$imgUrl('bg_sidenav.png')"></v-img>
       </v-list-item>
     </v-list>
-    <v-list class="secondary darken-1">
+    <v-list class="secondary darken-2">
       <v-list-item>
         <v-list-item-content>
           <span class="white--text">Selamat Datang di Aplikasi<br /></span>
