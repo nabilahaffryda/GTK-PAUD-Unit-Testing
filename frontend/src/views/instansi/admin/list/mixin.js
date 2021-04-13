@@ -45,7 +45,7 @@ export default {
         this.$set(
           this.formulir,
           'init',
-          Object.assign({}, item?.akun?.data ?? {}, { k_group: item.k_group, akun_instansi_id: item.akun_instansi_id })
+          Object.assign({}, item?.akun?.data ?? {}, { k_group: item.k_group, instansi_id: item.instansi_id })
         );
       });
     },
@@ -73,8 +73,11 @@ export default {
     },
 
     onDelete(item) {
-      this.$confirm('Apakan anda ingin menghapus akun berikut ?', 'Hapus Akun', { tipe: 'error' }).then(() => {
-        this.action({ id: item.akun_instansi_id, type: 'delete' }).then(() => {
+      this.$confirm('Apakan anda ingin menghapus akun berikut ?', 'Hapus Akun', {
+        tipe: 'error',
+        data: this.confirmHtml(item),
+      }).then(() => {
+        this.action({ id: item.paud_admin_id, type: 'delete' }).then(() => {
           this.$success('Akun berhasil di hapus');
           this.fetchData();
         });
@@ -216,6 +219,18 @@ export default {
         .then(() => {
           this.$set(this, 'instansis', mInstansi);
         });
+    },
+
+    confirmHtml(data) {
+      return [
+        {
+          icon: 'mdi-account-circle',
+          iconSize: 60,
+          iconColor: 'secondary',
+          title: `${this.$getDeepObj(data, 'akun.data.nama')}`,
+          subtitles: [`<span>Email: ${this.$getDeepObj(data, 'akun.data.email')}</span>`],
+        },
+      ];
     },
   },
 };
