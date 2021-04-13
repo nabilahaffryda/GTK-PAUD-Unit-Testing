@@ -109,7 +109,7 @@ export default {
     },
 
     onReset(item) {
-      const id = item.akun_instansi_id;
+      const id = item.paud_admin_id;
       this.$confirm(
         `Anda yakin ingin mereset password atas nama <strong>${item.akun?.data?.nama ?? ''}</strong> ?`,
         'Reset Password',
