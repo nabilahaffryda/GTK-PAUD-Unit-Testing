@@ -9,20 +9,20 @@ export const actions = {
     $ajax = kitsu({
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}/lpd`,
     });
-    return await $ajax.get('/', { params: payload.params });
+    return await $ajax.get('/', payload.params);
   },
 
   async getDetail({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/psp/i/${id}/lpd`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/lpd`,
     });
     return await $ajax.get(`/${payload.id}`);
   },
 
   create({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `psp/i/${id}/lpd/create`;
+    const url = `i/${id}/lpd/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 
@@ -32,7 +32,7 @@ export const actions = {
 
   action({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `psp/i/${id}/lpd/${payload.id}/${payload.type}`;
+    const url = `i/${id}/lpd/${payload.id}/${payload.type}`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 };

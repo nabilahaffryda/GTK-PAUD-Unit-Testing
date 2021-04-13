@@ -18,15 +18,29 @@ export default {
     onAdd() {
       this.$set(this.formulir, 'title', 'Tambah Data');
       this.$set(this.formulir, 'isEdit', false);
+      this.$set(this.formulir, 'useSave', false);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
       });
     },
 
+    onValidate() {
+      this.$refs.modal.onValidate().then((valid) => {
+        if (valid) {
+          this.$refs.formulir.next(valid);
+          this.$set(this.formulir, 'useSave', true);
+        }
+      });
+    },
+
+    onBack() {
+      this.$set(this.formulir, 'useSave', false);
+    },
+
     async onEdit(item) {
+      console.log(item)
       this.$set(this.formulir, 'isEdit', true);
-      this.$set(this.formulir, 'isChecked', true);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
@@ -34,7 +48,7 @@ export default {
         this.$set(
           this.formulir,
           'init',
-          Object.assign({}, item?.akun?.data ?? {}, { k_group: item.k_group, akun_instansi_id: item.akun_instansi_id })
+          Object.assign({}, item?.instansi?.data ?? {}, { nama_penanggung_jawab: item.nama_penanggung_jawab, telp_penanggung_jawab: item.telp_penanggung_jawab })
         );
       });
     },
@@ -54,31 +68,14 @@ export default {
       const params = Object.assign({}, this.$refs.formulir.getValue());
 
       this[isEdit ? 'update' : 'create']({ params, id })
-        .then(({ data }) => {
+        .then(() => {
           this.$success(`Data admin berhasil di ${isEdit ? 'diubah' : 'ditambahkan'}`);
           this.$refs.modal.close();
           this.fetchData();
-
-          if (!isEdit && !this.formulir.isExist) {
-            this.resetAkun(this.$getDeepObj(data, 'id'));
-          }
         })
         .catch(() => {
           this.$refs.modal.loading = false;
         });
-    },
-
-    onReset(item) {
-      const id = item.akun_instansi_id;
-      this.$confirm(
-        `Anda yakin ingin mereset password atas nama <strong>${item.akun?.data?.nama ?? ''}</strong> ?`,
-        'Reset Password',
-        {
-          tipe: 'error',
-        }
-      ).then(() => {
-        this.resetAkun(id);
-      });
     },
 
     resetAkun(id) {

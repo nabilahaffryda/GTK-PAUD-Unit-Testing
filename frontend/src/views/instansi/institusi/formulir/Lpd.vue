@@ -46,7 +46,7 @@
                   </v-row>
                 </v-card-text>
                 <v-card-actions class="pa-0">
-                  <v-btn right color="primary" @click="step--">
+                  <v-btn right color="primary" @click="back">
                     Sebelumnya
                   </v-btn>
                 </v-card-actions>
@@ -87,24 +87,14 @@ export default {
   },
   computed: {
     configs() {
-      const M_PROPINSI = this.masters.propinsi || {};
-      const M_KOTA = this.masters.kota || {};
+      const M_PROPINSI = this.masters.m_propinsi || {};
+      const M_KOTA = this.masters.m_kota || {};
       return {
-        dasar: {
-          selector: ['k_propinsi', 'k_kota'],
-          required: ['k_propinsi', 'k_kota'],
-          label: ['Provinsi', 'Kota/Kabupaten'],
-          options: [M_PROPINSI, M_KOTA],
-          grid: [{ cols: 6 }, { cols: 6 }],
-        },
-        ajar: {
-          selector: ['k_propinsi', 'k_kota'],
-          required: ['k_propinsi', 'k_kota'],
-          label: ['Provinsi', 'Kota/Kabupaten'],
-          disabled: [true, true],
-          options: [M_PROPINSI, M_KOTA],
-          grid: [{ cols: 6 }, { cols: 6 }],
-        },
+        selector: ['k_propinsi', 'k_kota'],
+        required: ['k_propinsi', 'k_kota'],
+        label: ['Provinsi', 'Kota/Kabupaten'],
+        options: [M_PROPINSI, M_KOTA],
+        grid: [{ cols: 6 }, { cols: 6 }],
       };
     },
     schema() {
@@ -112,14 +102,14 @@ export default {
         {
           type: 'VTextField',
           name: 'nama',
-          label: 'Nama Admin',
+          label: 'Nama Institusi',
           dense: true,
           hint: 'wajib diisi',
           required: true,
           hideDetails: false,
           outlined: true,
           singleLine: true,
-          grid: { cols: 12, md: 12 },
+          grid: { cols: 12, md: 6 },
           labelColor: 'secondary',
         },
         {
@@ -141,19 +131,19 @@ export default {
           type: 'VTextarea',
           name: 'alamat',
           label: 'Alamat',
-          labelColor: 'info',
           hint: 'wajib diisi',
           required: true,
           grid: { cols: 12 },
           outlined: true,
           dense: true,
           singleLine: true,
+          labelColor: 'secondary',
         },
         {
           type: 'cascade',
-          labelColor: 'info',
           configs: this.configs,
           grid: { cols: 12 },
+          labelColor: 'secondary',
         },
         {
           type: 'VTextField',
@@ -166,13 +156,12 @@ export default {
           dense: true,
           singleLine: true,
           mask: '######',
-          counter: 20,
           grid: { cols: 12, md: 6 },
           labelColor: 'secondary',
         },
         {
           type: 'VTextField',
-          name: 'penganggungjawab',
+          name: 'nama_penanggung_jawab',
           label: 'Penanggung Jawab',
           dense: true,
           hint: 'wajib diisi',
@@ -180,16 +169,16 @@ export default {
           hideDetails: false,
           outlined: true,
           singleLine: true,
-          grid: { cols: 12, md: 12 },
+          grid: { cols: 12, md: 6 },
           labelColor: 'secondary',
         },
         {
           type: 'VTextField',
-          name: `no_hp`,
-          label: `Nomor HP/WA`,
+          name: `telp_penanggung_jawab`,
+          label: `No. Telpon (Penanggung Jawab)`,
           labelColor: 'secondary',
           hideDetails: false,
-          placeholder: 'Nomor Handphone',
+          placeholder: 'Nomor Telpon Penanggung Jawab',
           hint: 'wajib diisi',
           grid: { cols: 12, md: 6 },
           required: true,
@@ -222,12 +211,11 @@ export default {
     },
 
     getValue() {
-      let keys = ['email'];
-      keys = keys.concat(
-        (this.schema.biodata[this.jenis] || []).map((item) => {
-          return item.name;
-        })
-      );
+      let keys = (this.schema || []).map((item) => {
+        return item.name;
+      });
+
+      keys = [...keys, 'k_propinsi', 'k_kota'];
 
       let params = {};
       for (const id of keys) {
@@ -237,16 +225,9 @@ export default {
       return params;
     },
 
-    onCheck() {
-      if (!this.form.email) {
-        return;
-      }
-
-      this.$emit('check', this.form.email);
-    },
-
-    onUncheck() {
-      this.$emit('unCheck');
+    back() {
+      this.step--;
+      this.$emit('onBack', this.step);
     },
 
     next() {
@@ -257,37 +238,45 @@ export default {
             label: 'Nama',
             value: this.$getDeepObj(this.form, 'nama') || '-',
           },
-        ],
-        [
-          {
-            key: 'lahir',
-            label: 'Tempat, Tanggal Lahir',
-            value: [
-              this.$getDeepObj(this.form, 'tmp_lahir') || '-',
-              this.$localDate(this.$getDeepObj(this.form, 'tgl_lahir') || '-'),
-            ].join(', '),
-          },
-          {
-            key: 'kelamin',
-            label: 'Jenis Kelamin',
-            value:
-              this.$getDeepObj(this.form, 'kelamin') === 'L'
-                ? 'Laki - laki'
-                : this.$getDeepObj(this.form, 'kelamin') === 'P'
-                ? 'Perempuan'
-                : '',
-          },
-        ],
-        [
-          {
-            key: 'no_wa',
-            label: 'Nomor Telepon (terhubung WhatsApp)',
-            value: this.$getDeepObj(this.form, 'no_hp') || '-',
-          },
           {
             key: 'email',
             label: 'Surel (untuk Kontak)',
             value: this.$getDeepObj(this.form, 'email') || '-',
+          },
+        ],
+        [
+          {
+            key: 'alamat',
+            label: 'Alamat',
+            value: this.$fAlamat([
+              this.$getDeepObj(this.form, 'alamat') || '-',
+              false,
+              false,
+              false,
+              false,
+              this.$getDeepObj(this.masters, `m_propinsi.${this.$getDeepObj(this.form, 'k_propinsi')}`) || '-',
+              this.$getDeepObj(this.masters, `m_kota.${this.$getDeepObj(this.form, 'k_kota')}`) || '-',
+            ]),
+            size: 12,
+          },
+        ],
+        [
+          {
+            key: 'kodepos',
+            label: 'Kode Pos ',
+            value: this.$getDeepObj(this.form, 'kodepos') || '-',
+          },
+        ],
+        [
+          {
+            key: 'nama_penanggung_jawab',
+            label: 'Penanggung Jawab',
+            value: this.$getDeepObj(this.form, 'nama_penanggung_jawab') || '-',
+          },
+          {
+            key: 'telp_penanggung_jawab',
+            label: 'No. Telpon (Penanggung Jawab)',
+            value: this.$getDeepObj(this.form, 'telp_penanggung_jawab') || '-',
           },
         ],
       ];

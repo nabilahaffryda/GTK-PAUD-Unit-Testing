@@ -71,7 +71,8 @@
                         <v-list-item-content class="py-0 mt-3">
                           <span class="caption">Penanggung Jawab</span>
                           <p>
-                            <span>{{ $getDeepObj(item, 'nama_penanggung_jawab') || '-' }}</span>
+                            <span>{{ $getDeepObj(item, 'nama_penanggung_jawab') || '-' }}</span><br>
+                            <span>{{ $getDeepObj(item, 'telp_penanggung_jawab') || '-' }}</span>
                           </p>
                         </v-list-item-content>
                       </v-list-item>
@@ -112,13 +113,15 @@
         <base-table-footer :pageTotal="pageTotal" @changePage="onChangePage"></base-table-footer>
       </v-card-actions>
     </v-card>
-    <base-modal-full ref="modal" generalError :title="formulir.title" @save="onSave">
+    <base-modal-full ref="modal" generalError :title="formulir.title" :useSave="formulir.useSave" @save="onSave">
       <form-lpd
         ref="formulir"
         :isEdit="formulir.isEdit"
         :initValue="formulir.init"
         :errorEmail="formulir.errorEmail"
         :masters="masters"
+        @onValidate="onValidate"
+        @onBack="onBack"
       />
     </base-modal-full>
     <Akun ref="akun" :akun="akun" />
@@ -171,7 +174,7 @@ export default {
     },
   },
   created() {
-    this.getMasters(['propinsi', 'kota'].join(';'));
+    this.getMasters(['m_propinsi', 'm_kota'].join(';'));
   },
   methods: {
     allow(action, data) {
