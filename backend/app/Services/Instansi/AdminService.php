@@ -231,9 +231,11 @@ class AdminService
         /** @var Akun $akun */
         $akun = Akun::query()
             ->firstOrNew([
-                'email'          => $params['email'],
+                'email' => $params['email'],
+            ], [
                 'k_status_email' => MStatusEmail::ANGGAP_AKTIVASI,
-            ], $params);
+            ])
+            ->fill($params);
 
         $paspor = new User();
         $passwd = $this->akunService->passwd();
