@@ -195,14 +195,14 @@ class MGroup extends Eloquent
     public const AP_PPG_PRAJAB_P3GTK = 167;
     public const EVAL_MERDEKA_PUSAT = 168;
     public const PL_MERDEKA = 169;
-    public const AP_DIKLAT_GTK_PAUD = 170;
-    public const AI_LPD_DIKLAT_PAUD = 171;
-    public const ADM_LPD_DIKLAT_PAUD = 172;
+    public const AP_GTK_PAUD_DIKLAT_PAUD = 170;
+    public const AP_LPD_DIKLAT_PAUD = 171;
+    public const OP_LPD_DIKLAT_PAUD = 172;
     public const PENGAJAR_BIMTEK_DIKLAT_PAUD = 173;
     public const PENGAJAR_DIKLAT_PAUD = 174;
     public const PENGAJAR_TAMBAHAN_DIKLAT_PAUD = 175;
     public const PEMBIMBING_PRAKTIK_DIKLAT_PAUD = 176;
-    public const ADM_KELAS_DIKLAT_GTK_PAUD = 177;
+    public const ADM_KELAS_DIKLAT_PAUD = 177;
 
     /**
      * The table associated with the model.

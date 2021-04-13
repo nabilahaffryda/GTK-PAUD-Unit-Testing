@@ -24,14 +24,14 @@ class AkunService
     {
         return [
             MGroup::AI_PAUD,
-            MGroup::AP_DIKLAT_GTK_PAUD,
-            MGroup::AI_LPD_DIKLAT_PAUD,
-            MGroup::ADM_LPD_DIKLAT_PAUD,
+            MGroup::AP_GTK_PAUD_DIKLAT_PAUD,
+            MGroup::AP_LPD_DIKLAT_PAUD,
+            MGroup::OP_LPD_DIKLAT_PAUD,
             MGroup::PENGAJAR_BIMTEK_DIKLAT_PAUD,
             MGroup::PENGAJAR_DIKLAT_PAUD,
             MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD,
             MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD,
-            MGroup::ADM_KELAS_DIKLAT_GTK_PAUD,
+            MGroup::ADM_KELAS_DIKLAT_PAUD,
         ];
     }
 
@@ -39,20 +39,20 @@ class AkunService
     {
         $groups = [
             MGroup::AI_PAUD             => [
-                MGroup::AP_DIKLAT_GTK_PAUD,
+                MGroup::AP_GTK_PAUD_DIKLAT_PAUD,
             ],
-            MGroup::AP_DIKLAT_GTK_PAUD  => [
-                MGroup::AI_LPD_DIKLAT_PAUD,
+            MGroup::AP_GTK_PAUD_DIKLAT_PAUD  => [
+                MGroup::AP_LPD_DIKLAT_PAUD,
                 MGroup::PENGAJAR_BIMTEK_DIKLAT_PAUD,
                 MGroup::PENGAJAR_DIKLAT_PAUD,
             ],
-            MGroup::AI_LPD_DIKLAT_PAUD  => [
-                MGroup::ADM_LPD_DIKLAT_PAUD,
+            MGroup::AP_LPD_DIKLAT_PAUD  => [
+                MGroup::OP_LPD_DIKLAT_PAUD,
             ],
-            MGroup::ADM_LPD_DIKLAT_PAUD => [
+            MGroup::OP_LPD_DIKLAT_PAUD => [
                 MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD,
                 MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD,
-                MGroup::ADM_KELAS_DIKLAT_GTK_PAUD,
+                MGroup::ADM_KELAS_DIKLAT_PAUD,
             ],
         ];
 
