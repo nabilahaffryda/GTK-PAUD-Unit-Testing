@@ -141,11 +141,11 @@ export default {
         1: 'success',
       },
       guards: [
-        { text: 'Akun', value: 'web' },
+        { text: 'Akun', value: 'akun' },
         { text: 'PTK', value: 'ptk' },
       ],
       form: {
-        guard: this.$route.query.guard || 'web',
+        guard: this.$route.query.guard || 'akun',
         k_group: null,
         akses_key: null,
       },
@@ -184,7 +184,7 @@ export default {
       })
       .then(() => {
         const kGroup = this.$route.query && this.$route.query.k_group;
-        this.form.guard = this.$route.query.guard || 'web';
+        this.form.guard = this.$route.query.guard || 'akun';
         this.form.k_group = this.$isArray(kGroup)
           ? (kGroup || []).map((item) => Number(item))
           : kGroup
