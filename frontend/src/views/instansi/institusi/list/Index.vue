@@ -56,12 +56,12 @@
                     <v-col class="py-0" cols="12" md="4">
                       <v-list-item class="px-0">
                         <v-list-item-avatar color="secondary">
-                          <v-icon dark>mdi-account-circle</v-icon>
+                          <v-icon dark>mdi-office-building-outline</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="py-0 mt-3">
-                          <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'akun.data.nama') || '-' }}</h2>
+                          <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</h2>
                           <p class="caption">
-                            <span>Email: {{ $getDeepObj(item, 'akun.data.email') || '-' }}</span>
+                            <span>ID Institusi: {{ $getDeepObj(item, 'instansi.data.instansi_id') || '-' }}</span>
                           </p>
                         </v-list-item-content>
                       </v-list-item>
@@ -69,9 +69,9 @@
                     <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <span class="caption">Grup</span>
+                          <span class="caption">Penanggung Jawab</span>
                           <p>
-                            <span>{{ $getDeepObj(item, 'm_group.data.keterangan') || '-' }}</span>
+                            <span>{{ $getDeepObj(item, 'nama_penanggung_jawab') || '-' }}</span>
                           </p>
                         </v-list-item-content>
                       </v-list-item>
@@ -79,9 +79,9 @@
                     <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <span class="caption">No HP/WA</span>
+                          <span class="caption">Alamat Email</span>
                           <p>
-                            <span>{{ $getDeepObj(item, 'akun.data.no_hp') || '-' }}</span>
+                            <span>{{ $getDeepObj(item, 'instansi.data.email') || '-' }}</span>
                           </p>
                         </v-list-item-content>
                       </v-list-item>
@@ -167,9 +167,6 @@ export default {
       }
       return label;
     },
-  },
-  created() {
-    this.getGroups();
   },
   methods: {
     allow(action, data) {

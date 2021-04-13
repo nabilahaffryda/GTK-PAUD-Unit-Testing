@@ -50,6 +50,7 @@ export default {
       return new Promise((resolve) => {
         const params = Object.assign({}, this.params, this.$isObject(this.filters) ? { filter: this.filters } : {});
         this.fetch({ params }).then(({ data, meta }) => {
+          console.log(data);
           this.data = data || [];
           this.total = meta?.total || 0;
           this.pageTotal = meta?.last_page || 1;
