@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AksesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,3 +18,10 @@ Route::get('/', [\App\Http\Controllers\IndexController::class, 'index'])->name('
 
 Route::match(['get', 'post'], 'auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
 Route::match(['get', 'post'], 'auth/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth:akun', 'dbtransaction'])->group(function () {
+    Route::get('akses', [AksesController::class, 'index']);
+    Route::get('akses/groups', [AksesController::class, 'groups']);
+    Route::post('akses/save', [AksesController::class, 'save']);
+    Route::post('akses/save-aktif', [AksesController::class, 'saveAktif']);
+});
