@@ -4,9 +4,7 @@
       <v-container>
         <v-stepper v-model="step" class="elevation-0">
           <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
-            <v-stepper-step :complete="step > 1" step="1">
-              Data Admin Program
-            </v-stepper-step>
+            <v-stepper-step :complete="step > 1" step="1"> Data {{ $route.meta.title }} </v-stepper-step>
             <v-divider></v-divider>
             <v-stepper-step step="2">
               Konfirmasi Akun
@@ -44,7 +42,7 @@
             <v-stepper-content step="2" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
-                  <h2 class="primary--text">Admin Program LPD</h2>
+                  <h2 class="primary--text">Admin {{ $route.meta.title }}</h2>
                   <span>
                     <i>{{ instansis[form.instansi_id] }}</i>
                   </span>
@@ -319,7 +317,7 @@ export default {
           this.$set(this.form, item.name, this.$getDeepObj(value, item.name) || '');
         }
       }
-      this.id = (value && value.akun_instansi_id) || '';
+      this.id = (value && value.paud_admin_id) || '';
     },
 
     getValue() {
@@ -388,7 +386,7 @@ export default {
           {
             key: 'email',
             label: 'Surel (untuk Kontak)',
-            value: this.$getDeepObj(this.form, 'ptk.data.alt_email') || '-',
+            value: this.$getDeepObj(this.form, 'email') || '-',
           },
         ],
       ];
