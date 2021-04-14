@@ -170,7 +170,7 @@ export default {
       type: String,
       default: '',
     },
-    action: {
+    actions: {
       type: Array,
       required: true,
     },
@@ -180,7 +180,6 @@ export default {
   data() {
     return {
       formulir: {},
-      actions: this.action,
       akun: {},
       groups: {},
       instansis: {},
@@ -242,7 +241,7 @@ export default {
           disabled = Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
           break;
         default:
-          disabled = this.$allow(action.akses, data.policies);
+          disabled = this.$allow(action.akses, data.policies || false);
           break;
       }
       return disabled;

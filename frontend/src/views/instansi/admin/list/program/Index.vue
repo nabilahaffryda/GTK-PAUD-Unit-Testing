@@ -1,16 +1,16 @@
 <template>
-  <list-admin jenis="program" title="Akun Admin Program" desc="Lorem Ipsum" :action="action"></list-admin>
+  <list-admin jenis="program" title="Akun Admin Program" desc="Lorem Ipsum" :actions="actions"></list-admin>
 </template>
 
 <script>
 import ListAdmin from '../Main';
-import Action from './actions';
+import Actions from './actions';
 export default {
   name: 'Program',
   components: { ListAdmin },
   data() {
     return {
-      action: Action,
+      actions: Actions,
     };
   },
 };
