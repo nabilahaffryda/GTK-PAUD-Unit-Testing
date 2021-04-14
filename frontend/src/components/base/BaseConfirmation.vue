@@ -17,7 +17,7 @@
                   <v-img v-else :src="$imgUrl(item.foto)" aspect-ratio="1" class="grey lighten-2"></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <span class="info--text" v-html="item.title" style="line-height: 1.5rem"></span>
+                  <span class="secondary--text" v-html="item.title" style="line-height: 1.5rem"></span>
                   <template v-for="(item2, index2) in item.subtitles">
                     <v-list-item-subtitle
                       v-html="item2"
