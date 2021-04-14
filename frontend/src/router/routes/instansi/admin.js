@@ -20,4 +20,24 @@ export default [
       tipe: 'operator-lpd',
     },
   },
+  {
+    path: '/i/:id(\\d+)/akun/pengajar',
+    name: 'admin-pengajar',
+    component: () => lazyLoadView(import('@views/instansi/admin/list/pengajar/Index')),
+    meta: {
+      title: 'Kelola Pengajar',
+      k_group: '174',
+      tipe: 'pengajar',
+    },
+  },
+  {
+    path: '/i/:id(\\d+)/akun/bimtek',
+    name: 'admin-bimtek',
+    component: () => lazyLoadView(import('@views/instansi/admin/list/bimtek/Index')),
+    meta: {
+      title: 'Kelola Pengajar BIMTEK',
+      k_group: '173',
+      tipe: 'pembimbing-praktik',
+    },
+  },
 ];

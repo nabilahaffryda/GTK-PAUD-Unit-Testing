@@ -235,7 +235,7 @@ export default {
   },
   created() {
     // this.getGroups();
-    this.getMasters('m_golongan');
+    this.getMasters(['m_propinsi', 'm_kota', 'm_golongan'].join(';'));
     this.getInstansi();
   },
   methods: {
