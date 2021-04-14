@@ -18,15 +18,16 @@ class UpdateRequest extends FormRequest
         $paudAdmin = $this->route('paudAdmin');
 
         return [
-            'nama'      => ['required', 'string', 'max:50'],
-            'email'     => ['required', 'email', "unique:akun,email,{$paudAdmin->akun_id},akun_id"],
-            'k_group'   => ['required', 'integer', 'exists:m_group,k_group'],
-            'kelamin'   => ['nullable', 'string', 'in:L,P'],
-            'tmp_lahir' => ['nullable', 'string'],
-            'tgl_lahir' => ['nullable', 'date_format:Y-m-d'],
-            'no_telpon' => ['nullable', 'numeric'],
-            'no_hp'     => ['nullable', 'numeric'],
-            'nip'       => ['nullable', 'string', 'max:18'],
+            'nama'       => ['required', 'string', 'max:100'],
+            'email'      => ['required', 'email', "unique:akun,email,{$paudAdmin->akun_id},akun_id"],
+            'k_group'    => ['required', 'integer', 'exists:m_group,k_group'],
+            'kelamin'    => ['nullable', 'string', 'in:L,P'],
+            'tmp_lahir'  => ['nullable', 'string', 'max:50'],
+            'tgl_lahir'  => ['nullable', 'date_format:Y-m-d'],
+            'nip'        => ['nullable', 'string', 'max:20'],
+            'no_telpon'  => ['nullable', 'numeric'],
+            'no_hp'      => ['nullable', 'numeric'],
+            'k_golongan' => ['nullable', 'integer', 'exists:m_golongan,k_golongan'],
         ];
     }
 }

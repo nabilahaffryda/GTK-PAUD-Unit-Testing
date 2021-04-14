@@ -14,16 +14,16 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama'        => ['required', 'string', 'max:50'],
+            'nama'        => ['required', 'string', 'max:100'],
             'email'       => ['required', 'email'],
+            'k_group'     => ['required', 'integer', 'exists:m_group,k_group'],
             'kelamin'     => ['nullable', 'string', 'in:L,P'],
-            'tmp_lahir'   => ['nullable', 'string'],
+            'tmp_lahir'   => ['nullable', 'string', 'max:50'],
             'tgl_lahir'   => ['nullable', 'date_format:Y-m-d'],
-            'nip'         => ['nullable', 'numeric'],
+            'nip'         => ['nullable', 'string', 'max:20'],
             'no_telpon'   => ['nullable', 'numeric'],
             'no_hp'       => ['nullable', 'numeric'],
-            'golongan'    => ['nullable', 'string', 'max:100'],
-            'k_group'     => ['required', 'exists:m_group,k_group'],
+            'k_golongan'  => ['nullable', 'integer', 'exists:m_golongan,k_golongan'],
             'instansi_id' => ['nullable', 'sometimes', 'exists:instansi,instansi_id'],
         ];
     }
