@@ -217,16 +217,18 @@ export default {
 
     getInstansi() {
       let mInstansi = {};
-      this.listInstansis()
-        .then((resp) => {
-          const instansi = resp || [];
-          instansi.forEach((item) => {
-            this.$set(mInstansi, this.$getDeepObj(item, 'instansi_id'), this.$getDeepObj(item, 'instansi.data.nama'));
+      if (Number(this.kGroup) === 171 && !Object.keys(this.instansis).length) {
+        this.listInstansis()
+          .then((resp) => {
+            const instansi = resp || [];
+            instansi.forEach((item) => {
+              this.$set(mInstansi, this.$getDeepObj(item, 'instansi_id'), this.$getDeepObj(item, 'instansi.data.nama'));
+            });
+          })
+          .then(() => {
+            this.$set(this, 'instansis', mInstansi);
           });
-        })
-        .then(() => {
-          this.$set(this, 'instansis', mInstansi);
-        });
+      }
     },
 
     confirmHtml(data) {

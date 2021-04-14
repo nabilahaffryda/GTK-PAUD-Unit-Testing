@@ -39,8 +39,8 @@ export default {
     },
 
     async onEdit(item) {
-      console.log(item)
       this.$set(this.formulir, 'isEdit', true);
+      this.$set(this.formulir, 'useSave', false);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
@@ -48,7 +48,11 @@ export default {
         this.$set(
           this.formulir,
           'init',
-          Object.assign({}, item?.instansi?.data ?? {}, { nama_penanggung_jawab: item.nama_penanggung_jawab, telp_penanggung_jawab: item.telp_penanggung_jawab })
+          Object.assign({}, item?.instansi?.data ?? {}, {
+            nama_penanggung_jawab: item.nama_penanggung_jawab,
+            telp_penanggung_jawab: item.telp_penanggung_jawab,
+            kodepos: item.kodepos,
+          })
         );
       });
     },

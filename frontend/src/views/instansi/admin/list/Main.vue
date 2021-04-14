@@ -75,10 +75,10 @@
                             <p>
                               <span>{{ $getDeepObj(item, 'm_group.data.keterangan') || '-' }}</span>
                             </p>
-                            <template v-if="$getDeepObj(instansis, `${item.instansi_id}`)">
+                            <template v-if="$getDeepObj(item, 'instansi.data.nama')">
                               <span class="caption">Instansi</span>
                               <p>
-                                <span>{{ $getDeepObj(instansis, `${item.instansi_id}`) || '-' }}</span>
+                                <span>{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</span>
                               </p>
                             </template>
                           </v-list-item-content>
@@ -135,6 +135,7 @@
         :groups="groups"
         :instansis="instansis"
         :masters="masters"
+        :jenis="jenis"
         @check="onCheck"
         @unCheck="onUncheck"
         @onValidate="onValidate"
@@ -223,7 +224,7 @@ export default {
     },
   },
   created() {
-    this.getGroups();
+    // this.getGroups();
     this.getMasters('m_golongan');
     this.getInstansi();
   },

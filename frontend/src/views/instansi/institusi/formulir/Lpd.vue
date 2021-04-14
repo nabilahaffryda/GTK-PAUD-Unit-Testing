@@ -201,7 +201,7 @@ export default {
     },
 
     initForm(value) {
-      const formulir = [...(this.schema.biodata[this.jenis] || []), { name: 'email' }];
+      const formulir = [...(this.schema || []), { name: 'email' }, { name: 'k_propinsi' }, { name: 'k_kota' }];
       for (const item of formulir) {
         if (item.name) {
           this.$set(this.form, item.name, this.$getDeepObj(value, item.name) || '');
