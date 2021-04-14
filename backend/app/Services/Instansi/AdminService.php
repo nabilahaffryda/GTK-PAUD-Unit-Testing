@@ -74,6 +74,10 @@ class AdminService
                 'akun.mGolongan',
             ]);
 
+        if (($params['k_group'] ?? 0) == MGroup::AP_LPD_DIKLAT_PAUD) {
+            $query->with(['instansi']);
+        }
+
         if (isset($params['k_group'])) {
             $query->where('paud_admin.k_group', '=', $params['k_group']);
 
