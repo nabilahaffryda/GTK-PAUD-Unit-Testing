@@ -45,8 +45,6 @@ class AdminService
      */
     public function query(Instansi $instansi, $params = [])
     {
-        $params = $params['filter'] ?? [];
-
         $condition = [
             'paud_admin.tahun'    => $params['tahun'] ?? config('paud.tahun'),
             'paud_admin.angkatan' => $params['angkatan'] ?? config('paud.angkatan'),
