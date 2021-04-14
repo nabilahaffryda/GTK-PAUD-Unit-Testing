@@ -18,7 +18,7 @@
         <base-table-header
           @search="onSearch"
           :btnFilter="true"
-          :btnAdd="true"
+          :btnAdd="$allow('akun-admin-program-lpd.create')"
           :btnDownload="true"
           @add="onAdd"
           @reload="onReload"
@@ -71,7 +71,8 @@
                         <v-list-item-content class="py-0 mt-3">
                           <span class="caption">Penanggung Jawab</span>
                           <p>
-                            <span>{{ $getDeepObj(item, 'nama_penanggung_jawab') || '-' }}</span><br>
+                            <span>{{ $getDeepObj(item, 'nama_penanggung_jawab') || '-' }}</span
+                            ><br />
                             <span>{{ $getDeepObj(item, 'telp_penanggung_jawab') || '-' }}</span>
                           </p>
                         </v-list-item-content>

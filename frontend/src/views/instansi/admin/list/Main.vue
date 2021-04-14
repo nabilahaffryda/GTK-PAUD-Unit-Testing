@@ -155,7 +155,6 @@ import FormAkun from '../formulir/Akun';
 import Akun from '@components/cetak/Akun';
 import mixin from './mixin';
 import list from '@mixins/list';
-import actions from './actions';
 export default {
   name: 'ListAdmin',
   props: {
@@ -171,13 +170,17 @@ export default {
       type: String,
       default: '',
     },
+    action: {
+      type: Array,
+      required: true,
+    },
   },
   mixins: [list, mixin],
   components: { FormAkun, Akun },
   data() {
     return {
       formulir: {},
-      actions: actions,
+      actions: this.action,
       akun: {},
       groups: {},
       instansis: {},

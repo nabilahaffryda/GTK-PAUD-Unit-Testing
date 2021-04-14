@@ -3,7 +3,7 @@ export default [
   {
     path: '/i/:id(\\d+)/akun/program',
     name: 'admin-program',
-    component: () => lazyLoadView(import('@views/instansi/admin/list/Program')),
+    component: () => lazyLoadView(import('@views/instansi/admin/list/program/Index')),
     meta: {
       title: 'Kelola Akun Admin Program',
       k_group: '171',
@@ -13,7 +13,7 @@ export default [
   {
     path: '/i/:id(\\d+)/akun/operator',
     name: 'admin-operator',
-    component: () => lazyLoadView(import('@views/instansi/admin/list/Operator')),
+    component: () => lazyLoadView(import('@views/instansi/admin/list/operator/Index')),
     meta: {
       title: 'Kelola Operator LPD',
       k_group: '172',
