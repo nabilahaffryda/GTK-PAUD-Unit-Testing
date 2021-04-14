@@ -4,51 +4,68 @@
       <v-container>
         <v-stepper v-model="step" class="elevation-0">
           <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
-            <v-stepper-step :complete="step > 1" step="1"> Data {{ $route.meta.title }} </v-stepper-step>
+            <v-stepper-step color="secondary" :complete="step > 1" step="1"> Tambah Akun </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step step="2">
+            <v-stepper-step color="secondary" :complete="step > 2" step="2"> Data {{ title }} </v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step color="secondary" step="3">
               Konfirmasi Akun
             </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">
-              <template v-if="isChecked">
-                <v-card flat>
-                  <v-card-text class="pa-0 pt-7">
-                    <base-form-generator :schema="schema.biodata[jenis]" v-model="form" />
-                    <v-divider class="my-4" />
-                  </v-card-text>
-                  <v-card-actions class="pa-0">
-                    <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
-                    <v-spacer></v-spacer>
-                    <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')">
-                      Selanjutnya
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </template>
-              <template v-else>
-                <v-row class="mt-2">
-                  <v-col cols="12" md="10" sm="12">
-                    <base-form-generator :schema="schema.unchecked" v-model="form" />
-                  </v-col>
-                  <v-col cols="12" md="2" sm="12" class="py-1">
-                    <div class="white--text">d</div>
-                    <v-btn depressed color="secondary" @click="onCheck"> CEK SUREL </v-btn>
-                  </v-col>
-                </v-row>
-              </template>
+              <v-card flat>
+                <v-card-text class="pa-0 pt-7">
+                  <base-form-generator :schema="schema.unchecked" v-model="form" />
+                  <v-divider class="my-4" />
+                </v-card-text>
+                <v-card-actions class="pa-0">
+                  <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
+                  <v-spacer></v-spacer>
+                  <v-btn class="text-md-right" right color="secondary" @click="onCheck">
+                    Selanjutnya
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
             </v-stepper-content>
             <v-stepper-content step="2" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
-                  <h2 class="primary--text">Admin {{ $route.meta.title }}</h2>
+                  <base-form-generator :schema="schema.biodata[jenis]" v-model="form" />
+                  <v-divider class="my-4" />
+                </v-card-text>
+                <v-card-actions class="pa-0">
+                  <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    v-if="!isEdit"
+                    right
+                    text
+                    @click="
+                      () => {
+                        step--;
+                        $emit('onStep');
+                      }
+                    "
+                  >
+                    Kembali
+                  </v-btn>
+                  <v-btn class="text-md-right" right color="secondary" @click="$emit('onValidate')">
+                    Selanjutnya
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-stepper-content>
+            <v-stepper-content step="3" style="padding: 0">
+              <v-card flat>
+                <v-card-text class="pa-0 pt-7">
+                  <h2 class="secondary--text">Admin {{ title }}</h2>
                   <span>
                     <i>{{ instansis[form.instansi_id] }}</i>
                   </span>
                   <v-row class="my-2">
                     <v-col cols="12" md="2" sm="12">
-                      <v-avatar color="primary" size="100">
+                      <v-avatar color="secondary" size="100">
                         <v-icon dark size="80">mdi-account-circle</v-icon>
                       </v-avatar>
                     </v-col>
@@ -56,15 +73,17 @@
                       <base-list-info class="px-0" :info="info"></base-list-info>
                     </v-col>
                     <v-col cols="12" md="12" sm="12">
-                      Selamat, <b>Admin Berhasil Baru Berhasil Ditambahkan.</b> Anda dapat mencetak data akun sebagai
-                      bukti pembuatan akun dengan menekan tombol dibawah ini.
+                      Silakan mengecek data <b>Akun Baru</b> yang akan <b>Ditambahkan</b>. Jika data sudah sesuai
+                      silakan Simpan dan Cetak data Akun sebagai bukti pembuatan Akun dengan menekan tombol pada kanan
+                      atas.
                     </v-col>
                   </v-row>
                 </v-card-text>
                 <v-card-actions class="pa-0">
+                  <v-spacer></v-spacer>
                   <v-btn
                     right
-                    color="primary"
+                    text
                     @click="
                       () => {
                         step--;
@@ -89,6 +108,10 @@ import BaseListInfo from '@components/base/BaseListInfo';
 export default {
   components: { BaseListInfo, BaseFormGenerator },
   props: {
+    title: {
+      type: String,
+      default: 'Akun Admin Program',
+    },
     initValue: {
       default: () => null,
     },
@@ -127,7 +150,6 @@ export default {
       step: 1,
       form: {},
       info: [],
-      isValid: false,
     };
   },
   computed: {
@@ -471,12 +493,7 @@ export default {
       if (!this.form.email) {
         return;
       }
-
       this.$emit('check', this.form.email);
-    },
-
-    onUncheck() {
-      this.$emit('unCheck');
     },
 
     next() {
@@ -521,7 +538,7 @@ export default {
           },
         ],
       ];
-      this.step = 2;
+      this.step++;
     },
   },
   watch: {

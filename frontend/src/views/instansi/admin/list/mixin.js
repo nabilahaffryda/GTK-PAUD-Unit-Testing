@@ -27,7 +27,6 @@ export default {
 
     onAdd() {
       this.$set(this.formulir, 'title', 'Tambah Data');
-      this.$set(this.formulir, 'isChecked', false);
       this.$set(this.formulir, 'isEdit', false);
       this.$set(this.formulir, 'isValid', false);
       this.$refs.modal.open();
@@ -38,12 +37,13 @@ export default {
 
     async onEdit(item) {
       this.$set(this.formulir, 'isEdit', true);
-      this.$set(this.formulir, 'isChecked', true);
       this.$set(this.formulir, 'isValid', false);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
         this.$set(this.formulir, 'title', 'Ubah Data');
+        // langsung ke step 2
+        this.$refs.formulir.step = 2;
         this.$set(
           this.formulir,
           'init',
@@ -60,33 +60,21 @@ export default {
       this.$set(this.formulir, 'errorEmail', null);
       this.lookup(email)
         .then((resp) => {
-          this.$set(this.formulir, 'isChecked', true);
           this.$set(this.formulir, 'init', this.$isObject(resp) ? resp : { email });
           this.$set(this.formulir, 'isExist', this.$isObject(resp));
+          this.$refs.formulir.step++;
         })
         .catch((resp) => {
-          this.$set(this.formulir, 'isChecked', false);
           this.$set(this.formulir, 'init', {});
           this.$set(this.formulir, 'isExist', false);
           this.$set(this.formulir, 'errorEmail', resp.error || 'Pastikan anda memasukan data email yang Valid');
         });
     },
 
-    onUncheck() {
-      this.$set(this.formulir, 'isChecked', false);
-      this.$set(this.formulir, 'init', {});
-      this.$set(this.formulir, 'isExist', false);
-    },
-
-    onDelete(item) {
-      this.$confirm('Apakan anda ingin menghapus akun berikut ?', 'Hapus Akun', {
-        tipe: 'error',
-        data: this.confirmHtml(item),
-      }).then(() => {
-        this.action({ id: item.paud_admin_id, type: 'delete', name: this.attr.tipe }).then(() => {
-          this.$success('Akun berhasil di hapus');
-          this.fetchData();
-        });
+    onValidate() {
+      this.$refs.modal.onValidate().then((valid) => {
+        this.$set(this.formulir, 'isValid', valid);
+        if (valid) this.$refs.formulir.next(valid);
       });
     },
 
@@ -111,19 +99,6 @@ export default {
         });
     },
 
-    onReset(item) {
-      const id = item.paud_admin_id;
-      this.$confirm(
-        `Anda yakin ingin mereset password atas nama <strong>${item.akun?.data?.nama ?? ''}</strong> ?`,
-        'Reset Password',
-        {
-          tipe: 'error',
-        }
-      ).then(() => {
-        this.resetAkun(id);
-      });
-    },
-
     resetAkun(id) {
       this.action({ id, type: 'reset', name: this.$getDeepObj(this, 'attr.tipe') }).then(({ data, included }) => {
         const ptk = this.$getIncluded('akun', this.$getRelasi(data, 'akun')['id'], included);
@@ -135,6 +110,31 @@ export default {
         this.$nextTick(() => {
           this.$refs.akun.print();
         });
+      });
+    },
+
+    onDelete(item) {
+      this.$confirm('Apakan anda ingin menghapus akun berikut ?', 'Hapus Akun', {
+        tipe: 'error',
+        data: this.confirmHtml(item),
+      }).then(() => {
+        this.action({ id: item.paud_admin_id, type: 'delete', name: this.attr.tipe }).then(() => {
+          this.$success('Akun berhasil di hapus');
+          this.fetchData();
+        });
+      });
+    },
+
+    onReset(item) {
+      const id = item.paud_admin_id;
+      this.$confirm(
+        `Anda yakin ingin mereset password atas nama <strong>${item.akun?.data?.nama ?? ''}</strong> ?`,
+        'Reset Password',
+        {
+          tipe: 'error',
+        }
+      ).then(() => {
+        this.resetAkun(id);
       });
     },
 
@@ -205,13 +205,6 @@ export default {
         this.downloadList({ params, url: url.dokumen }).then((url) => {
           this.$downloadFile(url);
         });
-      });
-    },
-
-    onValidate() {
-      this.$refs.modal.onValidate().then((valid) => {
-        this.$set(this.formulir, 'isValid', valid);
-        if (valid) this.$refs.formulir.next(valid);
       });
     },
 

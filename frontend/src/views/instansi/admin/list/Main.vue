@@ -125,9 +125,18 @@
         <base-table-footer :pageTotal="pageTotal" @changePage="onChangePage"></base-table-footer>
       </v-card-actions>
     </v-card>
-    <base-modal-full ref="modal" generalError :use-save="formulir.isValid" :title="formulir.title" @save="onSave">
+    <base-modal-full
+      ref="modal"
+      colorBtn="primary"
+      lblBtn="Simpan & Cetak"
+      generalError
+      :use-save="formulir.isValid"
+      :title="formulir.title"
+      @save="onSave"
+    >
       <form-akun
         ref="formulir"
+        :title="title"
         :isChecked="formulir.isChecked"
         :isEdit="formulir.isEdit"
         :initValue="formulir.init"
@@ -137,7 +146,6 @@
         :masters="masters"
         :jenis="jenis"
         @check="onCheck"
-        @unCheck="onUncheck"
         @onValidate="onValidate"
         @onStep="
           () => {
