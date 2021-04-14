@@ -1,5 +1,5 @@
 <template>
-  <list-admin jenis="bimtek" title="Akun Pengajar BIMTEK" desc="Lorem Ipsum" :actions="actions"></list-admin>
+  <list-admin jenis="pengajar" title="Akun Pengajar BIMTEK" desc="Lorem Ipsum" :actions="actions"></list-admin>
 </template>
 
 <script>

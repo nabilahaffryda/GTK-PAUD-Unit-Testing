@@ -235,7 +235,17 @@ export default {
   },
   created() {
     // this.getGroups();
-    this.getMasters(['m_propinsi', 'm_kota', 'm_golongan'].join(';'));
+    this.getMasters({
+      name: ['m_propinsi', 'm_kota', 'm_golongan'].join(';'),
+      filter: {
+        0: {
+          k_propinsi: {
+            op: '<',
+            val: 90,
+          },
+        },
+      },
+    });
     this.getInstansi();
   },
   methods: {

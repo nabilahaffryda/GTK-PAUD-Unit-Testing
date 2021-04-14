@@ -137,7 +137,7 @@ export default {
     },
     jenis: {
       type: String,
-      default: 'akun',
+      default: 'program',
     },
     instansis: {
       type: Object,
@@ -154,6 +154,7 @@ export default {
   },
   computed: {
     configs() {
+      console.log(this.masters);
       const M_PROPINSI = this.masters.m_propinsi || {};
       const M_KOTA = this.masters.m_kota || {};
       return {
@@ -459,11 +460,11 @@ export default {
               labelColor: 'secondary',
             },
           ],
-          bimtek: [
+          pengajar: [
             {
               type: 'VTextField',
               name: 'nama',
-              label: 'Nama Admin',
+              label: 'Nama Lengkap',
               dense: true,
               hint: 'wajib diisi',
               required: true,
@@ -566,7 +567,7 @@ export default {
             {
               type: 'VTextarea',
               name: 'alamat',
-              label: 'Alamat',
+              label: 'Alamat Sesuai KTP',
               hint: 'wajib diisi',
               required: true,
               grid: { cols: 12 },

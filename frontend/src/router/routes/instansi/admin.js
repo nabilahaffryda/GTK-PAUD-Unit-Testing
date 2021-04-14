@@ -37,7 +37,7 @@ export default [
     meta: {
       title: 'Kelola Pengajar BIMTEK',
       k_group: '173',
-      tipe: 'pembimbing-praktik',
+      tipe: 'pengajar-bimtek',
     },
   },
 ];
