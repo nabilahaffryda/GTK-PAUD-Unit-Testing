@@ -92,8 +92,9 @@ export default {
       const isEdit = this.formulir.isEdit;
       const id = this.$refs.formulir.id;
       const params = Object.assign({}, this.$refs.formulir.getValue(), { k_group: this.kGroup });
+      const name = this.$getDeepObj(this, 'attr.tipe');
 
-      this[isEdit ? 'update' : 'create']({ params, id })
+      this[isEdit ? 'update' : 'create']({ params, id, name })
         .then(({ data }) => {
           this.$success(`Data admin berhasil di ${isEdit ? 'diubah' : 'ditambahkan'}`);
           this.$refs.modal.close();

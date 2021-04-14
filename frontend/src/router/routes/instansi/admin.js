@@ -7,6 +7,7 @@ export default [
     meta: {
       title: 'Kelola Akun Admin Program',
       k_group: '171',
+      tipe: 'admin-program-lpd',
     },
   },
   {
@@ -16,6 +17,7 @@ export default [
     meta: {
       title: 'Kelola Operator LPD',
       k_group: '172',
+      tipe: 'operator-lpd',
     },
   },
 ];

@@ -49,8 +49,8 @@ export default {
     fetchData: function() {
       return new Promise((resolve) => {
         const params = Object.assign({}, this.params, this.$isObject(this.filters) ? { filter: this.filters } : {});
-        this.fetch({ params }).then(({ data, meta }) => {
-          console.log(data);
+        const attr = Object.assign({}, this.attr);
+        this.fetch({ params, attr }).then(({ data, meta }) => {
           this.data = data || [];
           this.total = meta?.total || 0;
           this.pageTotal = meta?.last_page || 1;

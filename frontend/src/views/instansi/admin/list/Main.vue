@@ -176,6 +176,10 @@ export default {
     Object.assign(this.filters, {
       k_group: this.$route.meta && this.$route.meta.k_group,
     });
+
+    Object.assign(this.attr, {
+      tipe: this.$route.meta && this.$route.meta.tipe,
+    });
   },
   computed: {
     ...mapState('master', ['masters']),
