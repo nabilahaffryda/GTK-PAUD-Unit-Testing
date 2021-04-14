@@ -62,7 +62,16 @@
                   </v-row>
                 </v-card-text>
                 <v-card-actions class="pa-0">
-                  <v-btn right color="primary" @click="step--">
+                  <v-btn
+                    right
+                    color="primary"
+                    @click="
+                      () => {
+                        step--;
+                        $emit('onStep');
+                      }
+                    "
+                  >
                     Sebelumnya
                   </v-btn>
                 </v-card-actions>
@@ -228,7 +237,7 @@ export default {
               required: true,
               outlined: true,
               dense: true,
-              disable: true,
+              disabled: true,
               singleLine: true,
             },
             {
@@ -291,6 +300,7 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
+              disabled: this.isEdit,
               grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
             },

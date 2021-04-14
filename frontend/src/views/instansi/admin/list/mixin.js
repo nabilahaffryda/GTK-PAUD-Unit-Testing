@@ -29,6 +29,7 @@ export default {
       this.$set(this.formulir, 'title', 'Tambah Data');
       this.$set(this.formulir, 'isChecked', false);
       this.$set(this.formulir, 'isEdit', false);
+      this.$set(this.formulir, 'isValid', false);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
@@ -38,6 +39,7 @@ export default {
     async onEdit(item) {
       this.$set(this.formulir, 'isEdit', true);
       this.$set(this.formulir, 'isChecked', true);
+      this.$set(this.formulir, 'isValid', false);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
@@ -47,7 +49,7 @@ export default {
           'init',
           Object.assign({}, item?.akun?.data ?? {}, {
             paud_admin_id: item.paud_admin_id,
-            k_group: item.k_group,
+            k_group: this.$getDeepObj(item, 'akun.data.k_golongan'),
             instansi_id: item.instansi_id,
           })
         );
@@ -208,6 +210,7 @@ export default {
 
     onValidate() {
       this.$refs.modal.onValidate().then((valid) => {
+        this.$set(this.formulir, 'isValid', valid);
         if (valid) this.$refs.formulir.next(valid);
       });
     },

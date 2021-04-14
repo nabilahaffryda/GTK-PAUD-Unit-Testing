@@ -75,6 +75,12 @@
                             <p>
                               <span>{{ $getDeepObj(item, 'm_group.data.keterangan') || '-' }}</span>
                             </p>
+                            <template v-if="$getDeepObj(instansis, `${item.instansi_id}`)">
+                              <span class="caption">Instansi</span>
+                              <p>
+                                <span>{{ $getDeepObj(instansis, `${item.instansi_id}`) || '-' }}</span>
+                              </p>
+                            </template>
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
@@ -119,7 +125,7 @@
         <base-table-footer :pageTotal="pageTotal" @changePage="onChangePage"></base-table-footer>
       </v-card-actions>
     </v-card>
-    <base-modal-full ref="modal" generalError :title="formulir.title" @save="onSave">
+    <base-modal-full ref="modal" generalError :use-save="formulir.isValid" :title="formulir.title" @save="onSave">
       <form-akun
         ref="formulir"
         :isChecked="formulir.isChecked"
@@ -132,6 +138,11 @@
         @check="onCheck"
         @unCheck="onUncheck"
         @onValidate="onValidate"
+        @onStep="
+          () => {
+            $set(formulir, 'isValid', false);
+          }
+        "
       />
     </base-modal-full>
     <Akun ref="akun" :akun="akun" />
