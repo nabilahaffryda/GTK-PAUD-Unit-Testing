@@ -391,7 +391,7 @@ class AdminService
      */
     public function delete(Instansi $instansi, PaudAdmin $paudAdmin)
     {
-        if ($paudAdmin->instansi_id != $instansi->instansi_id) {
+        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD && $paudAdmin->instansi_id != $instansi->instansi_id) {
             throw new FlowException('Akun tidak terdaftar di instansi terkait');
         }
 
@@ -443,7 +443,7 @@ class AdminService
      */
     public function resetPasword(Instansi $instansi, PaudAdmin $paudAdmin)
     {
-        if ($paudAdmin->instansi_id != $instansi->instansi_id) {
+        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD && $paudAdmin->instansi_id != $instansi->instansi_id) {
             throw new FlowException('Akun tidak terdaftar di instansi terkait');
         }
 
