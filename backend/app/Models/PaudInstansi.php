@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|int $tahun
  * @property null|int $angkatan
  * @property int $k_verval_paud
+ * @property null|Carbon $wkt_ajuan
+ * @property null|Carbon $wkt_verval
  * @property null|string $kodepos
  * @property null|string $nama_penanggung_jawab
  * @property null|string $telp_penanggung_jawab
@@ -25,8 +27,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $nama_bendahara
  * @property null|string $telp_bendahara
  * @property null|string $diklat
+ * @property null|string $akun_id_verval
+ * @property null|string $alasan
+ * @property null|string $catatan
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
+ * @property null|string $akun_id
  *
  * @property-read Instansi $instansi
  * @property-read MVervalPaud $mVervalPaud
@@ -37,6 +43,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudInstansi whereTahun($value)
  * @method static Builder|PaudInstansi whereAngkatan($value)
  * @method static Builder|PaudInstansi whereKVervalPaud($value)
+ * @method static Builder|PaudInstansi whereWktAjuan($value)
+ * @method static Builder|PaudInstansi whereWktVerval($value)
  * @method static Builder|PaudInstansi whereKodepos($value)
  * @method static Builder|PaudInstansi whereNamaPenanggungJawab($value)
  * @method static Builder|PaudInstansi whereTelpPenanggungJawab($value)
@@ -45,8 +53,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudInstansi whereNamaBendahara($value)
  * @method static Builder|PaudInstansi whereTelpBendahara($value)
  * @method static Builder|PaudInstansi whereDiklat($value)
+ * @method static Builder|PaudInstansi whereAkunIdVerval($value)
+ * @method static Builder|PaudInstansi whereAlasan($value)
+ * @method static Builder|PaudInstansi whereCatatan($value)
  * @method static Builder|PaudInstansi whereCreatedAt($value)
  * @method static Builder|PaudInstansi whereUpdatedAt($value)
+ * @method static Builder|PaudInstansi whereAkunId($value)
  */
 class PaudInstansi extends Eloquent
 {
@@ -74,6 +86,8 @@ class PaudInstansi extends Eloquent
         'tahun'                 => 'int',
         'angkatan'              => 'int',
         'k_verval_paud'         => 'int',
+        'wkt_ajuan'             => 'datetime',
+        'wkt_verval'            => 'datetime',
         'kodepos'               => 'string',
         'nama_penanggung_jawab' => 'string',
         'telp_penanggung_jawab' => 'string',
@@ -82,8 +96,12 @@ class PaudInstansi extends Eloquent
         'nama_bendahara'        => 'string',
         'telp_bendahara'        => 'string',
         'diklat'                => 'string',
+        'akun_id_verval'        => 'string',
+        'alasan'                => 'string',
+        'catatan'               => 'string',
         'created_at'            => 'datetime',
         'updated_at'            => 'datetime',
+        'akun_id'               => 'string',
     ];
 
     /**
@@ -97,6 +115,8 @@ class PaudInstansi extends Eloquent
         'tahun',
         'angkatan',
         'k_verval_paud',
+        'wkt_ajuan',
+        'wkt_verval',
         'kodepos',
         'nama_penanggung_jawab',
         'telp_penanggung_jawab',
@@ -105,6 +125,10 @@ class PaudInstansi extends Eloquent
         'nama_bendahara',
         'telp_bendahara',
         'diklat',
+        'akun_id_verval',
+        'alasan',
+        'catatan',
+        'akun_id',
     ];
 
     /**

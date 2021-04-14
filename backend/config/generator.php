@@ -252,6 +252,14 @@ return [
             ],
         ],
 
+        'paud_pengajar_berkas' => [
+            'class'  => 'PaudPengajarBerkas',
+            'gramar' => [
+                'singular' => 'paud_pengajar_berkas',
+                'plural'   => 'paud_pengajar_berkases',
+            ],
+        ],
+
         'ptk' => [
             'model' => [
                 'base' => ['Illuminate\Foundation\Auth\User', 'Authenticatable'],

@@ -18,9 +18,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $k_berkas_paud
  * @property null|string $nama
  * @property null|string $file
- * @property null|string $diklat
+ * @property null|string $keterangan
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
+ * @property null|string $akun_id
  *
  * @property-read Instansi $instansi
  * @property-read MBerkasPaud $mBerkasPaud
@@ -34,9 +35,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|PaudInstansiBerkas whereKBerkasPaud($value)
  * @method static Builder|PaudInstansiBerkas whereNama($value)
  * @method static Builder|PaudInstansiBerkas whereFile($value)
- * @method static Builder|PaudInstansiBerkas whereDiklat($value)
+ * @method static Builder|PaudInstansiBerkas whereKeterangan($value)
  * @method static Builder|PaudInstansiBerkas whereCreatedAt($value)
  * @method static Builder|PaudInstansiBerkas whereUpdatedAt($value)
+ * @method static Builder|PaudInstansiBerkas whereAkunId($value)
  */
 class PaudInstansiBerkas extends Eloquent
 {
@@ -67,9 +69,10 @@ class PaudInstansiBerkas extends Eloquent
         'k_berkas_paud'    => 'int',
         'nama'             => 'string',
         'file'             => 'string',
-        'diklat'           => 'string',
+        'keterangan'       => 'string',
         'created_at'       => 'datetime',
         'updated_at'       => 'datetime',
+        'akun_id'          => 'string',
     ];
 
     /**
@@ -86,7 +89,8 @@ class PaudInstansiBerkas extends Eloquent
         'k_berkas_paud',
         'nama',
         'file',
-        'diklat',
+        'keterangan',
+        'akun_id',
     ];
 
     /**
