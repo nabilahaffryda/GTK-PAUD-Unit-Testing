@@ -30,6 +30,20 @@ class AkunController extends Controller
     }
 
     /**
+     * @throws SaveException
+     */
+    protected function validateGroup()
+    {
+        $kGroups = AkunService::childGroups(akun(), instansi())
+            ->pluck('k_group')
+            ->all();
+
+        if (!in_array($this->kGroup, $kGroups)) {
+            throw new SaveException("Grup tidak dikenali");
+        }
+    }
+
+    /**
      * @param Request $request
      * @return BaseCollection
      */
@@ -74,6 +88,8 @@ class AkunController extends Controller
      */
     public function create(CreateRequest $request)
     {
+        $this->validateGroup();
+
         $params = array_merge($request->validated(), [
             'k_group' => $this->kGroup,
         ]);
@@ -85,12 +101,15 @@ class AkunController extends Controller
     /**
      * @param PaudAdmin $paudAdmin
      * @return BaseResource
+     * @throws SaveException
      */
     public function fetch(PaudAdmin $paudAdmin)
     {
         if ($paudAdmin->k_group != $this->kGroup) {
             abort(404);
         }
+
+        $this->validateGroup();
 
         return BaseResource::make($this->service->fetch(instansi(), $paudAdmin));
     }
@@ -108,6 +127,8 @@ class AkunController extends Controller
             abort(404);
         }
 
+        $this->validateGroup();
+
         return BaseResource::make($this->service->update(instansi(), $paudAdmin, $request->validated()));
     }
 
@@ -122,6 +143,8 @@ class AkunController extends Controller
         if ($paudAdmin->k_group != $this->kGroup) {
             abort(404);
         }
+
+        $this->validateGroup();
 
         return BaseResource::make($this->service->delete(instansi(), $paudAdmin));
     }
@@ -138,6 +161,8 @@ class AkunController extends Controller
         if ($paudAdmin->k_group != $this->kGroup) {
             abort(404);
         }
+
+        $this->validateGroup();
 
         return BaseResource::make($this->service->resetPasword(instansi(), $paudAdmin));
     }

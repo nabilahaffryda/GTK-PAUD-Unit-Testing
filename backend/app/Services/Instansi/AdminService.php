@@ -50,7 +50,7 @@ class AdminService
             'paud_admin.angkatan' => $params['angkatan'] ?? config('paud.angkatan'),
         ];
 
-        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD && ($params['k_group'] ?? 0) != MGroup::AP_LPD_DIKLAT_PAUD) {
+        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD || ($params['k_group'] ?? 0) != MGroup::AP_LPD_DIKLAT_PAUD) {
             $condition['paud_admin.instansi_id'] = $instansi->instansi_id;
         }
 
@@ -82,9 +82,9 @@ class AdminService
             $query->where('paud_admin.k_group', '=', $params['k_group']);
 
         } else {
-            $mGroups = AkunService::childGroups(akun(), $instansi);
-            $kGroups = $mGroups->pluck('k_group');
-
+            // pastikan hanya mengembalikan data yang sesuai dengan childgroup
+            $kGroups = AkunService::childGroups(akun(), $instansi)
+                ->pluck('k_group');
             $query->whereIn('paud_admin.k_group', $kGroups);
         }
 
@@ -350,7 +350,7 @@ class AdminService
      */
     public function update(Instansi $instansi, PaudAdmin $paudAdmin, $params = [])
     {
-        if ($paudAdmin->instansi_id != $instansi->instansi_id) {
+        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD && $paudAdmin->instansi_id != $instansi->instansi_id) {
             throw new FlowException('Akun tidak terdaftar di instansi terkait');
         }
 
