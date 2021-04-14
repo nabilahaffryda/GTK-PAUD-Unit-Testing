@@ -83,7 +83,7 @@ export default {
         tipe: 'error',
         data: this.confirmHtml(item),
       }).then(() => {
-        this.action({ id: item.paud_admin_id, type: 'delete' }).then(() => {
+        this.action({ id: item.paud_admin_id, type: 'delete', name: this.attr.tipe }).then(() => {
           this.$success('Akun berhasil di hapus');
           this.fetchData();
         });
@@ -125,7 +125,7 @@ export default {
     },
 
     resetAkun(id) {
-      this.action({ id, type: 'reset' }).then(({ data, included }) => {
+      this.action({ id, type: 'reset', name: this.$getDeepObj(this, 'attr.tipe') }).then(({ data, included }) => {
         const ptk = this.$getIncluded('akun', this.$getRelasi(data, 'akun')['id'], included);
         const group = this.$getIncluded('m_group', this.$getRelasi(data, 'm_group')['id'], included);
         this.$set(this.akun, 'nama', this.$getAttr(ptk, 'nama') || '-');
