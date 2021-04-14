@@ -10,6 +10,8 @@ use App\Http\Requests\Instansi\Admin\UpdateRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\Akun;
+use App\Models\MGroup;
+use App\Models\MJenisInstansi;
 use App\Models\PaudAdmin;
 use App\Services\AkunService;
 use App\Services\Instansi\AdminService;
@@ -34,6 +36,10 @@ class AkunController extends Controller
      */
     protected function validateGroup()
     {
+        if (instansi()->k_jenis_instansi == MJenisInstansi::PAUD && $this->kGroup == MGroup::AP_LPD_DIKLAT_PAUD) {
+            return;
+        }
+
         $kGroups = AkunService::childGroups(akun(), instansi())
             ->pluck('k_group')
             ->all();
