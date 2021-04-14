@@ -47,7 +47,7 @@ export const actions = {
 
   create({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/akun/create`;
+    const url = `/i/${id}/akun/${payload.name}/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 
