@@ -6,6 +6,7 @@ use App\Http\Controllers\Instansi\Akun\AdminProgramController;
 use App\Http\Controllers\Instansi\Akun\AdminProgramLpdController;
 use App\Http\Controllers\Instansi\Akun\OperatorLpdController;
 use App\Http\Controllers\Instansi\Akun\PembimbingPraktikController;
+use App\Http\Controllers\Instansi\Akun\PengajarBimtekController;
 use App\Http\Controllers\Instansi\Akun\PengajarController;
 use App\Http\Controllers\Instansi\Akun\PengajarTambahanController;
 use App\Http\Controllers\Instansi\AkunController;
@@ -59,6 +60,16 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/update', [OperatorLpdController::class, 'update']);
         Route::post('{paudAdmin}/delete', [OperatorLpdController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [OperatorLpdController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'akun/pengajar-bimtek'], function () {
+        Route::get('', [PengajarBimtekController::class, 'index']);
+        Route::get('download', [PengajarBimtekController::class, 'download']);
+        Route::post('create', [PengajarBimtekController::class, 'create']);
+        Route::get('{paudAdmin}', [PengajarBimtekController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [PengajarBimtekController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [PengajarBimtekController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [PengajarBimtekController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'akun/pengajar'], function () {
