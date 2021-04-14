@@ -8,40 +8,37 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\MVervalPaud
+ * App\Models\MBerkasLpdPaud
  *
- * @property int $k_verval_paud
+ * @property int $k_berkas_lpd_paud
  * @property null|string $singkat
  * @property null|string $keterangan
+ * @property null|int $maks
+ * @property null|string $validasi
  *
- * @property-read Collection|PaudInstansi[] $paudInstansis
- * @property-read Collection|PaudPengajar[] $paudPengajars
+ * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
  *
- * @method static Builder|MVervalPaud whereKVervalPaud($value)
- * @method static Builder|MVervalPaud whereSingkat($value)
- * @method static Builder|MVervalPaud whereKeterangan($value)
+ * @method static Builder|MBerkasLpdPaud whereKBerkasLpdPaud($value)
+ * @method static Builder|MBerkasLpdPaud whereSingkat($value)
+ * @method static Builder|MBerkasLpdPaud whereKeterangan($value)
+ * @method static Builder|MBerkasLpdPaud whereMaks($value)
+ * @method static Builder|MBerkasLpdPaud whereValidasi($value)
  */
-class MVervalPaud extends Eloquent
+class MBerkasLpdPaud extends Eloquent
 {
-    public const KANDIDAT = 1;
-    public const DIAJUKAN = 2;
-    public const DIPROSES = 3;
-    public const DITOLAK = 4;
-    public const REVISI = 5;
-    public const DISETUJUI = 6;
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'm_verval_paud';
+    protected $table = 'm_berkas_lpd_paud';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'k_verval_paud';
+    protected $primaryKey = 'k_berkas_lpd_paud';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -58,6 +55,8 @@ class MVervalPaud extends Eloquent
     protected $casts = [
         'singkat'    => 'string',
         'keterangan' => 'string',
+        'maks'       => 'int',
+        'validasi'   => 'string',
     ];
 
     /**
@@ -73,24 +72,18 @@ class MVervalPaud extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'k_verval_paud',
+        'k_berkas_lpd_paud',
         'singkat',
         'keterangan',
+        'maks',
+        'validasi',
     ];
 
     /**
-     * @return HasMany|Builder|PaudInstansi
+     * @return HasMany|Builder|PaudInstansiBerkas
      */
-    public function paudInstansis()
+    public function paudInstansiBerkases()
     {
-        return $this->hasMany('App\Models\PaudInstansi', 'k_verval_paud', 'k_verval_paud');
-    }
-
-    /**
-     * @return HasMany|Builder|PaudPengajar
-     */
-    public function paudPengajars()
-    {
-        return $this->hasMany('App\Models\PaudPengajar', 'k_verval_paud', 'k_verval_paud');
+        return $this->hasMany('App\Models\PaudInstansiBerkas', 'k_berkas_lpd_paud', 'k_berkas_lpd_paud');
     }
 }

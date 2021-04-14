@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|string $akun_id
  * @property null|int $tahun
  * @property null|int $angkatan
- * @property int $k_berkas_paud
+ * @property int $k_berkas_pengajar_paud
  * @property null|string $nama
  * @property null|string $file
  * @property null|string $keterangan
@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|string $admin_id
  *
  * @property-read Akun $akun
- * @property-read MBerkasPaud $mBerkasPaud
+ * @property-read MBerkasPengajarPaud $mBerkasPengajarPaud
  * @property-read PaudPengajar $paudPengajar
  *
  * @method static Builder|PaudPengajarBerkas wherePaudPengajarBerkasId($value)
@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|PaudPengajarBerkas whereAkunId($value)
  * @method static Builder|PaudPengajarBerkas whereTahun($value)
  * @method static Builder|PaudPengajarBerkas whereAngkatan($value)
- * @method static Builder|PaudPengajarBerkas whereKBerkasPaud($value)
+ * @method static Builder|PaudPengajarBerkas whereKBerkasPengajarPaud($value)
  * @method static Builder|PaudPengajarBerkas whereNama($value)
  * @method static Builder|PaudPengajarBerkas whereFile($value)
  * @method static Builder|PaudPengajarBerkas whereKeterangan($value)
@@ -64,18 +64,18 @@ class PaudPengajarBerkas extends Eloquent
      * @var array
      */
     protected $casts = [
-        'paud_pengajar_id' => 'int',
-        'akun_id'          => 'string',
-        'tahun'            => 'int',
-        'angkatan'         => 'int',
-        'k_berkas_paud'    => 'int',
-        'nama'             => 'string',
-        'file'             => 'string',
-        'keterangan'       => 'string',
-        'validasi'         => 'string',
-        'created_at'       => 'datetime',
-        'updated_at'       => 'datetime',
-        'admin_id'         => 'string',
+        'paud_pengajar_id'       => 'int',
+        'akun_id'                => 'string',
+        'tahun'                  => 'int',
+        'angkatan'               => 'int',
+        'k_berkas_pengajar_paud' => 'int',
+        'nama'                   => 'string',
+        'file'                   => 'string',
+        'keterangan'             => 'string',
+        'validasi'               => 'string',
+        'created_at'             => 'datetime',
+        'updated_at'             => 'datetime',
+        'admin_id'               => 'string',
     ];
 
     /**
@@ -89,7 +89,7 @@ class PaudPengajarBerkas extends Eloquent
         'akun_id',
         'tahun',
         'angkatan',
-        'k_berkas_paud',
+        'k_berkas_pengajar_paud',
         'nama',
         'file',
         'keterangan',
@@ -106,11 +106,11 @@ class PaudPengajarBerkas extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MBerkasPaud
+     * @return BelongsTo|Builder|MBerkasPengajarPaud
      */
-    public function mBerkasPaud()
+    public function mBerkasPengajarPaud()
     {
-        return $this->belongsTo('App\Models\MBerkasPaud', 'k_berkas_paud', 'k_berkas_paud');
+        return $this->belongsTo('App\Models\MBerkasPengajarPaud', 'k_berkas_pengajar_paud', 'k_berkas_pengajar_paud');
     }
 
     /**

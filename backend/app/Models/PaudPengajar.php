@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $admin_id
  *
  * @property-read Akun $akun
+ * @property-read MVervalPaud $mVervalPaud
  * @property-read Collection|PaudPengajarBerkas[] $paudPengajarBerkases
  *
  * @method static Builder|PaudPengajar wherePaudPengajarId($value)
@@ -127,10 +128,33 @@ class PaudPengajar extends Eloquent
     }
 
     /**
+     * @return BelongsTo|Builder|MVervalPaud
+     */
+    public function mVervalPaud()
+    {
+        return $this->belongsTo('App\Models\MVervalPaud', 'k_verval_paud', 'k_verval_paud');
+    }
+
+    /**
      * @return HasMany|Builder|PaudPengajarBerkas
      */
     public function paudPengajarBerkases()
     {
         return $this->hasMany('App\Models\PaudPengajarBerkas', 'paud_pengajar_id', 'paud_pengajar_id');
+    }
+
+    public function isVervalKandidat()
+    {
+        return $this->k_verval_paud == MVervalPaud::KANDIDAT;
+    }
+
+    public function isVervalRevisi()
+    {
+        return $this->k_verval_paud == MVervalPaud::REVISI;
+    }
+
+    public function isVervalDiajukan()
+    {
+        return $this->k_verval_paud == MVervalPaud::DIAJUKAN;
     }
 }

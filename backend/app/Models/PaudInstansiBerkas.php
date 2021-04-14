@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|int $instansi_id
  * @property null|int $tahun
  * @property null|int $angkatan
- * @property int $k_berkas_paud
+ * @property int $k_berkas_lpd_paud
  * @property null|string $nama
  * @property null|string $file
  * @property null|string $keterangan
@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|string $akun_id
  *
  * @property-read Instansi $instansi
- * @property-read MBerkasPaud $mBerkasPaud
+ * @property-read MBerkasLpdPaud $mBerkasLpdPaud
  * @property-read PaudInstansi $paudInstansi
  *
  * @method static Builder|PaudInstansiBerkas wherePaudInstansiBerkasId($value)
@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|PaudInstansiBerkas whereInstansiId($value)
  * @method static Builder|PaudInstansiBerkas whereTahun($value)
  * @method static Builder|PaudInstansiBerkas whereAngkatan($value)
- * @method static Builder|PaudInstansiBerkas whereKBerkasPaud($value)
+ * @method static Builder|PaudInstansiBerkas whereKBerkasLpdPaud($value)
  * @method static Builder|PaudInstansiBerkas whereNama($value)
  * @method static Builder|PaudInstansiBerkas whereFile($value)
  * @method static Builder|PaudInstansiBerkas whereKeterangan($value)
@@ -62,17 +62,17 @@ class PaudInstansiBerkas extends Eloquent
      * @var array
      */
     protected $casts = [
-        'paud_instansi_id' => 'int',
-        'instansi_id'      => 'int',
-        'tahun'            => 'int',
-        'angkatan'         => 'int',
-        'k_berkas_paud'    => 'int',
-        'nama'             => 'string',
-        'file'             => 'string',
-        'keterangan'       => 'string',
-        'created_at'       => 'datetime',
-        'updated_at'       => 'datetime',
-        'akun_id'          => 'string',
+        'paud_instansi_id'  => 'int',
+        'instansi_id'       => 'int',
+        'tahun'             => 'int',
+        'angkatan'          => 'int',
+        'k_berkas_lpd_paud' => 'int',
+        'nama'              => 'string',
+        'file'              => 'string',
+        'keterangan'        => 'string',
+        'created_at'        => 'datetime',
+        'updated_at'        => 'datetime',
+        'akun_id'           => 'string',
     ];
 
     /**
@@ -86,7 +86,7 @@ class PaudInstansiBerkas extends Eloquent
         'instansi_id',
         'tahun',
         'angkatan',
-        'k_berkas_paud',
+        'k_berkas_lpd_paud',
         'nama',
         'file',
         'keterangan',
@@ -102,11 +102,11 @@ class PaudInstansiBerkas extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MBerkasPaud
+     * @return BelongsTo|Builder|MBerkasLpdPaud
      */
-    public function mBerkasPaud()
+    public function mBerkasLpdPaud()
     {
-        return $this->belongsTo('App\Models\MBerkasPaud', 'k_berkas_paud', 'k_berkas_paud');
+        return $this->belongsTo('App\Models\MBerkasLpdPaud', 'k_berkas_lpd_paud', 'k_berkas_lpd_paud');
     }
 
     /**
