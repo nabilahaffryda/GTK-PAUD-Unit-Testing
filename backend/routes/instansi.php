@@ -12,6 +12,9 @@ use App\Http\Controllers\Instansi\Akun\PengajarTambahanController;
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Controllers\Instansi\IndexController;
 use App\Http\Controllers\Instansi\LpdController;
+use App\Http\Controllers\Instansi\Pengajar\Profil\BerkasController;
+use App\Http\Controllers\Instansi\Pengajar\Profil\PeranController;
+use App\Http\Controllers\Instansi\Pengajar\ProfilController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -110,5 +113,17 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/update', [AdminKelasController::class, 'update']);
         Route::post('{paudAdmin}/delete', [AdminKelasController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [AdminKelasController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'pengajar/profil'], function () {
+        Route::get('', [ProfilController::class, 'index']);
+        Route::post('{pengajar}/update', [ProfilController::class, 'update']);
+
+        Route::get('{pengajar}/update-peran', [PeranController::class, 'update']);
+
+        Route::get('{pengajar}/berkas', [BerkasController::class, 'index']);
+        Route::post('{pengajar}/berkas/create', [BerkasController::class, 'create']);
+
+        Route::post('berkas/{berkas}/delete', [BerkasController::class, 'delete']);
     });
 });
