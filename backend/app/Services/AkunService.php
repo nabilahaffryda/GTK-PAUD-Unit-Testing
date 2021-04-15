@@ -15,6 +15,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent;
 use Illuminate\Database\Query;
 use Illuminate\Support;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Log;
 
@@ -328,5 +329,38 @@ class AkunService
         }
 
         return $akun;
+    }
+
+    /**
+     * @param Akun $akun
+     * @param $foto
+     * @param $ext
+     * @return string
+     * @throws FlowException
+     */
+    public function uploadFoto(Akun $akun, $foto, $ext)
+    {
+        $ftpPath   = config('filesystems.disks.akun-foto.path');
+        $timestamp = date('ymdhis');
+        $filename  = "{$akun->k_kota}/{$akun->k_propinsi}/{$akun->akun_id}-{$timestamp}.$ext";
+
+        $path = sprintf("%s/%s", $ftpPath, $filename);
+        if (!Storage::disk('akun-foto')->put($path, $foto)) {
+            throw new FlowException("Unggah Foto Akun tidak berhasil");
+        }
+
+        return $filename;
+    }
+
+    /**
+     * @param string $filename
+     * @return boolean
+     */
+    public function deleteFoto($filename)
+    {
+        $ftpPath = config('filesystems.disks.akun-foto.path');
+
+        $path = sprintf("%s/%s", $ftpPath, $filename);
+        return Storage::disk('akun-foto')->delete($path);
     }
 }
