@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|int $instansi_k_kota
  * @property null|string $instansi_kodepos
  * @property null|int $k_pcp_paud
- * @property null|string $pengalaman
+ * @property null|array $pengalaman
  * @property null|int $is_pembimbing
  * @property null|string $akun_id_verval
  * @property null|string $alasan
@@ -107,7 +107,7 @@ class PaudPengajar extends Eloquent
         'instansi_k_kota'     => 'int',
         'instansi_kodepos'    => 'string',
         'k_pcp_paud'          => 'int',
-        'pengalaman'          => 'string',
+        'pengalaman'          => 'array',
         'is_pembimbing'       => 'int',
         'akun_id_verval'      => 'string',
         'alasan'              => 'string',

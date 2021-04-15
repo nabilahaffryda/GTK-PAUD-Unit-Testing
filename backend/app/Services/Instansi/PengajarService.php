@@ -123,12 +123,24 @@ class PengajarService
 
         $oldFoto = $akun->foto ? $akun->getOriginal('foto') : null;
 
-        $pengajar->fill(Arr::only($data, ['instansi_lulus', 'is_pcp', 'pengalaman', 'k_kualifikasi']));
+        $pengajar->fill($data);
         if (!$pengajar->save()) {
             throw new SaveException("Penyimpanan Data Profil Tidak Berhasil");
         }
 
-        $akun->fill(Arr::only($data, ['nama', 'alamat', 'k_propinsi', 'k_kota', 'tgl_lahir', 'tmp_lahir', 'no_hp']));
+        $akun->fill(Arr::only($data, [
+            'alamat',
+            'kelamin',
+            'kodepos',
+            'k_kota',
+            'k_propinsi',
+            'nama',
+            'nik',
+            'nip',
+            'no_hp',
+            'tgl_lahir',
+            'tmp_lahir',
+        ]));
 
         if ($foto && $ext) {
             $akun->foto = app(AkunService::class)->uploadFoto($akun, $foto, $ext);
