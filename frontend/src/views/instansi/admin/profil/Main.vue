@@ -73,7 +73,7 @@
     </v-card>
     <div class="my-5">
       <h3 class="my-5">PERSYARATAN REGISTRASI</h3>
-      <daftar :contents="contents" :berkases="berkases" @upload="upload" @edit="edit" />
+      <daftar :contents="contents" :berkases="berkases[jenis]" @upload="upload" @edit="edit" />
     </div>
     <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title">
       <component

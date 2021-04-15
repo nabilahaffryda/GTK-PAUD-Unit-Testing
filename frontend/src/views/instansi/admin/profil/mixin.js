@@ -53,29 +53,75 @@ export default {
     },
 
     berkases() {
-      return [
-        {
-          title: 'Pakta Integritas',
-          pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
-          valid: true,
-          type: 'integritas',
-          withAction: true,
-        },
-        {
-          title: 'Surat Keterangan Sudah Menjalankan Fungsi Sebagai Pengajar Diklat PAUD',
-          pesan: ``,
-          valid: true,
-          type: 'fungsi',
-          withAction: true,
-        },
-        {
-          title: 'Sertifikat Pelatihan Calon Pelatih (PCP)',
-          pesan: ``,
-          valid: true,
-          type: 'pelatihan',
-          withAction: true,
-        },
-      ];
+      return {
+        pengajar: [
+          {
+            title: 'Pakta Integritas',
+            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
+            valid: true,
+            type: 'integritas',
+            withAction: true,
+          },
+          {
+            title: 'Surat Keterangan Sudah Menjalankan Fungsi Sebagai Pengajar Diklat PAUD',
+            pesan: ``,
+            valid: true,
+            type: 'fungsi',
+            withAction: true,
+          },
+          {
+            title: 'Sertifikat Pelatihan Calon Pelatih (PCP)',
+            pesan: ``,
+            valid: true,
+            type: 'pelatihan',
+            withAction: true,
+          },
+        ],
+        bimtek: [
+          {
+            title: 'Pakta Integritas',
+            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
+            valid: true,
+            type: 'integritas',
+            withAction: true,
+          },
+          {
+            title: 'Kartu Tanda Penduduk (KTP)',
+            pesan: ``,
+            valid: true,
+            type: 'ktp',
+            withAction: true,
+          },
+          {
+            title: 'Nomor Pokok Wajib Pajak (NPWP)',
+            pesan: ``,
+            valid: true,
+            type: 'npwp',
+            withAction: true,
+          },
+          {
+            title: 'Ijasah Terakhir',
+            pesan: ``,
+            valid: true,
+            type: 'ijasah',
+            withAction: true,
+          },
+          {
+            title: 'Sertifikat Diklat Dasar',
+            pesan: ``,
+            valid: true,
+            type: 'diklat',
+            withAction: true,
+          },
+          {
+            title: 'Sertifikat Diklat PAUD',
+            pesan: `<i>*3 Pelatihan PAUD TERAKHIR</i>`,
+            valid: true,
+            type: 'sertifikat',
+            withAction: true,
+          },
+        ],
+      };
     },
   },
   methods: {
@@ -86,6 +132,10 @@ export default {
         integritas: { format: 'JPEG/JPG/PNG', required: true },
         fungsi: { format: 'PDF', required: true },
         pelatihan: { format: 'PDF', required: true },
+        ktp: { format: 'PDF', required: true },
+        npwp: { format: 'PDF', required: true },
+        ijasah: { format: 'PDF', required: true },
+        sertifikat: { format: 'PDF', required: true },
       };
 
       this.id = this.id || null;
