@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|string $nama
  * @property null|string $file
  * @property null|string $keterangan
- * @property null|string $validasi
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|string $admin_id
@@ -37,7 +36,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|PaudPengajarBerkas whereNama($value)
  * @method static Builder|PaudPengajarBerkas whereFile($value)
  * @method static Builder|PaudPengajarBerkas whereKeterangan($value)
- * @method static Builder|PaudPengajarBerkas whereValidasi($value)
  * @method static Builder|PaudPengajarBerkas whereCreatedAt($value)
  * @method static Builder|PaudPengajarBerkas whereUpdatedAt($value)
  * @method static Builder|PaudPengajarBerkas whereAdminId($value)
@@ -72,7 +70,6 @@ class PaudPengajarBerkas extends Eloquent
         'nama'                   => 'string',
         'file'                   => 'string',
         'keterangan'             => 'string',
-        'validasi'               => 'string',
         'created_at'             => 'datetime',
         'updated_at'             => 'datetime',
         'admin_id'               => 'string',
@@ -93,7 +90,6 @@ class PaudPengajarBerkas extends Eloquent
         'nama',
         'file',
         'keterangan',
-        'validasi',
         'admin_id',
     ];
 
@@ -119,5 +115,10 @@ class PaudPengajarBerkas extends Eloquent
     public function paudPengajar()
     {
         return $this->belongsTo('App\Models\PaudPengajar', 'paud_pengajar_id', 'paud_pengajar_id');
+    }
+
+    public function getUrlBerkasAttribute()
+    {
+        return $this->file ? sprintf("%s/%s", config('filesystems.disks.pengajar-berkas.url'), $this->file) : null;
     }
 }
