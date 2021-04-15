@@ -52,6 +52,16 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'akun-foto' => [
+            'driver'   => 'ftp',
+            'passive'  => env('AKUN_FOTO_PASSIVE', env('FTP_PASSIVE', true)),
+            'host'     => env('AKUN_FOTO_HOST', env('FTP_HOST', '172.17.1.20')),
+            'username' => env('AKUN_FOTO_USER', env('FTP_USER', 'webmaster')),
+            'password' => env('AKUN_FOTO_PASS', env('FTP_PASS', 'w3bmaster')),
+            'path'     => env('AKUN_FOTO_PATH', '/upload/gpo/foto-akun'),
+            'url'      => env('AKUN_FOTO_URL', 'https://upload.dev.siap.id/gpo/foto-akun'),
+        ],
+
         'lpd-berkas' => [
             'driver'   => 'ftp',
             'passive'  => env('LPD_BERKAS_PASSIVE', env('FTP_PASSIVE', true)),
@@ -60,6 +70,16 @@ return [
             'password' => env('LPD_BERKAS_PASS', env('FTP_PASS', 'w3bmaster')),
             'path'     => env('LPD_BERKAS_PATH', '/upload/gpo/paud/lpd-berkas'),
             'url'      => env('LPD_BERKAS_URL', 'https://upload.dev.siap.id/gpo/paud/lpd-berkas'),
+        ],
+
+        'pengajar-berkas' => [
+            'driver'   => 'ftp',
+            'passive'  => env('PENGAJAR_BERKAS_PASSIVE', env('FTP_PASSIVE', true)),
+            'host'     => env('PENGAJAR_BERKAS_HOST', env('FTP_HOST', '172.17.1.20')),
+            'username' => env('PENGAJAR_BERKAS_USER', env('FTP_USER', 'webmaster')),
+            'password' => env('PENGAJAR_BERKAS_PASS', env('FTP_PASS', 'w3bmaster')),
+            'path'     => env('PENGAJAR_BERKAS_PATH', '/upload/gpo/paud/pengajar-berkas'),
+            'url'      => env('PENGAJAR_BERKAS_URL', 'https://upload.dev.siap.id/gpo/paud/pengajar-berkas'),
         ],
     ],
 
