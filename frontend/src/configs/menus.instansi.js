@@ -75,6 +75,14 @@ export default [
         link: 'admin-pembimbing',
         to: { name: 'admin-pembimbing' },
       },
+    ],
+  },
+  {
+    key: 'profil',
+    program: 'Profil Akun',
+    subheading: 'Profil Akun',
+    submenu: false,
+    menu: [
       {
         icon: 'mdi-account-voice',
         title: 'Profil Pengajar',
