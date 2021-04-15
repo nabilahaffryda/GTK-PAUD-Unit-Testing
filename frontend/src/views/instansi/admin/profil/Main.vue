@@ -114,7 +114,17 @@ export default {
     },
   },
   created() {
-    this.getMasters('m_propinsi;m_kota;kualifikasi');
+    this.getMasters({
+      name: ['m_propinsi', 'm_kota', 'kualifikasi'].join(';'),
+      filter: {
+        0: {
+          k_propinsi: {
+            op: '<',
+            val: 90,
+          },
+        },
+      },
+    });
   },
 };
 </script>

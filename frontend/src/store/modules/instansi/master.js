@@ -16,7 +16,7 @@ export const actions = {
     // check masters on state
     const id = rootState.auth.instansi_id;
     const masters = (state.masters && Object.keys(state.masters)) || [];
-    const mastersRequest = (payload || '').split(';') || [];
+    const mastersRequest = (payload.name || '').split(';') || [];
     const mastersForRequest = mastersRequest.filter((item) => masters.indexOf(item) === -1);
     if (mastersForRequest && mastersForRequest.length) {
       const data = await http

@@ -175,7 +175,17 @@ export default {
     },
   },
   created() {
-    this.getMasters(['m_propinsi', 'm_kota'].join(';'));
+    this.getMasters({
+      name: ['m_propinsi', 'm_kota'].join(';'),
+      filter: {
+        0: {
+          k_propinsi: {
+            op: '<',
+            val: 90,
+          },
+        },
+      },
+    });
   },
   methods: {
     allow(action, data) {
