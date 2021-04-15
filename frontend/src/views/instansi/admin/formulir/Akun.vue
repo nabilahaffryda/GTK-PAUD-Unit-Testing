@@ -119,7 +119,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    isChecked: {
+    useUpload: {
       type: Boolean,
       default: false,
     },
@@ -154,7 +154,6 @@ export default {
   },
   computed: {
     configs() {
-      console.log(this.masters);
       const M_PROPINSI = this.masters.m_propinsi || {};
       const M_KOTA = this.masters.m_kota || {};
       return {
