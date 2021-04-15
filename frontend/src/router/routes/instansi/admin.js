@@ -40,4 +40,23 @@ export default [
       tipe: 'pengajar-bimtek',
     },
   },
+  {
+    path: '/i/:id(\\d+)/profil/pengajar',
+    name: 'profil-pengajar',
+    component: () => lazyLoadView(import('@views/instansi/admin/list/pengajar/Profil')),
+    meta: {
+      title: 'Profil Pengajar',
+      k_group: '174',
+      tipe: 'pengajar',
+    },
+  },
+  {
+    path: '/i/:id(\\d+)/profil/bimtek',
+    name: 'profil-bimtek',
+    component: () => lazyLoadView(import('@views/instansi/admin/list/bimtek/Profil')),
+    meta: {
+      title: 'Profil Pengajar BIMTEK',
+      tipe: 'pengajar-bimtek',
+    },
+  },
 ];
