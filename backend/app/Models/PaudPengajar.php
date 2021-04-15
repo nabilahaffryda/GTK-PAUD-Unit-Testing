@@ -19,10 +19,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $k_verval_paud
  * @property null|Carbon $wkt_ajuan
  * @property null|Carbon $wkt_verval
- * @property null|string $instansi_lulus
- * @property null|int $is_pcp
- * @property null|int $pengalaman
  * @property null|int $k_kualifikasi
+ * @property null|string $prodi
+ * @property null|string $lulusan
+ * @property null|string $instansi_nama
+ * @property null|string $instansi_jabatan
+ * @property null|string $instansi_alamat
+ * @property null|int $instansi_k_propinsi
+ * @property null|int $instansi_k_kota
+ * @property null|string $instansi_kodepos
+ * @property null|int $k_pcp_paud
+ * @property null|string $pengalaman
  * @property null|int $is_pembimbing
  * @property null|string $akun_id_verval
  * @property null|string $alasan
@@ -32,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $admin_id
  *
  * @property-read Akun $akun
+ * @property-read MPcpPaud $mPcpPaud
  * @property-read MVervalPaud $mVervalPaud
  * @property-read Collection|PaudPengajarBerkas[] $paudPengajarBerkases
  *
@@ -42,10 +50,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudPengajar whereKVervalPaud($value)
  * @method static Builder|PaudPengajar whereWktAjuan($value)
  * @method static Builder|PaudPengajar whereWktVerval($value)
- * @method static Builder|PaudPengajar whereInstansiLulus($value)
- * @method static Builder|PaudPengajar whereIsPcp($value)
- * @method static Builder|PaudPengajar wherePengalaman($value)
  * @method static Builder|PaudPengajar whereKKualifikasi($value)
+ * @method static Builder|PaudPengajar whereProdi($value)
+ * @method static Builder|PaudPengajar whereLulusan($value)
+ * @method static Builder|PaudPengajar whereInstansiNama($value)
+ * @method static Builder|PaudPengajar whereInstansiJabatan($value)
+ * @method static Builder|PaudPengajar whereInstansiAlamat($value)
+ * @method static Builder|PaudPengajar whereInstansiKPropinsi($value)
+ * @method static Builder|PaudPengajar whereInstansiKKota($value)
+ * @method static Builder|PaudPengajar whereInstansiKodepos($value)
+ * @method static Builder|PaudPengajar whereKPcpPaud($value)
+ * @method static Builder|PaudPengajar wherePengalaman($value)
  * @method static Builder|PaudPengajar whereIsPembimbing($value)
  * @method static Builder|PaudPengajar whereAkunIdVerval($value)
  * @method static Builder|PaudPengajar whereAlasan($value)
@@ -76,23 +91,30 @@ class PaudPengajar extends Eloquent
      * @var array
      */
     protected $casts = [
-        'akun_id'        => 'string',
-        'tahun'          => 'int',
-        'angkatan'       => 'int',
-        'k_verval_paud'  => 'int',
-        'wkt_ajuan'      => 'datetime',
-        'wkt_verval'     => 'datetime',
-        'instansi_lulus' => 'string',
-        'is_pcp'         => 'int',
-        'pengalaman'     => 'int',
-        'k_kualifikasi'  => 'int',
-        'is_pembimbing'  => 'int',
-        'akun_id_verval' => 'string',
-        'alasan'         => 'string',
-        'catatan'        => 'string',
-        'created_at'     => 'datetime',
-        'updated_at'     => 'datetime',
-        'admin_id'       => 'string',
+        'akun_id'             => 'string',
+        'tahun'               => 'int',
+        'angkatan'            => 'int',
+        'k_verval_paud'       => 'int',
+        'wkt_ajuan'           => 'datetime',
+        'wkt_verval'          => 'datetime',
+        'k_kualifikasi'       => 'int',
+        'prodi'               => 'string',
+        'lulusan'             => 'string',
+        'instansi_nama'       => 'string',
+        'instansi_jabatan'    => 'string',
+        'instansi_alamat'     => 'string',
+        'instansi_k_propinsi' => 'int',
+        'instansi_k_kota'     => 'int',
+        'instansi_kodepos'    => 'string',
+        'k_pcp_paud'          => 'int',
+        'pengalaman'          => 'string',
+        'is_pembimbing'       => 'int',
+        'akun_id_verval'      => 'string',
+        'alasan'              => 'string',
+        'catatan'             => 'string',
+        'created_at'          => 'datetime',
+        'updated_at'          => 'datetime',
+        'admin_id'            => 'string',
     ];
 
     /**
@@ -108,10 +130,17 @@ class PaudPengajar extends Eloquent
         'k_verval_paud',
         'wkt_ajuan',
         'wkt_verval',
-        'instansi_lulus',
-        'is_pcp',
-        'pengalaman',
         'k_kualifikasi',
+        'prodi',
+        'lulusan',
+        'instansi_nama',
+        'instansi_jabatan',
+        'instansi_alamat',
+        'instansi_k_propinsi',
+        'instansi_k_kota',
+        'instansi_kodepos',
+        'k_pcp_paud',
+        'pengalaman',
         'is_pembimbing',
         'akun_id_verval',
         'alasan',
@@ -125,6 +154,14 @@ class PaudPengajar extends Eloquent
     public function akun()
     {
         return $this->belongsTo('App\Models\Akun', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return BelongsTo|Builder|MPcpPaud
+     */
+    public function mPcpPaud()
+    {
+        return $this->belongsTo('App\Models\MPcpPaud', 'k_pcp_paud', 'k_pcp_paud');
     }
 
     /**

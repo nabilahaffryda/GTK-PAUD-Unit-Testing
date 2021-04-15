@@ -74,7 +74,14 @@ class PaudPengajarBerkas extends Eloquent
         'updated_at'             => 'datetime',
         'admin_id'               => 'string',
     ];
-
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url',
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -117,7 +124,7 @@ class PaudPengajarBerkas extends Eloquent
         return $this->belongsTo('App\Models\PaudPengajar', 'paud_pengajar_id', 'paud_pengajar_id');
     }
 
-    public function getUrlBerkasAttribute()
+    public function getUrlAttribute()
     {
         return $this->file ? sprintf("%s/%s", config('filesystems.disks.pengajar-berkas.url'), $this->file) : null;
     }

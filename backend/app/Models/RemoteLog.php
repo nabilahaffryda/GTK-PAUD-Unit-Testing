@@ -65,17 +65,18 @@ class RemoteLog extends Eloquent
      * @var array
      */
     protected $casts = [
-        'remote_log_id' => 'int',
-        'log_id'        => 'int',
-        'class'         => 'string',
-        'base_uri'      => 'string',
-        'req_uri'       => 'string',
-        'req_method'    => 'string',
-        'req_header'    => 'string',
-        'req_body'      => 'string',
-        'resp_status'   => 'int',
-        'resp_header'   => 'string',
-        'resp_body'     => 'string',
+        'log_id'      => 'int',
+        'class'       => 'string',
+        'base_uri'    => 'string',
+        'req_uri'     => 'string',
+        'req_method'  => 'string',
+        'req_header'  => 'string',
+        'req_body'    => 'string',
+        'resp_status' => 'int',
+        'resp_header' => 'string',
+        'resp_body'   => 'string',
+        'created_at'  => 'datetime',
+        'updated_at'  => 'datetime',
     ];
 
     /**

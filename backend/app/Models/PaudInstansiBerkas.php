@@ -74,7 +74,14 @@ class PaudInstansiBerkas extends Eloquent
         'updated_at'        => 'datetime',
         'akun_id'           => 'string',
     ];
-
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url',
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -115,5 +122,10 @@ class PaudInstansiBerkas extends Eloquent
     public function paudInstansi()
     {
         return $this->belongsTo('App\Models\PaudInstansi', 'paud_instansi_id', 'paud_instansi_id');
+    }
+
+    public function getUrlAttribute()
+    {
+        return $this->file ? sprintf("%s/%s", config('filesystems.disks.lpd-berkas.url'), $this->file) : null;
     }
 }
