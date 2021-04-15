@@ -68,14 +68,22 @@ export default {
   },
   computed: {
     configs() {
-      const M_PROPINSI = this.masters.m_propinsi || {};
-      const M_KOTA = this.masters.m_kota || {};
-      return {
+      const M_PROPINSI = this.masters.propinsi || {};
+      const M_KOTA = this.masters.kota || {};
+      const config = {
         selector: ['k_propinsi', 'k_kota'],
         required: ['k_propinsi', 'k_kota'],
         label: ['Provinsi', 'Kota/Kabupaten'],
         options: [M_PROPINSI, M_KOTA],
         grid: [{ cols: 6 }, { cols: 6 }],
+      };
+      return {
+        rumah: Object.assign({}, config),
+        instansi: Object.assign({}, config, {
+          selector: ['instansi_k_propinsi', 'instansi_k_kota'],
+          required: ['instansi_k_propinsi', 'instansi_k_kota'],
+          label: ['Provinsi Instansi Asal', 'Kota/Kabupaten Instansi Asal'],
+        }),
       };
     },
 
@@ -225,7 +233,7 @@ export default {
           },
           {
             type: 'cascade',
-            configs: this.configs,
+            configs: this.configs.rumah,
             grid: { cols: 8 },
             labelColor: 'secondary',
           },
@@ -302,7 +310,7 @@ export default {
           },
           {
             type: 'cascade',
-            configs: this.configs,
+            configs: this.configs.instansi,
             grid: { cols: 8 },
             labelColor: 'secondary',
           },
@@ -348,6 +356,8 @@ export default {
         ...(this.schema.instansi || []),
         { name: 'k_propinsi' },
         { name: 'k_kota' },
+        { name: 'instansi_k_propinsi' },
+        { name: 'instansi_k_kota' },
       ];
       for (const item of formulir) {
         if (item.name) {

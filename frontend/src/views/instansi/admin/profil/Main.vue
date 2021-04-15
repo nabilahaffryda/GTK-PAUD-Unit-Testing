@@ -62,7 +62,7 @@
             <!--ajuan button-->
             <template>
               <div>
-                <v-btn depressed color="success" class="mt-2">
+                <v-btn depressed color="success" class="mt-2" :disabled="!isLengkap">
                   Kirim Berkas
                 </v-btn>
               </div>
@@ -73,7 +73,7 @@
     </v-card>
     <div class="my-5">
       <h3 class="my-5">PERSYARATAN REGISTRASI</h3>
-      <daftar :contents="contents" :berkases="berkases[jenis]" @upload="upload" @edit="edit" />
+      <daftar :contents="contents" :berkases="berkases[jenis]" :detail="detail" @upload="upload" @edit="edit" />
     </div>
     <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title">
       <component
@@ -125,6 +125,7 @@ export default {
         },
       },
     });
+    this.fetchProfil();
   },
 };
 </script>

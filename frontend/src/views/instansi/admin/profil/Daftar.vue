@@ -21,11 +21,12 @@
               :type="item.type"
               :valid="item.valid"
               :with-action="item.withAction"
+              :value="item.value || {}"
               @upload="$emit('upload', item.type)"
             />
           </template>
           <template v-else>
-            <component :is="item.component" @edit="$emit('edit')" />
+            <component :is="item.component" :detail="detail" @edit="$emit('edit')" />
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -44,6 +45,10 @@ export default {
     berkases: {
       type: Array,
       default: () => [],
+    },
+    detail: {
+      type: Object,
+      default: () => {},
     },
   },
   components: { Berkas, Profil },

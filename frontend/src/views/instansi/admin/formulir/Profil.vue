@@ -28,22 +28,47 @@
 </template>
 <script>
 export default {
+  props: {
+    detail: {
+      type: Object,
+      default: () => {},
+    },
+  },
   computed: {
     profils() {
+      const item = Object.assign({}, this.detail);
       return [
-        { title: 'Nama Lembaga', value: 'Syamroni Abdul Marona', grid: { cols: 12, md: 6, sm: 12 } },
-        { title: 'Alamat Sesuai KTP', value: 'Jl. Sirip Hui Nomor 231', grid: { cols: 12, md: 6, sm: 12 } },
-        { title: 'Email', value: 'Abadilah@gmail.com', grid: { cols: 12, md: 6, sm: 12 } },
-        { title: 'Propinsi', value: 'Jawa Timur', grid: { cols: 12, md: 3, sm: 6 } },
-        { title: 'Kabupaten/Kota', value: 'Malang', grid: { cols: 12, md: 3, sm: 6 } },
-        { title: 'Nomor HP Aktif', value: '081929382912', grid: { cols: 12, md: 6, sm: 12 } },
-        { title: 'Kode Pos', value: '65164', grid: { cols: 12, md: 6, sm: 12 } },
-        { title: 'NIK', value: '3507282912939281', grid: { cols: 12, md: 6, sm: 12 } },
-        { title: 'Keikutsertaan PCP', value: 'YA', grid: { cols: 12, md: 6, sm: 12 } },
-        { title: 'Tempat Tanggal Lahir', value: 'Malang, 20 Mei 1997', grid: { cols: 12, md: 3, sm: 12 } },
-        { title: 'Usia', value: '22 Tahun', grid: { cols: 12, md: 3, sm: 12 } },
-        { title: 'Pengalaman Melatih 2 Tahun Terakhir', value: '5 Kali', grid: { cols: 12, md: 4, sm: 12 } },
-        { title: 'Pendidikan Terakhir', value: 'S1 - Universitas Brawijawa', grid: { cols: 12, md: 6, sm: 12 } },
+        {
+          title: 'Nama Lembaga',
+          value: this.$getDeepObj(item, 'akun.data.nama') || '-',
+          grid: { cols: 12, md: 6, sm: 12 },
+        },
+        {
+          title: 'Alamat Sesuai KTP',
+          value: this.$getDeepObj(item, 'akun.data.alamat') || '-',
+          grid: { cols: 12, md: 6, sm: 12 },
+        },
+        { title: 'Email', value: this.$getDeepObj(item, 'akun.data.email') || '-', grid: { cols: 12, md: 6, sm: 12 } },
+        { title: 'Propinsi', value: this.$getDeepObj(item, ''), grid: { cols: 12, md: 3, sm: 6 } },
+        { title: 'Kabupaten/Kota', value: this.$getDeepObj(item, ''), grid: { cols: 12, md: 3, sm: 6 } },
+        {
+          title: 'Nomor HP Aktif',
+          value: this.$getDeepObj(item, 'akun.data.no_hp') || '-',
+          grid: { cols: 12, md: 6, sm: 12 },
+        },
+        { title: 'Kode Pos', value: this.$getDeepObj(item, 'akun.data.kodepos'), grid: { cols: 12, md: 6, sm: 12 } },
+        { title: 'NIK', value: this.$getDeepObj(item, 'akun.data.nik'), grid: { cols: 12, md: 6, sm: 12 } },
+        { title: 'Keikutsertaan PCP', value: this.$getDeepObj(item, ''), grid: { cols: 12, md: 6, sm: 12 } },
+        {
+          title: 'Tempat Tanggal Lahir',
+          value:
+            (this.$getDeepObj(item, 'akun.data.tmp_lahir') || '-') +
+            ', ' +
+            (this.$localDate(this.$getDeepObj(item, 'akun.data.tgl_lahir')) || '-'),
+          grid: { cols: 12, md: 6, sm: 12 },
+        },
+        { title: 'Pengalaman Melatih 2 Tahun Terakhir', value: '', grid: { cols: 12, md: 4, sm: 12 } },
+        { title: 'Pendidikan Terakhir', value: this.$getDeepObj(item, ''), grid: { cols: 12, md: 6, sm: 12 } },
       ];
     },
   },

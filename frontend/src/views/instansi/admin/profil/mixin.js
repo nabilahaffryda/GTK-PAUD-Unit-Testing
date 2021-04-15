@@ -4,18 +4,25 @@ export default {
   data() {
     return {
       formulir: {},
+      detail: {},
+      lengkap: {},
+      berkas: [],
     };
   },
   computed: {
     ...mapState('master', ['masters']),
 
+    isLengkap() {
+      return this.lengkap['profil'] && this.lengkap['berkas'];
+    },
+
     status() {
       return [
         {
           label: 'Profil Pengajar',
-          value: 'passed',
+          value: this.lengkap['profil'] ? 'passed' : 'not_finish',
         },
-        { label: 'Berkas Persyaratan Lainnya', value: 'passed' },
+        { label: 'Berkas Persyaratan Lainnya', value: this.lengkap['berkas'] ? 'passed' : 'not_finish' },
       ];
     },
 
@@ -53,28 +60,35 @@ export default {
     },
 
     berkases() {
+      const mBerkas = this.$arrToObj(this.berkas, 'k_berkas_pengajar_paud');
       return {
         pengajar: [
           {
             title: 'Pakta Integritas',
             pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
-            valid: true,
+            valid: !!mBerkas['1'],
             type: 'integritas',
             withAction: true,
+            kBerkas: 1,
+            value: mBerkas['1'] || {},
           },
           {
             title: 'Surat Keterangan Sudah Menjalankan Fungsi Sebagai Pengajar Diklat PAUD',
             pesan: ``,
-            valid: true,
+            valid: !!mBerkas['4'],
             type: 'fungsi',
             withAction: true,
+            kBerkas: 4,
+            value: mBerkas['4'] || {},
           },
           {
             title: 'Sertifikat Pelatihan Calon Pelatih (PCP)',
             pesan: ``,
-            valid: true,
+            valid: !!mBerkas['5'],
             type: 'pelatihan',
             withAction: true,
+            kBerkas: 5,
+            value: mBerkas['5'] || {},
           },
         ],
         bimtek: [
@@ -84,6 +98,7 @@ export default {
             valid: true,
             type: 'integritas',
             withAction: true,
+            kBerkas: 1,
           },
           {
             title: 'Kartu Tanda Penduduk (KTP)',
@@ -105,6 +120,7 @@ export default {
             valid: true,
             type: 'ijasah',
             withAction: true,
+            kBerkas: 3,
           },
           {
             title: 'Sertifikat Diklat Dasar',
@@ -126,6 +142,7 @@ export default {
   },
   methods: {
     ...mapActions('master', ['getMasters']),
+    ...mapActions('profil', ['fetch', 'update', 'getBerkas', 'setBerkas']),
 
     upload(type) {
       const rules = {
@@ -163,6 +180,23 @@ export default {
       this.$nextTick(() => {
         this.$refs.formulir.reset();
         // this.$set(this.formulir, 'init', berkas[0])
+      });
+    },
+
+    fetchProfil() {
+      this.fetch({ jenis: this.jenis })
+        .then(({ data, meta }) => {
+          this.detail = Object.assign({}, data);
+          this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
+        })
+        .then(() => {
+          this.fetchDokumen();
+        });
+    },
+
+    fetchDokumen() {
+      this.getBerkas({ jenis: this.jenis, id: this.$getDeepObj(this, 'detail.paud_pengajar_id') }).then(({ data }) => {
+        this.berkas = data || [];
       });
     },
   },
