@@ -21,6 +21,16 @@ export default [
     },
   },
   {
+    path: '/i/:id(\\d+)/akun/bimtek',
+    name: 'admin-bimtek',
+    component: () => lazyLoadView(import('@views/instansi/admin/list/bimtek/Index')),
+    meta: {
+      title: 'Kelola Pengajar BIMTEK',
+      k_group: '173',
+      tipe: 'pengajar-bimtek',
+    },
+  },
+  {
     path: '/i/:id(\\d+)/akun/pengajar',
     name: 'admin-pengajar',
     component: () => lazyLoadView(import('@views/instansi/admin/list/pengajar/Index')),
@@ -31,13 +41,23 @@ export default [
     },
   },
   {
-    path: '/i/:id(\\d+)/akun/bimtek',
-    name: 'admin-bimtek',
-    component: () => lazyLoadView(import('@views/instansi/admin/list/bimtek/Index')),
+    path: '/i/:id(\\d+)/akun/pengajar-tambahan',
+    name: 'admin-pengajar-tambahan',
+    component: () => lazyLoadView(import('@views/instansi/admin/list/pengajarTambahan/Index')),
     meta: {
-      title: 'Kelola Pengajar BIMTEK',
-      k_group: '173',
-      tipe: 'pengajar-bimtek',
+      title: 'Kelola Pengajar Tambahan',
+      k_group: '175',
+      tipe: 'pengajar-tambahan',
+    },
+  },
+  {
+    path: '/i/:id(\\d+)/akun/pembimbing',
+    name: 'admin-pembimbing',
+    component: () => lazyLoadView(import('@views/instansi/admin/list/pembimbing/Index')),
+    meta: {
+      title: 'Kelola Pembimbing Praktik',
+      k_group: '176',
+      tipe: 'pembimbing-praktik',
     },
   },
   {
