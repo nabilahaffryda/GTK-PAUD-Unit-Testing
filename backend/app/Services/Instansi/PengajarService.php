@@ -12,9 +12,9 @@ use App\Models\PaudPengajar;
 use App\Models\PaudPengajarBerkas;
 use App\Services\AkunService;
 use Arr;
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Modules\Psp\Models\PspProfil;
 
 class PengajarService
 {
@@ -205,6 +205,9 @@ class PengajarService
         return $berkas;
     }
 
+    /**
+     * @throws Exception
+     */
     public function berkasDelete(PaudPengajarBerkas $berkas)
     {
         $oldFile = $berkas->file;
