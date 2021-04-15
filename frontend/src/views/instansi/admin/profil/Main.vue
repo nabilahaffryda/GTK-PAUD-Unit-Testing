@@ -114,7 +114,7 @@ export default {
     },
   },
   created() {
-    this.getMasters('m_propinsi;m_kota;m_kualifikasi');
+    this.getMasters('m_propinsi;m_kota;kualifikasi');
   },
 };
 </script>

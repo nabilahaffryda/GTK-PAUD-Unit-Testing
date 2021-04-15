@@ -2,7 +2,7 @@
   <div>
     <v-toolbar flat>
       <v-toolbar-title class="subtitle-1">
-        <div>Data CV</div>
+        <div class="font-weight-bold">Data CV</div>
         <span>
           Lengkapi data persyaratan sesuai kebutuhan sistem, Silakan <b>tekan tombol/icon pensil</b> di sebelah kanan
           untuk melakukan edit.

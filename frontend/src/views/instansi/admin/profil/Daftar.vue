@@ -6,14 +6,14 @@
           <span class="text-h6">{{ item.title }}</span>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <div class="mb-4">
-            <div class="subtitle-1 font-weight-bold">Berkas Unggahan</div>
-            <span>
-              Lengkapi data persyaratan sesuai kebutuhan sistem, Silakan <b>tekan tombol/icon pensil</b> di sebelah
-              kanan untuk melakukan edit
-            </span>
-          </div>
           <template v-if="i === 'berkas'">
+            <div class="mb-4">
+              <div class="subtitle-1 font-weight-bold">Berkas Unggahan</div>
+              <span>
+                Lengkapi data persyaratan sesuai kebutuhan sistem, Silakan <b>tekan tombol/icon pensil</b> di sebelah
+                kanan untuk melakukan edit
+              </span>
+            </div>
             <berkas
               v-for="(item, b) in berkases"
               :key="b"
