@@ -139,7 +139,7 @@ class LpdService
 
     public function upload(PaudInstansi $paudInstansi, int $kBerkasLpdPaud, UploadedFile $file)
     {
-        $mBerkasLpdPaud = MBerkasLpdPaud::find($kBerkasLpdPaud)->firstOrFail();
+        $mBerkasLpdPaud = MBerkasLpdPaud::findOrFail($kBerkasLpdPaud);
         $deleteBerkas   = null;
 
         $berkases = $paudInstansi->paudInstansiBerkases()->where('k_berkas_lpd_paud', $kBerkasLpdPaud)->get();
@@ -169,7 +169,7 @@ class LpdService
 
     private function uploadFtp(PaudInstansi $paudInstansi, $label, $file)
     {
-        $ftpPath  = config('filesystems.disks.ftp.lpd-berkas');
+        $ftpPath  = config('filesystems.disks.lpd-berkas.path');
         $ext      = $file->guessExtension();
         $filename = "lpd-{$paudInstansi->instansi_id}/" . implode('-', [$label, $paudInstansi->instansi_id, date('ymdhis')]) . ".$ext";
         $path     = sprintf("%s/%s", $ftpPath, $filename);
@@ -183,7 +183,7 @@ class LpdService
 
     public function deleteFtp($filename)
     {
-        $ftpPath = config('filesystems.disks.ftp.lpd-berkas');
+        $ftpPath = config('filesystems.disks.lpd-berkas.path');
         $delete  = sprintf("%s/%s", $ftpPath, $filename);
         return Storage::disk('ftp')->delete($delete);
     }
