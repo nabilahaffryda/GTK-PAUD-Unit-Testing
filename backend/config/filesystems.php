@@ -52,6 +52,15 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'lpd-berkas' => [
+            'driver'   => 'ftp',
+            'passive'  => env('LPD_BERKAS_PASSIVE', env('FTP_PASSIVE', true)),
+            'host'     => env('LPD_BERKAS_HOST', env('FTP_HOST', '172.17.1.20')),
+            'username' => env('LPD_BERKAS_USER', env('FTP_USER', 'webmaster')),
+            'password' => env('LPD_BERKAS_PASS', env('FTP_PASS', 'w3bmaster')),
+            'path'     => env('LPD_BERKAS_PATH', '/upload/gpo/paud/lpd-berkas'),
+            'url'      => env('LPD_BERKAS_URL', 'https://upload.dev.siap.id/gpo/paud/lpd-berkas'),
+        ],
     ],
 
     /*
