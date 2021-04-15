@@ -2,12 +2,20 @@
 
 namespace App\Services\Instansi;
 
+use App\Exceptions\FlowException;
+use App\Models\Akun;
 use App\Models\Instansi;
+use App\Models\MBerkasLpdPaud;
+use App\Models\MGroup;
 use App\Models\MJenisInstansi;
 use App\Models\MVervalPaud;
+use App\Models\PaudAdmin;
 use App\Models\PaudInstansi;
+use App\Models\PaudInstansiBerkas;
 use Arr;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class LpdService
 {
@@ -91,4 +99,41 @@ class LpdService
         return $paudInstansi;
     }
 
+    public function getOperatorLpd(Akun $akun, Instansi $instansi)
+    {
+        $operator = PaudAdmin::whereAkunId($akun->akun_id)
+            ->where('k_group', MGroup::OP_LPD_DIKLAT_PAUD)->first();
+
+        return $operator;
+    }
+
+    public function getPaudInstansi(Instansi $instansi, PaudAdmin $paudAdmin)
+    {
+        if($paudAdmin->instansi_id != $instansi->instansi_id) {
+            abort(404);;
+        }
+
+        return PaudInstansi::whereInstansiId($instansi->instansi_id)
+            ->where('angkatan', config('paud.angkatan'))
+            ->where('tahun', config('paud.tahun'))->first();
+    }
+
+    public function getStatusLengkap(PaudInstansi $paudInstansi)
+    {
+        $instansi = $paudInstansi->instansi;
+
+        $diklat = json_decode($paudInstansi->diklat, true);
+
+        $isLengkapProfil = $instansi->nama && $instansi->no_telpon && $instansi->email && $instansi->alamat &&
+            $instansi->k_propinsi && $instansi->k_kota && $paudInstansi->nama_penanggung_jawab &&
+            $paudInstansi->nama_sekretaris && $paudInstansi->nama_bendahara && $paudInstansi->telp_penanggung_jawab &&
+            $paudInstansi->telp_sekretaris && $paudInstansi->telp_bendahara && (count($diklat) >= 1);
+
+        $isLengkapBerkas = $paudInstansi->paudInstansiBerkases->count() == 7;
+
+        return [
+            'profil' => $isLengkapProfil,
+            'berkas' => $isLengkapBerkas,
+        ];
+    }
 }

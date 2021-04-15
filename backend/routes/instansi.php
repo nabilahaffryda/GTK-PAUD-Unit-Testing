@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Instansi\AdminController;
 use App\Http\Controllers\Instansi\Akun\AdminKelasController;
 use App\Http\Controllers\Instansi\Akun\AdminProgramController;
 use App\Http\Controllers\Instansi\Akun\AdminProgramLpdController;
@@ -125,5 +124,13 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{pengajar}/berkas/create', [BerkasController::class, 'create']);
 
         Route::post('berkas/{berkas}/delete', [BerkasController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'lpd-profil'], function () {
+        Route::get('', [\App\Http\Controllers\Instansi\Lpd\ProfilController::class, 'index']);
+        Route::post('{paudInstansi}/update', [\App\Http\Controllers\Instansi\Lpd\ProfilController::class, 'update']);
+
+        Route::get('{paudInstansi}/berkas', [\App\Http\Controllers\Instansi\Lpd\Profil\BerkasController::class, 'index']);
+        Route::post('{paudInstansi}/berkas/create', [\App\Http\Controllers\Instansi\Lpd\Profil\BerkasController::class, 'create']);
     });
 });
