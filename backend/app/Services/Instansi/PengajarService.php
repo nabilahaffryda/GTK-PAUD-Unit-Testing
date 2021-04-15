@@ -71,9 +71,11 @@ class PengajarService
         $akun = $pengajar->akun;
 
         $isLengkap1 = $akun->nama && $akun->alamat && $akun->email && $akun->k_propinsi && $akun->k_kota
+                      && $akun->nik && $pengajar->prodi
                       && $akun->tgl_lahir && $akun->tmp_lahir && $akun->no_hp
-                      && $pengajar->instansi_lulus && $pengajar->is_pcp && $pengajar->pengalaman
-                      && $pengajar->k_kualifikasi;
+                      && $pengajar->lulusan && $pengajar->k_pcp_paud && $pengajar->pengalaman
+                      && $pengajar->k_kualifikasi
+                      && $pengajar->pengalaman && is_array($pengajar->pengalaman) && count($pengajar->pengalaman) >= 1;
 
         $isLengkap2 = $pengajar->paudPengajarBerkases()->count() == 5;
 
