@@ -136,4 +136,55 @@ class LpdService
             'berkas' => $isLengkapBerkas,
         ];
     }
+
+    public function upload(PaudInstansi $paudInstansi, int $kBerkasLpdPaud, UploadedFile $file)
+    {
+        $mBerkasLpdPaud = MBerkasLpdPaud::find($kBerkasLpdPaud)->firstOrFail();
+        $deleteBerkas   = null;
+
+        $berkases = $paudInstansi->paudInstansiBerkases()->where('k_berkas_lpd_paud', $kBerkasLpdPaud)->get();
+        if ($mBerkasLpdPaud->max == 1 && $berkases->count()) {
+            /** @var PaudInstansiBerkas $berkas */
+            $berkas       = $berkases->first();
+            $deleteBerkas = $berkas->getOriginal('file');
+        } else {
+            $berkas = new PaudInstansiBerkas();
+            $berkas->fill($paudInstansi->toArray());
+            $berkas->k_berkas_lpd_paud = $kBerkasLpdPaud;
+        }
+
+        $berkas->nama = $file->getClientOriginalName();
+        $berkas->file = $this->uploadFtp($paudInstansi, $mBerkasLpdPaud->singkat, $file);
+        if (!$berkas->save()) {
+            throw new FlowException('Berkas gagal diupload. silahkan ulangi lagi');
+        }
+
+        if ($deleteBerkas) {
+            // Disable hapus berkas, untuk backup plan
+            $this->deleteFtp($deleteBerkas);
+        }
+
+        return $berkas;
+    }
+
+    private function uploadFtp(PaudInstansi $paudInstansi, $label, $file)
+    {
+        $ftpPath  = config('filesystems.disks.ftp.lpd-berkas');
+        $ext      = $file->guessExtension();
+        $filename = "lpd-{$paudInstansi->instansi_id}/" . implode('-', [$label, $paudInstansi->instansi_id, date('ymdhis')]) . ".$ext";
+        $path     = sprintf("%s/%s", $ftpPath, $filename);
+
+        if (!Storage::disk('ftp')->put($path, file_get_contents($file->getRealPath()))) {
+            throw new FlowException("Unggah Berkas $label tidak berhasil");
+        }
+
+        return $filename;
+    }
+
+    public function deleteFtp($filename)
+    {
+        $ftpPath = config('filesystems.disks.ftp.lpd-berkas');
+        $delete  = sprintf("%s/%s", $ftpPath, $filename);
+        return Storage::disk('ftp')->delete($delete);
+    }
 }
