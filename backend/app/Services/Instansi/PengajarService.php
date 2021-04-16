@@ -89,6 +89,7 @@ class PengajarService
     {
         return $pengajar->loadMissing([
             'akun',
+            'mPcpPaud',
             'mVervalPaud',
             'paudPengajarBerkases',
         ]);
