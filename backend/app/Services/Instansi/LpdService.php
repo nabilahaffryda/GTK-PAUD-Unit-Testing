@@ -3,6 +3,7 @@
 namespace App\Services\Instansi;
 
 use App\Exceptions\FlowException;
+use App\Exceptions\SaveException;
 use App\Models\Akun;
 use App\Models\Instansi;
 use App\Models\MBerkasLpdPaud;
@@ -12,6 +13,7 @@ use App\Models\MVervalPaud;
 use App\Models\PaudAdmin;
 use App\Models\PaudInstansi;
 use App\Models\PaudInstansiBerkas;
+use App\Services\InstansiService;
 use Arr;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
@@ -102,6 +104,7 @@ class LpdService
     public function getOperatorLpd(Akun $akun, Instansi $instansi)
     {
         $operator = PaudAdmin::whereAkunId($akun->akun_id)
+            ->where('instansi_id', '=', $instansi->instansi_id)
             ->where('k_group', MGroup::OP_LPD_DIKLAT_PAUD)->first();
 
         return $operator;
@@ -185,5 +188,41 @@ class LpdService
         $ftpPath = config('filesystems.disks.lpd-berkas.path');
         $delete  = sprintf("%s/%s", $ftpPath, $filename);
         return Storage::disk('lpd-berkas')->delete($delete);
+    }
+
+    public function update(PaudInstansi $paudInstansi, array $data, string $foto, string $ext)
+    {
+        $instansi = $paudInstansi->instansi;
+
+        $oldFoto = $instansi->foto ? $instansi->getOriginal('foto') : null;
+
+        $paudInstansi->fill(Arr::except($data, 'diklat'));
+        if ($diklat = Arr::get($data, 'diklat')) {
+            $paudInstansi->diklat = json_encode($diklat);
+        }
+        if (!$paudInstansi->save()) {
+            throw new SaveException("Penyimpanan Data Lembaga Tidak Berhasil");
+        }
+
+        $instansi->fill(Arr::only($data, [
+            'nama',
+            'email',
+            'alamat',
+            'no_telp',
+            'k_propinsi',
+            'k_kota',
+            'kodepos',
+        ]));
+
+        if ($foto && $ext) {
+            $instansi->foto = app(InstansiService::class)->uploadFoto($instansi, $foto, $ext);
+        }
+
+        if (!$instansi->save()) {
+            throw new SaveException("Penyimpanan Data Lembaga Tidak Berhasil");
+        }
+        if ($foto && $ext && $oldFoto) {
+            app(InstansiService::class)->deleteFoto($oldFoto);
+        }
     }
 }

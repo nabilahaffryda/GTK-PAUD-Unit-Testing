@@ -62,6 +62,16 @@ return [
             'url'      => env('AKUN_FOTO_URL', 'https://upload.dev.siap.id/gpo/foto-akun'),
         ],
 
+        'instansi-foto' => [
+            'driver'   => 'ftp',
+            'passive'  => env('INSTANSI_FOTO_PASSIVE', env('FTP_PASSIVE', true)),
+            'host'     => env('INSTANSI_FOTO_HOST', env('FTP_HOST', '172.17.1.20')),
+            'username' => env('INSTANSI_FOTO_USER', env('FTP_USER', 'webmaster')),
+            'password' => env('INSTANSI_FOTO_PASS', env('FTP_PASS', 'w3bmaster')),
+            'path'     => env('INSTANSI_FOTO_PATH', '/upload/gpo/foto-instansi'),
+            'url'      => env('INSTANSI_FOTO_URL', 'https://upload.dev.siap.id/gpo/foto-instansi'),
+        ],
+
         'lpd-berkas' => [
             'driver'   => 'ftp',
             'passive'  => env('LPD_BERKAS_PASSIVE', env('FTP_PASSIVE', true)),
