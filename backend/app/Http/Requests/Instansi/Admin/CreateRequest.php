@@ -23,6 +23,7 @@ class CreateRequest extends FormRequest
             'nip'         => ['nullable', 'string', 'max:30'],
             'no_telpon'   => ['nullable', 'numeric'],
             'no_hp'       => ['nullable', 'numeric'],
+            'email'       => ['required', 'email'],
             'k_propinsi'  => ['nullable', 'integer', 'exists:m_propinsi,k_propinsi'],
             'k_kota'      => ['nullable', 'integer', 'exists:m_kota,k_kota'],
             'k_golongan'  => ['nullable', 'integer', 'exists:m_golongan,k_golongan'],
