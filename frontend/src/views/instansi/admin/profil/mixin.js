@@ -211,7 +211,7 @@ export default {
       }
 
       const data = this.$refs.formulir.getValue();
-      const { form, photo } = data;
+      const { form, photo, diklats } = data;
 
       let formData = new FormData();
 
@@ -220,6 +220,14 @@ export default {
           formData.append(key, form[key]);
         }
       });
+
+      if (!diklats.length) {
+        this.$error('Mohon isikan data diklat minimal 1 (satu)');
+        this.$refs.modal.loading = false;
+        return;
+      } else {
+        formData.append('pengalaman', diklats);
+      }
 
       if (photo) {
         for (let item of photo.entries()) {
