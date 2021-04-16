@@ -86,6 +86,10 @@ export default {
     };
   },
   computed: {
+    mKualifikasi() {
+      return this.$mapForMaster(this.masters.m_kualifikasi || {}).filter((s) => [9, 10, 11].includes(s.value)) || [];
+    },
+
     configs() {
       const M_PROPINSI = this.masters.m_propinsi || {};
       const M_KOTA = this.masters.m_kota || {};
@@ -189,8 +193,8 @@ export default {
             hint: '',
             grid: { cols: 12, md: 6 },
             items: [
-              { value: 'l', text: 'Laki-Laki' },
-              { value: 'p', text: 'Perempuan' },
+              { value: 'L', text: 'Laki-Laki' },
+              { value: 'P', text: 'Perempuan' },
             ],
             required: true,
             outlined: true,
@@ -206,6 +210,7 @@ export default {
             placeholder: 'Alamat Surel',
             hint: '',
             grid: { cols: 12, md: 6 },
+            disable: true,
             required: true,
             outlined: true,
             dense: true,
@@ -213,7 +218,7 @@ export default {
           },
           {
             type: 'VTextField',
-            name: 'instansi_lulus',
+            name: 'lulusan',
             label: `Institusi Pendidikan Terakhir`,
             labelColor: 'secondary',
             hideDetails: false,
@@ -232,7 +237,7 @@ export default {
             hideDetails: false,
             placeholder: 'prodi',
             grid: { cols: 12, md: 4, sm: 12 },
-            required: false,
+            required: true,
             outlined: true,
             dense: true,
             singleLine: true,
@@ -242,7 +247,7 @@ export default {
             name: 'k_kualifikasi',
             label: 'Jenjang',
             hint: 'wajib diisi',
-            items: this.$mapForMaster(this.masters.m_kualifikasi),
+            items: this.mKualifikasi,
             value: 'value',
             text: 'text',
             required: true,

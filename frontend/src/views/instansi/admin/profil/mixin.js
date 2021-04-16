@@ -226,7 +226,10 @@ export default {
         this.$refs.modal.loading = false;
         return;
       } else {
-        formData.append('pengalaman', diklats);
+        diklats.forEach((key, index) => {
+          formData.append('pengalaman' + `[${index}][nama]`, key['nama']);
+          formData.append('pengalaman' + `[${index}][tahun]`, key['tahun']);
+        });
       }
 
       if (photo) {
