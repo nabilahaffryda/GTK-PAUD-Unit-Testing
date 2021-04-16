@@ -26,7 +26,7 @@
             />
           </template>
           <template v-else>
-            <component :is="item.component" :detail="detail" @edit="$emit('edit')" />
+            <component :is="item.component" :detail="detail" :masters="masters" @edit="$emit('edit')" />
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -47,6 +47,10 @@ export default {
       default: () => [],
     },
     detail: {
+      type: Object,
+      default: () => {},
+    },
+    masters: {
       type: Object,
       default: () => {},
     },

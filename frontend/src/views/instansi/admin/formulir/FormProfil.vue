@@ -7,7 +7,7 @@
         <v-row class="my-5">
           <v-col cols="12" md="2" sm="12">
             <base-photo-profil
-              :photo="photo || this.$getDeepObj(detail, 'akun.foto')"
+              :photo="photo || this.$getDeepObj(detail, 'akun.foto') || ''"
               photodef="default_foto_gp.png"
               :useBase64="true"
               :use-trigger="false"
@@ -23,7 +23,7 @@
           </v-col>
           <v-col cols="12" md="10" sm="12">
             <div v-for="(item, i) in schema" :key="i">
-              <div class="text-h6 my-3 font-weight-bold"> Data {{ $titleCase(i) }} </div>
+              <div v-if="i !== 'dasar'" class="text-h6 my-3 font-weight-bold"> Data {{ $titleCase(i) }} </div>
               <base-form-generator :schema="item" v-model="form" />
             </div>
 
@@ -146,7 +146,7 @@ export default {
             name: 'nip',
             label: 'NUPTK/NUPTK',
             hint: '',
-            required: false,
+            required: true,
             hideDetails: false,
             outlined: true,
             dense: true,
@@ -274,6 +274,7 @@ export default {
             outlined: true,
             dense: true,
             singleLine: true,
+            labelClass: 'mt-n3 secondary--text px-0 body-2',
             mask: '######',
             grid: { cols: 12, md: 4 },
             labelColor: 'secondary',
@@ -364,6 +365,7 @@ export default {
             hideDetails: false,
             outlined: true,
             dense: true,
+            labelClass: 'mt-n3 secondary--text px-0 body-2',
             singleLine: true,
             mask: '######',
             grid: { cols: 12, md: 4 },

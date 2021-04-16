@@ -1,13 +1,13 @@
 <template>
   <v-list-item class="pa-0">
+    <v-list-item-icon>
+      <v-avatar color="blue-grey lighten-5">
+        <v-icon>mdi-attachment</v-icon>
+      </v-avatar>
+    </v-list-item-icon>
     <v-list-item-content class="px-0">
       <v-row>
-        <v-col cols="12" md="1" class="py-1">
-          <v-avatar color="blue-grey lighten-5">
-            <v-icon>mdi-attachment</v-icon>
-          </v-avatar>
-        </v-col>
-        <v-col cols="12" md="6" class="px-0">
+        <v-col cols="12" md="6" sm="12">
           <span class="subtitle-1">
             <b>{{ berkas.title }}</b>
           </span>
@@ -18,7 +18,7 @@
             </v-btn>
           </div>
         </v-col>
-        <v-col cols="12" md="5" class="pa-0">
+        <v-col cols="12" md="6" sm="12" class="pa-0">
           <v-container class="py-0">
             <v-row>
               <v-col cols="12" md="4" class="pb-0">
