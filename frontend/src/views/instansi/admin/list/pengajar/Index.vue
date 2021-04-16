@@ -1,5 +1,11 @@
 <template>
-  <list-admin jenis="pengajar" title="Akun Pengajar" desc="Lorem Ipsum" :actions="actions"></list-admin>
+  <list-admin
+    jenis="pengajar"
+    akses="pengajar"
+    title="Akun Pengajar"
+    desc="Lorem Ipsum"
+    :actions="actions"
+  ></list-admin>
 </template>
 
 <script>

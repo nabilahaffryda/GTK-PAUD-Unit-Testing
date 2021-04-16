@@ -1,5 +1,11 @@
 <template>
-  <list-admin jenis="program" title="Akun Admin Program" desc="Lorem Ipsum" :actions="actions"></list-admin>
+  <list-admin
+    jenis="program"
+    akses="admin-program-lpd"
+    title="Akun Admin Program"
+    desc="Lorem Ipsum"
+    :actions="actions"
+  ></list-admin>
 </template>
 
 <script>

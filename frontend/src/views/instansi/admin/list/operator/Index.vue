@@ -1,5 +1,11 @@
 <template>
-  <list-admin jenis="operator" title="Akun Operator LPD" desc="Lorem Ipsum" :actions="actions"></list-admin>
+  <list-admin
+    jenis="operator"
+    akses="operator-lpd"
+    title="Akun Operator LPD"
+    desc="Lorem Ipsum"
+    :actions="actions"
+  ></list-admin>
 </template>
 
 <script>

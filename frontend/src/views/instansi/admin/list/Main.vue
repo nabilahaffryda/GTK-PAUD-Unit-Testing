@@ -19,8 +19,8 @@
         <base-table-header
           @search="onSearch"
           :btnFilter="true"
-          :btnAdd="true"
-          :btnDownload="true"
+          :btnAdd="$allow(`akun-${this.akses}.create`)"
+          :btnDownload="$allow(`akun-${this.akses}.download`)"
           @add="onAdd"
           @reload="onReload"
           @filter="onFilter"
@@ -166,6 +166,10 @@ import list from '@mixins/list';
 export default {
   name: 'ListAdmin',
   props: {
+    akses: {
+      type: String,
+      required: true,
+    },
     jenis: {
       type: String,
       required: true,
