@@ -11,32 +11,33 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\Instansi
  *
- * @property int $instansi_id
- * @property null|int $k_jenis_instansi
- * @property string $nama
- * @property null|string $alamat
- * @property null|int $k_propinsi
- * @property null|int $k_kota
- * @property null|int $moodle_id
- * @property null|string $kode_penyelenggara
- * @property null|string $email
- * @property null|string $no_telpon
- * @property null|string $nama_pejabat
- * @property null|string $nip_pejabat
- * @property null|string $nama_pkp
- * @property null|string $kode_pkp
- * @property null|string $anggaran_pkp
- * @property null|string $data_pkp
- * @property null|string $kode_rkakl
- * @property null|string $nama_rkakl
+ * @property int                                  $instansi_id
+ * @property null|int                             $k_jenis_instansi
+ * @property string                               $nama
+ * @property null|string                          $alamat
+ * @property null|int                             $k_propinsi
+ * @property null|int                             $k_kota
+ * @property null|int                             $moodle_id
+ * @property null|string                          $kode_penyelenggara
+ * @property null|string                          $email
+ * @property null|string                          $no_telpon
+ * @property null|string                          $foto
+ * @property null|string                          $nama_pejabat
+ * @property null|string                          $nip_pejabat
+ * @property null|string                          $nama_pkp
+ * @property null|string                          $kode_pkp
+ * @property null|string                          $anggaran_pkp
+ * @property null|string                          $data_pkp
+ * @property null|string                          $kode_rkakl
+ * @property null|string                          $nama_rkakl
  *
- * @property-read MJenisInstansi $mJenisInstansi
- * @property-read MKota $mKota
- * @property-read MPropinsi $mPropinsi
- * @property-read Collection|AkunInstansi[] $akunInstansis
- * @property-read Collection|PaudAdmin[] $paudAdmins
+ * @property-read MJenisInstansi                  $mJenisInstansi
+ * @property-read MKota                           $mKota
+ * @property-read MPropinsi                       $mPropinsi
+ * @property-read Collection|AkunInstansi[]       $akunInstansis
+ * @property-read Collection|PaudAdmin[]          $paudAdmins
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
- * @property-read Collection|PaudInstansi[] $paudInstansis
+ * @property-read Collection|PaudInstansi[]       $paudInstansis
  *
  * @method static Builder|Instansi whereInstansiId($value)
  * @method static Builder|Instansi whereKJenisInstansi($value)
@@ -48,6 +49,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Instansi whereKodePenyelenggara($value)
  * @method static Builder|Instansi whereEmail($value)
  * @method static Builder|Instansi whereNoTelpon($value)
+ * @method static Builder|Instansi whereFoto($value)
  * @method static Builder|Instansi whereNamaPejabat($value)
  * @method static Builder|Instansi whereNipPejabat($value)
  * @method static Builder|Instansi whereNamaPkp($value)
@@ -95,6 +97,7 @@ class Instansi extends Eloquent
         'kode_penyelenggara' => 'string',
         'email'              => 'string',
         'no_telpon'          => 'string',
+        'foto'               => 'string',
         'nama_pejabat'       => 'string',
         'nip_pejabat'        => 'string',
         'nama_pkp'           => 'string',
@@ -128,6 +131,7 @@ class Instansi extends Eloquent
         'kode_penyelenggara',
         'email',
         'no_telpon',
+        'foto',
         'nama_pejabat',
         'nip_pejabat',
         'nama_pkp',
