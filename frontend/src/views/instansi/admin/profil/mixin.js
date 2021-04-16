@@ -146,7 +146,7 @@ export default {
 
     upload(type) {
       const rules = {
-        integritas: { format: 'JPEG/JPG/PNG', required: true },
+        integritas: { format: 'PDF', required: true },
         fungsi: { format: 'PDF', required: true },
         pelatihan: { format: 'PDF', required: true },
         ktp: { format: 'PDF', required: true },
@@ -158,9 +158,12 @@ export default {
       this.id = this.id || null;
       this.action = 'upload';
 
+      const mBerkas = this.$arrToObj(this.berkases[this.jenis], 'type');
+
       this.$set(this.formulir, 'form', 'FormUnggah');
       this.$set(this.formulir, 'title', `Unggah Berkas ${this.$titleCase(type)}`);
       this.$set(this.formulir, 'type', type);
+      this.$set(this.formulir, 'kBerkas', mBerkas[type]['kBerkas']);
       this.$set(this.formulir, 'format', `harus bertipe ${this.$getDeepObj(rules, `${type}.format`)}`);
       this.$set(this.formulir, 'rules', this.$getDeepObj(rules, `${type}`));
       this.$set(this.formulir, 'mode', 'upload');
@@ -176,10 +179,11 @@ export default {
     edit() {
       this.$set(this.formulir, 'form', 'FormProfil');
       this.$set(this.formulir, 'title', `Ubah Profil`);
+      this.$set(this.formulir, 'init', null);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
-        // this.$set(this.formulir, 'init', berkas[0])
+        this.$set(this.formulir, 'init', Object.assign(this.detail, this.detail?.akun?.data));
       });
     },
 
@@ -198,6 +202,82 @@ export default {
       this.getBerkas({ jenis: this.jenis, id: this.$getDeepObj(this, 'detail.paud_pengajar_id') }).then(({ data }) => {
         this.berkas = data || [];
       });
+    },
+
+    onSave() {
+      if (this.formulir.mode === 'upload') {
+        this.uploadData();
+        return;
+      }
+
+      const data = this.$refs.formulir.getValue();
+      const { form } = data;
+
+      const payload = {
+        jenis: this.jenis,
+        id: this.$getDeepObj(this, 'detail.paud_pengajar_id'),
+        params: form,
+      };
+
+      this.update(payload)
+        .then(() => {
+          this.$success('Profil Berhasil diperbarui');
+          this.fetchProfil();
+          this.$refs.modal.close();
+        })
+        .catch(() => {
+          this.$refs.modal.loading = false;
+        });
+    },
+
+    uploadData() {
+      const params = this.$refs.formulir.form || {};
+      const formData = new FormData();
+      let type = this.formulir.kBerkas;
+
+      let mapParams = this.appendData(
+        Object.assign(
+          {},
+          {
+            k_berkas: type,
+            file: params['file'],
+          }
+        ),
+        false,
+        formData
+      );
+
+      this.setBerkas({
+        jenis: this.jenis,
+        id: this.$getDeepObj(this, 'detail.paud_pengajar_id'),
+        params: mapParams,
+      })
+        .then(() => {
+          this.onReload();
+          this.$success(`Berkas berhasil diunggah`);
+          this.$refs.modal.close();
+        })
+        .catch(() => {
+          this.$refs.modal.loading = false;
+        });
+    },
+
+    appendData(data, obj, FormData) {
+      if (data && this.$isObject(data)) {
+        for (let key in data) {
+          let name = (obj && `${obj}[${key}]`) || key;
+          if (data[key] && this.$isObject(data[key])) {
+            this.appendData(data[key], name, FormData);
+          } else {
+            FormData.append(name, data[key]);
+          }
+        }
+        return FormData;
+      }
+    },
+
+    onReload() {
+      this.fetchProfil();
     },
   },
 };

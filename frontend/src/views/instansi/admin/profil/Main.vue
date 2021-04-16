@@ -75,7 +75,7 @@
       <h3 class="my-5">PERSYARATAN REGISTRASI</h3>
       <daftar :contents="contents" :berkases="berkases[jenis]" :detail="detail" @upload="upload" @edit="edit" />
     </div>
-    <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title">
+    <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title" @save="onSave">
       <component
         ref="formulir"
         :is="formulir.form"
@@ -115,7 +115,7 @@ export default {
   },
   created() {
     this.getMasters({
-      name: ['m_propinsi', 'm_kota', 'kualifikasi'].join(';'),
+      name: ['m_propinsi', 'm_kota', 'm_kualifikasi', 'm_pcp_paud'].join(';'),
       filter: {
         0: {
           k_propinsi: {

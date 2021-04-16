@@ -7,14 +7,11 @@
         <v-row class="my-5">
           <v-col cols="12" md="2" sm="12"></v-col>
           <v-col cols="12" md="10" sm="12">
-            <base-form-generator :schema="schema.dasar" v-model="form" />
-            <div class="text-h6 my-3 font-weight-bold">
-              Data Instansi
+            <div v-for="(item, i) in schema" :key="i">
+              <div class="text-h6 my-3 font-weight-bold"> Data {{ $titleCase(i) }} </div>
+              <base-form-generator :schema="item" v-model="form" />
             </div>
-            <base-form-generator :schema="schema.instansi" v-model="form" />
-            <div class="text-h6 my-3 font-weight-bold">
-              Data Diklat
-            </div>
+
             <v-alert type="info">Tambahkan data diklat minimal <b>1</b> dan maksimal <b>5 diklat</b></v-alert>
             <div>
               <v-row v-for="(diklat, i) in diklats" :key="i">
@@ -54,7 +51,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    intiValue: {
+    initValue: {
       type: Object,
       default: () => null,
     },
@@ -68,8 +65,8 @@ export default {
   },
   computed: {
     configs() {
-      const M_PROPINSI = this.masters.propinsi || {};
-      const M_KOTA = this.masters.kota || {};
+      const M_PROPINSI = this.masters.m_propinsi || {};
+      const M_KOTA = this.masters.m_kota || {};
       const config = {
         selector: ['k_propinsi', 'k_kota'],
         required: ['k_propinsi', 'k_kota'],
@@ -120,16 +117,16 @@ export default {
           },
           {
             type: 'VTextField',
-            name: 'nuptk',
-            label: 'NUPTK',
+            name: 'nip',
+            label: 'NUPTK/NUPTK',
             hint: '',
             required: false,
             hideDetails: false,
             outlined: true,
             dense: true,
             singleLine: true,
-            mask: '################',
-            counter: 16,
+            mask: '##############################',
+            counter: 30,
             grid: { cols: 12, md: 6 },
             labelColor: 'secondary',
           },
@@ -169,7 +166,7 @@ export default {
             placeholder: 'Jenis Kelamin',
             hint: '',
             grid: { cols: 12, md: 6 },
-            model: [
+            items: [
               { value: 'l', text: 'Laki-Laki' },
               { value: 'p', text: 'Perempuan' },
             ],
@@ -194,11 +191,11 @@ export default {
           },
           {
             type: 'VTextField',
-            name: 'institusi',
-            label: `Institusi Pendidikan`,
+            name: 'instansi_lulus',
+            label: `Institusi Pendidikan Terakhir`,
             labelColor: 'secondary',
             hideDetails: false,
-            placeholder: 'alamat',
+            placeholder: 'Institusi Pendidikan Terakhir',
             grid: { cols: 12, md: 4, sm: 12 },
             required: false,
             outlined: true,
@@ -219,17 +216,20 @@ export default {
             singleLine: true,
           },
           {
-            type: 'VTextField',
-            name: 'jenjang',
-            label: `Jenjang`,
-            labelColor: 'secondary',
+            type: 'VSelect',
+            name: 'k_kualifikasi',
+            label: 'Jenjang',
+            hint: 'wajib diisi',
+            items: this.$mapForMaster(this.masters.m_kualifikasi),
+            value: 'value',
+            text: 'text',
+            required: true,
             hideDetails: false,
-            placeholder: 'jenjang',
-            grid: { cols: 12, md: 4, sm: 12 },
-            required: false,
             outlined: true,
             dense: true,
             singleLine: true,
+            grid: { cols: 12, md: 4 },
+            labelColor: 'secondary',
           },
           {
             type: 'cascade',
@@ -253,7 +253,7 @@ export default {
           },
           {
             type: 'VTextarea',
-            name: 'alamat_ktp',
+            name: 'alamat',
             label: `Alamat Sesuai KTP`,
             labelColor: 'secondary',
             hideDetails: false,
@@ -263,6 +263,20 @@ export default {
             outlined: true,
             dense: true,
             singleLine: true,
+          },
+          {
+            type: 'VSelect',
+            name: 'k_pcp_paud',
+            label: 'Keikutsertaan PCP',
+            hint: 'wajib dipilh',
+            items: this.$mapForMaster(this.masters.m_pcp_paud),
+            required: true,
+            hideDetails: false,
+            outlined: true,
+            dense: true,
+            singleLine: true,
+            grid: { cols: 12, md: 4 },
+            labelColor: 'secondary',
           },
           {
             type: 'VTextField',
@@ -284,7 +298,7 @@ export default {
         instansi: [
           {
             type: 'VTextField',
-            name: 'nama_instansi',
+            name: 'instansi_nama',
             label: 'Nama Instansi',
             dense: true,
             hint: 'wajib diisi',
@@ -297,7 +311,7 @@ export default {
           },
           {
             type: 'VTextField',
-            name: 'jabatan',
+            name: 'instansi_jabatan',
             label: 'Jabatan',
             dense: true,
             hint: 'wajib diisi',
@@ -316,7 +330,7 @@ export default {
           },
           {
             type: 'VTextField',
-            name: 'kodepos_instansi',
+            name: 'instansi_kodepos',
             label: 'Kode Pos',
             hint: 'wajib diisi',
             required: false,
@@ -330,7 +344,7 @@ export default {
           },
           {
             type: 'VTextarea',
-            name: 'alamat_instansi',
+            name: 'instansi_alamat',
             label: `Alamat Instansi`,
             labelColor: 'secondary',
             hideDetails: false,
@@ -384,6 +398,10 @@ export default {
 
     onRemove(index) {
       this.diklats.splice(index, 1);
+    },
+
+    getValue() {
+      return { form: this.form, diklats: this.diklats };
     },
   },
 
