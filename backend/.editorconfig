@@ -15,6 +15,19 @@ trim_trailing_whitespace = false
 indent_size = 2
 
 [*.php]
+ij_php_align_multiline_extends_list = true
+ij_php_comma_after_last_array_element = true
+ij_php_do_while_brace_force = always
+ij_php_else_if_style = combine
+ij_php_fields_default_visibility = protected
+ij_php_for_brace_force = always
+ij_php_force_short_declaration_array_style = true
+ij_php_if_brace_force = always
+ij_php_keep_control_statement_in_one_line = false
 ij_php_keep_first_column_comment = true
 ij_php_line_comment_add_space = true
 ij_php_line_comment_at_first_column = false
+ij_php_lower_case_boolean_const = true
+ij_php_lower_case_null_const = true
+ij_php_variable_naming_style = camel_case
+ij_php_while_brace_force = always
