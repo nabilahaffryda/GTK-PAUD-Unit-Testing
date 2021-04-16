@@ -44,7 +44,7 @@ class ProfilUpdateRequest extends FormRequest
         return [
             'nama'                => ['required', 'string', 'max:100'],
             'nik'                 => ['required', 'digits:16'],
-            'nip'                 => ['required', 'digits:10,30'],
+            'nip'                 => ['required', 'digits_between:10,30'],
             'tmp_lahir'           => ['required', 'string', 'max:50'],
             'tgl_lahir'           => ['required', 'date_format:Y-m-d'],
             'kelamin'             => ['required', 'in:L,P'],
