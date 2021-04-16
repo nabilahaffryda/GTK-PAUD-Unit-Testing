@@ -211,12 +211,26 @@ export default {
       }
 
       const data = this.$refs.formulir.getValue();
-      const { form } = data;
+      const { form, photo } = data;
+
+      let formData = new FormData();
+
+      Object.keys(form).forEach((key) => {
+        if (form[key]) {
+          formData.append(key, form[key]);
+        }
+      });
+
+      if (photo) {
+        for (let item of photo.entries()) {
+          formData.append(item[0], item[1]);
+        }
+      }
 
       const payload = {
         jenis: this.jenis,
         id: this.$getDeepObj(this, 'detail.paud_pengajar_id'),
-        params: form,
+        params: formData,
       };
 
       this.update(payload)

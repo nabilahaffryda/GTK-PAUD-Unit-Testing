@@ -14,7 +14,13 @@ export const actions = {
   update({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     const url = `/i/${id}/${payload.jenis}/profil/${payload.id}/update`;
-    return http.post(url, payload.params).then(({ data }) => data);
+    return http
+      .post(url, payload.params, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(({ data }) => data);
   },
   async getBerkas({ rootState }, payload) {
     const id = rootState.auth.instansi_id;

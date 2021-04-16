@@ -5,7 +5,22 @@
         <div class="text-h4 font-weight-bold">Profil Pengajar</div>
         Lengkapi CV dibawah ini sesuai dengan form yang tersedia
         <v-row class="my-5">
-          <v-col cols="12" md="2" sm="12"></v-col>
+          <v-col cols="12" md="2" sm="12">
+            <base-photo-profil
+              :photo="photo || this.$getDeepObj(detail, 'akun.foto')"
+              photodef="default_foto_gp.png"
+              :useBase64="true"
+              :use-trigger="false"
+              is-edit
+              @upload="onChangePhoto"
+            >
+              <template v-slot:render>
+                <v-btn class="mt-2" id="edit-profpic" block color="secondary">
+                  UNGGAH FOTO
+                </v-btn>
+              </template>
+            </base-photo-profil>
+          </v-col>
           <v-col cols="12" md="10" sm="12">
             <div v-for="(item, i) in schema" :key="i">
               <div class="text-h6 my-3 font-weight-bold"> Data {{ $titleCase(i) }} </div>
@@ -45,6 +60,7 @@
 </template>
 <script>
 import BaseFormGenerator from '@components/base/BaseFormGenerator';
+import BasePhotoProfil from '@components/base/BasePhotoProfil';
 export default {
   props: {
     masters: {
@@ -55,12 +71,18 @@ export default {
       type: Object,
       default: () => null,
     },
+    detail: {
+      type: Object,
+      default: () => {},
+    },
   },
-  components: { BaseFormGenerator },
+  components: { BaseFormGenerator, BasePhotoProfil },
   data() {
     return {
       form: {},
       diklats: [{ nama: 'Diklat Pembimbing', tahun: '2020' }],
+      photo: '',
+      objPhoto: null,
     };
   },
   computed: {
@@ -362,6 +384,8 @@ export default {
   methods: {
     reset() {
       this.$set(this, 'reset', {});
+      this.$set(this, 'photo', '');
+      this.$set(this, 'objFoto', null);
     },
 
     initForm(value) {
@@ -401,7 +425,16 @@ export default {
     },
 
     getValue() {
-      return { form: this.form, diklats: this.diklats };
+      return { form: this.form, diklats: this.diklats, photo: this.objPhoto };
+    },
+
+    onChangePhoto(data) {
+      let photo = [];
+      for (const item of data) {
+        photo.push(item);
+      }
+      this.objPhoto = data;
+      this.photo = photo[0][1] || '';
     },
   },
 

@@ -1,16 +1,17 @@
 <template>
   <div class="box-card">
-    <v-btn id="edit-profpic" class="prof-pic grey--text text--darken-2" right icon v-if="isEdit">
+    <v-btn v-if="isEdit && useTrigger" id="edit-profpic" class="prof-pic grey--text text--darken-2" right icon>
       <v-icon large>mdi-camera</v-icon>
     </v-btn>
     <template>
       <v-img :src="image" :aspect-ratio="aspectRatio" />
     </template>
+    <slot name="render"></slot>
     <profil-picture
       v-if="isEdit"
       :uploadUrl="uploadUrl"
       :useBase64="useBase64"
-      trigger="#edit-profpic"
+      :trigger="'#edit-profpic'"
       @upload="upload"
       @uploaded="uploaded"
     />
@@ -46,6 +47,14 @@ export default {
     uploadUrl: {
       type: String,
       default: '',
+    },
+    useTrigger: {
+      type: Boolean,
+      default: true,
+    },
+    useBtn: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
