@@ -161,7 +161,7 @@ export default {
       const mBerkas = this.$arrToObj(this.berkases[this.jenis], 'type');
 
       this.$set(this.formulir, 'form', 'FormUnggah');
-      this.$set(this.formulir, 'title', `Unggah Berkas ${this.$titleCase(type)}`);
+      this.$set(this.formulir, 'title', `${mBerkas[type]['title']}`);
       this.$set(this.formulir, 'type', type);
       this.$set(this.formulir, 'kBerkas', mBerkas[type]['kBerkas']);
       this.$set(this.formulir, 'format', `harus bertipe ${this.$getDeepObj(rules, `${type}.format`)}`);
