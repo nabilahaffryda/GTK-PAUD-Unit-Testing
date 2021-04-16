@@ -109,7 +109,7 @@ class LpdService
 
     public function getPaudInstansi(Instansi $instansi, PaudAdmin $paudAdmin)
     {
-        if($paudAdmin->instansi_id != $instansi->instansi_id) {
+        if ($paudAdmin->instansi_id != $instansi->instansi_id) {
             abort(404);;
         }
 
@@ -122,7 +122,7 @@ class LpdService
     {
         $instansi = $paudInstansi->instansi;
 
-        $diklat = json_decode($paudInstansi->diklat, true);
+        $diklat = ($paudInstansi->diklat) ? json_decode($paudInstansi->diklat, true) : [];
 
         $isLengkapProfil = $instansi->nama && $instansi->no_telpon && $instansi->email && $instansi->alamat &&
             $instansi->k_propinsi && $instansi->k_kota && $paudInstansi->nama_penanggung_jawab &&
@@ -160,7 +160,6 @@ class LpdService
         }
 
         if ($deleteBerkas) {
-            // Disable hapus berkas, untuk backup plan
             $this->deleteFtp($deleteBerkas);
         }
 
@@ -174,7 +173,7 @@ class LpdService
         $filename = "lpd-{$paudInstansi->instansi_id}/" . implode('-', [$label, $paudInstansi->instansi_id, date('ymdhis')]) . ".$ext";
         $path     = sprintf("%s/%s", $ftpPath, $filename);
 
-        if (!Storage::disk('ftp')->put($path, file_get_contents($file->getRealPath()))) {
+        if (!Storage::disk('lpd-berkas')->put($path, file_get_contents($file->getRealPath()))) {
             throw new FlowException("Unggah Berkas $label tidak berhasil");
         }
 
@@ -185,6 +184,6 @@ class LpdService
     {
         $ftpPath = config('filesystems.disks.lpd-berkas.path');
         $delete  = sprintf("%s/%s", $ftpPath, $filename);
-        return Storage::disk('ftp')->delete($delete);
+        return Storage::disk('lpd-berkas')->delete($delete);
     }
 }
