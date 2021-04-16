@@ -18,6 +18,14 @@ export const actions = {
     const masters = (state.masters && Object.keys(state.masters)) || [];
     const mastersRequest = (payload.name || '').split(';') || [];
     const mastersForRequest = mastersRequest.filter((item) => masters.indexOf(item) === -1);
+
+    // remove filter jika ada di state
+    for (let i = 0; i < mastersRequest.length; i++) {
+      if (masters.includes(mastersRequest[i])) {
+        delete payload.filter[i];
+      }
+    }
+
     if (mastersForRequest && mastersForRequest.length) {
       const data = await http
         .get(`/i/${id}/master?${queryString({ name: mastersForRequest, filter: payload.filter })}`)
