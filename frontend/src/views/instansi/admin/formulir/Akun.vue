@@ -636,47 +636,105 @@ export default {
     },
 
     next() {
-      this.info = [
-        [
-          {
-            key: 'nama',
-            label: 'Nama',
-            value: this.$getDeepObj(this.form, 'nama') || '-',
-          },
+      const konfirmasi = {
+        biodata: [
+          [
+            {
+              key: 'nama',
+              label: 'Nama',
+              value: this.$getDeepObj(this.form, 'nama') || '-',
+            },
+          ],
+          [
+            {
+              key: 'lahir',
+              label: 'Tempat, Tanggal Lahir',
+              value: [
+                this.$getDeepObj(this.form, 'tmp_lahir') || '-',
+                this.$localDate(this.$getDeepObj(this.form, 'tgl_lahir') || '-'),
+              ].join(', '),
+            },
+            {
+              key: 'kelamin',
+              label: 'Jenis Kelamin',
+              value:
+                this.$getDeepObj(this.form, 'kelamin') === 'L'
+                  ? 'Laki - laki'
+                  : this.$getDeepObj(this.form, 'kelamin') === 'P'
+                  ? 'Perempuan'
+                  : '',
+            },
+          ],
+          [
+            {
+              key: 'no_wa',
+              label: 'Nomor Telepon (terhubung WhatsApp)',
+              value: this.$getDeepObj(this.form, 'no_hp') || '-',
+            },
+            {
+              key: 'email',
+              label: 'Surel (untuk Kontak)',
+              value: this.$getDeepObj(this.form, 'email') || '-',
+            },
+          ],
         ],
-        [
-          {
-            key: 'lahir',
-            label: 'Tempat, Tanggal Lahir',
-            value: [
-              this.$getDeepObj(this.form, 'tmp_lahir') || '-',
-              this.$localDate(this.$getDeepObj(this.form, 'tgl_lahir') || '-'),
-            ].join(', '),
-          },
-          {
-            key: 'kelamin',
-            label: 'Jenis Kelamin',
-            value:
-              this.$getDeepObj(this.form, 'kelamin') === 'L'
-                ? 'Laki - laki'
-                : this.$getDeepObj(this.form, 'kelamin') === 'P'
-                ? 'Perempuan'
-                : '',
-          },
+        program: [
+          [
+            {
+              key: 'nip',
+              label: 'NIP',
+              value: this.$getDeepObj(this.form, 'nip') || '-',
+            },
+            {
+              key: 'k_golongan',
+              label: 'Golongan',
+              value: this.masters.m_golongan[this.$getDeepObj(this.form, 'k_golongan')],
+            },
+          ],
+          [
+            {
+              key: 'instansi_id',
+              label: 'Instansi',
+              value: this.instansis[this.$getDeepObj(this.form, 'instansi_id')],
+            },
+          ],
         ],
-        [
-          {
-            key: 'no_wa',
-            label: 'Nomor Telepon (terhubung WhatsApp)',
-            value: this.$getDeepObj(this.form, 'no_hp') || '-',
-          },
-          {
-            key: 'email',
-            label: 'Surel (untuk Kontak)',
-            value: this.$getDeepObj(this.form, 'email') || '-',
-          },
+        operator: [
+          [
+            {
+              key: 'nip',
+              label: 'NIP',
+              value: this.$getDeepObj(this.form, 'nip') || '-',
+            },
+            {
+              key: 'k_golongan',
+              label: 'Golongan',
+              value: this.masters.m_golongan[this.$getDeepObj(this.form, 'k_golongan')],
+            },
+          ],
         ],
-      ];
+        pengajar: [
+          [
+            {
+              key: 'nik',
+              label: 'NIK',
+              value: this.$getDeepObj(this.form, 'nik') || '-',
+            },
+            {
+              key: 'alamat',
+              label: 'Alamat',
+              value: [
+                this.$getDeepObj(this.form, 'alamat') || '-',
+                [
+                  this.masters.m_propinsi[this.$getDeepObj(this.form, 'k_propinsi')],
+                  this.masters.m_kota[this.$getDeepObj(this.form, 'k_kota')],
+                ].join(' - '),
+              ].join('<br/>'),
+            },
+          ],
+        ],
+      };
+      this.info = [...konfirmasi['biodata'], ...konfirmasi[this.jenis]];
       this.step++;
     },
   },
