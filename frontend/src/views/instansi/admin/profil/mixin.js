@@ -183,7 +183,7 @@ export default {
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
-        this.$set(this.formulir, 'init', Object.assign(this.detail, this.detail?.akun?.data));
+        this.$set(this.formulir, 'init', Object.assign({}, this.detail, this.detail?.akun?.data));
       });
     },
 

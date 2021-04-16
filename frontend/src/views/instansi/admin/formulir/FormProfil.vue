@@ -15,7 +15,7 @@
               @upload="onChangePhoto"
             >
               <template v-slot:render>
-                <v-btn class="mt-2" id="edit-profpic" block color="secondary">
+                <v-btn class="mt-2" id="edit-profpic" depressed block color="secondary">
                   UNGGAH FOTO
                 </v-btn>
               </template>
@@ -80,7 +80,7 @@ export default {
   data() {
     return {
       form: {},
-      diklats: [{ nama: 'Diklat Pembimbing', tahun: '2020' }],
+      diklats: [],
       photo: '',
       objPhoto: null,
     };
@@ -390,7 +390,8 @@ export default {
   },
   methods: {
     reset() {
-      this.$set(this, 'reset', {});
+      this.$set(this, 'diklats', [{ name: '', tahun: '' }]);
+      this.$set(this, 'form', {});
       this.$set(this, 'photo', '');
       this.$set(this, 'objFoto', null);
     },
