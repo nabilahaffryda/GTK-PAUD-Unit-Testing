@@ -114,12 +114,12 @@ export default {
     },
 
     onDelete(item) {
-      this.$confirm('Apakan anda ingin menghapus akun berikut ?', 'Hapus Akun', {
+      this.$confirm(`Apakan anda ingin menghapus ${this.title} berikut ?`, `Hapus ${this.title}`, {
         tipe: 'error',
         data: this.confirmHtml(item),
       }).then(() => {
         this.action({ id: item.paud_admin_id, type: 'delete', name: this.attr.tipe }).then(() => {
-          this.$success('Akun berhasil di hapus');
+          this.$success(`Akun ${this.title} berhasil dihapus`);
           this.fetchData();
         });
       });
