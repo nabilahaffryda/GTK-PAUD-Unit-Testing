@@ -7,7 +7,21 @@ return [
     |--------------------------------------------------------------------------
     |   ['table-1', 'table-2', 'table-n']
     */
-    'only'    => [],
+    'only'    => [
+        '*_paud',
+        'akun',
+        'akun_instansi',
+        'instansi',
+        'm_group',
+        'm_golongan',
+        'm_jenis_instansi',
+        'm_kota',
+        'm_propinsi',
+        'm_status_email',
+        'paud_*',
+        'ptk',
+        'remote_log',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -15,7 +29,12 @@ return [
     |--------------------------------------------------------------------------
     |   ['failed_jobs', 'migrations', 'password_resets']
     */
-    'except'  => ['failed_jobs', 'migrations', 'password_resets', 'clockwork'],
+    'except'  => [
+        'failed_jobs',
+        'migrations',
+        'password_resets',
+        'clockwork',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -32,7 +51,7 @@ return [
             | null  = load from App/Models
             | other path = load from there
             */
-            'reference' => false,
+            'reference' => null,
 
             /*
             |--------------------------------------------------------------------------
@@ -51,19 +70,6 @@ return [
         |   ['table-1', 'table-2', 'table-n']
         */
         'only'    => [
-            '*_paud',
-            'akun',
-            'akun_instansi',
-            'instansi',
-            'm_group',
-            'm_golongan',
-            'm_jenis_instansi',
-            'm_kota',
-            'm_propinsi',
-            'm_status_email',
-            'paud_*',
-            'ptk',
-            'remote_log',
         ],
 
         /*
@@ -72,7 +78,8 @@ return [
         |--------------------------------------------------------------------------
         |   ['failed_jobs', 'migrations', 'password_resets']
         */
-        'except'  => ['failed_jobs', 'migrations', 'password_resets'],
+        'except'  => [
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -126,19 +133,6 @@ return [
         |   ['table-1', 'table-2', 'table-n']
         */
         'only'    => [
-            '*_paud',
-            'akun',
-            'akun_instansi',
-            'instansi',
-            'm_group',
-            'm_golongan',
-            'm_jenis_instansi',
-            'm_kota',
-            'm_propinsi',
-            'm_status_email',
-            'paud_*',
-            'ptk',
-            'remote_log',
         ],
 
         /*
@@ -147,7 +141,8 @@ return [
         |--------------------------------------------------------------------------
         |   ['failed_jobs', 'migrations', 'password_resets']
         */
-        'except'  => ['failed_jobs', 'migrations', 'password_resets'],
+        'except'  => [
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -159,9 +154,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Grammer configuration override
+    |--------------------------------------------------------------------------
+    | <singular> = <plural> : Custom mapping (default use Str::singular and Str::singular)
+    */
+    'plural' => [
+        'kota'   => 'kotas',
+        'akses'  => 'akseses',
+        'berkas' => 'berkases',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Table configuration override
     |--------------------------------------------------------------------------
-    | <table-name>.class : Class name (default use Str::studly(table))
     | <table-name>.gramar.singular : Singular name (default use Str::singular(table))
     | <table-name>.gramar.plural : Plural table name (default use Str::plural(Str::singular(table)))
     |
@@ -202,14 +208,6 @@ return [
             ],
         ],
 
-        'm_kota' => [
-            'class'  => 'MKota',
-            'gramar' => [
-                'singular' => 'm_kota',
-                'plural'   => 'm_kotas',
-            ],
-        ],
-
         'm_jenis_instansi' => [
             'model' => [
                 'const' => ['k_jenis_instansi', 'singkat'],
@@ -228,35 +226,11 @@ return [
             ],
         ],
 
-        'paud_akses' => [
-            'class'  => 'PaudAkses',
-            'gramar' => [
-                'singular' => 'paud_akses',
-                'plural'   => 'paud_akseses',
-            ],
-        ],
-
-        'paud_group_akses' => [
-            'class'  => 'PaudGroupAkses',
-            'gramar' => [
-                'singular' => 'paud_group_akses',
-                'plural'   => 'paud_group_akseses',
-            ],
-        ],
-
-        'paud_instansi_berkas' => [
-            'class'  => 'PaudInstansiBerkas',
-            'gramar' => [
-                'singular' => 'paud_instansi_berkas',
-                'plural'   => 'paud_instansi_berkases',
-            ],
-        ],
-
-        'paud_pengajar_berkas' => [
-            'class'  => 'PaudPengajarBerkas',
-            'gramar' => [
-                'singular' => 'paud_pengajar_berkas',
-                'plural'   => 'paud_pengajar_berkases',
+        'paud_pengajar' => [
+            'model' => [
+                'cast' => [
+                    'pengalaman' => 'array',
+                ],
             ],
         ],
 
