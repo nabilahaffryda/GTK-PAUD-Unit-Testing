@@ -16,7 +16,7 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.3",
         "itsgoingd/clockwork": "^5.0",
-        "laravel/framework": "^8.35",
+        "laravel/framework": "^8.37",
         "laravel/tinker": "^2.6",
         "pda/pheanstalk": "^4.0",
         "sentry/sentry-laravel": "^2.4",
@@ -24,13 +24,13 @@
         "yaumil/log-akses": "dev-master"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.9",
+        "barryvdh/laravel-ide-helper": "^2.10",
         "cloudcreativity/json-api-testing": "^3.2",
-        "facade/ignition": "^2.7",
+        "facade/ignition": "^2.8",
         "fakerphp/faker": "^1.14",
-        "hurie/laravel-generator": "dev-master",
+        "hurie/laravel-generator": "^1.0",
         "mockery/mockery": "^1.4",
-        "nunomaduro/collision": "^5.3",
+        "nunomaduro/collision": "^5.4",
         "phpunit/phpunit": "^9.5"
     },
     "config": {
