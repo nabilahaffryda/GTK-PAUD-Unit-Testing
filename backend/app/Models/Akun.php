@@ -59,6 +59,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|AkunInstansi[] $akunInstansis
  * @property-read Collection|PaudAdmin[] $paudAdmins
+ * @property-read Collection|PaudPembimbingBerkas[] $paudPembimbingBerkases
+ * @property-read Collection|PaudPembimbing[] $paudPembimbings
  * @property-read Collection|PaudPengajarBerkas[] $paudPengajarBerkases
  * @property-read Collection|PaudPengajar[] $paudPengajars
  *
@@ -288,6 +290,22 @@ class Akun extends Authenticatable
     public function paudAdmins()
     {
         return $this->hasMany('App\Models\PaudAdmin', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPembimbingBerkases()
+    {
+        return $this->hasMany('App\Models\PaudPembimbingBerkas', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPembimbings()
+    {
+        return $this->hasMany('App\Models\PaudPembimbing', 'akun_id', 'akun_id');
     }
 
     /**

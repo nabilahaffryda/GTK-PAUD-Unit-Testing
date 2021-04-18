@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $keterangan
  *
  * @property-read Collection|PaudInstansi[] $paudInstansis
+ * @property-read Collection|PaudPembimbing[] $paudPembimbings
  * @property-read Collection|PaudPengajar[] $paudPengajars
  *
  * @method static Builder|MVervalPaud whereKVervalPaud($value)
@@ -84,6 +85,14 @@ class MVervalPaud extends Eloquent
     public function paudInstansis()
     {
         return $this->hasMany('App\Models\PaudInstansi', 'k_verval_paud', 'k_verval_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPembimbings()
+    {
+        return $this->hasMany('App\Models\PaudPembimbing', 'k_verval_paud', 'k_verval_paud');
     }
 
     /**

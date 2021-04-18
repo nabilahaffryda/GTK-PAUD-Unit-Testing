@@ -11,33 +11,33 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\Instansi
  *
- * @property int                                  $instansi_id
- * @property null|int                             $k_jenis_instansi
- * @property string                               $nama
- * @property null|string                          $alamat
- * @property null|int                             $k_propinsi
- * @property null|int                             $k_kota
- * @property null|int                             $moodle_id
- * @property null|string                          $kode_penyelenggara
- * @property null|string                          $email
- * @property null|string                          $no_telpon
- * @property null|string                          $foto
- * @property null|string                          $nama_pejabat
- * @property null|string                          $nip_pejabat
- * @property null|string                          $nama_pkp
- * @property null|string                          $kode_pkp
- * @property null|string                          $anggaran_pkp
- * @property null|string                          $data_pkp
- * @property null|string                          $kode_rkakl
- * @property null|string                          $nama_rkakl
+ * @property int $instansi_id
+ * @property null|int $k_jenis_instansi
+ * @property string $nama
+ * @property null|string $alamat
+ * @property null|int $k_propinsi
+ * @property null|int $k_kota
+ * @property null|int $moodle_id
+ * @property null|string $kode_penyelenggara
+ * @property null|string $email
+ * @property null|string $no_telpon
+ * @property null|string $foto
+ * @property null|string $nama_pejabat
+ * @property null|string $nip_pejabat
+ * @property null|string $nama_pkp
+ * @property null|string $kode_pkp
+ * @property null|string $anggaran_pkp
+ * @property null|string $data_pkp
+ * @property null|string $kode_rkakl
+ * @property null|string $nama_rkakl
  *
- * @property-read MJenisInstansi                  $mJenisInstansi
- * @property-read MKota                           $mKota
- * @property-read MPropinsi                       $mPropinsi
- * @property-read Collection|AkunInstansi[]       $akunInstansis
- * @property-read Collection|PaudAdmin[]          $paudAdmins
+ * @property-read MJenisInstansi $mJenisInstansi
+ * @property-read MKota $mKota
+ * @property-read MPropinsi $mPropinsi
+ * @property-read Collection|AkunInstansi[] $akunInstansis
+ * @property-read Collection|PaudAdmin[] $paudAdmins
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
- * @property-read Collection|PaudInstansi[]       $paudInstansis
+ * @property-read Collection|PaudInstansi[] $paudInstansis
  *
  * @method static Builder|Instansi whereInstansiId($value)
  * @method static Builder|Instansi whereKJenisInstansi($value)
@@ -143,7 +143,7 @@ class Instansi extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|AkunInstansi
+     * @return HasMany
      */
     public function akunInstansis()
     {
@@ -151,7 +151,7 @@ class Instansi extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MJenisInstansi
+     * @return BelongsTo
      */
     public function mJenisInstansi()
     {
@@ -159,7 +159,7 @@ class Instansi extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MKota
+     * @return BelongsTo
      */
     public function mKota()
     {
@@ -167,7 +167,7 @@ class Instansi extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MPropinsi
+     * @return BelongsTo
      */
     public function mPropinsi()
     {
@@ -175,7 +175,7 @@ class Instansi extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|PaudAdmin
+     * @return HasMany
      */
     public function paudAdmins()
     {
@@ -183,7 +183,7 @@ class Instansi extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|PaudInstansiBerkas
+     * @return HasMany
      */
     public function paudInstansiBerkases()
     {
@@ -191,7 +191,7 @@ class Instansi extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|PaudInstansi
+     * @return HasMany
      */
     public function paudInstansis()
     {
