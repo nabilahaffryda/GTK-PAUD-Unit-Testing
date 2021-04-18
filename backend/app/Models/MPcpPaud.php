@@ -72,7 +72,7 @@ class MPcpPaud extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|PaudPengajar
+     * @return HasMany
      */
     public function paudPengajars()
     {

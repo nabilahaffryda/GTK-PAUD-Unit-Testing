@@ -244,7 +244,7 @@ class Ptk extends Authenticatable
     ];
 
     /**
-     * @return BelongsTo|Builder|MKota
+     * @return BelongsTo
      */
     public function mKota()
     {
@@ -252,7 +252,7 @@ class Ptk extends Authenticatable
     }
 
     /**
-     * @return BelongsTo|Builder|MPropinsi
+     * @return BelongsTo
      */
     public function mPropinsi()
     {

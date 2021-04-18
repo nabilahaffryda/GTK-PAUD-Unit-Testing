@@ -235,7 +235,7 @@ class Akun extends Authenticatable
     ];
 
     /**
-     * @return HasMany|Builder|AkunInstansi
+     * @return HasMany
      */
     public function akunInstansis()
     {
@@ -243,7 +243,7 @@ class Akun extends Authenticatable
     }
 
     /**
-     * @return BelongsTo|Builder|MKota
+     * @return BelongsTo
      */
     public function instansiKota()
     {
@@ -251,7 +251,7 @@ class Akun extends Authenticatable
     }
 
     /**
-     * @return BelongsTo|Builder|MPropinsi
+     * @return BelongsTo
      */
     public function instansiPropinsi()
     {
@@ -259,7 +259,7 @@ class Akun extends Authenticatable
     }
 
     /**
-     * @return BelongsTo|Builder|MGolongan
+     * @return BelongsTo
      */
     public function mGolongan()
     {
@@ -267,7 +267,7 @@ class Akun extends Authenticatable
     }
 
     /**
-     * @return BelongsTo|Builder|MKota
+     * @return BelongsTo
      */
     public function mKota()
     {
@@ -275,7 +275,7 @@ class Akun extends Authenticatable
     }
 
     /**
-     * @return BelongsTo|Builder|MPropinsi
+     * @return BelongsTo
      */
     public function mPropinsi()
     {
@@ -283,7 +283,7 @@ class Akun extends Authenticatable
     }
 
     /**
-     * @return HasMany|Builder|PaudAdmin
+     * @return HasMany
      */
     public function paudAdmins()
     {
@@ -291,7 +291,7 @@ class Akun extends Authenticatable
     }
 
     /**
-     * @return HasMany|Builder|PaudPengajarBerkas
+     * @return HasMany
      */
     public function paudPengajarBerkases()
     {
@@ -299,7 +299,7 @@ class Akun extends Authenticatable
     }
 
     /**
-     * @return HasMany|Builder|PaudPengajar
+     * @return HasMany
      */
     public function paudPengajars()
     {

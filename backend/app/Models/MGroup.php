@@ -256,7 +256,7 @@ class MGroup extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|AkunInstansi
+     * @return HasMany
      */
     public function akunInstansis()
     {
@@ -264,7 +264,7 @@ class MGroup extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MJenisInstansi
+     * @return BelongsTo
      */
     public function mJenisInstansi()
     {
@@ -272,7 +272,7 @@ class MGroup extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|PaudAdmin
+     * @return HasMany
      */
     public function paudAdmins()
     {
@@ -280,7 +280,7 @@ class MGroup extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|PaudGroupAkses
+     * @return HasMany
      */
     public function paudGroupAkseses()
     {

@@ -79,7 +79,7 @@ class MVervalPaud extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|PaudInstansi
+     * @return HasMany
      */
     public function paudInstansis()
     {
@@ -87,7 +87,7 @@ class MVervalPaud extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|PaudPengajar
+     * @return HasMany
      */
     public function paudPengajars()
     {

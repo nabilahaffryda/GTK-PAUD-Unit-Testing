@@ -149,7 +149,7 @@ class PaudPengajar extends Eloquent
     ];
 
     /**
-     * @return BelongsTo|Builder|Akun
+     * @return BelongsTo
      */
     public function akun()
     {
@@ -157,7 +157,7 @@ class PaudPengajar extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MPcpPaud
+     * @return BelongsTo
      */
     public function mPcpPaud()
     {
@@ -165,7 +165,7 @@ class PaudPengajar extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MVervalPaud
+     * @return BelongsTo
      */
     public function mVervalPaud()
     {
@@ -173,7 +173,7 @@ class PaudPengajar extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|PaudPengajarBerkas
+     * @return HasMany
      */
     public function paudPengajarBerkases()
     {

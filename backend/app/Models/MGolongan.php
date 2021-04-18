@@ -92,7 +92,7 @@ class MGolongan extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|Akun
+     * @return HasMany
      */
     public function akuns()
     {

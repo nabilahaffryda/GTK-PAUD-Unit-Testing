@@ -69,7 +69,7 @@ class PaudGroupAkses extends Eloquent
     ];
 
     /**
-     * @return BelongsTo|Builder|MGroup
+     * @return BelongsTo
      */
     public function mGroup()
     {
@@ -77,7 +77,7 @@ class PaudGroupAkses extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|PaudAkses
+     * @return BelongsTo
      */
     public function paudAkses()
     {

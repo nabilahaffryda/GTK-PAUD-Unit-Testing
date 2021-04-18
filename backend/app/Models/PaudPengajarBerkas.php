@@ -101,7 +101,7 @@ class PaudPengajarBerkas extends Eloquent
     ];
 
     /**
-     * @return BelongsTo|Builder|Akun
+     * @return BelongsTo
      */
     public function akun()
     {
@@ -109,7 +109,7 @@ class PaudPengajarBerkas extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MBerkasPengajarPaud
+     * @return BelongsTo
      */
     public function mBerkasPengajarPaud()
     {
@@ -117,7 +117,7 @@ class PaudPengajarBerkas extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|PaudPengajar
+     * @return BelongsTo
      */
     public function paudPengajar()
     {

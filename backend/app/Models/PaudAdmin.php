@@ -86,7 +86,7 @@ class PaudAdmin extends Eloquent
     ];
 
     /**
-     * @return BelongsTo|Builder|Akun
+     * @return BelongsTo
      */
     public function akun()
     {
@@ -94,7 +94,7 @@ class PaudAdmin extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|Instansi
+     * @return BelongsTo
      */
     public function instansi()
     {
@@ -102,7 +102,7 @@ class PaudAdmin extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MGroup
+     * @return BelongsTo
      */
     public function mGroup()
     {

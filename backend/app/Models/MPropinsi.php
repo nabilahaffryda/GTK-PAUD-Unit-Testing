@@ -84,7 +84,7 @@ class MPropinsi extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|Akun
+     * @return HasMany
      */
     public function akuns()
     {
@@ -92,7 +92,7 @@ class MPropinsi extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|Akun
+     * @return HasMany
      */
     public function instansiAkuns()
     {
@@ -100,7 +100,7 @@ class MPropinsi extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|Instansi
+     * @return HasMany
      */
     public function instansis()
     {
@@ -108,7 +108,7 @@ class MPropinsi extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|MKota
+     * @return HasMany
      */
     public function mKotas()
     {
@@ -116,7 +116,7 @@ class MPropinsi extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|Ptk
+     * @return HasMany
      */
     public function ptks()
     {

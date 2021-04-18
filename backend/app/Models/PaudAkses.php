@@ -73,7 +73,7 @@ class PaudAkses extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|PaudGroupAkses
+     * @return HasMany
      */
     public function paudGroupAkseses()
     {

@@ -80,7 +80,7 @@ class MBerkasPengajarPaud extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|PaudPengajarBerkas
+     * @return HasMany
      */
     public function paudPengajarBerkases()
     {

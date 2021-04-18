@@ -8045,11 +8045,11 @@
         },
         {
             "name": "hurie/laravel-generator",
-            "version": "v1.0",
+            "version": "v1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.dev.siap.id/azhar/laravel-generator.git",
-                "reference": "aefe3e5dbe1ab0727150335c94a51ab603e62f7d"
+                "reference": "532eb48a232e4e066bfc9cd13a0e531b6f0b1c43"
             },
             "require": {
                 "nikic/php-parser": "^4.10",
@@ -8097,7 +8097,7 @@
                 "generator",
                 "laravel"
             ],
-            "time": "2021-04-17T08:09:11+00:00"
+            "time": "2021-04-17T08:35:51+00:00"
         },
         {
             "name": "justinrainbow/json-schema",

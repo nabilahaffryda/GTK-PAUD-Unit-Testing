@@ -105,7 +105,7 @@ class MKota extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|Akun
+     * @return HasMany
      */
     public function akuns()
     {
@@ -113,7 +113,7 @@ class MKota extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|Akun
+     * @return HasMany
      */
     public function instansiAkuns()
     {
@@ -121,7 +121,7 @@ class MKota extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|Instansi
+     * @return HasMany
      */
     public function instansis()
     {
@@ -129,7 +129,7 @@ class MKota extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MPropinsi
+     * @return BelongsTo
      */
     public function mPropinsi()
     {
@@ -137,7 +137,7 @@ class MKota extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|Ptk
+     * @return HasMany
      */
     public function ptks()
     {

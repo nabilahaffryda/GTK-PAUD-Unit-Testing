@@ -80,7 +80,7 @@ class MBerkasLpdPaud extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|PaudInstansiBerkas
+     * @return HasMany
      */
     public function paudInstansiBerkases()
     {

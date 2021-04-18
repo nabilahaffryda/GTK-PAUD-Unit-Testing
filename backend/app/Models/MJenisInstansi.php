@@ -97,7 +97,7 @@ class MJenisInstansi extends Eloquent
     ];
 
     /**
-     * @return HasMany|Builder|Instansi
+     * @return HasMany
      */
     public function instansis()
     {
@@ -105,7 +105,7 @@ class MJenisInstansi extends Eloquent
     }
 
     /**
-     * @return HasMany|Builder|MGroup
+     * @return HasMany
      */
     public function mGroups()
     {

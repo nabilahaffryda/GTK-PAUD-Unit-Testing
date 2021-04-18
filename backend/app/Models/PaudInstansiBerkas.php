@@ -101,7 +101,7 @@ class PaudInstansiBerkas extends Eloquent
     ];
 
     /**
-     * @return BelongsTo|Builder|Instansi
+     * @return BelongsTo
      */
     public function instansi()
     {
@@ -109,7 +109,7 @@ class PaudInstansiBerkas extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MBerkasLpdPaud
+     * @return BelongsTo
      */
     public function mBerkasLpdPaud()
     {
@@ -117,7 +117,7 @@ class PaudInstansiBerkas extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|PaudInstansi
+     * @return BelongsTo
      */
     public function paudInstansi()
     {
