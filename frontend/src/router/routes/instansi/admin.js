@@ -79,4 +79,13 @@ export default [
       tipe: 'pengajar-bimtek',
     },
   },
+  {
+    path: '/i/:id(\\d+)/profil/operator',
+    name: 'profil-operator',
+    component: () => lazyLoadView(import('@views/instansi/admin/list/operator/Profil')),
+    meta: {
+      title: 'Profil Lembaga LPD',
+      tipe: 'lembaga',
+    },
+  },
 ];

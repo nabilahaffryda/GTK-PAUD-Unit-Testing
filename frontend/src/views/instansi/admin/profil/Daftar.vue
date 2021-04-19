@@ -27,7 +27,7 @@
             />
           </template>
           <template v-else>
-            <component :is="item.component" :detail="detail" :masters="masters" @edit="$emit('edit')" />
+            <component :is="item.component" :detail="detail" :masters="masters" :jenis="jenis" @edit="$emit('edit')" />
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>

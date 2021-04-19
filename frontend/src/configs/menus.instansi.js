@@ -103,6 +103,16 @@ export default [
         link: 'profil-bimtek',
         to: { name: 'profil-bimtek' },
       },
+      {
+        icon: 'mdi-account-voice',
+        title: 'Pengajuan Lembaga',
+        desc: 'Pengajuan dan Profil LPD',
+        color: 'yellow',
+        deepColor: 'darken-1',
+        akses: true,
+        link: 'profil-operator',
+        to: { name: 'profil-operator' },
+      },
     ],
   },
   {
