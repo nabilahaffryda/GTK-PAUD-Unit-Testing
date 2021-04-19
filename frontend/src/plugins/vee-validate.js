@@ -19,6 +19,13 @@ extend('nik', {
   message: 'Isian NIK harus berupa 16 digit angka',
 });
 
+extend('nip', {
+  validate(value) {
+    return Number(value) && value.length >= 10;
+  },
+  message: 'Isian NIP terhitung kurang dari 10 karakter',
+});
+
 extend('minTahun', {
   validate(value, { length }) {
     return value >= length;
