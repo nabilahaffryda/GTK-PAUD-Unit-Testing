@@ -52,6 +52,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property int $k_status_email
  * @property null|string $admin_id
  *
+ * @property-read null|string $foto_url
+ *
  * @property-read MKota $instansiKota
  * @property-read MPropinsi $instansiPropinsi
  * @property-read MGolongan $mGolongan
@@ -180,6 +182,15 @@ class Akun extends Authenticatable
         'is_aktif'             => 'string',
         'k_status_email'       => 'int',
         'admin_id'             => 'string',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'foto_url',
     ];
 
     /**
@@ -332,5 +343,10 @@ class Akun extends Authenticatable
     public function getAuthIdentifierName()
     {
         return 'paspor_id';
+    }
+
+    public function getFotoUrlAttribute()
+    {
+        return $this->foto ? sprintf("%s/%s", config('filesystems.disks.akun-foto.url'), $this->foto) : null;
     }
 }

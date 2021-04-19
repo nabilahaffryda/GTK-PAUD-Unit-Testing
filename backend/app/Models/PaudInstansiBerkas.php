@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|Carbon $updated_at
  * @property null|string $akun_id
  *
+ * @property-read null|string $url
+ *
  * @property-read Instansi $instansi
  * @property-read MBerkasLpdPaud $mBerkasLpdPaud
  * @property-read PaudInstansi $paudInstansi
@@ -74,6 +76,7 @@ class PaudInstansiBerkas extends Eloquent
         'updated_at'        => 'datetime',
         'akun_id'           => 'string',
     ];
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -82,6 +85,7 @@ class PaudInstansiBerkas extends Eloquent
     protected $appends = [
         'url',
     ];
+
     /**
      * The attributes that are mass assignable.
      *

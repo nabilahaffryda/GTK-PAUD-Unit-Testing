@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|Carbon $updated_at
  * @property null|string $admin_id
  *
+ * @property-read null|string $url
+ *
  * @property-read Akun $akun
  * @property-read MBerkasPengajarPaud $mBerkasPengajarPaud
  * @property-read PaudPengajar $paudPengajar
@@ -74,6 +76,7 @@ class PaudPengajarBerkas extends Eloquent
         'updated_at'             => 'datetime',
         'admin_id'               => 'string',
     ];
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -82,6 +85,7 @@ class PaudPengajarBerkas extends Eloquent
     protected $appends = [
         'url',
     ];
+
     /**
      * The attributes that are mass assignable.
      *
