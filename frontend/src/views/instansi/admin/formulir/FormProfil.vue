@@ -231,7 +231,7 @@ export default {
               hideDetails: false,
               placeholder: 'Institusi Pendidikan Terakhir',
               grid: { cols: 12, md: 4, sm: 12 },
-              required: false,
+              required: true,
               outlined: true,
               dense: true,
               singleLine: true,

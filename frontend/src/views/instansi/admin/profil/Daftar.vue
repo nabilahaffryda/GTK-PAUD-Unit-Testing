@@ -71,10 +71,11 @@ export default {
   },
   methods: {
     onDetil(berkas) {
-      this.$refs.popup.open();
+      this.$set(this, 'preview', {});
+      this.preview.url = this.$getDeepObj(berkas, 'value.url');
+      this.preview.title = this.$getDeepObj(berkas, 'title');
       this.$nextTick(() => {
-        this.$set(this.preview, 'url', this.$getDeepObj(berkas, 'value.url'));
-        this.$set(this.preview, 'title', this.$getDeepObj(berkas, 'title'));
+        this.$refs.popup.open();
       });
     },
   },
