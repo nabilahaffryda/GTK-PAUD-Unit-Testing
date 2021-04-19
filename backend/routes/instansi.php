@@ -10,10 +10,9 @@ use App\Http\Controllers\Instansi\Akun\PengajarController;
 use App\Http\Controllers\Instansi\Akun\PengajarTambahanController;
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Controllers\Instansi\IndexController;
+use App\Http\Controllers\Instansi\Lpd;
 use App\Http\Controllers\Instansi\LpdController;
-use App\Http\Controllers\Instansi\Pengajar\Profil\BerkasController;
-use App\Http\Controllers\Instansi\Pengajar\Profil\PeranController;
-use App\Http\Controllers\Instansi\Pengajar\ProfilController;
+use App\Http\Controllers\Instansi\Pengajar;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -115,22 +114,23 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     });
 
     Route::group(['prefix' => 'pengajar/profil'], function () {
-        Route::get('', [ProfilController::class, 'index']);
-        Route::post('{pengajar}/update', [ProfilController::class, 'update']);
+        Route::get('', [Pengajar\ProfilController::class, 'index']);
+        Route::post('{pengajar}/update', [Pengajar\ProfilController::class, 'update']);
 
-        Route::get('{pengajar}/update-peran', [PeranController::class, 'update']);
+        Route::get('{pengajar}/update-peran', [Pengajar\Profil\PeranController::class, 'update']);
 
-        Route::get('{pengajar}/berkas', [BerkasController::class, 'index']);
-        Route::post('{pengajar}/berkas/create', [BerkasController::class, 'create']);
 
-        Route::post('berkas/{berkas}/delete', [BerkasController::class, 'delete']);
+        Route::get('{pengajar}/berkas', [Pengajar\Profil\BerkasController::class, 'index']);
+        Route::post('{pengajar}/berkas/create', [Pengajar\Profil\BerkasController::class, 'create']);
+
+        Route::post('berkas/{berkas}/delete', [Pengajar\Profil\BerkasController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'lpd-profil'], function () {
-        Route::get('', [\App\Http\Controllers\Instansi\Lpd\ProfilController::class, 'index']);
-        Route::post('{paudInstansi}/update', [\App\Http\Controllers\Instansi\Lpd\ProfilController::class, 'update']);
+        Route::get('', [Lpd\ProfilController::class, 'index']);
+        Route::post('{paudInstansi}/update', [Lpd\ProfilController::class, 'update']);
 
-        Route::get('{paudInstansi}/berkas', [\App\Http\Controllers\Instansi\Lpd\Profil\BerkasController::class, 'index']);
-        Route::post('{paudInstansi}/berkas/create', [\App\Http\Controllers\Instansi\Lpd\Profil\BerkasController::class, 'create']);
+        Route::get('{paudInstansi}/berkas', [Lpd\Profil\BerkasController::class, 'index']);
+        Route::post('{paudInstansi}/berkas/create', [Lpd\Profil\BerkasController::class, 'create']);
     });
 });
