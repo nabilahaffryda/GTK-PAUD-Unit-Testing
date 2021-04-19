@@ -85,6 +85,12 @@ class PengajarService
         ];
     }
 
+    public function isStatusLengkap(PaudPengajar $pengajar): bool
+    {
+        $status = $this->getStatusLengkap($pengajar);
+        return array_search(false, $status, true) === false;
+    }
+
     /**
      * @throws FlowException
      */
@@ -181,6 +187,46 @@ class PengajarService
 
         $pengajar->is_pembimbing = $isPembimbing;
         $pengajar->save();
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function ajuanCreate(PaudPengajar $pengajar)
+    {
+        $this->validateTambahan($pengajar);
+
+        if (!($pengajar->isVervalKandidat() || $pengajar->isVervalRevisi())) {
+            throw new FlowException("Anda telah melakukan Pengajuan. Untuk melakukan perubahan silakan batalkan Ajuan jika memungkinkan");
+        }
+
+        if (!$this->isStatusLengkap($pengajar)) {
+            throw new FlowException("Pastikan Anda telah melengkapi Profil dan Berkas");
+        }
+
+        $pengajar->k_verval_paud = MVervalPaud::KANDIDAT;
+        $pengajar->save();
+    }
+
+    /**
+     * @throws FlowException|SaveException
+     */
+    public function ajuanDelete(PaudPengajar $pengajar)
+    {
+        $this->validateTambahan($pengajar);
+
+        if ($pengajar->isVervalKandidat() || $pengajar->isVervalRevisi()) {
+            throw new FlowException("Anda belum melakukan Pengajuan");
+        }
+
+        if (!$pengajar->isVervalDiajukan()) {
+            throw new FlowException("Batal Ajuan sudah tidak dapat dilakukan");
+        }
+
+        $pengajar->k_verval_paud = MVervalPaud::KANDIDAT;
+        if (!$pengajar->save()) {
+            throw new SaveException("Penyimpanan Status Ajuan tidak berhasil");
+        }
     }
 
     /**

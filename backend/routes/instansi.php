@@ -119,6 +119,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
 
         Route::get('{pengajar}/update-peran', [Pengajar\Profil\PeranController::class, 'update']);
 
+        Route::post('{pengajar}/ajuan/create', [Pengajar\Profil\AjuanController::class, 'create']);
+        Route::post('{pengajar}/ajuan/delete', [Pengajar\Profil\AjuanController::class, 'delete']);
 
         Route::get('{pengajar}/berkas', [Pengajar\Profil\BerkasController::class, 'index']);
         Route::post('{pengajar}/berkas/create', [Pengajar\Profil\BerkasController::class, 'create']);
