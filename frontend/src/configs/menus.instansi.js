@@ -109,7 +109,7 @@ export default [
         desc: 'Pengajuan dan Profil LPD',
         color: 'yellow',
         deepColor: 'darken-1',
-        akses: true,
+        akses: 'lpd-profil.index',
         link: 'profil-operator',
         to: { name: 'profil-operator' },
       },

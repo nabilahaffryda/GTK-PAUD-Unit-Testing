@@ -7,6 +7,7 @@ export default {
       detail: {},
       lengkap: {},
       berkas: [],
+      id: '',
     };
   },
   computed: {
@@ -138,6 +139,59 @@ export default {
             withAction: withAction,
           },
         ],
+        lpd: [
+          {
+            title: 'Akta Pendirian dan atau SK Oleh Pejabat Berwenang',
+            pesan: `<i>* Diperioritaskan dari kemenkumham</i>`,
+            valid: false,
+            type: 'akta-lembaga',
+            withAction: withAction,
+            kBerkas: 1,
+          },
+          {
+            title: 'Foto Lembaga Pelatihan',
+            pesan: ``,
+            valid: false,
+            type: 'ktp',
+            withAction: withAction,
+          },
+          {
+            title: 'Foto Kartu NPWP Atas Nama Lembaga',
+            pesan: ``,
+            valid: false,
+            type: 'npwp',
+            withAction: withAction,
+          },
+          {
+            title: 'SK Lembaga Pelatihan Yang Terakreditasi',
+            pesan: `<i>* Khusus Perguruan Tinggi</i>`,
+            valid: false,
+            type: 'ijasah',
+            withAction: withAction,
+            kBerkas: 3,
+          },
+          {
+            title: 'SK Kepengurusan Masih Berlaku',
+            pesan: ``,
+            valid: false,
+            type: 'diklat',
+            withAction: withAction,
+          },
+          {
+            title: 'Pakta Integritas',
+            pesan: ``,
+            valid: false,
+            type: 'sertifikat',
+            withAction: withAction,
+          },
+          {
+            title: 'Foto Rekening Atas Nama Lembaga Pada Halaman Nomor Rekening',
+            pesan: ``,
+            valid: false,
+            type: 'sertifikat',
+            withAction: withAction,
+          },
+        ],
       };
     },
   },
@@ -156,7 +210,6 @@ export default {
         sertifikat: { format: 'PDF', required: true },
       };
 
-      this.id = this.id || null;
       this.action = 'upload';
 
       const mBerkas = this.$arrToObj(this.berkases[this.jenis], 'type');
@@ -193,6 +246,7 @@ export default {
         .then(({ data, meta }) => {
           this.detail = Object.assign({}, data);
           this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
+          this.id = this.$getDeepObj(data, 'paud_pengajar_id') || this.$getDeepObj(data, 'paud_instansi_id');
         })
         .then(() => {
           this.fetchDokumen();
@@ -200,7 +254,7 @@ export default {
     },
 
     fetchDokumen() {
-      this.getBerkas({ jenis: this.jenis, id: this.$getDeepObj(this, 'detail.paud_pengajar_id') }).then(({ data }) => {
+      this.getBerkas({ jenis: this.jenis, id: this.id }).then(({ data }) => {
         this.berkas = data || [];
       });
     },
@@ -241,7 +295,7 @@ export default {
 
       const payload = {
         jenis: this.jenis,
-        id: this.$getDeepObj(this, 'detail.paud_pengajar_id'),
+        id: this.id,
         params: formData,
       };
 
@@ -275,7 +329,7 @@ export default {
 
       this.setBerkas({
         jenis: this.jenis,
-        id: this.$getDeepObj(this, 'detail.paud_pengajar_id'),
+        id: this.id,
         params: mapParams,
       })
         .then(() => {
