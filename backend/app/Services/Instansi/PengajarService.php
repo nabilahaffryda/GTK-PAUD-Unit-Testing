@@ -85,6 +85,16 @@ class PengajarService
         ];
     }
 
+    /**
+     * @throws FlowException
+     */
+    public function validateTambahan(PaudPengajar $pengajar)
+    {
+        if (!$pengajar->is_tambahan) {
+            throw new FlowException("Peran anda bukan sebagai pengajar tambahan");
+        }
+    }
+
     public function fetch(PaudPengajar $pengajar)
     {
         return $pengajar->loadMissing([
@@ -158,8 +168,17 @@ class PengajarService
         }
     }
 
+    /**
+     * @throws FlowException
+     */
     public function updatePeran(PaudPengajar $pengajar, bool $isPembimbing)
     {
+        $this->validateTambahan($pengajar);
+
+        if ($pengajar->is_pembimbing !== null) {
+            throw new FlowException("Anda sudah menentukan peran anda");
+        }
+
         $pengajar->is_pembimbing = $isPembimbing;
         $pengajar->save();
     }
