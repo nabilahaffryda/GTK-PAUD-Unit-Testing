@@ -1,5 +1,5 @@
 <template>
-  <profil-admin jenis="lembaga" title="" desc="Lorem Ipsum"></profil-admin>
+  <profil-admin jenis="lpd" title="" desc="Lorem Ipsum"></profil-admin>
 </template>
 
 <script>

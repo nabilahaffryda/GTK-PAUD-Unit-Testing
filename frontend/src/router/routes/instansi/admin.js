@@ -85,7 +85,7 @@ export default [
     component: () => lazyLoadView(import('@views/instansi/admin/list/operator/Profil')),
     meta: {
       title: 'Profil Lembaga LPD',
-      tipe: 'lembaga',
+      tipe: 'lpd',
     },
   },
 ];

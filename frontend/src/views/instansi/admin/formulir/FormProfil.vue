@@ -393,7 +393,7 @@ export default {
             },
           ],
         },
-        lembaga: {
+        lpd: {
           dasar: [
             {
               type: 'VTextField',

@@ -162,7 +162,7 @@ export default {
             },
           ],
         },
-        lembaga: {
+        lpd: {
           dasar: [
             {
               title: 'Nama Lembaga',
