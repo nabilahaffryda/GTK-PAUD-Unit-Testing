@@ -1,7 +1,58 @@
 <template>
   <v-card class="mx-auto" flat>
     <v-card-text>
-      <v-container>
+      <template v-if="useUpload && !isPilih">
+        <h2 class="">Akun Baru</h2>
+        <span class="my-2">
+          Untuk menambah data akun baru, terdapat dua pilihan dengan cara unggah data melalui excel atau membuat akun
+          persatu melalui sistem
+        </span>
+        <v-radio-group v-model="pilihan" hide-details class="pa-0 mt-3">
+          <v-alert text outlined dense color="secondary">
+            <v-radio value="manual">
+              <template v-slot:label>
+                <div class="pa-4">
+                  <div class="font-weight-bold">Tambah Pengajar Mengunakan Form Input</div>
+                  <div class="caption">
+                    Anda dapat menambahkan akun baru secara <b>manual satu persatu</b> melalui form input yang di
+                    sediakan sistem
+                  </div>
+                </div>
+              </template>
+            </v-radio>
+          </v-alert>
+          <v-alert text outlined dense color="secondary">
+            <v-radio value="excel">
+              <template v-slot:label>
+                <div class="pa-4">
+                  <div class="font-weight-bold">Tambah Pengajar Mengunakan Excel</div>
+                  <div class="caption">
+                    Anda dapat menambahkan template baru di bawah ini.
+                    <ol>
+                      <li>Download format template dibawah ini.</li>
+                      <li>Silakan isi data sesuai format yang tersedia pada template</li>
+                      <li>
+                        Unggah file yang sudah Anda isi pada langkah selanjutnya. Silakan tekan
+                        <b>tombol selanjutnya</b>
+                      </li>
+                    </ol>
+                    <v-btn depressed class="ma-2" color="secondary" style="text-transform: none">
+                      <v-icon left>mdi-file</v-icon>Template_akun_baru.xls
+                    </v-btn>
+                  </div>
+                </div>
+              </template>
+            </v-radio>
+          </v-alert>
+        </v-radio-group>
+        <v-divider class="my-2"></v-divider>
+        <div class="text-md-right">
+          <v-btn right color="secondary" :disabled="!pilihan" @click="onPilih">
+            Selanjutnya
+          </v-btn>
+        </div>
+      </template>
+      <v-container v-if="!useUpload ? true : isPilih === 'manual'">
         <v-stepper v-model="step" class="elevation-0">
           <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
             <v-stepper-step color="secondary" :complete="step > 1" step="1"> Tambah Akun </v-stepper-step>
@@ -22,6 +73,9 @@
                 <v-card-actions class="pa-0">
                   <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
                   <v-spacer></v-spacer>
+                  <v-btn class="text-md-right" right text @click="onResetPilih">
+                    Kembali
+                  </v-btn>
                   <v-btn class="text-md-right" right color="secondary" @click="onCheck">
                     Selanjutnya
                   </v-btn>
@@ -99,6 +153,68 @@
           </v-stepper-items>
         </v-stepper>
       </v-container>
+      <v-container v-else-if="isPilih === 'excel'">
+        <v-stepper v-model="stepUnggah" class="elevation-0">
+          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
+            <v-stepper-step color="secondary" :complete="stepUnggah > 1" step="1"> Isi Data Akun </v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step color="secondary" :complete="stepUnggah > 2" step="2"> Konfirmasi Akun </v-stepper-step>
+          </v-stepper-header>
+          <v-stepper-items>
+            <v-stepper-content step="1" style="padding: 0">
+              <v-card flat>
+                <v-card-text class="pa-0 pt-7">
+                  <v-row class="my-2" dense no-gutters>
+                    <v-col cols="12" md="2" sm="12" class="px-0">
+                      <v-avatar color="secondary" size="100">
+                        <v-icon dark size="80">mdi-file-upload</v-icon>
+                      </v-avatar>
+                    </v-col>
+                    <v-col cols="12" md="10" sm="12" class="px-0">
+                      <h2>Unggah Akun Secara Kolektif</h2>
+                      <span
+                        >Silakan unggah data pengajar yang sudah di isi sesuai format template yang telah Anda unduh
+                        pada langkah sebelumnnya. Pastikan data yang Anda masukan bersifat final</span
+                      >
+                      <div class="mt-2">
+                        <v-btn depressed color="secondary" @click="$emit('upload')">
+                          <v-icon left>mdi-upload</v-icon>Unggah File
+                        </v-btn>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-divider class="my-3" />
+                </v-card-text>
+                <v-card-actions class="pa-0">
+                  <v-spacer></v-spacer>
+                  <v-btn class="text-md-right" right text @click="onResetPilih">
+                    Kembali
+                  </v-btn>
+                  <v-btn class="text-md-right" right color="secondary" @click="onCheck">
+                    Selanjutnya
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-stepper-content>
+            <v-stepper-content step="2" style="padding: 0">
+              <v-card flat>
+                <v-card-text class="pa-0 pt-7">
+                  <v-divider class="my-4" />
+                </v-card-text>
+                <v-card-actions class="pa-0">
+                  <v-spacer></v-spacer>
+                  <v-btn right text>
+                    Kembali
+                  </v-btn>
+                  <v-btn class="text-md-right" right color="secondary" @click="$emit('onValidate')">
+                    Selanjutnya
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-stepper-content>
+          </v-stepper-items>
+        </v-stepper>
+      </v-container>
     </v-card-text>
   </v-card>
 </template>
@@ -150,6 +266,9 @@ export default {
       step: 1,
       form: {},
       info: [],
+      pilihan: null,
+      isPilih: '',
+      stepUnggah: 1,
     };
   },
   computed: {
@@ -595,6 +714,8 @@ export default {
       this.step = 1;
       this.info = [];
       this.id = null;
+      this.pilihan = null;
+      this.isPilih = null;
     },
 
     initForm(value) {
@@ -736,6 +857,15 @@ export default {
       };
       this.info = [...konfirmasi['biodata'], ...konfirmasi[this.jenis]];
       this.step++;
+    },
+
+    onPilih() {
+      this.isPilih = this.pilihan;
+    },
+
+    onResetPilih() {
+      this.pilihan = null;
+      this.isPilih = null;
     },
   },
   watch: {

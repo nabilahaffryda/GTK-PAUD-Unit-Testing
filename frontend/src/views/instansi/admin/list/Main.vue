@@ -21,12 +21,10 @@
           :btnFilter="true"
           :btnAdd="$allow(`akun-${this.akses}.create`)"
           :btnDownload="$allow(`akun-${this.akses}.download`)"
-          :btnUpload="$allow(`akun-${this.akses}.download`)"
           @add="onAdd"
           @reload="onReload"
           @filter="onFilter"
           @download="onDownload"
-          @upload="onUpload"
         >
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text"> {{ total }} {{ title }}</div>
@@ -147,6 +145,7 @@
         :instansis="instansis"
         :masters="masters"
         :jenis="jenis"
+        :useUpload="jenis === 'pengajar'"
         @check="onCheck"
         @onValidate="onValidate"
         @onStep="
@@ -154,12 +153,14 @@
             $set(formulir, 'isValid', false);
           }
         "
+        @upload="onUpload"
       />
     </base-modal-full>
     <Akun ref="akun" :akun="akun" />
     <popup-upload
       ref="uploader"
       :rules="{ format: 'xls', required: true }"
+      label-ok="pilih"
       format="XLXS/XLS"
       title="Data Akun"
       @save="uploadSave"

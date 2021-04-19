@@ -10,22 +10,6 @@
       <v-card-text style="min-height: 150px;">
         <v-container class="py-5">
           <template v-if="step === 0">
-            <v-row>
-              <v-col cols="1">
-                <v-avatar color="info lighten-1" size="50">
-                  <v-icon color="white">mdi-upload</v-icon>
-                </v-avatar>
-              </v-col>
-              <v-col cols="11">
-                <p class="body-1 grey--text">
-                  Unduh berkas <b>Template Unggah Data</b> sebagai dasar untuk mengisi data, setelah itu unggah dokumen
-                  dengan memilih berkas pada formulir di bawah ini.
-                </p>
-                <v-btn color="info" @click="unduhTemplate">
-                  Unduh Template Unggah Data
-                </v-btn>
-              </v-col>
-            </v-row>
             <form-unggah
               ref="formulir"
               :title="`Formulir ${title}`"
@@ -97,7 +81,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn v-if="step === 0" text right @click.native="dialog = false"> Batal</v-btn>
-        <v-btn v-if="step === 0" color="info" right @click="submit"> Unggah</v-btn>
+        <v-btn v-if="step === 0" color="info" depressed right @click="submit"> {{ labelOk || 'Upload' }}</v-btn>
         <template v-if="step === 1">
           <v-btn v-if="!(errorFile && errorFile.length)" color="info" right text @click="tutup"> OK</v-btn>
           <v-btn v-else color="red darken-1" right text @click="back"> Unggah Ulang</v-btn>
@@ -134,6 +118,10 @@ export default {
     rules: {
       type: Object,
       default: () => {},
+    },
+    labelOk: {
+      type: String,
+      default: '',
     },
   },
   data() {
