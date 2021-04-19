@@ -7,14 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * Class CreateRequest
  *
- * @property-read $nama
- * @property-read $email
- * @property-read $alamat
- * @property-read $k_propinsi
- * @property-read $k_kota
- * @property-read $kodepos
- * @property-read $nama_penanggung_jawab
- * @property-read $telp_penanggung_jawab
+ * @property-read $is_pembimbing
  *
  * @package App\Http\Requests\Instansi\PaudInstansi
  */

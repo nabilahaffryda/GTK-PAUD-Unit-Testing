@@ -21,15 +21,14 @@ class PeranController extends Controller
 
     /**
      * @throws FlowException
-     * @throws SaveException
      */
-    public function update(PaudPengajar $pengajar, PeranUpdateRequest $request, FotoRequest $foto)
+    public function update(PaudPengajar $pengajar, PeranUpdateRequest $request)
     {
         if ($pengajar->akun_id != akunId()) {
             abort(404);
         }
 
-        $this->service->update($pengajar, $request->validated(), $foto->data, $foto->ext);
+        $this->service->updatePeran($pengajar, $request->is_pembimbing);
 
         return BaseResource::make($pengajar->loadMissing(['akun']));
     }
