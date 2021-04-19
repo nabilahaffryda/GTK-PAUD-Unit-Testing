@@ -40,7 +40,7 @@ export default {
     },
 
     avatar() {
-      return this.role === 'instansi' ? this.akun?.foto ?? 'avatar.png' : this.ptk?.foto ?? 'avatar.png';
+      return this.role === 'instansi' ? this.akun?.foto_url ?? 'avatar.png' : this.ptk?.foto ?? 'avatar.png';
     },
   },
   methods: {
