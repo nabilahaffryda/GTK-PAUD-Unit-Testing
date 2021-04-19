@@ -114,15 +114,13 @@ class PengajarService
     /**
      * @throws SaveException
      */
-    public function create(PaudAdmin $admin)
+    public function create(PaudAdmin $admin, array $params)
     {
         $pengajar = PaudPengajar::firstOrNew([
             'akun_id'  => $admin->akun_id,
             'tahun'    => $admin->tahun,
             'angkatan' => $admin->angkatan,
-        ], [
-            'k_verval_paud' => MVervalPaud::KANDIDAT,
-        ]);
+        ], $params);
 
         $pengajar->admin_id = akunId();
         if (!$pengajar->save()) {
