@@ -27,10 +27,10 @@ class PengajarService
 
         $ftpPath   = config('filesystems.disks.pengajar-berkas.path');
         $timestamp = date('ymdhis');
-        $pathname  = "{$ftpPath}/{$pengajar->tahun}/{$pengajar->angkatan}";
+        $pathname  = "{$pengajar->tahun}/{$pengajar->angkatan}";
         $filename  = "{$akun->akun_id}-{$kBerkas}-{$timestamp}.{$file->getClientOriginalExtension()}";
 
-        if (!Storage::disk('pengajar-berkas')->putFileAs($pathname, $file, $filename)) {
+        if (!Storage::disk('pengajar-berkas')->putFileAs("{$ftpPath}/{$pathname}", $file, $filename)) {
             throw new FlowException("Unggah Foto Akun tidak berhasil");
         }
 
