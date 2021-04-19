@@ -15,6 +15,7 @@ use App\Models\PaudInstansi;
 use App\Models\PaudInstansiBerkas;
 use App\Services\InstansiService;
 use Arr;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -107,8 +108,8 @@ class LpdService
             ->where('instansi_id', '=', $instansi->instansi_id)
             ->where('k_group', MGroup::OP_LPD_DIKLAT_PAUD)->first();
 
-        if(!$operator) {
-            throw new FlowException('Operator tidak terdaftar di instansi '.$instansi->nama);
+        if (!$operator) {
+            throw new FlowException('Operator tidak terdaftar di instansi ' . $instansi->nama);
         }
 
         return $operator;
@@ -228,5 +229,15 @@ class LpdService
         if ($foto && $ext && $oldFoto) {
             app(InstansiService::class)->deleteFoto($oldFoto);
         }
+    }
+
+    public function ajuanCreate(PaudInstansi $paudInstansi)
+    {
+
+        $paudInstansi->wkt_ajuan     = Carbon::now();
+        $paudInstansi->k_verval_paud = MVervalPaud::DIAJUKAN;
+        $paudInstansi->save();
+
+        return $paudInstansi;
     }
 }
