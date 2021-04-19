@@ -7,7 +7,7 @@
         <v-row class="my-5">
           <v-col cols="12" md="2" sm="12">
             <base-photo-profil
-              :photo="photo || this.$getDeepObj(detail, 'akun.foto') || ''"
+              :photo="photo || this.$getDeepObj(detail, 'akun.data.foto_url') || ''"
               photodef="default_foto_gp.png"
               :useBase64="true"
               :use-trigger="false"

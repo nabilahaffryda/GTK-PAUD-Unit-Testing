@@ -20,9 +20,9 @@ export default {
       return [
         {
           label: 'Profil Pengajar',
-          value: this.lengkap['profil'] ? 'passed' : 'not_finish',
+          value: this.lengkap?.profil ? 'passed' : 'not_finish',
         },
-        { label: 'Berkas Persyaratan Lainnya', value: this.lengkap['berkas'] ? 'passed' : 'not_finish' },
+        { label: 'Berkas Persyaratan Lainnya', value: this.lengkap?.berkas ? 'passed' : 'not_finish' },
       ];
     },
 

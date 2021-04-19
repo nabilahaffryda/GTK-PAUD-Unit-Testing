@@ -100,7 +100,7 @@
         :max="formulir.max"
         :format="formulir.format"
         :rules="formulir.rules"
-        :detail="formulir.detail"
+        :detail="detail"
         :jenis="jenis"
       />
     </base-modal-full>
