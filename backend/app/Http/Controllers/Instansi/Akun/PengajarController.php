@@ -6,6 +6,7 @@ use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Requests\Instansi\Admin\CreateRequest;
 use App\Http\Resources\BaseResource;
 use App\Models\MGroup;
+use App\Models\MVervalPaud;
 use App\Services\Instansi\PengajarService;
 
 class PengajarController extends AkunController
@@ -21,7 +22,10 @@ class PengajarController extends AkunController
         ]);
 
         $paudAdmin = $this->service->create(instansi(), $params);
-        app(PengajarService::class)->create($paudAdmin);
+        app(PengajarService::class)->create($paudAdmin, [
+            'k_verval_paud' => MVervalPaud::DISETUJUI,
+            'is_tambahan'   => 0,
+        ]);
         return BaseResource::make($paudAdmin);
     }
 }
