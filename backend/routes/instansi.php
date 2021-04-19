@@ -26,12 +26,20 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::get('master', [IndexController::class, 'master']);
     Route::get('instansi', [IndexController::class, 'instansi']);
 
-    Route::get('lpd', [LpdController::class, 'index']);
-    Route::post('lpd/create', [LpdController::class, 'create']);
-    Route::get('lpd/{paudInstansi}', [LpdController::class, 'fetch']);
-
     Route::get('akun/groups', [AkunController::class, 'groups']);
     Route::get('akun/email/{email}', [AkunController::class, 'email']);
+
+    Route::group(['prefix' => 'lpd'], function () {
+        Route::get('', [LpdController::class, 'index']);
+        Route::post('create', [LpdController::class, 'create']);
+
+        Route::get('profil', [Lpd\ProfilController::class, 'index']);
+        Route::post('profil/{paudInstansi}/update', [Lpd\ProfilController::class, 'update']);
+        Route::get('profil/{paudInstansi}/berkas', [Lpd\Profil\BerkasController::class, 'index']);
+        Route::post('profil/{paudInstansi}/berkas/create', [Lpd\Profil\BerkasController::class, 'create']);
+
+        Route::get('{paudInstansi}', [LpdController::class, 'fetch']);
+    });
 
     Route::group(['prefix' => 'akun/admin-program'], function () {
         Route::get('', [AdminProgramController::class, 'index']);
@@ -126,13 +134,5 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{pengajar}/berkas/create', [Pengajar\Profil\BerkasController::class, 'create']);
 
         Route::post('berkas/{berkas}/delete', [Pengajar\Profil\BerkasController::class, 'delete']);
-    });
-
-    Route::group(['prefix' => 'lpd-profil'], function () {
-        Route::get('', [Lpd\ProfilController::class, 'index']);
-        Route::post('{paudInstansi}/update', [Lpd\ProfilController::class, 'update']);
-
-        Route::get('{paudInstansi}/berkas', [Lpd\Profil\BerkasController::class, 'index']);
-        Route::post('{paudInstansi}/berkas/create', [Lpd\Profil\BerkasController::class, 'create']);
     });
 });
