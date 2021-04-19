@@ -22,6 +22,7 @@
               :valid="item.valid"
               :with-action="item.withAction"
               :value="item.value || {}"
+              @detil="onDetil"
               @upload="$emit('upload', item.type)"
             />
           </template>
@@ -31,11 +32,13 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+    <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
   </div>
 </template>
 <script>
 import Berkas from '../formulir/Berkas';
 import Profil from '../formulir/Profil';
+import PopupPreviewDetail from '@components/popup/PreviewDetil';
 export default {
   props: {
     contents: {
@@ -56,14 +59,24 @@ export default {
     },
     jenis: {
       type: String,
-      default: 'pengajar'
-    }
+      default: 'pengajar',
+    },
   },
-  components: { Berkas, Profil },
+  components: { Berkas, Profil, PopupPreviewDetail },
   data() {
     return {
       panel: [0, 1],
+      preview: {},
     };
+  },
+  methods: {
+    onDetil(berkas) {
+      this.$refs.popup.open();
+      this.$nextTick(() => {
+        this.$set(this.preview, 'url', this.$getDeepObj(berkas, 'value.url'));
+        this.$set(this.preview, 'title', this.$getDeepObj(berkas, 'title'));
+      });
+    },
   },
 };
 </script>

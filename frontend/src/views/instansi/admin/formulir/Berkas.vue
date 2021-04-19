@@ -28,10 +28,10 @@
                 {{ valid ? 'Sudah Diunggah' : 'Belum Diunggah' }}
               </v-col>
               <v-col cols="12" md="4" class="mt-4">
-                <v-btn depressed small @click="onView(type)" color="blue-grey lighten-5">
+                <v-btn depressed :disabled="!valid" small @click="onDetil(berkas)" color="blue-grey lighten-5">
                   <v-icon>mdi-eye</v-icon>
                 </v-btn>
-                <v-btn class="ml-md-1" depressed small @click="onView(type)" color="blue-grey lighten-5">
+                <v-btn class="ml-md-1" :disabled="!valid" depressed small @click="onView(type)" color="blue-grey lighten-5">
                   <v-icon>mdi-download</v-icon>
                 </v-btn>
               </v-col>
@@ -82,7 +82,10 @@ export default {
       this.$emit('upload', { type: type });
     },
     onView() {
-      this.$downloadFile(this.value && this.value.url_berkas);
+      this.$downloadFile(this.value && this.value.url);
+    },
+    onDetil(berkas) {
+      this.$emit('detil', berkas);
     },
   },
 };

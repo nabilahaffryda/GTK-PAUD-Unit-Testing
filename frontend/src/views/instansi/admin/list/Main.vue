@@ -21,10 +21,12 @@
           :btnFilter="true"
           :btnAdd="$allow(`akun-${this.akses}.create`)"
           :btnDownload="$allow(`akun-${this.akses}.download`)"
+          :btnUpload="$allow(`akun-${this.akses}.download`)"
           @add="onAdd"
           @reload="onReload"
           @filter="onFilter"
           @download="onDownload"
+          @upload="onUpload"
         >
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text"> {{ total }} {{ title }}</div>
@@ -155,12 +157,21 @@
       />
     </base-modal-full>
     <Akun ref="akun" :akun="akun" />
+    <popup-upload
+      ref="uploader"
+      :rules="{ format: 'xls', required: true }"
+      format="XLXS/XLS"
+      title="Data Akun"
+      @save="uploadSave"
+      @unduhTemplate="unduhTemplate"
+    ></popup-upload>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex';
 import FormAkun from '../formulir/Akun';
 import Akun from '@components/cetak/Akun';
+import PopupUpload from '@components/popup/Upload';
 import mixin from './mixin';
 import list from '@mixins/list';
 export default {
@@ -188,7 +199,7 @@ export default {
     },
   },
   mixins: [list, mixin],
-  components: { FormAkun, Akun },
+  components: { FormAkun, Akun, PopupUpload },
   data() {
     return {
       formulir: {},
