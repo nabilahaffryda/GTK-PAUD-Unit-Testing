@@ -1,0 +1,449 @@
+stages:
+  - prebuild
+  - build
+  - deploy
+
+prebuild:
+  stage: prebuild
+  tags:
+    - common
+    - shell-runner
+    - docker
+
+  only:
+    refs:
+      - demo
+      - devel
+      - real
+    changes:
+      - .gitlab/build/docker-compose.yml
+      - .gitlab/build/Dockerfile
+
+  variables:
+    GIT_STRATEGY: fetch
+    GIT_CHECKOUT: "false"
+
+  script:
+    - git reset --mixed $CI_COMMIT_SHA
+    - git checkout -- .gitlab/build/docker-compose.yml .gitlab/build/Dockerfile
+
+    - echo '*' > .dockerignore
+
+    - docker-compose -f .gitlab/build/docker-compose.yml pull --quiet --ignore-pull-failures
+    - docker-compose -f .gitlab/build/docker-compose.yml build --parallel
+    - docker-compose -f .gitlab/build/docker-compose.yml push
+
+build-backend:
+  stage: build
+  tags:
+    - common
+    - shell-runner
+    - docker
+
+  only:
+    - demo
+    - devel
+    - real
+
+  cache:
+    key: $CI_JOB_NAME-$CI_COMMIT_REF_SLUG
+    paths:
+      - backend/vendor/
+
+  artifacts:
+    name: $CI_JOB_NAME-$CI_COMMIT_REF_SLUG
+    paths:
+      - backend/app
+      - backend/bootstrap
+      - backend/config
+      - backend/database
+      - backend/public
+      - backend/resources
+      - backend/routes
+      - backend/storage
+      - backend/vendor
+      - backend/artisan
+      - backend/server.php
+
+  script:
+    - |
+      mkdir -p \
+        $HOME/.runner-home
+
+      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
+      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
+        --user `id -u`:`id -g` \
+        --volume $HOME/.runner-home:/home \
+        build bash -c "cd backend \
+          && php /composer.phar install --prefer-dist --no-dev \
+          && php /composer.phar dump-autoload --optimize --no-dev"
+
+    - find backend/storage/ -type d \! -perm 777 -print -execdir chmod a+rwx \{\} \;
+    - find backend/bootstrap/ -type d \! -perm 777 -print -execdir chmod a+rwx \{\} \;
+
+    - |
+      REMOTE=`git remote`
+      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
+
+      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
+        --user `id -u`:`id -g` \
+        --volume $HOME/.runner-home:/home \
+        build bash -c \
+        "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG new --project=$SENTRY_PROJECT $SOURCE_SHA \
+          && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG set-commits --auto $SOURCE_SHA \
+          && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG finalize $SOURCE_SHA"
+
+build-frontend:
+  stage: build
+  tags:
+    - common
+    - shell-runner
+    - docker
+
+  only:
+    - demo
+    - devel
+    - real
+
+  cache:
+    key: $CI_JOB_NAME-$CI_COMMIT_REF_SLUG
+    paths:
+      - frontend/node_modules/
+
+  artifacts:
+    name: $CI_JOB_NAME-$CI_COMMIT_REF_SLUG
+    paths:
+      - frontend/dist/
+
+  script:
+    - |
+      if [[ $CI_COMMIT_REF_NAME == real ]]; then
+        ENV_FRONTEND=$REAL_ENV_FRONTEND
+      elif [[ $CI_COMMIT_REF_NAME == demo ]]; then
+        ENV_FRONTEND=$DEMO_ENV_FRONTEND
+      else
+        ENV_FRONTEND=$DEVEL_ENV_FRONTEND
+      fi
+
+      cp "${ENV_FRONTEND}" frontend/.env
+
+      mkdir -p \
+        $HOME/.runner-home
+
+      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
+      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
+        --user `id -u`:`id -g` \
+        --volume $HOME/.runner-home:/home \
+        build bash -c "cd frontend && yarn install && yarn build"
+
+deploy-devel:
+  stage: deploy
+  tags:
+    - common
+    - shell-runner
+    - docker
+
+  only:
+    - devel
+
+  variables:
+    STAGE: devel
+    VERSION: $CI_COMMIT_SHORT_SHA
+    HUB: $DEVEL_HUB
+    DOMAIN: $DEVEL_DOMAIN
+    MEMCACHED: $DEVEL_MEMCACHED
+
+  script:
+    - curl -kso .gitlab/helper_script.sh ${HELPER_SCRIPT_URL}
+    - source .gitlab/helper_script.sh
+
+    # setup env
+    - cp "$DEVEL_ENV_BACKEND" backend/.env
+    - cp "$DEVEL_COMPOSE" .gitlab/docker-compose.deploy.yml
+
+    - |
+      REMOTE=`git remote`
+      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
+
+      echo "
+      SENTRY_RELEASE=$SOURCE_SHA" >> .env
+
+    # build image
+    - setup_image .gitlab/docker-compose.yml $VERSION
+
+    # persiapan deploy
+    - start_ssh_agent $CI_COMMIT_SHA
+    - ssh-add -t 600 <(echo "$DEVEL_SERVER_KEY")
+
+    # update service
+    - VARS="VERSION HUB STAGE DOMAIN"
+
+    - deploy_image "$DEVEL_SERVER" "$VARS" $CI_PROJECT_PATH_SLUG .gitlab/docker-compose.deploy.yml
+
+    - |
+      REMOTE=`git remote`
+      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
+
+      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
+        --user `id -u`:`id -g` \
+        --volume $HOME/.runner-home:/home \
+        build bash -c \
+        "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG deploys $SOURCE_SHA new --env $STAGE"
+
+  after_script:
+    - source .gitlab/helper_script.sh
+    - kill_sshagent $CI_COMMIT_SHA
+
+  environment:
+    name: devel
+    url: https://$DEVEL_DOMAIN
+
+  resource_group: devel
+
+deploy-demo:
+  stage: deploy
+  tags:
+    - common
+    - shell-runner
+    - docker
+
+  only:
+    - demo
+
+  variables:
+    STAGE: demo
+    VERSION: $CI_COMMIT_SHORT_SHA
+    HUB: $DEMO_HUB
+    DOMAIN: $DEMO_DOMAIN
+    MEMCACHED: $DEMO_MEMCACHED
+
+  script:
+    - curl -kso .gitlab/helper_script.sh ${HELPER_SCRIPT_URL}
+    - source .gitlab/helper_script.sh
+
+    # setup env
+    - cp "$DEMO_ENV_BACKEND" backend/.env
+    - cp "$DEMO_COMPOSE" .gitlab/docker-compose.deploy.yml
+
+    - |
+      REMOTE=`git remote`
+      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
+
+      echo "
+      SENTRY_RELEASE=$SOURCE_SHA" >> .env
+
+    # build image
+    - setup_image .gitlab/docker-compose.yml $VERSION
+
+    # persiapan deploy
+    - start_ssh_agent $CI_COMMIT_SHA
+    - ssh-add -t 600 <(echo "$DEMO_SERVER_KEY")
+
+    # update service
+    - VARS="VERSION HUB STAGE DOMAIN"
+
+    - deploy_image "$DEMO_SERVER" "$VARS" $CI_PROJECT_PATH_SLUG .gitlab/docker-compose.deploy.yml
+
+    - |
+      REMOTE=`git remote`
+      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
+
+      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
+        --user `id -u`:`id -g` \
+        --volume $HOME/.runner-home:/home \
+        build bash -c \
+        "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG deploys $SOURCE_SHA new --env $STAGE"
+
+  after_script:
+    - source .gitlab/helper_script.sh
+    - kill_sshagent $CI_COMMIT_SHA
+
+  environment:
+    name: demo
+    url: https://$DEMO_DOMAIN
+
+  resource_group: demo
+
+deploy-real:
+  stage: deploy
+  tags:
+    - common
+    - shell-runner
+
+  only:
+    - real
+
+  variables:
+    STAGE: real
+
+  script:
+    # setup env
+    - cp "$REAL_ENV_BACKEND" backend/.env
+
+    - curl -kso .gitlab/helper_script.sh ${HELPER_SCRIPT_URL}
+    - source .gitlab/helper_script.sh
+
+    - |
+      REMOTE=`git remote`
+      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
+
+      echo "
+      SENTRY_RELEASE=$SOURCE_SHA" >> .env
+
+    # persiapan deploy
+    - start_ssh_agent $CI_COMMIT_SHA
+    - ssh-add -t 600 <(echo "$REAL_SERVER_KEY")
+
+    # update aplikasi
+    - |
+      PWD=`pwd`
+
+      STATUS_FILE=$( mktemp )
+      echo 0 > ${STATUS_FILE}
+
+      # jalankan rsync bersamaan ke semua server
+      for SERVER in ${REAL_SERVER_BACKEND} ; do
+        echo deploy ke ${SERVER}
+
+        PART=( ${SERVER//:/ } )
+        SERVER_LOGIN=${PART[0]}
+        SERVER_PATH=${PART[1]}
+
+        PART=( ${SERVER_LOGIN//@/ } )
+        LOGIN_HOST=${PART[1]}
+
+        ( rsync -avz -L \
+            --checksum \
+            --omit-dir-times \
+            --timeout=600 \
+            --delete \
+            --delete-excluded \
+            --exclude=.git* \
+            --exclude=/.gitlab* \
+            --exclude=/.dockerignore \
+            --exclude-from=.dockerignore \
+            --filter "P /storage/framework/cache/**" \
+            --filter "P /storage/logs/**" \
+            --rsh 'ssh -o ConnectTimeout=2 -o ServerAliveInterval=2 -o ServerAliveCountMax=2 -oStrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
+            ${PWD}/backend/ \
+            ${SERVER}/backend/ 2>&1 | sed -e "s/^/${LOGIN_HOST}-backend:\ /"
+        ) &
+        PIDS+=($!)
+      done
+
+      for SERVER in ${REAL_SERVER_FRONTEND} ; do
+        echo deploy ke ${SERVER}
+
+        PART=( ${SERVER//:/ } )
+        SERVER_LOGIN=${PART[0]}
+        SERVER_PATH=${PART[1]}
+
+        PART=( ${SERVER_LOGIN//@/ } )
+        LOGIN_HOST=${PART[1]}
+
+        ( rsync -avz -L \
+            --checksum \
+            --omit-dir-times \
+            --exclude=.git* \
+            --rsh 'ssh -o ConnectTimeout=2 -o ServerAliveInterval=2 -o ServerAliveCountMax=2 -oStrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
+            ${PWD}/frontend/dist/ \
+            ${SERVER}/frontend/ 2>&1 | sed -e "s/^/${LOGIN_HOST}-frontend:\ /"
+        ) &
+        PIDS+=($!)
+      done
+
+      # tunggu proses rsync sampai selesai
+      for pid in ${PIDS[@]}; do
+        wait ${pid}
+        STATUS+=($?)
+      done
+
+      # cek status
+      for st in ${STATUS[@]}; do
+        [[ ${st} == 0 ]]
+      done
+
+      unset PIDS
+
+      # restart worker
+      for SERVER in ${REAL_WORKER} ; do
+        echo restart worker ${SERVER}
+
+        PART=( ${SERVER//:/ } )
+        SERVER_LOGIN=${PART[0]}
+        SERVER_PATH=${PART[1]}
+
+        PART=( ${SERVER_LOGIN//@/ } )
+        LOGIN_HOST=${PART[1]}
+
+        ( ssh -o ConnectTimeout=2 -o ServerAliveInterval=2 -o ServerAliveCountMax=2 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            ${SERVER_LOGIN} \
+            "/usr/bin/php ${SERVER_PATH}/artisan queue:restart" 2>&1 | sed -e "s/^/${LOGIN_HOST}:\ /"
+        ) &
+        PIDS+=($!)
+      done
+
+      # tunggu proses restart selesai
+      for pid in ${PIDS[@]}; do
+        wait ${pid}
+        STATUS+=($?)
+      done
+
+      # cek status
+      for st in ${STATUS[@]}; do
+        [[ ${st} == 0 ]]
+      done
+
+    - |
+      REMOTE=`git remote`
+      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
+
+      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
+      --user `id -u`:`id -g` \
+      --volume $HOME/.runner-home:/home \
+      build bash -c \
+      "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG deploys $SOURCE_SHA new --env $STAGE"
+
+  after_script:
+    - source .gitlab/helper_script.sh
+    - kill_sshagent $CI_COMMIT_SHA
+
+  environment:
+    name: real
+    url: https://$REAL_DOMAIN
+
+  resource_group: real
+
+.trigger-template: &trigger-template
+  stage: deploy
+  tags:
+    - common
+    - shell-runner
+
+  dependencies: []
+
+  variables: &variable-template
+    GIT_STRATEGY: fetch
+    GIT_CHECKOUT: "false"
+
+  script:
+    - eval "$( curl -kso - ${HELPER_SCRIPT_URL} )"
+    - auto_merge ${TARGET} ${CI_COMMIT_SHA} ${CI_COMMIT_REF_NAME} ${CI_PROJECT_ID} ${CI_PROJECT_URL} ${AUTOMERGE_TOKEN}
+
+trigger-demo:
+  <<: *trigger-template
+  only:
+    - real
+
+  variables:
+    <<: *variable-template
+    TARGET: demo
+
+trigger-devel:
+  <<: *trigger-template
+  only:
+    - demo
+
+  variables:
+    <<: *variable-template
+    TARGET: devel

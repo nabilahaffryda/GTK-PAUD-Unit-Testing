@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+  build:
+    image: dhub.dev.siap.id/simpkb-paud/build:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      cache_from:
+        - dhub.dev.siap.id/simpkb-paud/build:latest
+    volumes:
+      - ./../../:/source
+      - /home
+    user: 1000:1000
+    environment:
+      HOME: /home
+    network_mode: bridge

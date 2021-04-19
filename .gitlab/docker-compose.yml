@@ -1,0 +1,24 @@
+version: '3.5'
+
+services:
+  backend:
+    image: ${HUB}/simpkb-paud/backend-${STAGE:-devel}:${VERSION:-latest}
+    build:
+      context: ../backend
+      dockerfile: ../.gitlab/backend/Dockerfile
+      cache_from:
+        - ${HUB}/simpkb-paud/backend-${STAGE:-devel}:latest
+      args:
+        - DOMAIN
+        - STAGE
+        - MEMCACHED
+
+  frontend:
+    image: ${HUB}/simpkb-paud/frontend-${STAGE:-devel}:${VERSION:-latest}
+    build:
+      context: ../frontend
+      dockerfile: ../.gitlab/frontend/Dockerfile
+      cache_from:
+        - ${HUB}/simpkb-paud/frontend-${STAGE:-devel}:latest
+      args:
+        - STAGE
