@@ -9,7 +9,7 @@ RUN sed -ri \
         https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
         http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm \
         yum-utils \
-    && curl -sL https://rpm.nodesource.com/setup_10.x | bash - \
+    && curl -sL https://rpm.nodesource.com/setup_12.x | bash - \
     && curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo \
     && yum-config-manager --enable remi-php80 \
     && yum install -y \
