@@ -194,7 +194,7 @@ class LpdService
         return Storage::disk('lpd-berkas')->delete($delete);
     }
 
-    public function update(PaudInstansi $paudInstansi, array $data, string $foto, string $ext)
+    public function update(PaudInstansi $paudInstansi, array $data, ?string $foto, ?string $ext)
     {
         $instansi = $paudInstansi->instansi;
 
