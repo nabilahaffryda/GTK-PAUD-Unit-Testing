@@ -404,6 +404,7 @@ export default {
               required: true,
               hideDetails: false,
               outlined: true,
+              disabled: true,
               singleLine: true,
               grid: { cols: 12, md: 12, sm: 12 },
               labelColor: 'secondary',
@@ -458,7 +459,7 @@ export default {
             },
             {
               type: 'VTextField',
-              name: `no_hp`,
+              name: `no_telp`,
               label: `Nomor Telepon`,
               labelColor: 'secondary',
               hideDetails: false,
@@ -476,7 +477,7 @@ export default {
           tambahan: [
             {
               type: 'VTextField',
-              name: 'penanggung_jawab',
+              name: 'nama_penanggung_jawab',
               label: 'Penanggung Jawab',
               dense: true,
               hint: 'wajib diisi',
@@ -489,7 +490,7 @@ export default {
             },
             {
               type: 'VTextField',
-              name: 'no_hp_penanggung_jawab',
+              name: 'telp_penanggung_jawab',
               label: 'Penanggung Jawab',
               dense: true,
               hint: 'wajib diisi',
@@ -502,8 +503,8 @@ export default {
             },
             {
               type: 'VTextField',
-              name: 'penanggung_jawab',
-              label: 'Penanggung Jawab',
+              name: 'nama_sekretaris',
+              label: 'Nama Sekertaris',
               dense: true,
               hint: 'wajib diisi',
               required: true,
@@ -515,7 +516,7 @@ export default {
             },
             {
               type: 'VTextField',
-              name: 'no_hp_sekertaris',
+              name: 'telp_sekretaris',
               label: 'Telpon Sekertaris',
               dense: true,
               hint: 'wajib diisi',
@@ -528,8 +529,8 @@ export default {
             },
             {
               type: 'VTextField',
-              name: 'bendahara',
-              label: 'Bendahara',
+              name: 'nama_bendahara',
+              label: 'Nama Bendahara',
               dense: true,
               hint: 'wajib diisi',
               required: true,
@@ -541,7 +542,7 @@ export default {
             },
             {
               type: 'VTextField',
-              name: 'no_hp_bendahara',
+              name: 'telp_bendahara',
               label: 'Telpon Bendahara',
               dense: true,
               hint: 'wajib diisi',

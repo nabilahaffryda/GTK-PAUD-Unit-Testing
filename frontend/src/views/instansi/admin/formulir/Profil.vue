@@ -28,7 +28,7 @@
             <v-row>
               <v-col v-for="(sub, s) in profil" :key="s" v-bind="sub.grid">
                 <div class="caption grey--text">{{ $getDeepObj(sub, 'title') || '-' }}</div>
-                <h2 class="subtitle-1 black--text">{{ $getDeepObj(sub, 'value') || '-' }}</h2>
+                <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(sub, 'value') || '-'"/></h2>
               </v-col>
             </v-row>
           </v-col>
@@ -37,7 +37,7 @@
             <div class="text-h6 my-3 font-weight-bold"> Data Diklat </div>
             <div class="grey--text">Pengalaman Melatih 2 Tahun Terakhir</div>
             <v-list three-line>
-              <template v-for="(item, index) in $getDeepObj(detail, 'pengalaman')">
+              <template v-for="(item, index) in diklats">
                 <v-list-item :key="index">
                   <v-list-item-avatar tile>
                     <v-avatar tile color="secondary">
@@ -77,6 +77,10 @@ export default {
   },
   components: { BasePhotoProfil },
   computed: {
+    diklats() {
+      return this.$getDeepObj(this.detail, 'pengalaman');
+    },
+
     profils() {
       const item = Object.assign({}, this.detail);
       const profil = {
@@ -166,7 +170,7 @@ export default {
           dasar: [
             {
               title: 'Nama Lembaga',
-              value: this.$getDeepObj(item, '') || '-',
+              value: this.$getDeepObj(item, 'instansi.data.nama') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },
             {
@@ -176,44 +180,53 @@ export default {
             },
             {
               title: 'Email',
-              value: this.$getDeepObj(item, '') || '-',
+              value: this.$getDeepObj(item, 'instansi.data.email') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },
             {
               title: 'Propinsi',
-              value: this.$getDeepObj(item, '') || '-',
+              value: this.$getDeepObj(item, 'instansi.data.m_propinsi.keterangan') || '-',
               grid: { cols: 12, md: 3, sm: 12 },
             },
             {
               title: 'Kabupaten/Kota',
-              value: this.$getDeepObj(item, '') || '-',
+              value: this.$getDeepObj(item, 'instansi.data.m_kota.keterangan') || '-',
               grid: { cols: 12, md: 3, sm: 12 },
             },
             {
               title: 'Nomor Telepon',
-              value: this.$getDeepObj(item, '') || '-',
+              value: this.$getDeepObj(item, 'instansi.data.no_telpon') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },
             {
               title: 'Kodepos',
-              value: this.$getDeepObj(item, '') || '-',
+              value: this.$getDeepObj(item, 'kodepos') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },
           ],
           tambahan: [
             {
               title: 'Penanggung Jawab',
-              value: this.$getDeepObj(item, '') || '-',
+              value:
+                (this.$getDeepObj(item, 'nama_penanggung_jawab') || '-') +
+                '<br/>' +
+                (this.$getDeepObj(item, 'telp_penanggung_jawab') || '-'),
               grid: { cols: 12, md: 12, sm: 12 },
             },
             {
               title: 'Sekertaris',
-              value: this.$getDeepObj(item, '') || '-',
+              value:
+                (this.$getDeepObj(item, 'nama_sekretaris') || '-') +
+                '<br/>' +
+                (this.$getDeepObj(item, 'telp_sekretaris') || '-'),
               grid: { cols: 12, md: 12, sm: 12 },
             },
             {
               title: 'Bendahara',
-              value: this.$getDeepObj(item, 'instansi_alamat') || '-',
+              value:
+                (this.$getDeepObj(item, 'nama_bendahara') || '-') +
+                ' <br/>' +
+                (this.$getDeepObj(item, 'telp_bendahara') || '-'),
               grid: { cols: 12, md: 12, sm: 12 },
             },
           ],

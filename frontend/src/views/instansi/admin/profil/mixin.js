@@ -143,53 +143,65 @@ export default {
           {
             title: 'Akta Pendirian dan atau SK Oleh Pejabat Berwenang',
             pesan: `<i>* Diperioritaskan dari kemenkumham</i>`,
-            valid: false,
-            type: 'akta-lembaga',
+            valid: !!mBerkas['1'],
+            type: 'pendirian',
             withAction: withAction,
+            value: mBerkas['1'] || {},
             kBerkas: 1,
           },
           {
             title: 'Foto Lembaga Pelatihan',
             pesan: ``,
-            valid: false,
-            type: 'ktp',
+            valid: !!mBerkas['1'],
+            type: 'profillembaga',
             withAction: withAction,
+            value: mBerkas['2'] || {},
+            kBerkas: 2,
           },
           {
             title: 'Foto Kartu NPWP Atas Nama Lembaga',
             pesan: ``,
-            valid: false,
+            valid: !!mBerkas['3'],
             type: 'npwp',
             withAction: withAction,
+            value: mBerkas['3'] || {},
+            kBerkas: 3,
           },
           {
             title: 'SK Lembaga Pelatihan Yang Terakreditasi',
             pesan: `<i>* Khusus Perguruan Tinggi</i>`,
-            valid: false,
-            type: 'ijasah',
+            valid: !!mBerkas['4'],
+            type: 'skpelatihan',
             withAction: withAction,
-            kBerkas: 3,
+            value: mBerkas['4'] || {},
+            kBerkas: 4,
           },
           {
             title: 'SK Kepengurusan Masih Berlaku',
             pesan: ``,
-            valid: false,
-            type: 'diklat',
+            valid: !!mBerkas['5'],
+            type: 'skpengurusan',
             withAction: withAction,
+            value: mBerkas['5'] || {},
+            kBerkas: 5,
           },
           {
             title: 'Pakta Integritas',
             pesan: ``,
-            valid: false,
-            type: 'sertifikat',
+            valid: !!mBerkas['6'],
+            type: 'integritas',
             withAction: withAction,
+            value: mBerkas['6'] || {},
+            kBerkas: 6,
           },
           {
             title: 'Foto Rekening Atas Nama Lembaga Pada Halaman Nomor Rekening',
             pesan: ``,
-            valid: false,
-            type: 'sertifikat',
+            valid: !!mBerkas['7'],
+            type: 'bukurekening',
             withAction: withAction,
+            value: mBerkas['7'] || {},
+            kBerkas: 7,
           },
         ],
       };
@@ -205,9 +217,14 @@ export default {
         fungsi: { format: 'PDF', required: true },
         pelatihan: { format: 'PDF', required: true },
         ktp: { format: 'PDF', required: true },
-        npwp: { format: 'PDF', required: true },
+        npwp: { format: 'JPEG/JPG/PNG', required: true },
         ijasah: { format: 'PDF', required: true },
         sertifikat: { format: 'PDF', required: true },
+        pendirian: { format: 'PDF', required: true },
+        profillembaga: { format: 'JPEG/JPG/PNG', required: true },
+        skpelatihan: { format: 'PDF', required: true },
+        skpengurusan: { format: 'PDF', required: true },
+        bukurekening: { format: 'JPEG/JPG/PNG', required: true },
       };
 
       this.action = 'upload';
@@ -237,7 +254,11 @@ export default {
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
-        this.$set(this.formulir, 'init', Object.assign({}, this.detail, this.detail?.akun?.data));
+        this.$set(
+          this.formulir,
+          'init',
+          Object.assign({}, this.detail, this.detail?.akun?.data, this.detail?.instansi.data)
+        );
       });
     },
 
