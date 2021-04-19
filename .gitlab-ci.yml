@@ -85,6 +85,7 @@ build-backend:
       REMOTE=`git remote`
       SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
 
+      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
       docker-compose -f .gitlab/build/docker-compose.yml run --rm \
         --user `id -u`:`id -g` \
         --volume $HOME/.runner-home:/home \
@@ -184,6 +185,7 @@ deploy-devel:
       REMOTE=`git remote`
       SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
 
+      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
       docker-compose -f .gitlab/build/docker-compose.yml run --rm \
         --user `id -u`:`id -g` \
         --volume $HOME/.runner-home:/home \
@@ -248,6 +250,7 @@ deploy-demo:
       REMOTE=`git remote`
       SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
 
+      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
       docker-compose -f .gitlab/build/docker-compose.yml run --rm \
         --user `id -u`:`id -g` \
         --volume $HOME/.runner-home:/home \
@@ -398,6 +401,7 @@ deploy-real:
       REMOTE=`git remote`
       SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
 
+      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
       docker-compose -f .gitlab/build/docker-compose.yml run --rm \
       --user `id -u`:`id -g` \
       --volume $HOME/.runner-home:/home \
