@@ -107,6 +107,10 @@ class LpdService
             ->where('instansi_id', '=', $instansi->instansi_id)
             ->where('k_group', MGroup::OP_LPD_DIKLAT_PAUD)->first();
 
+        if(!$operator) {
+            throw new FlowException('Operator tidak terdaftar di instansi '.$instansi->nama);
+        }
+
         return $operator;
     }
 
