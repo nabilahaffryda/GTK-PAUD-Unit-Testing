@@ -390,7 +390,7 @@ export default {
   },
   methods: {
     reset() {
-      this.$set(this, 'diklats', [{ name: '', tahun: '' }]);
+      this.$set(this, 'diklats', []);
       this.$set(this, 'form', {});
       this.$set(this, 'photo', '');
       this.$set(this, 'objFoto', null);
@@ -411,6 +411,14 @@ export default {
         }
       }
       this.id = (value && value.paud_admin_id) || '';
+      if (value?.pengalaman?.length) {
+        const pengalaman = [...value.pengalaman];
+        pengalaman.forEach((key) => {
+          this.diklats.push({ nama: key.nama, tahun: key.tahun });
+        });
+      } else {
+        this.$set(this, 'diklats', [{ nama: '', tahun: '' }]);
+      }
     },
 
     onAdd(index) {

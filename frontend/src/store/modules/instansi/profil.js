@@ -31,7 +31,7 @@ export const actions = {
   },
   setBerkas({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/${payload.jenis}/profil/${payload.id}/berkas/update`;
+    const url = `/i/${id}/${payload.jenis}/profil/${payload.id}/berkas/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 };

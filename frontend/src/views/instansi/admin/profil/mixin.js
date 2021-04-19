@@ -61,6 +61,7 @@ export default {
 
     berkases() {
       const mBerkas = this.$arrToObj(this.berkas, 'k_berkas_pengajar_paud');
+      const withAction = this.$allow(`${this.jenis}-profil-berkas.create`);
       return {
         pengajar: [
           {
@@ -68,7 +69,7 @@ export default {
             pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
             valid: !!mBerkas['1'],
             type: 'integritas',
-            withAction: true,
+            withAction: withAction,
             kBerkas: 1,
             value: mBerkas['1'] || {},
           },
@@ -77,7 +78,7 @@ export default {
             pesan: ``,
             valid: !!mBerkas['4'],
             type: 'fungsi',
-            withAction: true,
+            withAction: withAction,
             kBerkas: 4,
             value: mBerkas['4'] || {},
           },
@@ -86,7 +87,7 @@ export default {
             pesan: ``,
             valid: !!mBerkas['5'],
             type: 'pelatihan',
-            withAction: true,
+            withAction: withAction,
             kBerkas: 5,
             value: mBerkas['5'] || {},
           },
@@ -97,7 +98,7 @@ export default {
             pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
             valid: true,
             type: 'integritas',
-            withAction: true,
+            withAction: withAction,
             kBerkas: 1,
           },
           {
@@ -105,21 +106,21 @@ export default {
             pesan: ``,
             valid: true,
             type: 'ktp',
-            withAction: true,
+            withAction: withAction,
           },
           {
             title: 'Nomor Pokok Wajib Pajak (NPWP)',
             pesan: ``,
             valid: true,
             type: 'npwp',
-            withAction: true,
+            withAction: withAction,
           },
           {
             title: 'Ijasah Terakhir',
             pesan: ``,
             valid: true,
             type: 'ijasah',
-            withAction: true,
+            withAction: withAction,
             kBerkas: 3,
           },
           {
@@ -127,14 +128,14 @@ export default {
             pesan: ``,
             valid: true,
             type: 'diklat',
-            withAction: true,
+            withAction: withAction,
           },
           {
             title: 'Sertifikat Diklat PAUD',
             pesan: `<i>*3 Pelatihan PAUD TERAKHIR</i>`,
             valid: true,
             type: 'sertifikat',
-            withAction: true,
+            withAction: withAction,
           },
         ],
       };

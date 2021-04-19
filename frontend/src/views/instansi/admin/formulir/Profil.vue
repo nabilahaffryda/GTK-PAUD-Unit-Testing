@@ -9,7 +9,7 @@
         </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn depressed @click="$emit('edit')">
+      <v-btn v-if="$allow(`${jenis}-profil.update`)" depressed @click="$emit('edit')">
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
     </v-toolbar>
@@ -32,6 +32,27 @@
               </v-col>
             </v-row>
           </v-col>
+          <!-- Sheet Diklat -->
+          <v-col cols="12" md="6" sm="12">
+            <div class="text-h6 my-3 font-weight-bold"> Data Diklat </div>
+            <div class="grey--text">Pengalaman Melatih 2 Tahun Terakhir</div>
+            <v-list three-line>
+              <template v-for="(item, index) in $getDeepObj(detail, 'pengalaman')">
+                <v-list-item :key="index">
+                  <v-list-item-avatar tile>
+                    <v-avatar tile color="secondary">
+                      <span class="white--text">{{ index + 1 }}</span>
+                    </v-avatar>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <v-list-item-title v-html="item.nama"></v-list-item-title>
+                    <v-list-item-subtitle v-html="item.tahun"></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -48,6 +69,10 @@ export default {
     masters: {
       type: Object,
       default: () => {},
+    },
+    jenis: {
+      type: String,
+      default: 'pengajar',
     },
   },
   components: { BasePhotoProfil },
@@ -75,13 +100,13 @@ export default {
             title: 'Pendidikan Terakhir',
             value:
               (this.$getDeepObj(this, `masters.m_kualifikasi.${this.$getDeepObj(item, 'k_kualifikasi')}`) || '-') +
-              '-' +
+              ' - ' +
               (this.$getDeepObj(item, 'lulusan') || '-'),
             grid: { cols: 12, md: 3, sm: 12 },
           },
           {
             title: 'Prodi',
-            value: this.$getDeepObj(item, 'akun.data.prodi') || '-',
+            value: this.$getDeepObj(item, 'prodi') || '-',
             grid: { cols: 12, md: 3, sm: 12 },
           },
           {
@@ -114,7 +139,7 @@ export default {
           },
           {
             title: 'Keikutsertaan PCP',
-            value: this.$getDeepObj(item, 'akun.data.m_pcp_paud.keterangan') || '-',
+            value: this.$getDeepObj(item, 'm_pcp_paud.data.keterangan') || '-',
             grid: { cols: 12, md: 6, sm: 12 },
           },
         ],

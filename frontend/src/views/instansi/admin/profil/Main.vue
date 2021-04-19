@@ -62,7 +62,13 @@
             <!--ajuan button-->
             <template>
               <div>
-                <v-btn depressed color="success" class="mt-2" :disabled="!isLengkap">
+                <v-btn
+                  v-if="detail && detail.is_tambahan"
+                  depressed
+                  color="success"
+                  class="mt-2"
+                  :disabled="!isLengkap"
+                >
                   Kirim Berkas
                 </v-btn>
               </div>
@@ -78,6 +84,7 @@
         :berkases="berkases[jenis]"
         :detail="detail"
         :masters="masters"
+        :jenis="jenis"
         @upload="upload"
         @edit="edit"
       />

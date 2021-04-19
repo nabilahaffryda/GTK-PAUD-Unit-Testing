@@ -54,6 +54,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    jenis: {
+      type: String,
+      default: 'pengajar'
+    }
   },
   components: { Berkas, Profil },
   data() {
