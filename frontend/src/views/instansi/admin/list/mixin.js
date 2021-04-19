@@ -235,5 +235,42 @@ export default {
         },
       ];
     },
+
+    onUpload() {
+      this.$refs.uploader.open();
+    },
+
+    uploadSave(data) {
+      const formData = new FormData();
+      for (let obj in data) {
+        formData.append(obj, data[obj]);
+      }
+
+      const params = {
+        params: formData,
+      };
+
+      this.upload(params)
+        .then(({ data }) => {
+          if (data && data.errors) {
+            const error = Object.values(data.errors) || [];
+            this.$refs.uploader.step = 1;
+            this.$refs.uploader.errorFile.push(...error);
+            return;
+          }
+
+          this.$refs.uploader.step = 1;
+          this.fetchData();
+        })
+        .catch(() => {
+          this.$error('Terdapat kesalahan saat mengunggah berkas, silakan periksa berkas Anda kemudian coba kembali!');
+        });
+    },
+
+    unduhTemplate() {
+      this.templateUpload().then((url) => {
+        this.$downloadFile(process.env.VUE_APP_API_URL + '/' + url);
+      });
+    },
   },
 };
