@@ -240,4 +240,31 @@ class LpdService
 
         return $paudInstansi;
     }
+
+    public function indexAjuan(array $params)
+    {
+        $query = $this->query($params);
+
+        if ($kVervalPaud = Arr::get($params, 'k_verval_paud')) {
+            $query->where('k_verval_paud', $kVervalPaud);
+        }
+
+        return $query;
+    }
+
+    public function vervalUpdate(Akun $akun, PaudInstansi $paudInstansi, array $params)
+    {
+        if ($paudInstansi->akun_id_verval <> $akun->akun_id) {
+            throw new FlowException("Anda tidak berhak melakukan verifikasi");
+        }
+
+        $paudInstansi->k_verval_paud = $params['k_verval_paud'];
+        $paudInstansi->wkt_verval    = Carbon::now();
+
+        if (!$paudInstansi->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $paudInstansi;
+    }
 }
