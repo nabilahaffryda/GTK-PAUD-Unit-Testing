@@ -91,11 +91,16 @@
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content>
-                          <span class="caption">Status</span>
+                          <span class="caption">Alamat</span>
                           <div>
-                            <v-chip small dark :color="Number($getDeepObj(item, 'is_aktif')) === 1 ? 'success' : 'red'">
-                              {{ Number($getDeepObj(item, 'is_aktif')) === 1 ? 'Aktif' : 'Tidak Aktif' }}
-                            </v-chip>
+                            {{ $getDeepObj(item, 'instansi.data.alamat') || '-' }}
+                            <br />
+                            {{
+                              [
+                                $getDeepObj(item, 'instansi.data.m_kota.data.keterangan') || '-',
+                                $getDeepObj(item, 'instansi.data.m_propinsi.data.keterangan') || '-',
+                              ].join(' - ')
+                            }}
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -151,27 +156,37 @@ export default {
       masters: (state) => Object.assign({}, state.masters),
     }),
 
+    configs() {
+      const M_PROPINSI = this.masters.m_propinsi || {};
+      const M_KOTA = this.masters.m_kota || {};
+      return {
+        selector: ['k_propinsi', 'k_kota'],
+        required: [false, false],
+        label: ['Provinsi', 'Kota/Kabupaten'],
+        options: [M_PROPINSI, M_KOTA],
+        grid: [{ cols: 12 }, { cols: 12 }],
+        disabled: [],
+      };
+    },
+
     formFilter() {
       return [
         {
-          label: 'Pilih Grup Admin',
+          label: 'Lokasi',
           default: true,
-          type: 'checkbox',
-          model: 'k_group',
-          master: this.$mapForMaster(this.groups),
+          type: 'cascade',
+          configs: this.configs,
+          labelColor: 'secondary',
+          grid: { cols: 12, md: 6 },
         },
       ];
     },
 
-    filtered() {
-      const filters = this.filters.k_group || [];
-
-      let label = [];
-      for (let key in filters) {
-        let value = filters[key];
-        label.push(this.$getDeepObj(this.groups, `${value}`));
-      }
-      return label;
+    filtersMaster() {
+      return {
+        k_propinsi: this.masters && this.masters.m_propinsi,
+        k_kota: this.masters && this.masters.m_kota,
+      };
     },
   },
   created() {

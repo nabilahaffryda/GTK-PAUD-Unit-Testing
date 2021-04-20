@@ -175,6 +175,7 @@ import Akun from '@components/cetak/Akun';
 import PopupUpload from '@components/popup/Upload';
 import mixin from './mixin';
 import list from '@mixins/list';
+import { M_AKTIF } from '@utils/master';
 export default {
   name: 'ListAdmin',
   props: {
@@ -222,27 +223,30 @@ export default {
   computed: {
     ...mapState('master', ['masters']),
 
+    mAktif() {
+      let temp = {};
+      for (const item of M_AKTIF) {
+        temp[item.value] = item.text;
+      }
+      return temp;
+    },
+
     formFilter() {
       return [
         {
-          label: 'Pilih Grup Admin',
+          label: 'Pilih Status',
           default: true,
           type: 'checkbox',
-          model: 'k_group',
-          master: this.$mapForMaster(this.groups),
+          model: 'is_aktif',
+          master: M_AKTIF,
         },
       ];
     },
 
-    filtered() {
-      const filters = this.filters.k_group || [];
-
-      let label = [];
-      for (let key in filters) {
-        let value = filters[key];
-        label.push(this.$getDeepObj(this.groups, `${value}`));
-      }
-      return label;
+    filtersMaster() {
+      return {
+        is_aktif: this.mAktif,
+      };
     },
 
     kGroup() {
