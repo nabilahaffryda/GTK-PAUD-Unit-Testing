@@ -12,6 +12,7 @@ use App\Models\PaudPengajar;
 use App\Models\PaudPengajarBerkas;
 use App\Services\AkunService;
 use Arr;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -99,6 +100,19 @@ class PengajarService
         if (!$pengajar->is_tambahan) {
             throw new FlowException("Peran anda bukan sebagai pengajar tambahan");
         }
+    }
+
+    public function index(array $params)
+    {
+        $query = PaudPengajar::query()
+            ->where('is_tambahan', '=', 1)
+            ->with('akun');
+
+        if ($angkatan = Arr::get($params, 'angkatan')) {
+            $query->where('angkatan', '=', $angkatan);
+        }
+
+        return $query;
     }
 
     public function fetch(PaudPengajar $pengajar)
