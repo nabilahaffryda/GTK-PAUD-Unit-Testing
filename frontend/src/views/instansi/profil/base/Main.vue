@@ -114,18 +114,12 @@ import FormProfil from '../formulir/FormProfil';
 export default {
   mixins: [mixin],
   components: { Daftar, FormUnggah, FormProfil },
-  props: {
-    jenis: {
-      type: String,
-      default: '',
+  computed: {
+    jenis() {
+      return this.$route.meta.tipe;
     },
-    title: {
-      type: String,
-      default: '',
-    },
-    desc: {
-      type: String,
-      default: '',
+    title() {
+      return this.$route.meta.title;
     },
   },
   created() {

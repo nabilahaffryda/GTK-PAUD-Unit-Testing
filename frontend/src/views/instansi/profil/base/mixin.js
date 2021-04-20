@@ -265,7 +265,11 @@ export default {
         this.$set(
           this.formulir,
           'init',
-          Object.assign({}, this.detail, this.detail?.akun?.data, this.detail?.instansi.data)
+          Object.assign(
+            this.detail,
+            this.$getDeepObj(this, 'detail.akun.data') || {},
+            this.$getDeepObj(this, 'detail.instansi.data') || {}
+          )
         );
       });
     },

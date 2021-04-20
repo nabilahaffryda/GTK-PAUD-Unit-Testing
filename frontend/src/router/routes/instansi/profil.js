@@ -3,7 +3,7 @@ export default [
   {
     path: '/i/:id(\\d+)/profil/pengajar',
     name: 'profil-pengajar',
-    component: () => lazyLoadView(import('@views/instansi/profil/pengajar/Index')),
+    component: () => lazyLoadView(import('@views/instansi/profil/base/Main')),
     meta: {
       title: 'Profil Pengajar',
       k_group: '174',
@@ -13,16 +13,16 @@ export default [
   {
     path: '/i/:id(\\d+)/profil/bimtek',
     name: 'profil-bimtek',
-    component: () => lazyLoadView(import('@views/instansi/profil/bimtek/Index')),
+    component: () => lazyLoadView(import('@views/instansi/profil/base/Main')),
     meta: {
       title: 'Profil Pengajar BIMTEK',
-      tipe: 'pengajar-bimtek',
+      tipe: 'bimtek',
     },
   },
   {
     path: '/i/:id(\\d+)/profil/operator',
     name: 'profil-operator',
-    component: () => lazyLoadView(import('@views/instansi/profil/operator/Index')),
+    component: () => lazyLoadView(import('@views/instansi/profil/base/Main')),
     meta: {
       title: 'Profil Lembaga LPD',
       tipe: 'lpd',
