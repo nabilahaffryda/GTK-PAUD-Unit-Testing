@@ -5,7 +5,9 @@ namespace App\Exceptions;
 use CloudCreativity\LaravelJsonApi\Exceptions\HandlesErrors;
 use DB;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Neomerx\JsonApi\Exceptions\JsonApiException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -34,6 +36,25 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+    protected function renderError(FlowException|SaveException $e)
+    {
+        return new JsonResponse(
+            config('app.debug') ? [
+                'message'   => $e->getMessage(),
+                'exception' => get_class($e),
+                'file'      => $e->getFile(),
+                'line'      => $e->getLine(),
+                'trace'     => collect($e->getTrace())->map(function ($trace) {
+                    return Arr::except($trace, ['args']);
+                })->all(),
+            ] : [
+                'message' => $e->getMessage(),
+            ],
+            520,
+            options: JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+        );
+    }
+
     /**
      * Register the exception handling callbacks for the application.
      *
@@ -41,7 +62,21 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        $this->renderable(function (FlowException $e, $request) {
+            if (!$request->expectsJson()) {
+                return $this->prepareResponse($request, $e);
+            }
 
+            return $this->renderError($e);
+        });
+
+        $this->renderable(function (SaveException $e, $request) {
+            if (!$request->expectsJson()) {
+                return $this->prepareResponse($request, $e);
+            }
+
+            return $this->renderError($e);
+        });
     }
 
     /**
