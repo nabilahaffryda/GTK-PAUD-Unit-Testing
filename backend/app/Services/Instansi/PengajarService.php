@@ -77,7 +77,7 @@ class PengajarService
             && $pengajar->k_kualifikasi
             && $pengajar->pengalaman && is_array($pengajar->pengalaman) && count($pengajar->pengalaman) >= 1;
 
-        $isLengkap2 = $pengajar->paudPengajarBerkases()->count() == 5;
+        $isLengkap2 = $pengajar->paudPengajarBerkases()->count() == 4;
 
         return [
             'profil' => $isLengkap1,
