@@ -44,7 +44,7 @@ export default {
         profil: {
           component: 'Profil',
           form: 'FormProfil',
-          title: 'Profil Pengajar',
+          title: this.$route.meta.title,
           deskripsi: '',
           max: 10,
           optional: true,
@@ -217,7 +217,7 @@ export default {
   },
   methods: {
     ...mapActions('master', ['getMasters']),
-    ...mapActions('profil', ['fetch', 'update', 'getBerkas', 'setBerkas']),
+    ...mapActions('profil', ['fetch', 'update', 'getBerkas', 'setBerkas', 'ajuan', 'batalAjuan']),
 
     upload(type) {
       const rules = {
@@ -391,6 +391,29 @@ export default {
 
     onReload() {
       this.fetchProfil();
+    },
+
+    onAjuan() {
+      this.$confirm('<p>Anda yakin ingin ajukan verval diatas?</p>', 'Ajuan Verval', {
+        tipe: 'info',
+        data: '',
+      }).then(() => {
+        this.ajuan({ jenis: this.jenis, id: this.id }).then(() => {
+          this.$success('Berkas Berhasil Diajukan');
+          this.fetchProfil();
+        });
+      });
+    },
+
+    onBatalAjuan() {
+      this.$confirm(`<h3>Anda yakin ingin membatalkan Ajuan Verval?</h3>`, `Batal Ajuan Verval`, {
+        tipe: 'error',
+      }).then(() => {
+        this.batalAjuan({ jenis: this.jenis, id: this.id }).then(() => {
+          this.$success('Ajuan Berhasil Dibatalkan');
+          this.fetchProfil();
+        });
+      });
     },
   },
 };

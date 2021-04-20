@@ -7,10 +7,15 @@
           <v-col cols="10" class="pa-5" style="background-color: white">
             <h1 class="headline info--text">
               <v-row dense>
-                <v-col cols="12" md="8" sm="8"> Selamat Datang, <strong>Nama Pengajar</strong> </v-col>
+                <v-col cols="12" md="8" sm="8">
+                  Selamat Datang,
+                  <strong>
+                    {{ $getDeepObj(detail, 'akun.data.nama') || $getDeepObj(detail, 'instansi.data.nama') || '' }}
+                  </strong>
+                </v-col>
                 <v-col cols="12" md="4" sm="4" class="text-right right-aligned">
                   <v-chip class="caption" color="error" dark>
-                    {{ $titleCase(jenis) }}
+                    {{ $titleCase(jenis === 'lpd' ? 'Lembaga' : jenis) }}
                   </v-chip>
                 </v-col>
               </v-row>
@@ -63,14 +68,27 @@
             <template>
               <div>
                 <v-btn
-                  v-if="detail && detail.is_tambahan"
+                  v-if="$allow(`${jenis}-profil-ajuan.create`) && Number(detail && detail.k_verval_paud) === 1"
                   depressed
                   color="success"
                   class="mt-2"
+                  @click="onAjuan"
                   :disabled="!isLengkap"
                 >
                   Kirim Berkas
                 </v-btn>
+                <v-btn class="my-1" v-else-if="Number(detail && detail.k_verval_paud) > 1" outlined color="success"
+                  >Berkas Terkirim</v-btn
+                >
+                <template v-if="Number(detail && detail.k_verval_paud) > 1 && $allow(`${jenis}-profil-ajuan.delete`)">
+                  <!-- is_kirim_ci -->
+                  <v-alert dense text type="info" class="mt-4">
+                    Anda sudah mengirimkan berkas Anda untuk diproses, Informasi lebih lanjut tentang pendaftaran akun
+                    kami kirimkan ke alamat surel Anda, Apabila Anda ingin membatalkan pengiriman berkas dan mengubah
+                    isian berkas Anda.<br />
+                    <a style="font-weight: bold; text-decoration: underline" @click="onBatalAjuan">klik disini</a>
+                  </v-alert>
+                </template>
               </div>
             </template>
           </v-col>

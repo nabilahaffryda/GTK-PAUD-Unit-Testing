@@ -78,7 +78,7 @@ export default {
   components: { BasePhotoProfil },
   computed: {
     diklats() {
-      return this.$getDeepObj(this.detail, 'pengalaman');
+      return this.$getDeepObj(this.detail, 'pengalaman') || this.$getDeepObj(this.detail, 'diklat') || [];
     },
 
     profils() {

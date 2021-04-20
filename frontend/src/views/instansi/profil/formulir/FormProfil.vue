@@ -588,8 +588,9 @@ export default {
         }
       }
       this.id = (value && value.paud_admin_id) || '';
-      if (value?.pengalaman?.length) {
-        const pengalaman = [...value.pengalaman];
+
+      if (value?.pengalaman?.length || value?.diklat?.length) {
+        const pengalaman = value.pengalaman || value.diklat;
         pengalaman.forEach((key) => {
           this.diklats.push({ nama: key.nama, tahun: key.tahun });
         });

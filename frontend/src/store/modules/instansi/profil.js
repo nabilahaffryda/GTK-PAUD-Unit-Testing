@@ -34,4 +34,14 @@ export const actions = {
     const url = `/i/${id}/${payload.jenis}/profil/${payload.id}/berkas/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
+  ajuan({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const url = `/i/${id}/${payload.jenis}/${payload.id}/ajuan/create`;
+    return http.post(url, payload.params).then(({ data }) => data);
+  },
+  batalAjuan({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const url = `/i/${id}/${payload.jenis}/${payload.id}/ajuan/delete`;
+    return http.post(url, payload.params).then(({ data }) => data);
+  },
 };
