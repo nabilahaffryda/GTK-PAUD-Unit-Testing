@@ -37,6 +37,6 @@ class PengajarController extends AkunController
 
     public function upload(Request $request)
     {
-        return $this->service->upload(akun(), instansi(), $request->file('file'));
+        return $this->service->upload(akun(), instansi(), $request->file('file'), $this->kGroup);
     }
 }

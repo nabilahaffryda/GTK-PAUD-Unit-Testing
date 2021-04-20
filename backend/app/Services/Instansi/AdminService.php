@@ -538,7 +538,7 @@ class AdminService
         throw new SaveException('Reset Password Gagal');
     }
 
-    public function upload(Akun $admin, Instansi $instansi, UploadedFile $file)
+    public function upload(Akun $admin, Instansi $instansi, UploadedFile $file, $kGroup)
     {
         $reader = ReaderEntityFactory::createXLSXReader();
         $reader->open($file->getRealPath());
@@ -582,14 +582,14 @@ class AdminService
                     'nama'      => trim($cells[2]),
                     'tmp_lahir' => trim($cells[3]),
                     'tgl_lahir' => $tglLahir,
-                    'k_group'   => MGroup::PENGAJAR_DIKLAT_PAUD,
+                    'k_group'   => $kGroup,
                 ];
 
                 $validator = \Validator::make($params, $rules);
                 if ($validator->fails()) {
                     $errors[$index] = "Baris $index: " . implode("; ", $validator->getMessageBag()->all());
                 } else {
-                    $batches[] = new CreateAkunPengajar($admin, $instansi, array_filter($params));
+                    $batches[] = new CreateAkunPengajar($admin, $instansi, array_filter($params), $kGroup);
                     $data[]    = $params;
 
                     $unique = $params['email'];
