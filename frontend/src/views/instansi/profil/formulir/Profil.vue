@@ -16,7 +16,7 @@
     <v-row class="my-5">
       <v-col cols="12" md="2" sm="12">
         <base-photo-profil
-          :photo="this.$getDeepObj(detail, 'akun.data.foto_url') || ''"
+          :photo="$getDeepObj(detail, 'akun.data.foto_url') || $getDeepObj(detail, 'instansi.data.foto_url') || ''"
           photodef="default_foto_gp.png"
           :useBase64="true"
         />
@@ -185,12 +185,12 @@ export default {
             },
             {
               title: 'Propinsi',
-              value: this.$getDeepObj(item, 'instansi.data.m_propinsi.keterangan') || '-',
+              value: this.$getDeepObj(item, 'instansi.data.m_propinsi.data.keterangan') || '-',
               grid: { cols: 12, md: 3, sm: 12 },
             },
             {
               title: 'Kabupaten/Kota',
-              value: this.$getDeepObj(item, 'instansi.data.m_kota.keterangan') || '-',
+              value: this.$getDeepObj(item, 'instansi.data.m_kota.data.keterangan') || '-',
               grid: { cols: 12, md: 3, sm: 12 },
             },
             {
