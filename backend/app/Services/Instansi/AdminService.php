@@ -4,7 +4,7 @@ namespace App\Services\Instansi;
 
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
-use App\Jobs\CreateAkunPengajar;
+use App\Jobs\CreateAkun;
 use App\Models\Akun;
 use App\Models\AkunInstansi;
 use App\Models\Instansi;
@@ -589,7 +589,7 @@ class AdminService
                 if ($validator->fails()) {
                     $errors[$index] = "Baris $index: " . implode("; ", $validator->getMessageBag()->all());
                 } else {
-                    $batches[] = new CreateAkunPengajar($admin, $instansi, array_filter($params), $kGroup);
+                    $batches[] = new CreateAkun($admin, $instansi, array_filter($params), $kGroup);
                     $data[]    = $params;
 
                     $unique = $params['email'];

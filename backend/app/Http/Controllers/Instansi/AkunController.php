@@ -114,6 +114,16 @@ class AkunController extends Controller
         return BaseResource::make($paudAdmin);
     }
 
+    public function template()
+    {
+        return response()->file(resource_path('xlsx/akun-template.xlsx'));
+    }
+
+    public function upload(Request $request)
+    {
+        return $this->service->upload(akun(), instansi(), $request->file('file'), $this->kGroup);
+    }
+
     /**
      * @param PaudAdmin $paudAdmin
      * @return BaseResource

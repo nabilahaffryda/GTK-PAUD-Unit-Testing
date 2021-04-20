@@ -15,7 +15,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class CreateAkunPengajar implements ShouldQueue
+class CreateAkun implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -39,9 +39,13 @@ class CreateAkunPengajar implements ShouldQueue
         }
 
         $paudAdmin = app(AdminService::class)->create($this->instansi, $this->data);
-        app(PengajarService::class)->create($paudAdmin, [
-            'k_verval_paud' => MVervalPaud::DISETUJUI,
-            'is_tambahan'   => $this->kGroup == MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD ? 1 : 0,
-        ]);
+
+        if (in_array($this->kGroup, [MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD, MGroup::PENGAJAR_DIKLAT_PAUD])) {
+            app(PengajarService::class)->create($paudAdmin, [
+                'k_verval_paud' => MVervalPaud::DISETUJUI,
+                'is_tambahan'   => $this->kGroup == MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD ? 1 : 0,
+            ]);
+        }
+
     }
 }
