@@ -1,7 +1,7 @@
 <template>
   <list-admin
-    jenis="pengajar"
-    akses="pengajar-tambahan"
+    jenis="pembimbing-praktik"
+    akses="pembimbing-praktik"
     title="Akun Pembimbing Praktik"
     desc="Lorem Ipsum"
     :actions="actions"

@@ -22,7 +22,7 @@
             </v-radio>
           </v-alert>
           <v-alert text outlined dense color="secondary">
-            <v-radio value="excel" :disabled="!$allow(`akun-${jenis}.upload`)">
+            <v-radio value="excel">
               <template v-slot:label>
                 <div class="pa-4">
                   <div class="font-weight-bold">Tambah Pengajar Mengunakan Excel</div>

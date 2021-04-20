@@ -145,7 +145,7 @@
         :instansis="instansis"
         :masters="masters"
         :jenis="jenis"
-        :useUpload="jenis === 'pengajar'"
+        :useUpload="$allow(`akun-${akses}.upload`)"
         @check="onCheck"
         @onValidate="onValidate"
         @onStep="
