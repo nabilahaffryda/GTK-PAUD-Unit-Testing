@@ -79,7 +79,10 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::group(['prefix' => 'akun/pengajar-bimtek'], function () {
         Route::get('', [PengajarBimtekController::class, 'index']);
         Route::get('download', [PengajarBimtekController::class, 'download']);
+        Route::get('download-aktivasi', [PengajarBimtekController::class, 'downloadAktivasi']);
+        Route::get('template', [PengajarBimtekController::class, 'template']);
         Route::post('create', [PengajarBimtekController::class, 'create']);
+        Route::post('upload', [PengajarBimtekController::class, 'upload']);
         Route::get('{paudAdmin}', [PengajarBimtekController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [PengajarBimtekController::class, 'update']);
         Route::post('{paudAdmin}/delete', [PengajarBimtekController::class, 'delete']);
