@@ -151,7 +151,8 @@ deploy-devel:
     STAGE: devel
     VERSION: $CI_COMMIT_SHORT_SHA
     HUB: $DEVEL_HUB
-    DOMAIN: $DEVEL_DOMAIN
+    DOMAIN: $DEVEL_DOMAIN_BACKEND
+    DOMAIN_FRONTEND: $DEVEL_DOMAIN
     MEMCACHED: $DEVEL_MEMCACHED
 
   script:
@@ -177,8 +178,7 @@ deploy-devel:
     - ssh-add -t 600 <(echo "$DEVEL_SERVER_KEY")
 
     # update service
-    - VARS="VERSION HUB STAGE DOMAIN"
-
+    - VARS="VERSION HUB STAGE DOMAIN DOMAIN_FRONTEND"
     - deploy_image "$DEVEL_SERVER" "$VARS" $CI_PROJECT_PATH_SLUG .gitlab/docker-compose.deploy.yml
 
     - |
@@ -216,7 +216,8 @@ deploy-demo:
     STAGE: demo
     VERSION: $CI_COMMIT_SHORT_SHA
     HUB: $DEMO_HUB
-    DOMAIN: $DEMO_DOMAIN
+    DOMAIN: $DEMO_DOMAIN_BACKEND
+    DOMAIN_FRONTEND: $DEMO_DOMAIN
     MEMCACHED: $DEMO_MEMCACHED
 
   script:
@@ -242,8 +243,7 @@ deploy-demo:
     - ssh-add -t 600 <(echo "$DEMO_SERVER_KEY")
 
     # update service
-    - VARS="VERSION HUB STAGE DOMAIN"
-
+    - VARS="VERSION HUB STAGE DOMAIN DOMAIN_FRONTEND"
     - deploy_image "$DEMO_SERVER" "$VARS" $CI_PROJECT_PATH_SLUG .gitlab/docker-compose.deploy.yml
 
     - |
