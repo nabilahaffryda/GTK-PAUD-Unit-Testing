@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
 
         Route::get('{paudInstansi}', [LpdController::class, 'fetch']);
         Route::post('{paudInstansi}/ajuan/create', [Lpd\Profil\AjuanController::class, 'create']);
+        Route::post('{paudInstansi}/ajuan/delete', [Lpd\Profil\AjuanController::class, 'delete']);
 
         Route::get('verval', [Lpd\VervalController::class, 'index']);
         Route::post('verval/{paudInstansi}', [Lpd\VervalController::class, 'update']);

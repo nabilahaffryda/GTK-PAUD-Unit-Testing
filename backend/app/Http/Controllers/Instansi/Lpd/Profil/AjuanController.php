@@ -17,4 +17,9 @@ class AjuanController extends Controller
     {
         return BaseResource::make($this->service->ajuanCreate($paudInstansi));
     }
+
+    public function delete(PaudInstansi $paudInstansi)
+    {
+        return BaseResource::make($this->service->ajuanDelete($paudInstansi));
+    }
 }

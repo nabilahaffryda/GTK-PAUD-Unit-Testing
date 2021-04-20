@@ -242,6 +242,27 @@ class LpdService
         return $paudInstansi;
     }
 
+    private function validateBatalAjuan(PaudInstansi $paudInstansi)
+    {
+        if ($paudInstansi->k_verval_paud > MVervalPaud::DIAJUKAN) {
+            throw new FlowException('Ajuan sedang dalam proses verifikasi');
+        }
+    }
+
+    public function ajuanDelete(PaudInstansi $paudInstansi)
+    {
+        $this->validateBatalAjuan($paudInstansi);
+
+        $paudInstansi->wkt_ajuan     = Carbon::now();
+        $paudInstansi->k_verval_paud = MVervalPaud::KANDIDAT;
+
+        if (!$paudInstansi->save()) {
+            throw new FlowException('Proses ajuan tidak berhasil');
+        }
+
+        return $paudInstansi;
+    }
+
     public function indexAjuan(array $params)
     {
         $query = $this->query($params);
