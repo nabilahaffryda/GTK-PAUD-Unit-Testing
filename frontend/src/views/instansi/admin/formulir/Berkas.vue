@@ -31,7 +31,14 @@
                 <v-btn depressed :disabled="!valid" small @click="onDetil(berkas)" color="blue-grey lighten-5">
                   <v-icon>mdi-eye</v-icon>
                 </v-btn>
-                <v-btn class="ml-md-1" :disabled="!valid" depressed small @click="onView(type)" color="blue-grey lighten-5">
+                <v-btn
+                  class="ml-md-1"
+                  :disabled="!valid"
+                  depressed
+                  small
+                  @click="onView(type)"
+                  color="blue-grey lighten-5"
+                >
                   <v-icon>mdi-download</v-icon>
                 </v-btn>
               </v-col>
