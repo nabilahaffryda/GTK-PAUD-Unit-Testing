@@ -296,4 +296,21 @@ class PengajarService
             // static::deleteBerkas($oldFile);
         }
     }
+
+    public function vervalUpdate(Akun $akun, PaudPengajar $pengajar, array $params)
+    {
+
+        if ($pengajar->akun_id_verval <> $akun->akun_id) {
+            throw new FlowException("Anda tidak berhak melakukan verifikasi");
+        }
+
+        $pengajar->k_verval_paud = $params['k_verval_paud'];
+        $pengajar->wkt_verval    = Carbon::now();
+
+        if (!$pengajar->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $pengajar;
+    }
 }
