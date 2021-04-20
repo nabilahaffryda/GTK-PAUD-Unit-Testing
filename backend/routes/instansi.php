@@ -45,9 +45,11 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
 
     Route::group(['prefix' => 'verval'], function () {
         Route::get('lpd', [Lpd\VervalController::class, 'index']);
+        Route::get('lpd/{paudInstansi}', [Lpd\VervalController::class, 'fetch']);
         Route::post('lpd/{paudInstansi}', [Lpd\VervalController::class, 'update']);
 
         Route::get('pengajar', [Pengajar\VervalController::class, 'index']);
+        Route::get('pengajar/{pengajar}', [Pengajar\VervalController::class, 'fetch']);
         Route::post('pengajar/{pengajar}', [Pengajar\VervalController::class, 'update']);
     });
 

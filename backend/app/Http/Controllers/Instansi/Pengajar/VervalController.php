@@ -26,4 +26,9 @@ class VervalController extends Controller
     {
         return BaseResource::make($this->service->vervalUpdate(akun(), $pengajar, $request->all()));
     }
+
+    public function fetch(PaudPengajar $pengajar)
+    {
+        return BaseResource::make($this->service->fetch($pengajar));
+    }
 }
