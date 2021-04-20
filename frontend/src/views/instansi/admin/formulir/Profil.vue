@@ -175,7 +175,7 @@ export default {
             },
             {
               title: 'Alamat Lembaga',
-              value: this.$getDeepObj(item, '') || '-',
+              value: this.$getDeepObj(item, 'instansi.data.alamat') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },
             {
