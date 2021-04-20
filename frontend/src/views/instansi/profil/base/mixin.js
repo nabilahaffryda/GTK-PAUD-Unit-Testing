@@ -160,7 +160,7 @@ export default {
           {
             title: 'Foto Lembaga Pelatihan',
             pesan: ``,
-            valid: !!mBerkas['1'],
+            valid: !!mBerkas['2'],
             type: 'profillembaga',
             withAction: withAction,
             value: mBerkas['2'] || {},
