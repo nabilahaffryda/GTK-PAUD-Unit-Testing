@@ -61,7 +61,7 @@ export default {
     },
 
     berkases() {
-      const mBerkas = this.$arrToObj(this.berkas, 'k_berkas_pengajar_paud');
+      const mBerkas = this.$arrToObj(this.berkas, `k_berkas_${this.jenis}_paud`);
       const withAction = this.$allow(`${this.jenis}-profil-berkas.create`);
       return {
         pengajar: [
