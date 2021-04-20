@@ -26,6 +26,6 @@ class BerkasController extends Controller
 
     public function create(PaudInstansi $paudInstansi, BerkasCreateRequest $request)
     {
-        return BaseResource::make($this->service->upload($paudInstansi, $request->k_berkas_lpd_paud, $request->file));
+        return BaseResource::make($this->service->upload($paudInstansi, $request->k_berkas, $request->file));
     }
 }
