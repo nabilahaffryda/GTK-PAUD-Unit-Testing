@@ -133,6 +133,7 @@ class AkunService
         return akun()
             ->akunInstansis()
             ->whereIn('k_group', $this->kGroups())
+            ->where('is_aktif', '1')
             ->whereInstansiId($instansi->instansi_id)
             ->get();
     }
