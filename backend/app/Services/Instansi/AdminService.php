@@ -4,6 +4,7 @@ namespace App\Services\Instansi;
 
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
+use App\Jobs\CreateAkunPengajar;
 use App\Models\Akun;
 use App\Models\AkunInstansi;
 use App\Models\Instansi;
@@ -11,10 +12,13 @@ use App\Models\MGroup;
 use App\Models\MJenisInstansi;
 use App\Models\MStatusEmail;
 use App\Models\PaudAdmin;
+use App\Models\Ptk;
 use App\Remotes\Paspor\User;
 use App\Services\AkunService;
 use Arr;
+use Box\Spout\Common\Entity\Row;
 use Box\Spout\Common\Exception\IOException;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Writer\Exception\WriterNotOpenedException;
@@ -24,6 +28,8 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 use Str;
 
 class AdminService
@@ -217,6 +223,73 @@ class AdminService
         return null;
     }
 
+    public function downloadAktivasi(Instansi $instansi, $params = [])
+    {
+        $q = $this->query($instansi, $params)
+            ->whereNotNull('akun.passwd');
+
+        if (Arr::get($params, 'format') == 'json') {
+            return $q->paginate(10);
+        }
+
+        $header = [
+            'NO',
+            'EMAIL',
+            'NAMA',
+            'JENIS KELAMIN',
+            'TEMPAT LAHIR',
+            'TANGGAL LAHIR',
+            'NIP',
+            'NOMOR TELEPON',
+            'NOMOR HP',
+            'PERAN',
+            'KODE AKTIVASI',
+        ];
+
+        $date     = Carbon::now()->format('dmYHi');
+        $filename = "Laporan-Aktivasi-Akun-{$date}.xlsx";
+
+        $defaultStyle = (new StyleBuilder())
+            ->setFontName('Calibri')
+            ->setFontSize(11)
+            ->setShouldWrapText(false)
+            ->build();
+        $headerStyle  = clone $defaultStyle;
+        $headerStyle->setFontBold();
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($filename);
+        $writer->setDefaultRowStyle($defaultStyle);
+
+        $writer->addRow(WriterEntityFactory::createRowFromArray($header, $headerStyle));
+
+        $i = 1;
+        $q->chunk(1000, function ($akunInstansis) use ($writer, &$i) {
+            foreach ($akunInstansis as $akunInstansi) {
+                /** @var AkunInstansi $akunInstansi */
+                $akun = $akunInstansi->akun;
+
+                $row = [
+                    $i++,
+                    $akun->email,
+                    $akun->nama,
+                    $akun->kelamin,
+                    $akun->tmp_lahir,
+                    $akun->tgl_lahir ? $akun->tgl_lahir->format('Y-m-d') : null,
+                    $akun->nip,
+                    $akun->no_telpon,
+                    $akun->no_hp,
+                    $akunInstansi->mGroup->keterangan,
+                    $akun->passwd,
+                ];
+
+                $writer->addRow(WriterEntityFactory::createRowFromArray($row));
+            }
+        });
+
+        $writer->close();
+    }
+
     /**
      * @param Instansi $instansi
      * @param array $params
@@ -228,6 +301,12 @@ class AdminService
     {
         if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD || !isset($params['instansi_id'])) {
             $params['instansi_id'] = $instansi->instansi_id;
+        }
+
+        if (Str::is("*@guruku.id", $params['email'])) {
+            if (!Ptk::whereEmail($params['email'])->whereIsAktif(1)->first()) {
+                throw new FlowException("Akun SIMPKB {$params['email']} tidak ditemukan");
+            }
         }
 
         /** @var Akun $akun */
@@ -457,5 +536,93 @@ class AdminService
         }
 
         throw new SaveException('Reset Password Gagal');
+    }
+
+    public function upload(Akun $admin, Instansi $instansi, UploadedFile $file)
+    {
+        $reader = ReaderEntityFactory::createXLSXReader();
+        $reader->open($file->getRealPath());
+
+        $rules = [
+            'nama'      => ['required', 'string', 'max:50'],
+            'email'     => ['required', 'email:dns,rfc'],
+            'tmp_lahir' => ['nullable', 'string'],
+            'tgl_lahir' => ['nullable', 'date_format:Y-m-d'],
+        ];
+
+        $data    = [];
+        $batches = [];
+        $errors  = [];
+        $uniques = [];
+
+        foreach ($reader->getSheetIterator() as $sheet) {
+            if ($sheet->getName() !== 'Data') {
+                break;
+            }
+
+            foreach ($sheet->getRowIterator() as $index => $row) {
+                /** @var Row $row */
+                if ($index < 2) {
+                    continue;
+                }
+
+                if ($index > 1000) {
+                    break;
+                }
+
+                $cells = $row->toArray();
+
+                $tglLahir = $cells[4];
+                if ($tglLahir instanceof \DateTime) {
+                    $tglLahir = $tglLahir->format('Y-m-d');
+                }
+
+                $params = [
+                    'email'     => trim($cells[1]),
+                    'nama'      => trim($cells[2]),
+                    'tmp_lahir' => trim($cells[3]),
+                    'tgl_lahir' => $tglLahir,
+                    'k_group'   => MGroup::PENGAJAR_DIKLAT_PAUD,
+                ];
+
+                $validator = \Validator::make($params, $rules);
+                if ($validator->fails()) {
+                    $errors[$index] = "Baris $index: " . implode("; ", $validator->getMessageBag()->all());
+                } else {
+                    $batches[] = new CreateAkunPengajar($admin, $instansi, array_filter($params));
+                    $data[]    = $params;
+
+                    $unique = $params['email'];
+                    if (isset($uniques[$unique])) {
+                        $duplikat = $uniques[$unique];
+                        $errors[$index] = "Baris $index: {$unique} sudah ada di Baris {$duplikat}";
+                    } else {
+                        $uniques[$unique] = $index;
+                    }
+                }
+            }
+        }
+
+        $reader->close();
+
+
+        if (!$batches) {
+            throw new FlowException("Berkas tidak memuat data akun, silakan cek kesesuaian dengan template");
+        }
+
+
+        if ($errors) {
+            return [
+                'errors' => $errors,
+            ];
+        }
+
+        $batch = Bus::batch($batches)->dispatch();
+
+
+        return [
+            'batch' => $batch,
+            'data'  => $data,
+        ];
     }
 }

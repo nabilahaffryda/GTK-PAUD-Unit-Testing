@@ -8,6 +8,7 @@ use App\Http\Resources\BaseResource;
 use App\Models\MGroup;
 use App\Models\MVervalPaud;
 use App\Services\Instansi\PengajarService;
+use Illuminate\Http\Request;
 
 class PengajarController extends AkunController
 {
@@ -27,5 +28,15 @@ class PengajarController extends AkunController
             'is_tambahan'   => 0,
         ]);
         return BaseResource::make($paudAdmin);
+    }
+
+    public function template()
+    {
+        return response()->file(resource_path('xlsx/akun-pengajar-template.xlsx'));
+    }
+
+    public function upload(Request $request)
+    {
+        return $this->service->upload(akun(), instansi(), $request->file('file'));
     }
 }

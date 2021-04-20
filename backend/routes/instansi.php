@@ -88,7 +88,10 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::group(['prefix' => 'akun/pengajar'], function () {
         Route::get('', [PengajarController::class, 'index']);
         Route::get('download', [PengajarController::class, 'download']);
+        Route::get('download-aktivasi', [PengajarController::class, 'downloadAktivasi']);
+        Route::get('template', [PengajarController::class, 'template']);
         Route::post('create', [PengajarController::class, 'create']);
+        Route::post('upload', [PengajarController::class, 'upload']);
         Route::get('{paudAdmin}', [PengajarController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [PengajarController::class, 'update']);
         Route::post('{paudAdmin}/delete', [PengajarController::class, 'delete']);

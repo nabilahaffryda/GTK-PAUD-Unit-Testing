@@ -86,6 +86,16 @@ class AkunController extends Controller
         return $this->service->download(instansi(), $params);
     }
 
+
+    public function downloadAktivasi(Request $request)
+    {
+        $params = array_merge($request->input('filter', []), [
+            'k_group' => $this->kGroup,
+        ]);
+
+        return $this->service->downloadAktivasi(instansi(), $params);
+    }
+
     /**
      * @param CreateRequest $request
      * @return BaseResource
