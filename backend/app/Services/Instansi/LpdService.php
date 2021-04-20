@@ -253,7 +253,7 @@ class LpdService
     {
         $this->validateBatalAjuan($paudInstansi);
 
-        $paudInstansi->wkt_ajuan     = Carbon::now();
+        $paudInstansi->wkt_ajuan     = null;
         $paudInstansi->k_verval_paud = MVervalPaud::KANDIDAT;
 
         if (!$paudInstansi->save()) {
