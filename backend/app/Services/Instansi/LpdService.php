@@ -271,7 +271,7 @@ class LpdService
             $query->where('k_verval_paud', $kVervalPaud);
         }
 
-        return $query;
+        return $query->with(['mVervalPaud']);
     }
 
     public function vervalUpdate(Akun $akun, PaudInstansi $paudInstansi, array $params)

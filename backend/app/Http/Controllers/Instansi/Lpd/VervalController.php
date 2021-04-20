@@ -26,4 +26,10 @@ class VervalController extends Controller
     {
         return BaseResource::make($this->service->vervalUpdate(akun(), $paudInstansi, $request->all()));
     }
+
+    public function fetch(PaudInstansi $paudInstansi)
+    {
+        return BaseResource::make($this->service->fetch($paudInstansi)
+            ->loadMissing('mVervalPaud'));
+    }
 }
