@@ -54,6 +54,7 @@ _axios.interceptors.response.use(
     let conectionLost = `Terjadi kegagalan koneksi, pastikan Anda terhubung internet.<br/>Silakan mencoba kembali.`;
     let message =
       (error.response && error.response.data && error.response.data.title) ||
+      (error.response && error.response.data && error.response.data.message) ||
       (status === 500 ? errorMessage : conectionLost);
 
     const statusForNotify = [400, 401, 403, 404, 405, 422, 500, 501, 502, 503, 504, 520, 521];
