@@ -123,7 +123,8 @@ class LpdService
 
         return PaudInstansi::whereInstansiId($instansi->instansi_id)
             ->where('angkatan', config('paud.angkatan'))
-            ->where('tahun', config('paud.tahun'))->first();
+            ->where('tahun', config('paud.tahun'))
+            ->with(['instansi.mKota', 'instansi.mPropinsi'])->first();
     }
 
     public function getStatusLengkap(PaudInstansi $paudInstansi)
