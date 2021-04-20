@@ -109,6 +109,15 @@ class Instansi extends Eloquent
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'foto_url',
+    ];
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
@@ -196,5 +205,10 @@ class Instansi extends Eloquent
     public function paudInstansis()
     {
         return $this->hasMany('App\Models\PaudInstansi', 'instansi_id', 'instansi_id');
+    }
+
+    public function getFotoUrlAttribute()
+    {
+        return $this->foto ? sprintf("%s/%s", config('filesystems.disks.instansi-foto.url'), $this->foto) : null;
     }
 }
