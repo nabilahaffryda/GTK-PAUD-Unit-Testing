@@ -21,9 +21,9 @@ export default {
       return [
         {
           label: 'Profil Pengajar',
-          value: this.lengkap?.profil ? 'passed' : 'not_finish',
+          value: this.lengkap?.profil ? 'passed' : 'not_complete',
         },
-        { label: 'Berkas Persyaratan Lainnya', value: this.lengkap?.berkas ? 'passed' : 'not_finish' },
+        { label: 'Berkas Persyaratan Lainnya', value: this.lengkap?.berkas ? 'passed' : 'not_complete' },
       ];
     },
 
@@ -73,6 +73,14 @@ export default {
             withAction: withAction,
             kBerkas: 1,
             value: mBerkas['1'] || {},
+          },
+          {
+            title: 'Ijasah Terakhir',
+            pesan: ``,
+            valid: !!mBerkas['3'],
+            type: 'ijasah',
+            withAction: withAction,
+            kBerkas: 3,
           },
           {
             title: 'Surat Keterangan Sudah Menjalankan Fungsi Sebagai Pengajar Diklat PAUD',
