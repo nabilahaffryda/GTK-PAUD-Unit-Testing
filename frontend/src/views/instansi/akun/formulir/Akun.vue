@@ -22,7 +22,7 @@
             </v-radio>
           </v-alert>
           <v-alert text outlined dense color="secondary">
-            <v-radio value="excel" disabled>
+            <v-radio value="excel" :disabled="!$allow(`akun-${jenis}.upload`)">
               <template v-slot:label>
                 <div class="pa-4">
                   <div class="font-weight-bold">Tambah Pengajar Mengunakan Excel</div>
@@ -36,7 +36,13 @@
                         <b>tombol selanjutnya</b>
                       </li>
                     </ol>
-                    <v-btn depressed class="ma-2" color="secondary" style="text-transform: none">
+                    <v-btn
+                      depressed
+                      class="ma-2"
+                      color="secondary"
+                      @click="$emit('unduhTemplate')"
+                      style="text-transform: none"
+                    >
                       <v-icon left>mdi-file</v-icon>Template_akun_baru.xls
                     </v-btn>
                   </div>
@@ -190,7 +196,18 @@
                   <v-btn class="text-md-right" right text @click="onResetPilih">
                     Kembali
                   </v-btn>
-                  <v-btn class="text-md-right" right color="secondary" @click="onCheck">
+                  <v-btn
+                    class="text-md-right"
+                    :disabled="!file"
+                    right
+                    color="secondary"
+                    @click="
+                      () => {
+                        $emit('onValidate');
+                        stepUnggah++;
+                      }
+                    "
+                  >
                     Selanjutnya
                   </v-btn>
                 </v-card-actions>
@@ -199,15 +216,40 @@
             <v-stepper-content step="2" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
-                  <v-divider class="my-4" />
+                  <h2 class="secondary--text">Konfirmasi Pembuatan Akun</h2>
+                  <i>Tambah Data Menggunakan Excel</i>
+                  <v-row class="my-2">
+                    <v-col cols="12" md="2" sm="2">
+                      <v-avatar color="secondary" size="80">
+                        <v-icon dark size="60">mdi-file</v-icon>
+                      </v-avatar>
+                    </v-col>
+                    <v-col cols="12" md="10" sm="10" class="my-auto">
+                      <div class="ml-n5">
+                        <h3>Nama File</h3>
+                        {{ $getDeepObj(file, 'file.name') || '' }}
+                      </div>
+                    </v-col>
+                    <v-col cols="12" md="12" sm="12">
+                      Silakan periksa kembali akun yang Anda inputkan.
+                      <b>Jika terjadi kesalahan input Anda dapat kembali ke langkah sebelumnya</b> dengan menekan tombol
+                      dibawah ini
+                    </v-col>
+                  </v-row>
                 </v-card-text>
                 <v-card-actions class="pa-0">
                   <v-spacer></v-spacer>
-                  <v-btn right text>
+                  <v-btn
+                    right
+                    text
+                    @click="
+                      () => {
+                        $emit('onStep');
+                        stepUnggah--;
+                      }
+                    "
+                  >
                     Kembali
-                  </v-btn>
-                  <v-btn class="text-md-right" right color="secondary" @click="$emit('onValidate')">
-                    Selanjutnya
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -269,6 +311,7 @@ export default {
       pilihan: null,
       isPilih: '',
       stepUnggah: 1,
+      file: null,
     };
   },
   computed: {
@@ -649,6 +692,7 @@ export default {
       this.id = null;
       this.pilihan = null;
       this.isPilih = null;
+      this.file = null;
     },
 
     initForm(value) {
@@ -799,6 +843,10 @@ export default {
     onResetPilih() {
       this.pilihan = null;
       this.isPilih = null;
+    },
+
+    setFile(file) {
+      this.file = file;
     },
   },
   watch: {

@@ -154,6 +154,7 @@
           }
         "
         @upload="onUpload"
+        @unduhTemplate="unduhTemplate"
       />
     </base-modal-full>
     <Akun ref="akun" :akun="akun" />
@@ -163,7 +164,7 @@
       label-ok="pilih"
       format="XLXS/XLS"
       title="Data Akun"
-      @save="uploadSave"
+      @save="setFile"
       @unduhTemplate="unduhTemplate"
     ></popup-upload>
   </div>

@@ -61,15 +61,15 @@ export const actions = {
     return http.post(url, payload.params).then(({ data }) => data);
   },
 
-  templateUpload({ rootState }) {
+  templateUpload({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/akun/template`;
+    const url = `${process.env.VUE_APP_API_URL}/i/${id}/akun/${payload.tipe}/template`;
     return Promise.resolve(url);
   },
 
   upload({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/akun/upload`;
+    const url = `/i/${id}/akun/${payload.tipe}/upload`;
     return http.post(url, payload.params, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -79,7 +79,9 @@ export const actions = {
 
   downloadList({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `${process.env.VUE_APP_API_URL}//i/${id}/akun/${payload.url}?${queryString(payload.params)}`;
+    const url = `${process.env.VUE_APP_API_URL}/i/${id}/akun/${payload.tipe}/${payload.url}?${queryString(
+      payload.params
+    )}`;
     return Promise.resolve(url);
   },
 };

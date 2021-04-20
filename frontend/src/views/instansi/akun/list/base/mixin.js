@@ -12,6 +12,8 @@ export default {
       'lookup',
       'getDetail',
       'downloadList',
+      'templateUpload',
+      'upload',
     ]),
 
     ...mapActions('master', ['getMasters']),
@@ -83,6 +85,13 @@ export default {
       const id = this.$refs.formulir.id;
       const params = Object.assign({}, this.$refs.formulir.getValue(), { k_group: +this.kGroup });
       const name = this.$getDeepObj(this, 'attr.tipe');
+      const tipe = this.$refs.formulir.isPilih || '';
+      const file = this.$refs.formulir.file || {};
+
+      if (tipe === 'excel') {
+        this.uploadSave(file);
+        return;
+      }
 
       this[isEdit ? 'update' : 'create']({ params, id, name })
         .then(({ data }) => {
@@ -162,7 +171,7 @@ export default {
         {
           key: 'download-aktivasi',
           label: `Daftar Aktivasi Admin`,
-          acl: this.$allow('psp-admin.download-aktivasi'),
+          acl: this.$allow(`akun-${this.akses}.download-aktivasi`),
         },
       ];
 
@@ -202,7 +211,7 @@ export default {
         }
 
         const params = Object.assign(this.params, this.$isObject(this.filters) ? this.filters : {});
-        this.downloadList({ params, url: url.dokumen }).then((url) => {
+        this.downloadList({ params, url: url.dokumen, tipe: this.akses }).then((url) => {
           this.$downloadFile(url);
         });
       });
@@ -240,6 +249,11 @@ export default {
       this.$refs.uploader.open();
     },
 
+    setFile(data) {
+      this.$refs.formulir.setFile(data);
+      this.$refs.uploader.dialog = false;
+    },
+
     uploadSave(data) {
       const formData = new FormData();
       for (let obj in data) {
@@ -248,6 +262,7 @@ export default {
 
       const params = {
         params: formData,
+        tipe: this.akses,
       };
 
       this.upload(params)
@@ -260,16 +275,18 @@ export default {
           }
 
           this.$refs.uploader.step = 1;
+          this.$refs.modal.close();
           this.fetchData();
         })
         .catch(() => {
+          this.$refs.modal.loading = false;
           this.$error('Terdapat kesalahan saat mengunggah berkas, silakan periksa berkas Anda kemudian coba kembali!');
         });
     },
 
     unduhTemplate() {
-      this.templateUpload().then((url) => {
-        this.$downloadFile(process.env.VUE_APP_API_URL + '/' + url);
+      this.templateUpload({ tipe: this.akses }).then((url) => {
+        this.$downloadFile(url);
       });
     },
   },
