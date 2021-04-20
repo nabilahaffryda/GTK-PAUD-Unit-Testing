@@ -19,7 +19,7 @@ class BerkasController extends Controller
     {
         $berkases = $paudInstansi
             ->paudInstansiBerkases
-            ->loadMissing(['mBerkasLpdPaud']);
+            ->loadMissing(['instansi.mKota', 'instansi.mPropinsi', 'mBerkasLpdPaud']);
 
         return BaseCollection::make($berkases);
     }
