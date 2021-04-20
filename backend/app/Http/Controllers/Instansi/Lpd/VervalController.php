@@ -24,6 +24,6 @@ class VervalController extends Controller
 
     public function update(PaudInstansi $paudInstansi, UpdateRequest $request)
     {
-        return BaseResource::make($this->service->vervalUpdate($paudInstansi, $request->all()));
+        return BaseResource::make($this->service->vervalUpdate(akun(), $paudInstansi, $request->all()));
     }
 }

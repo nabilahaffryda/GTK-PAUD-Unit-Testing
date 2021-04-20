@@ -211,7 +211,7 @@ class LpdService
             'nama',
             'email',
             'alamat',
-            'no_telp',
+            'no_telpon',
             'k_propinsi',
             'k_kota',
             'kodepos',
@@ -231,10 +231,12 @@ class LpdService
 
     public function ajuanCreate(PaudInstansi $paudInstansi)
     {
-
         $paudInstansi->wkt_ajuan     = Carbon::now();
         $paudInstansi->k_verval_paud = MVervalPaud::DIAJUKAN;
-        $paudInstansi->save();
+
+        if (!$paudInstansi->save()) {
+            throw new FlowException('Proses ajuan tidak berhasil');
+        }
 
         return $paudInstansi;
     }

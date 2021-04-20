@@ -17,7 +17,7 @@ class UpdateRequest extends FormRequest
             'nama'                  => ['required', 'string', 'max:50'],
             'email'                 => ['required', 'email'],
             'alamat'                => ['required', 'string', 'max:255'],
-            'no_telp'               => ['required', 'string', 'max:255'],
+            'no_telpon'             => ['required', 'string', 'max:255'],
             'k_propinsi'            => ['required', 'integer'],
             'k_kota'                => ['required', 'integer'],
             'kodepos'               => ['required', 'string', 'max:6'],
