@@ -2,7 +2,7 @@ import { mapActions } from 'vuex';
 
 export default {
   methods: {
-    ...mapActions('admin', [
+    ...mapActions('akun', [
       'fetch',
       'create',
       'update',

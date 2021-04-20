@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import ListAdmin from '../Main';
+import ListAdmin from '../base/Main';
 import Actions from './actions';
 export default {
   name: 'Program',

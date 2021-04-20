@@ -1,15 +1,15 @@
 <template>
   <list-admin
-    jenis="program"
-    akses="admin-program-lpd"
-    title="Akun Admin Program"
+    jenis="pengajar"
+    akses="pengajar"
+    title="Akun Pengajar"
     desc="Lorem Ipsum"
     :actions="actions"
   ></list-admin>
 </template>
 
 <script>
-import ListAdmin from '../Main';
+import ListAdmin from '../base/Main';
 import Actions from './actions';
 export default {
   name: 'Program',

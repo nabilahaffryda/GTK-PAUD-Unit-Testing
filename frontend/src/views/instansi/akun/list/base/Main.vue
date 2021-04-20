@@ -170,7 +170,7 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import FormAkun from '../formulir/Akun';
+import FormAkun from '@views/instansi/akun/formulir/Akun';
 import Akun from '@components/cetak/Akun';
 import PopupUpload from '@components/popup/Upload';
 import mixin from './mixin';
