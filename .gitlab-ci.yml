@@ -178,8 +178,7 @@ deploy-devel:
     - ssh-add -t 600 <(echo "$DEVEL_SERVER_KEY")
 
     # update service
-    - VARS="VERSION HUB STAGE DOMAIN"
-
+    - VARS="VERSION HUB STAGE DOMAIN DOMAIN_FRONTEND"
     - deploy_image "$DEVEL_SERVER" "$VARS" $CI_PROJECT_PATH_SLUG .gitlab/docker-compose.deploy.yml
 
     - |
@@ -244,8 +243,7 @@ deploy-demo:
     - ssh-add -t 600 <(echo "$DEMO_SERVER_KEY")
 
     # update service
-    - VARS="VERSION HUB STAGE DOMAIN"
-
+    - VARS="VERSION HUB STAGE DOMAIN DOMAIN_FRONTEND"
     - deploy_image "$DEMO_SERVER" "$VARS" $CI_PROJECT_PATH_SLUG .gitlab/docker-compose.deploy.yml
 
     - |
