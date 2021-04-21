@@ -124,6 +124,16 @@ export default [
         to: { name: 'profil-kelas' },
       },
       {
+        icon: 'mdi-card-account-details',
+        title: 'Profil Pembimbing Praktik',
+        desc: 'Profil data Pembimbing Praktik',
+        color: 'blue',
+        deepColor: 'darken-2',
+        akses: 'pembimbing-profil.index',
+        link: 'profil-pembimbing',
+        to: { name: 'profil-pembimbing' },
+      },
+      {
         icon: 'mdi-account-voice',
         title: 'Pengajuan Lembaga',
         desc: 'Pengajuan dan Profil LPD',

@@ -37,4 +37,14 @@ export default [
       tipe: 'admin-kelas',
     },
   },
+  {
+    path: '/i/:id(\\d+)/profil/pembimbing',
+    name: 'profil-pembimbing',
+    component: () => lazyLoadView(import('@views/instansi/profil/base/Main')),
+    meta: {
+      title: 'Profil Pembimbing Praktik',
+      k_group: '174',
+      tipe: 'pembimbing',
+    },
+  },
 ];

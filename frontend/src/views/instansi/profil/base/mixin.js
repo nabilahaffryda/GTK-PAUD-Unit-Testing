@@ -96,7 +96,7 @@ export default {
             value: mBerkas['1'] || {},
           },
           {
-            title: 'Ijasah Terakhir',
+            title: 'Ijazah Terakhir',
             pesan: ``,
             valid: !!mBerkas['3'],
             type: 'ijasah',
@@ -146,7 +146,7 @@ export default {
             withAction: withAction,
           },
           {
-            title: 'Ijasah Terakhir',
+            title: 'Ijazah Terakhir',
             pesan: ``,
             valid: true,
             type: 'ijasah',
@@ -188,15 +188,6 @@ export default {
             kBerkas: 2,
           },
           {
-            title: 'Foto Kartu NPWP Atas Nama Lembaga',
-            pesan: ``,
-            valid: !!mBerkas['3'],
-            type: 'npwp',
-            withAction: withAction,
-            value: mBerkas['3'] || {},
-            kBerkas: 3,
-          },
-          {
             title: 'SK Lembaga Pelatihan Yang Terakreditasi',
             pesan: `<i>* Khusus Perguruan Tinggi</i>`,
             valid: !!mBerkas['4'],
@@ -233,6 +224,62 @@ export default {
             kBerkas: 7,
           },
         ],
+        pembimbing: [
+          {
+            title: 'Pakta Integritas',
+            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
+            valid: !!mBerkas['1'],
+            type: 'integritas',
+            withAction: withAction,
+            kBerkas: 1,
+            value: mBerkas['1'] || {},
+          },
+          {
+            title: 'Kartu Tanda Penduduk (KTP)',
+            pesan: ``,
+            type: 'ktp',
+            valid: !!mBerkas['2'],
+            withAction: withAction,
+            kBerkas: 2,
+            value: mBerkas['2'] || {},
+          },
+          {
+            title: 'Nomor Pokok Wajib Pajak (NPWP)',
+            pesan: ``,
+            type: 'npwp',
+            valid: !!mBerkas['3'],
+            withAction: withAction,
+            kBerkas: 3,
+            value: mBerkas['3'] || {},
+          },
+          {
+            title: 'Ijazah Terakhir',
+            pesan: ``,
+            valid: !!mBerkas['4'],
+            type: 'ijasah',
+            withAction: withAction,
+            kBerkas: 4,
+            value: mBerkas['4'] || {},
+          },
+          {
+            title: 'Sertifikasi Diklat Dasar',
+            pesan: ``,
+            valid: !!mBerkas['5'],
+            type: 'diklat',
+            withAction: withAction,
+            kBerkas: 5,
+            value: mBerkas['5'] || {},
+          },
+          {
+            title: 'Sertifikasi Diklat Paud Lainnya',
+            pesan: ``,
+            valid: !!mBerkas['6'],
+            type: 'sertifikat',
+            withAction: withAction,
+            kBerkas: 6,
+            value: mBerkas['6'] || {},
+          },
+        ],
       };
     },
 
@@ -241,7 +288,7 @@ export default {
     },
 
     isAjuan() {
-      return this.kVerval !== 5 || this.kVerval !== 1;
+      return ![1, 5].includes(this.kVerval);
     },
   },
   methods: {
@@ -329,6 +376,7 @@ export default {
           this.id =
             this.$getDeepObj(data, 'paud_pengajar_id') ||
             this.$getDeepObj(data, 'paud_instansi_id') ||
+            this.$getDeepObj(data, 'paud_pembimbing_id') ||
             this.$getDeepObj(data, 'paud_admin_id');
         })
         .then(() => {

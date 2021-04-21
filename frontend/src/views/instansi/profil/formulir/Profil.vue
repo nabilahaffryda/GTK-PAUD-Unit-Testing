@@ -292,7 +292,7 @@ export default {
         },
       };
 
-      return profil[this.jenis];
+      return profil[this.jenis === 'pembimbing' ? 'pengajar' : this.jenis];
     },
   },
 };
