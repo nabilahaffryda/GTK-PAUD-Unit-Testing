@@ -7,6 +7,7 @@ use App\Models\Instansi;
 use App\Models\MGroup;
 use App\Models\MVervalPaud;
 use App\Services\Instansi\AdminService;
+use App\Services\Instansi\PembimbingService;
 use App\Services\Instansi\PengajarService;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -53,6 +54,12 @@ class CreateAkun implements ShouldQueue
                     'k_verval_paud' => MVervalPaud::KANDIDAT,
                     'is_tambahan'   => 1,
                     'is_pembimbing' => 0,
+                ]);
+                break;
+
+            case MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD:
+                app(PembimbingService::class)->create($paudAdmin, [
+                    'k_verval_paud' => MVervalPaud::KANDIDAT,
                 ]);
                 break;
         }
