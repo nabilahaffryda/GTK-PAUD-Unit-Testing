@@ -18,13 +18,13 @@ class VervalController extends Controller
 
     public function index(IndexRequest $request)
     {
-        return BaseCollection::make($this->service->index($request->all())
+        return BaseCollection::make($this->service->index($request->validated())
             ->paginate((int)$request->get('count', 10)));
     }
 
     public function update(PaudPengajar $pengajar, UpdateRequest $request)
     {
-        return BaseResource::make($this->service->vervalUpdate(akun(), $pengajar, $request->all()));
+        return BaseResource::make($this->service->vervalUpdate(akun(), $pengajar, $request->validated()));
     }
 
     public function fetch(PaudPengajar $pengajar)
