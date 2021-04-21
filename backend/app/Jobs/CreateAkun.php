@@ -10,19 +10,19 @@ use App\Services\Instansi\AdminService;
 use App\Services\Instansi\PengajarService;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class CreateAkun implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected array    $data;
+    protected array $data;
     protected Instansi $instansi;
-    protected Akun     $admin;
-    protected int      $kGroup;
+    protected Akun $admin;
+    protected int $kGroup;
 
     public function __construct(Akun $admin, Instansi $instansi, $data, $kGroup)
     {
@@ -40,12 +40,21 @@ class CreateAkun implements ShouldQueue
 
         $paudAdmin = app(AdminService::class)->create($this->instansi, $this->data);
 
-        if (in_array($this->kGroup, [MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD, MGroup::PENGAJAR_DIKLAT_PAUD])) {
-            app(PengajarService::class)->create($paudAdmin, [
-                'k_verval_paud' => MVervalPaud::DISETUJUI,
-                'is_tambahan'   => $this->kGroup == MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD ? 1 : 0,
-            ]);
-        }
+        switch ($this->kGroup) {
+            case MGroup::PENGAJAR_DIKLAT_PAUD:
+                app(PengajarService::class)->create($paudAdmin, [
+                    'k_verval_paud' => MVervalPaud::DISETUJUI,
+                    'is_tambahan'   => 0,
+                ]);
+                break;
 
+            case MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD:
+                app(PengajarService::class)->create($paudAdmin, [
+                    'k_verval_paud' => MVervalPaud::KANDIDAT,
+                    'is_tambahan'   => 1,
+                    'is_pembimbing' => 0,
+                ]);
+                break;
+        }
     }
 }
