@@ -7,6 +7,7 @@ use App\Http\Controllers\Instansi\IndexController;
 use App\Http\Controllers\Instansi\Lpd;
 use App\Http\Controllers\Instansi\LpdController;
 use App\Http\Controllers\Instansi\Pengajar;
+use App\Http\Controllers\Instansi\Pembimbing;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -154,6 +155,16 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{pengajar}/berkas/create', [Pengajar\Profil\BerkasController::class, 'create']);
 
         Route::post('berkas/{berkas}/delete', [Pengajar\Profil\BerkasController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'pembimbing/profil'], function () {
+        Route::get('', [Pembimbing\ProfilController::class, 'index']);
+        Route::post('{pembimbing}/update', [Pembimbing\ProfilController::class, 'update']);
+
+        Route::get('{pembimbing}/berkas', [Pembimbing\Profil\BerkasController::class, 'index']);
+        Route::post('{pembimbing}/berkas/create', [Pembimbing\Profil\BerkasController::class, 'create']);
+
+        Route::post('berkas/{berkas}/delete', [Pembimbing\Profil\BerkasController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'admin-kelas/profil'], function () {
