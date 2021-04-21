@@ -30,6 +30,6 @@ class VervalController extends Controller
     public function fetch(PaudInstansi $paudInstansi)
     {
         return BaseResource::make($this->service->fetch($paudInstansi)
-            ->loadMissing('mVervalPaud'));
+            ->loadMissing(['mVervalPaud', 'paudInstansiBerkases']));
     }
 }
