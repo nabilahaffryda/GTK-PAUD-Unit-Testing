@@ -106,7 +106,7 @@ class PengajarService
     {
         $query = PaudPengajar::query()
             ->where('is_tambahan', '=', 1)
-            ->with('akun');
+            ->with(['akun', 'mVervalPaud']);
 
         if ($angkatan = Arr::get($params, 'angkatan')) {
             $query->where('angkatan', '=', $angkatan);
