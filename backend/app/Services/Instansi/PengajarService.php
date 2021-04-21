@@ -32,7 +32,7 @@ class PengajarService
         $filename  = "{$akun->akun_id}-{$kBerkas}-{$timestamp}.{$file->getClientOriginalExtension()}";
 
         if (!Storage::disk('pengajar-berkas')->putFileAs("{$ftpPath}/{$pathname}", $file, $filename)) {
-            throw new FlowException("Unggah Foto Akun tidak berhasil");
+            throw new FlowException("Unggah Berkas Pengajar tidak berhasil");
         }
 
         return "{$pathname}/{$filename}";
