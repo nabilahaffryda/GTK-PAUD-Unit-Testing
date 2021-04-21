@@ -1,6 +1,6 @@
 <template>
   <list-admin
-    jenis="pembimbing-praktik"
+    jenis="kelas"
     akses="pembimbing-praktik"
     title="Akun Pembimbing Praktik"
     desc="Lorem Ipsum"

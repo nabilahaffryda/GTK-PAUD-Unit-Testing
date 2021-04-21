@@ -75,6 +75,16 @@ export default [
         link: 'akun-pembimbing',
         to: { name: 'akun-pembimbing' },
       },
+      {
+        icon: 'mdi-account-cog',
+        title: 'Kelola Admin Kelas',
+        desc: 'Pengelolaan data Admin Kelas',
+        color: 'green',
+        deepColor: 'darken-2',
+        akses: 'akun-admin-kelas.index',
+        link: 'akun-kelas',
+        to: { name: 'akun-kelas' },
+      },
     ],
   },
   {

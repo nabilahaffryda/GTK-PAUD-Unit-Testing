@@ -166,7 +166,7 @@ export default {
         {
           key: 'download',
           label: `Daftar Admin`,
-          acl: this.$allow('psp-admin.download'),
+          acl: this.$allow(`akun-${this.akses}.download`),
         },
         {
           key: 'download-aktivasi',

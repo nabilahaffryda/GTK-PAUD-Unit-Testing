@@ -60,4 +60,14 @@ export default [
       tipe: 'pembimbing-praktik',
     },
   },
+  {
+    path: '/i/:id(\\d+)/akun/kelas',
+    name: 'akun-kelas',
+    component: () => lazyLoadView(import('@views/instansi/akun/list/kelas/Index')),
+    meta: {
+      title: 'Kelola Admin Kelas',
+      k_group: '177',
+      tipe: 'admin-kelas',
+    },
+  },
 ];

@@ -340,7 +340,6 @@ export default {
       this.$set(this.formulir, 'init', null);
 
       this.getDetail({ id: item.id, tipe: this.$route.meta.tipe }).then(({ data }) => {
-        console.log(data);
         this.$set(this.formulir, 'alasan_verval', this.$getDeepObj(data, 'meta.alasan-verval'));
         this.$set(this.formulir, 'is_disable', !this.isAllowAkses(data.policies));
         this.$set(this.formulir, 'is_edit', this.isAllowAkses(data.policies));
