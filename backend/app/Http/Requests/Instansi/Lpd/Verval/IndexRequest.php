@@ -14,7 +14,9 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'angkatan' => ['required', 'integer'],
+            'keyword' => ['string', 'min:3', 'max:100'],
+            'count'   => ['integer', 'max:50'],
+            'page'    => ['integer', 'min:1'],
         ];
     }
 }
