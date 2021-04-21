@@ -28,4 +28,13 @@ export default [
       tipe: 'lpd',
     },
   },
+  {
+    path: '/i/:id(\\d+)/profil/kelas',
+    name: 'profil-kelas',
+    component: () => lazyLoadView(import('@views/instansi/profil/base/Main')),
+    meta: {
+      title: 'Profil Admin Kelas',
+      tipe: 'admin-kelas',
+    },
+  },
 ];

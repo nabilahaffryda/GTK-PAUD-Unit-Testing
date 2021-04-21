@@ -18,13 +18,20 @@ export default {
     },
 
     status() {
-      return [
-        {
-          label: `${this.$route.meta.title}`,
-          value: this.lengkap?.profil ? 'passed' : 'not_complete',
-        },
-        { label: 'Berkas Persyaratan Lainnya', value: this.lengkap?.berkas ? 'passed' : 'not_complete' },
-      ];
+      return this.jenis === 'admin-kelas'
+        ? [
+            {
+              label: `${this.$route.meta.title}`,
+              value: this.lengkap?.profil ? 'passed' : 'not_complete',
+            },
+          ]
+        : [
+            {
+              label: `${this.$route.meta.title}`,
+              value: this.lengkap?.profil ? 'passed' : 'not_complete',
+            },
+            { label: 'Berkas Persyaratan Lainnya', value: this.lengkap?.berkas ? 'passed' : 'not_complete' },
+          ];
     },
 
     statusLabel() {
@@ -40,24 +47,38 @@ export default {
     },
 
     contents() {
-      return {
-        profil: {
-          component: 'Profil',
-          form: 'FormProfil',
-          title: this.$route.meta.title,
-          deskripsi: '',
-          max: 10,
-          optional: true,
-        },
-        berkas: {
-          component: 'Berkas',
-          form: 'FormUnggah',
-          title: 'Berkas Persyaratan Lainnya',
-          deskripsi: '',
-          max: 10,
-          optional: true,
-        },
-      };
+      return Object.assign(
+        {},
+        this.jenis === 'admin-kelas'
+          ? {
+              profil: {
+                component: 'Profil',
+                form: 'FormProfil',
+                title: this.$route.meta.title,
+                deskripsi: '',
+                max: 10,
+                optional: true,
+              },
+            }
+          : {
+              profil: {
+                component: 'Profil',
+                form: 'FormProfil',
+                title: this.$route.meta.title,
+                deskripsi: '',
+                max: 10,
+                optional: true,
+              },
+              berkas: {
+                component: 'Berkas',
+                form: 'FormUnggah',
+                title: 'Berkas Persyaratan Lainnya',
+                deskripsi: '',
+                max: 10,
+                optional: true,
+              },
+            }
+      );
     },
 
     berkases() {
@@ -282,7 +303,7 @@ export default {
           this.id = this.$getDeepObj(data, 'paud_pengajar_id') || this.$getDeepObj(data, 'paud_instansi_id');
         })
         .then(() => {
-          this.fetchDokumen();
+          if (this.jenis !== 'admin-kelas') this.fetchDokumen();
         });
     },
 

@@ -33,7 +33,7 @@
             </v-row>
           </v-col>
           <!-- Sheet Diklat -->
-          <v-col cols="12" md="6" sm="12">
+          <v-col cols="12" md="6" sm="12" v-if="jenis !== 'admin-kelas'">
             <div class="text-h6 my-3 font-weight-bold"> Data Diklat </div>
             <div class="grey--text">Pengalaman Melatih 2 Tahun Terakhir</div>
             <v-list three-line>
@@ -163,6 +163,65 @@ export default {
               title: 'Alamat Instansi',
               value: this.$getDeepObj(item, 'instansi_alamat') || '-',
               grid: { cols: 12, md: 12, sm: 12 },
+            },
+          ],
+        },
+        'admin-kelas': {
+          dasar: [
+            {
+              title: 'Nama Lengkap',
+              value: this.$getDeepObj(item, 'akun.data.nama') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Jenis Kelamin',
+              value: this.$fGender(this.$getDeepObj(item, 'akun.data.kelamin')) || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'NIK',
+              value: this.$getDeepObj(item, 'akun.data.nik') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Email',
+              value: this.$getDeepObj(item, 'akun.data.email') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Tempat, Tanggal Lahir',
+              value:
+                (this.$getDeepObj(item, 'akun.data.tmp_lahir') || '-') +
+                ', ' +
+                (this.$localDate(this.$getDeepObj(item, 'akun.data.tgl_lahir')) || '-'),
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Nomor HP Aktif',
+              value: this.$getDeepObj(item, 'akun.data.no_hp') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Alamat Sesuai KTP',
+              value: this.$getDeepObj(item, 'akun.data.alamat') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Kota/Kab. dan Provinsi',
+              value: [
+                this.$getDeepObj(item, 'akun.data.k_kota')
+                  ? this.masters.m_kota[this.$getDeepObj(item, 'akun.data.k_kota')]
+                  : '-',
+                this.$getDeepObj(item, 'akun.data.k_propinsi')
+                  ? this.masters.m_propinsi[this.$getDeepObj(item, 'akun.data.k_propinsi')]
+                  : '-',
+              ].join(' - '),
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Kodepos',
+              value: this.$getDeepObj(item, 'akun.data.kodepos') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
             },
           ],
         },

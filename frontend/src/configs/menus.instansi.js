@@ -94,7 +94,7 @@ export default [
     submenu: false,
     menu: [
       {
-        icon: 'mdi-account-voice',
+        icon: 'mdi-card-account-details',
         title: 'Profil Pengajar',
         desc: 'Profil data Pengajar',
         color: 'success',
@@ -104,7 +104,7 @@ export default [
         to: { name: 'profil-pengajar' },
       },
       {
-        icon: 'mdi-account-hard-hat',
+        icon: 'mdi-card-account-details',
         title: 'Profil Pengajar BIMTEK',
         desc: 'Profil data Pengajar BIMTEK',
         color: 'pink',
@@ -112,6 +112,16 @@ export default [
         akses: false,
         link: 'profil-bimtek',
         to: { name: 'profil-bimtek' },
+      },
+      {
+        icon: 'mdi-card-account-details',
+        title: 'Profil Admin Kelas',
+        desc: 'Profil data Admin Kelas',
+        color: 'blue',
+        deepColor: 'darken-2',
+        akses: 'admin-kelas-profil.index',
+        link: 'profil-kelas',
+        to: { name: 'profil-kelas' },
       },
       {
         icon: 'mdi-account-voice',

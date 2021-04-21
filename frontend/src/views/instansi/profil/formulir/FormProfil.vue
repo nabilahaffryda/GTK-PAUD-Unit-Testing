@@ -32,31 +32,33 @@
               <base-form-generator :schema="item" v-model="form" />
             </div>
 
-            <v-alert type="info">Tambahkan data diklat minimal <b>1</b> dan maksimal <b>5 diklat</b></v-alert>
-            <div>
-              <v-row v-for="(diklat, i) in diklats" :key="i">
-                <v-col cols="12" md="5" sm="12">
-                  <span class="text-caption secondary--text">Nama Diklat</span>
-                  <v-text-field label="Nama Diklat" v-model="diklats[i]['nama']" outlined dense single-line />
-                </v-col>
-                <v-col cols="12" md="5" sm="12">
-                  <span class="text-caption secondary--text">Tahun Diklat</span>
-                  <v-text-field label="Tahun Diklat" v-model="diklats[i]['tahun']" outlined dense single-line />
-                </v-col>
-                <v-col cols="12" md="2" sm="12" class="my-auto">
-                  <template v-if="i === diklats.length - 1">
-                    <v-btn class="mb-1" depressed @click="onAdd(i)">
-                      <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                  </template>
-                  <template v-else>
-                    <v-btn color="red" dark class="mb-1" depressed @click="onRemove(i)">
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                  </template>
-                </v-col>
-              </v-row>
-            </div>
+            <template v-if="jenis !== 'admin-kelas'">
+              <v-alert type="info">Tambahkan data diklat minimal <b>1</b> dan maksimal <b>5 diklat</b></v-alert>
+              <div>
+                <v-row v-for="(diklat, i) in diklats" :key="i">
+                  <v-col cols="12" md="5" sm="12">
+                    <span class="text-caption secondary--text">Nama Diklat</span>
+                    <v-text-field label="Nama Diklat" v-model="diklats[i]['nama']" outlined dense single-line />
+                  </v-col>
+                  <v-col cols="12" md="5" sm="12">
+                    <span class="text-caption secondary--text">Tahun Diklat</span>
+                    <v-text-field label="Tahun Diklat" v-model="diklats[i]['tahun']" outlined dense single-line />
+                  </v-col>
+                  <v-col cols="12" md="2" sm="12" class="my-auto">
+                    <template v-if="i === diklats.length - 1">
+                      <v-btn class="mb-1" depressed @click="onAdd(i)">
+                        <v-icon>mdi-plus</v-icon>
+                      </v-btn>
+                    </template>
+                    <template v-else>
+                      <v-btn color="red" dark class="mb-1" depressed @click="onRemove(i)">
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </template>
+                  </v-col>
+                </v-row>
+              </div>
+            </template>
           </v-col>
         </v-row>
       </v-card-text>
@@ -395,6 +397,149 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
+            },
+          ],
+        },
+        'admin-kelas': {
+          dasar: [
+            {
+              type: 'VTextField',
+              name: 'nama',
+              label: 'Nama Lengkap',
+              dense: true,
+              hint: 'wajib diisi',
+              required: true,
+              hideDetails: false,
+              outlined: true,
+              singleLine: true,
+              grid: { cols: 12, md: 12 },
+              labelColor: 'secondary',
+            },
+            {
+              type: 'VTextField',
+              name: 'nik',
+              label: 'NIK',
+              hint: 'wajib diisi',
+              required: true,
+              hideDetails: false,
+              outlined: true,
+              dense: true,
+              singleLine: true,
+              rules: { required: true, nik: true },
+              mask: '################',
+              counter: 16,
+              grid: { cols: 12, md: 6 },
+              labelColor: 'secondary',
+            },
+            {
+              type: 'VSelect',
+              name: 'kelamin',
+              label: `Jenis Kelamin`,
+              labelColor: 'secondary',
+              hideDetails: false,
+              placeholder: 'Jenis Kelamin',
+              hint: '',
+              grid: { cols: 12, md: 6 },
+              items: [
+                { value: 'L', text: 'Laki-Laki' },
+                { value: 'P', text: 'Perempuan' },
+              ],
+              required: true,
+              outlined: true,
+              dense: true,
+              singleLine: true,
+            },
+            {
+              type: 'VTextField',
+              name: 'tmp_lahir',
+              label: `Tempat Lahir`,
+              labelColor: 'secondary',
+              hideDetails: false,
+              placeholder: 'Tempat Lahir',
+              hint: 'wajib diisi',
+              grid: { cols: 12, md: 6 },
+              required: true,
+              outlined: true,
+              dense: true,
+              singleLine: true,
+            },
+            {
+              type: 'VDatePicker',
+              name: 'tgl_lahir',
+              label: 'Tanggal Lahir',
+              hint: 'wajib diisi',
+              required: true,
+              hideDetails: false,
+              outlined: true,
+              dense: true,
+              singleLine: true,
+              grid: { cols: 12, md: 6 },
+              labelColor: 'secondary',
+            },
+            {
+              type: 'VTextField',
+              name: 'email',
+              label: `Alamat Surel`,
+              labelColor: 'secondary',
+              hideDetails: false,
+              placeholder: 'Alamat Surel',
+              hint: '',
+              grid: { cols: 12, md: 6 },
+              disabled: true,
+              required: true,
+              outlined: true,
+              dense: true,
+              singleLine: true,
+            },
+            {
+              type: 'VTextField',
+              name: `no_hp`,
+              label: `Nomor HP Aktif`,
+              labelColor: 'secondary',
+              hideDetails: false,
+              placeholder: 'Nomor Handphone',
+              hint: 'wajib diisi',
+              grid: { cols: 12, md: 6 },
+              required: true,
+              dense: true,
+              outlined: true,
+              singleLine: true,
+              mask: '##############',
+              counter: 14,
+            },
+            {
+              type: 'VTextarea',
+              name: 'alamat',
+              label: `Alamat Sesuai KTP`,
+              labelColor: 'secondary',
+              hideDetails: false,
+              placeholder: 'Alamat KTP',
+              grid: { cols: 12, md: 12 },
+              required: false,
+              outlined: true,
+              dense: true,
+              singleLine: true,
+            },
+            {
+              type: 'cascade',
+              configs: this.configs.rumah,
+              grid: { cols: 8 },
+              labelColor: 'secondary',
+            },
+            {
+              type: 'VTextField',
+              name: 'kodepos',
+              label: 'Kode Pos',
+              hint: '',
+              required: false,
+              hideDetails: false,
+              outlined: true,
+              dense: true,
+              singleLine: true,
+              labelClass: 'mt-n3 secondary--text px-0 body-2',
+              mask: '######',
+              grid: { cols: 12, md: 4 },
+              labelColor: 'secondary',
             },
           ],
         },
