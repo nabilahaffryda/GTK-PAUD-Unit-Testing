@@ -235,12 +235,29 @@ export default {
         ],
       };
     },
+
+    kVerval() {
+      return this.detail?.k_verval_paud ?? 1;
+    },
+
+    isAjuan() {
+      return this.kVerval !== 5 || this.kVerval !== 1;
+    },
   },
   methods: {
     ...mapActions('master', ['getMasters']),
     ...mapActions('profil', ['fetch', 'update', 'getBerkas', 'setBerkas', 'ajuan', 'batalAjuan']),
 
     upload(type) {
+      if (this.isAjuan) {
+        const msg = `<p class="title mb-2">Mohon maaf! Ajuan sedang diperiksa oleh tim verval`;
+        this.$info(msg, `Perubahan data tidak diperbolehkan`, {
+          tipe: 'warning',
+          data: '',
+        });
+        return;
+      }
+
       const rules = {
         integritas: { format: 'PDF', required: true },
         fungsi: { format: 'PDF', required: true },
@@ -277,6 +294,15 @@ export default {
     },
 
     edit() {
+      if (this.isAjuan) {
+        const msg = `<p class="title mb-2">Mohon maaf! Ajuan sedang diperiksa oleh tim verval`;
+        this.$info(msg, `Perubahan data tidak diperbolehkan`, {
+          tipe: 'warning',
+          data: '',
+        });
+        return;
+      }
+
       this.$set(this.formulir, 'form', 'FormProfil');
       this.$set(this.formulir, 'title', `Ubah Profil`);
       this.$set(this.formulir, 'init', null);
