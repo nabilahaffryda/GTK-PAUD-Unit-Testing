@@ -480,7 +480,7 @@ class AdminService
             throw new SaveException('Hapus akun admin dari instansi terkait tidak berhasil');
         }
 
-        if ($jmlPaudAdmin != 1) {
+        if ($jmlPaudAdmin > 1) {
             return $paudAdmin;
         }
 
@@ -499,7 +499,7 @@ class AdminService
             throw new SaveException('Hapus akun admin dari instansi terkait tidak berhasil');
         }
 
-        if ($jmlAkunInstansi != 1) {
+        if ($jmlAkunInstansi > 1) {
             return $paudAdmin;
         }
 
