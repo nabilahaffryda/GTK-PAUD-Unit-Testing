@@ -1,14 +1,7 @@
 <?php
 
 use App\Http\Controllers\Instansi\AdminKelas;
-use App\Http\Controllers\Instansi\Akun\AdminKelasController;
-use App\Http\Controllers\Instansi\Akun\AdminProgramController;
-use App\Http\Controllers\Instansi\Akun\AdminProgramLpdController;
-use App\Http\Controllers\Instansi\Akun\OperatorLpdController;
-use App\Http\Controllers\Instansi\Akun\PembimbingPraktikController;
-use App\Http\Controllers\Instansi\Akun\PengajarBimtekController;
-use App\Http\Controllers\Instansi\Akun\PengajarController;
-use App\Http\Controllers\Instansi\Akun\PengajarTambahanController;
+use App\Http\Controllers\Instansi\Akun;
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Controllers\Instansi\IndexController;
 use App\Http\Controllers\Instansi\Lpd;
@@ -55,97 +48,97 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     });
 
     Route::group(['prefix' => 'akun/admin-program'], function () {
-        Route::get('', [AdminProgramController::class, 'index']);
-        Route::get('download', [AdminProgramController::class, 'download']);
-        Route::post('create', [AdminProgramController::class, 'create']);
-        Route::get('{paudAdmin}', [AdminProgramController::class, 'fetch']);
-        Route::post('{paudAdmin}/update', [AdminProgramController::class, 'update']);
-        Route::post('{paudAdmin}/delete', [AdminProgramController::class, 'delete']);
-        Route::post('{paudAdmin}/reset', [AdminProgramController::class, 'reset']);
+        Route::get('', [Akun\AdminProgramController::class, 'index']);
+        Route::get('download', [Akun\AdminProgramController::class, 'download']);
+        Route::post('create', [Akun\AdminProgramController::class, 'create']);
+        Route::get('{paudAdmin}', [Akun\AdminProgramController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [Akun\AdminProgramController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [Akun\AdminProgramController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [Akun\AdminProgramController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'akun/admin-program-lpd'], function () {
-        Route::get('', [AdminProgramLpdController::class, 'index']);
-        Route::get('download', [AdminProgramLpdController::class, 'download']);
-        Route::post('create', [AdminProgramLpdController::class, 'create']);
-        Route::get('{paudAdmin}', [AdminProgramLpdController::class, 'fetch']);
-        Route::post('{paudAdmin}/update', [AdminProgramLpdController::class, 'update']);
-        Route::post('{paudAdmin}/delete', [AdminProgramLpdController::class, 'delete']);
-        Route::post('{paudAdmin}/reset', [AdminProgramLpdController::class, 'reset']);
+        Route::get('', [Akun\AdminProgramLpdController::class, 'index']);
+        Route::get('download', [Akun\AdminProgramLpdController::class, 'download']);
+        Route::post('create', [Akun\AdminProgramLpdController::class, 'create']);
+        Route::get('{paudAdmin}', [Akun\AdminProgramLpdController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [Akun\AdminProgramLpdController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [Akun\AdminProgramLpdController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [Akun\AdminProgramLpdController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'akun/operator-lpd'], function () {
-        Route::get('', [OperatorLpdController::class, 'index']);
-        Route::get('download', [OperatorLpdController::class, 'download']);
-        Route::post('create', [OperatorLpdController::class, 'create']);
-        Route::get('{paudAdmin}', [OperatorLpdController::class, 'fetch']);
-        Route::post('{paudAdmin}/update', [OperatorLpdController::class, 'update']);
-        Route::post('{paudAdmin}/delete', [OperatorLpdController::class, 'delete']);
-        Route::post('{paudAdmin}/reset', [OperatorLpdController::class, 'reset']);
+        Route::get('', [Akun\OperatorLpdController::class, 'index']);
+        Route::get('download', [Akun\OperatorLpdController::class, 'download']);
+        Route::post('create', [Akun\OperatorLpdController::class, 'create']);
+        Route::get('{paudAdmin}', [Akun\OperatorLpdController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [Akun\OperatorLpdController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [Akun\OperatorLpdController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [Akun\OperatorLpdController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'akun/pengajar-bimtek'], function () {
-        Route::get('', [PengajarBimtekController::class, 'index']);
-        Route::get('download', [PengajarBimtekController::class, 'download']);
-        Route::get('download-aktivasi', [PengajarBimtekController::class, 'downloadAktivasi']);
-        Route::get('template', [PengajarBimtekController::class, 'template']);
-        Route::post('create', [PengajarBimtekController::class, 'create']);
-        Route::post('upload', [PengajarBimtekController::class, 'upload']);
-        Route::get('{paudAdmin}', [PengajarBimtekController::class, 'fetch']);
-        Route::post('{paudAdmin}/update', [PengajarBimtekController::class, 'update']);
-        Route::post('{paudAdmin}/delete', [PengajarBimtekController::class, 'delete']);
-        Route::post('{paudAdmin}/reset', [PengajarBimtekController::class, 'reset']);
+        Route::get('', [Akun\PengajarBimtekController::class, 'index']);
+        Route::get('download', [Akun\PengajarBimtekController::class, 'download']);
+        Route::get('download-aktivasi', [Akun\PengajarBimtekController::class, 'downloadAktivasi']);
+        Route::get('template', [Akun\PengajarBimtekController::class, 'template']);
+        Route::post('create', [Akun\PengajarBimtekController::class, 'create']);
+        Route::post('upload', [Akun\PengajarBimtekController::class, 'upload']);
+        Route::get('{paudAdmin}', [Akun\PengajarBimtekController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [Akun\PengajarBimtekController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [Akun\PengajarBimtekController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [Akun\PengajarBimtekController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'akun/pengajar'], function () {
-        Route::get('', [PengajarController::class, 'index']);
-        Route::get('download', [PengajarController::class, 'download']);
-        Route::get('download-aktivasi', [PengajarController::class, 'downloadAktivasi']);
-        Route::get('template', [PengajarController::class, 'template']);
-        Route::post('create', [PengajarController::class, 'create']);
-        Route::post('upload', [PengajarController::class, 'upload']);
-        Route::get('{paudAdmin}', [PengajarController::class, 'fetch']);
-        Route::post('{paudAdmin}/update', [PengajarController::class, 'update']);
-        Route::post('{paudAdmin}/delete', [PengajarController::class, 'delete']);
-        Route::post('{paudAdmin}/reset', [PengajarController::class, 'reset']);
+        Route::get('', [Akun\PengajarController::class, 'index']);
+        Route::get('download', [Akun\PengajarController::class, 'download']);
+        Route::get('download-aktivasi', [Akun\PengajarController::class, 'downloadAktivasi']);
+        Route::get('template', [Akun\PengajarController::class, 'template']);
+        Route::post('create', [Akun\PengajarController::class, 'create']);
+        Route::post('upload', [Akun\PengajarController::class, 'upload']);
+        Route::get('{paudAdmin}', [Akun\PengajarController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [Akun\PengajarController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [Akun\PengajarController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [Akun\PengajarController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'akun/pengajar-tambahan'], function () {
-        Route::get('', [PengajarTambahanController::class, 'index']);
-        Route::get('download', [PengajarTambahanController::class, 'download']);
-        Route::get('download-aktivasi', [PengajarTambahanController::class, 'downloadAktivasi']);
-        Route::get('template', [PengajarTambahanController::class, 'template']);
-        Route::post('create', [PengajarTambahanController::class, 'create']);
-        Route::post('upload', [PengajarTambahanController::class, 'upload']);
-        Route::get('{paudAdmin}', [PengajarTambahanController::class, 'fetch']);
-        Route::post('{paudAdmin}/update', [PengajarTambahanController::class, 'update']);
-        Route::post('{paudAdmin}/delete', [PengajarTambahanController::class, 'delete']);
-        Route::post('{paudAdmin}/reset', [PengajarTambahanController::class, 'reset']);
+        Route::get('', [Akun\PengajarTambahanController::class, 'index']);
+        Route::get('download', [Akun\PengajarTambahanController::class, 'download']);
+        Route::get('download-aktivasi', [Akun\PengajarTambahanController::class, 'downloadAktivasi']);
+        Route::get('template', [Akun\PengajarTambahanController::class, 'template']);
+        Route::post('create', [Akun\PengajarTambahanController::class, 'create']);
+        Route::post('upload', [Akun\PengajarTambahanController::class, 'upload']);
+        Route::get('{paudAdmin}', [Akun\PengajarTambahanController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [Akun\PengajarTambahanController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [Akun\PengajarTambahanController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [Akun\PengajarTambahanController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'akun/pembimbing-praktik'], function () {
-        Route::get('', [PembimbingPraktikController::class, 'index']);
-        Route::get('download', [PembimbingPraktikController::class, 'download']);
-        Route::get('download-aktivasi', [PembimbingPraktikController::class, 'downloadAktivasi']);
-        Route::get('template', [PembimbingPraktikController::class, 'template']);
-        Route::post('create', [PembimbingPraktikController::class, 'create']);
-        Route::post('upload', [PembimbingPraktikController::class, 'upload']);
-        Route::get('{paudAdmin}', [PembimbingPraktikController::class, 'fetch']);
-        Route::post('{paudAdmin}/update', [PembimbingPraktikController::class, 'update']);
-        Route::post('{paudAdmin}/delete', [PembimbingPraktikController::class, 'delete']);
-        Route::post('{paudAdmin}/reset', [PembimbingPraktikController::class, 'reset']);
+        Route::get('', [Akun\PembimbingPraktikController::class, 'index']);
+        Route::get('download', [Akun\PembimbingPraktikController::class, 'download']);
+        Route::get('download-aktivasi', [Akun\PembimbingPraktikController::class, 'downloadAktivasi']);
+        Route::get('template', [Akun\PembimbingPraktikController::class, 'template']);
+        Route::post('create', [Akun\PembimbingPraktikController::class, 'create']);
+        Route::post('upload', [Akun\PembimbingPraktikController::class, 'upload']);
+        Route::get('{paudAdmin}', [Akun\PembimbingPraktikController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [Akun\PembimbingPraktikController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [Akun\PembimbingPraktikController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [Akun\PembimbingPraktikController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'akun/admin-kelas'], function () {
-        Route::get('', [AdminKelasController::class, 'index']);
-        Route::get('download', [AdminKelasController::class, 'download']);
-        Route::get('download-aktivasi', [AdminKelasController::class, 'downloadAktivasi']);
-        Route::post('create', [AdminKelasController::class, 'create']);
-        Route::post('upload', [AdminKelasController::class, 'upload']);
-        Route::get('{paudAdmin}', [AdminKelasController::class, 'fetch']);
-        Route::post('{paudAdmin}/update', [AdminKelasController::class, 'update']);
-        Route::post('{paudAdmin}/delete', [AdminKelasController::class, 'delete']);
-        Route::post('{paudAdmin}/reset', [AdminKelasController::class, 'reset']);
+        Route::get('', [Akun\AdminKelasController::class, 'index']);
+        Route::get('download', [Akun\AdminKelasController::class, 'download']);
+        Route::get('download-aktivasi', [Akun\AdminKelasController::class, 'downloadAktivasi']);
+        Route::post('create', [Akun\AdminKelasController::class, 'create']);
+        Route::post('upload', [Akun\AdminKelasController::class, 'upload']);
+        Route::get('{paudAdmin}', [Akun\AdminKelasController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [Akun\AdminKelasController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [Akun\AdminKelasController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [Akun\AdminKelasController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'pengajar/profil'], function () {
