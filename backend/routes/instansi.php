@@ -138,7 +138,9 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::group(['prefix' => 'akun/admin-kelas'], function () {
         Route::get('', [AdminKelasController::class, 'index']);
         Route::get('download', [AdminKelasController::class, 'download']);
+        Route::get('download-aktivasi', [AdminKelasController::class, 'downloadAktivasi']);
         Route::post('create', [AdminKelasController::class, 'create']);
+        Route::post('upload', [AdminKelasController::class, 'upload']);
         Route::get('{paudAdmin}', [AdminKelasController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [AdminKelasController::class, 'update']);
         Route::post('{paudAdmin}/delete', [AdminKelasController::class, 'delete']);
