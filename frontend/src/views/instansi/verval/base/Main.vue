@@ -350,7 +350,7 @@ export default {
       let statistik = this.statistik;
 
       init = {
-        pilihan: kVerval === 3 ? null : kVerval === 4 ? 1 : kVerval === 6 ? 2 : 3,
+        pilihan: kVerval <= 3 ? null : kVerval === 4 ? 1 : kVerval === 6 ? 2 : 3,
       };
 
       this.$set(this.formulir, 'form', 'form-berkas');

@@ -3,8 +3,12 @@
     <v-card flat>
       <v-toolbar flat>
         <v-toolbar-title>Verval Ajuan</v-toolbar-title>
+        <v-spacer />
+        <v-chip dark :color="$getDeepObj(detail, 'status.color')">
+          {{ $getDeepObj(detail, 'status.keterangan') }}
+        </v-chip>
       </v-toolbar>
-      <v-divider />
+      <v-spacer />
       <v-card-text>
         <v-container class="black--text">
           <v-row>
@@ -101,7 +105,7 @@
         </v-container>
       </v-card-text>
     </v-card>
-    <div style="bottom: 0; left: 0; right: 0;">
+    <div style="bottom: 0; left: 0; right: 0;" v-if="!isDisable">
       <v-card flat>
         <v-card-text>
           <v-container>
