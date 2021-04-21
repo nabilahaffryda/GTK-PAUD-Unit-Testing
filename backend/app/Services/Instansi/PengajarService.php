@@ -104,15 +104,13 @@ class PengajarService
 
     public function index(array $params)
     {
-        $query = PaudPengajar::query()
-            ->where('is_tambahan', '=', 1)
-            ->with(['akun', 'mVervalPaud']);
-
-        if ($angkatan = Arr::get($params, 'angkatan')) {
-            $query->where('angkatan', '=', $angkatan);
-        }
-
-        return $query;
+        return PaudPengajar::query()
+            ->where([
+                'is_tambahan' => 1,
+                'tahun'       => Arr::get($params, 'tahun', config('paud.tahun')),
+                'angkatan'    => Arr::get($params, 'angkatan', config('paud.angkatan')),
+            ])
+            ->with('akun', 'mVervalPaud');
     }
 
     public function fetch(PaudPengajar $pengajar)
