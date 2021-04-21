@@ -23,6 +23,10 @@ class ProfilController extends Controller
     {
         $akun       = akun();
         $pembimbing = $this->service->getPembimbing($akun);
+        if (!$pembimbing) {
+            abort(404);
+        }
+
         $pembimbing = $this->service->fetch($pembimbing);
         $status     = $this->service->getStatusLengkap($pembimbing);
 
