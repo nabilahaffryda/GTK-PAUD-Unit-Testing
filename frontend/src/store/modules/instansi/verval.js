@@ -20,9 +20,9 @@ export const actions = {
     return await $ajax.get('/');
   },
 
-  update({ rootState }, payload) {
+  action({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/verval/${payload.jenis}/${payload.id}/update`;
+    const url = `/i/${id}/verval/${payload.jenis}/${payload.id}`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 };

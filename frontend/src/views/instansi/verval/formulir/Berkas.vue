@@ -74,14 +74,34 @@
                 </template>
               </v-list>
             </v-col>
-            <v-col cols="12" md="12" sm="12">
-              <div class="text-h6 my-3 font-weight-bold"> Data Tambahan </div>
+            <v-col cols="12" sm="12" md="12">
+              <div class="text-h6 my-3 font-weight-bold"> Data Unggahan </div>
+              <v-expansion-panels tile flat v-model="tab">
+                <v-expansion-panel>
+                  <v-expansion-panel-header class="px-4 subtitle-1">
+                    <strong>Berkas Persyaratan</strong>
+                  </v-expansion-panel-header>
+                  <v-divider></v-divider>
+                  <v-expansion-panel-content class="px-0">
+                    <berkas-collection
+                      v-for="(berkas, b) in berkases"
+                      :key="b"
+                      :berkas="berkas"
+                      :type="berkas.type"
+                      :valid="berkas.valid"
+                      :with-action="false"
+                      :value="berkas.value || {}"
+                      @detil="onDetil"
+                    />
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
             </v-col>
           </v-row>
         </v-container>
       </v-card-text>
     </v-card>
-    <div style="position: fixed; bottom: 0; left: 0;right: 0;">
+    <div style="bottom: 0; left: 0; right: 0;">
       <v-card flat>
         <v-card-text>
           <v-container>
@@ -97,7 +117,7 @@
                   Berikan Penilaian pada kelengkapan dan keabsahan dokumen ini, Apakah semua dokumen sah dan sesuai
                   dengan data yang di inputkan kandidat ?
                 </div>
-                <v-card flat>
+                <v-card flat :disabled="isDisable">
                   <v-row dense>
                     <template v-for="item in mBtnPilihan">
                       <v-col :key="item.value" md="3" sm="12" class="my-auto">
@@ -122,9 +142,12 @@
         </v-card-text>
       </v-card>
     </div>
+    <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
   </div>
 </template>
 <script>
+import BerkasCollection from './CollectionBerkas';
+import PopupPreviewDetail from '@components/popup/PreviewDetil';
 export default {
   props: {
     detail: {
@@ -143,10 +166,29 @@ export default {
       type: String,
       default: 'instansi',
     },
+    initValue: {
+      type: Object,
+      default: () => null,
+    },
+    isDisable: {
+      type: Boolean,
+      default: false,
+    },
+    isEdit: {
+      type: Boolean,
+      default: false,
+    },
+    id: {
+      type: [String, Number],
+      default: null,
+    },
   },
+  components: { BerkasCollection, PopupPreviewDetail },
   data() {
     return {
+      preview: {},
       pilihan: null,
+      tab: null,
       tambahans: [
         {
           label: 'Penanggung Jawab',
@@ -157,8 +199,8 @@ export default {
           key: 'bendahara',
         },
         {
-          label: 'Sekertaris',
-          key: 'sekertaris',
+          label: 'Sekretaris',
+          key: 'sekretaris',
         },
       ],
       mBtnPilihan: [
@@ -236,10 +278,54 @@ export default {
         ],
       };
     },
+
+    berkases() {
+      const berkas = this.$getDeepObj(this, `detail.paud_${this.jenis}_berkases.data`) || [];
+      const masters = this.$mapForMaster(this.$getDeepObj(this, `masters.m_berkas_${this.jenis}_paud`));
+      const mBerkas = this.$arrToObj(berkas, `k_berkas_${this.jenis}_paud`);
+
+      let temp = [];
+      masters.forEach((key) => {
+        temp.push({
+          title: key.text,
+          pesan: ``,
+          valid: !!mBerkas[key.value],
+          type: 'pelatihan',
+          withAction: false,
+          kBerkas: key.value,
+          value: mBerkas[key.value],
+        });
+      });
+
+      return temp;
+    },
   },
 
   methods: {
-    reset() {},
+    getValue() {
+      return { pilihan: this.pilihan, id: this.id };
+    },
+
+    reset() {
+      this.pilihan = null;
+      this.tab = 0;
+    },
+
+    onDetil(berkas) {
+      this.$set(this, 'preview', {});
+      this.preview.url = this.$getDeepObj(berkas, 'value.url');
+      this.preview.title = this.$getDeepObj(berkas, 'title');
+      this.$nextTick(() => {
+        this.$refs.popup.open();
+      });
+    },
+
+    initForm(value) {
+      this.$set(this, 'pilihan', (value && value.pilihan) || null);
+    },
+  },
+  watch: {
+    initValue: 'initForm',
   },
 };
 </script>

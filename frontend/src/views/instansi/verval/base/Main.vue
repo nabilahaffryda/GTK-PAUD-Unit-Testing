@@ -104,7 +104,7 @@
                             </v-chip>
                             <span
                               style="cursor: pointer"
-                              v-if="Number(item.k_verval_paud) === 1"
+                              v-if="false"
                               class="group pa-2"
                               @click="
                                 $info('Data sedang dalam proses perbaikan oleh pendaftar', {
@@ -126,7 +126,16 @@
                             <v-label color="caption"><small>Aksi Selanjutnya</small></v-label>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
-                            <v-btn color="primary" small block @click="onVerval(item)">
+                            <v-btn
+                              v-if="$allow(`${jenis}-verval.update`) && Number(item.k_verval_paud) <= 3"
+                              color="primary"
+                              small
+                              block
+                              @click="onVerval(item)"
+                            >
+                              Verval Ajuan
+                            </v-btn>
+                            <v-btn v-else color="primary" small block @click="onVerval(item)">
                               LIHAT DETAIL
                             </v-btn>
                           </v-list-item-subtitle>
@@ -152,6 +161,7 @@
       :title="formulir['title']"
       :autoClose="formulir['autoClose']"
       :useSave="formulir['is_edit']"
+      color-btn="blue"
       @close="onClose"
       @save="onSave"
     >
@@ -272,7 +282,17 @@ export default {
     },
   },
   created() {
-    this.getMasters({ name: ['m_berkas_pengajar_paud', 'm_berkas_lpd_paud', 'm_kualifikasi'].join(';'), filter: {} });
+    this.getMasters({
+      name: ['m_berkas_pengajar_paud', 'm_berkas_lpd_paud', 'm_kualifikasi'].join(';'),
+      filter: {
+        0: {
+          k_berkas_pengajar_paud: {
+            op: '<>',
+            val: 2,
+          },
+        },
+      },
+    });
   },
 
   mounted() {
@@ -320,7 +340,7 @@ export default {
     },
 
     async onVerval(item) {
-      const kVerval = Number(item.k_verval_psp);
+      const kVerval = Number(item.k_verval_paud);
       const status = {
         color: this.getColor(kVerval),
         keterangan: this.$getDeepObj(item, 'm_verval_paud.data.keterangan') || '-',
@@ -341,9 +361,9 @@ export default {
 
       this.getDetail({ id: item.id, tipe: this.$route.meta.tipe }).then(({ data }) => {
         this.$set(this.formulir, 'alasan_verval', this.$getDeepObj(data, 'meta.alasan-verval'));
-        this.$set(this.formulir, 'is_disable', !this.isAllowAkses(data.policies));
-        this.$set(this.formulir, 'is_edit', this.isAllowAkses(data.policies));
-        this.$set(this.formulir, 'autoClose', !this.isAllowAkses(data.policies));
+        this.$set(this.formulir, 'is_disable', kVerval > 3);
+        this.$set(this.formulir, 'is_edit', this.$allow(`${this.jenis}-verval.update`) && kVerval <= 3);
+        this.$set(this.formulir, 'autoClose', kVerval > 3);
 
         this.$refs.modal.open();
         this.$nextTick(() => {
@@ -359,10 +379,11 @@ export default {
     onSave() {
       const formulir = Object.assign({}, this.$refs.formulir.getValue());
       const status = formulir.pilihan;
-      const alasan = formulir.alasan;
+      // const alasan = formulir.alasan;
       const id = formulir.id;
+
       if (status) {
-        const aksi = status === 1 ? 'tolak' : status === 2 ? 'setuju' : 'tolak-revisi';
+        const aksi = status === 1 ? '4' : status === 2 ? '6' : '5';
         const html = `<span class="subtitle-1">Anda Yakin ingin <strong>${
           status === 1 ? 'menolak' : status === 2 ? 'menerima' : 'menyatakan perbaikan'
         }</strong> ajuan verval berikut ?</span>`;
@@ -370,7 +391,7 @@ export default {
         this.$confirm(html, 'Konfirmasi', { tipe: status === 1 ? 'error' : status === 2 ? 'success' : 'warning' }).then(
           () => {
             this.$refs.modal.loading = true;
-            this.action({ id: id, type: aksi, params: { alasan: JSON.stringify(alasan) } })
+            this.action({ id: id, jenis: this.jenis, params: { k_verval_paud: aksi } })
               .then(() => {
                 this.$success('Data ajuan berhasil di ubah');
                 this.$refs.modal.dialog = false;
