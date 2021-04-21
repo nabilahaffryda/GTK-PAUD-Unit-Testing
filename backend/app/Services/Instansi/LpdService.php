@@ -276,12 +276,10 @@ class LpdService
 
     public function vervalUpdate(Akun $akun, PaudInstansi $paudInstansi, array $params)
     {
-        if ($paudInstansi->akun_id_verval <> $akun->akun_id) {
-            throw new FlowException("Anda tidak berhak melakukan verifikasi");
-        }
-
-        $paudInstansi->k_verval_paud = $params['k_verval_paud'];
-        $paudInstansi->wkt_verval    = Carbon::now();
+        $paudInstansi->k_verval_paud  = $params['k_verval_paud'];
+        $paudInstansi->wkt_verval     = Carbon::now();
+        $paudInstansi->akun_id_verval = $akun->akun_id;
+        $paudInstansi->alasan         = $params['alasan'] ?? null;
 
         if (!$paudInstansi->save()) {
             throw new FlowException('Proses simpan status verval tidak berhasil');
