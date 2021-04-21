@@ -134,6 +134,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('', [Akun\AdminKelasController::class, 'index']);
         Route::get('download', [Akun\AdminKelasController::class, 'download']);
         Route::get('download-aktivasi', [Akun\AdminKelasController::class, 'downloadAktivasi']);
+        Route::get('template', [Akun\AdminKelasController::class, 'template']);
         Route::post('create', [Akun\AdminKelasController::class, 'create']);
         Route::post('upload', [Akun\AdminKelasController::class, 'upload']);
         Route::get('{paudAdmin}', [Akun\AdminKelasController::class, 'fetch']);
