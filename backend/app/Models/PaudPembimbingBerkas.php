@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|Carbon $updated_at
  * @property null|string $admin_id
  *
+ * @property-read null|string $url
+ *
  * @property-read Akun $akun
  * @property-read MBerkasPembimbingPaud $mBerkasPembimbingPaud
  * @property-read PaudPembimbing $paudPembimbing
@@ -76,6 +78,15 @@ class PaudPembimbingBerkas extends Eloquent
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var string[]
@@ -115,5 +126,10 @@ class PaudPembimbingBerkas extends Eloquent
     public function paudPembimbing()
     {
         return $this->belongsTo('App\Models\PaudPembimbing', 'paud_pembimbing_id', 'paud_pembimbing_id');
+    }
+
+    public function getUrlAttribute()
+    {
+        return $this->file ? sprintf("%s/%s", config('filesystems.disks.pembimbing-berkas.url'), $this->file) : null;
     }
 }
