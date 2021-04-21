@@ -18,6 +18,7 @@ import {
   stringToHtml,
   showMore,
   isLongText,
+  getAge,
 } from '@utils/format';
 
 export default {
@@ -270,6 +271,10 @@ export default {
       };
 
       return fungsiGpm[kFungsiGpm];
+    },
+
+    $getAge(date, useMonth) {
+      return getAge(date, useMonth);
     },
   },
 };

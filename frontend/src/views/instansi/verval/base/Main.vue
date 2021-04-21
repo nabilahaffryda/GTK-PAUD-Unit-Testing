@@ -15,13 +15,11 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <statistik :value="statistik"></statistik>
     <!--daftar-->
     <v-card flat>
       <v-card-text>
         <base-table-header
           :btnFilter="false"
-          btn-download
           @download="onDownloadList"
           @filter="onFilter"
           @search="onSearch"
@@ -59,9 +57,7 @@
                           <v-icon color="secondary" size="60">mdi-account-circle</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="py-0 px-1">
-                          <p class="caption grey--text">
-                            Nama Kandidat
-                          </p>
+                          <p class="caption grey--text"> Nama {{ $titleCase(obj) }} </p>
                           <span class="body-1">
                             <strong>
                               {{ $getDeepObj(item, `${obj}.data.nama`) || '-' }}
@@ -151,6 +147,30 @@
         <base-table-footer :pageTotal="pageTotal" :allow="!allow" @changePage="onChangePage"></base-table-footer>
       </v-card-actions>
     </v-card>
+    <base-modal-full
+      ref="modal"
+      :title="formulir['title']"
+      :autoClose="formulir['autoClose']"
+      :useSave="formulir['is_edit']"
+      @close="onClose"
+      @save="onSave"
+    >
+      <form-berkas
+        ref="formulir"
+        :masters="Object.assign({}, masters)"
+        :id="formulir['id']"
+        :detail="formulir['detail']"
+        :berkas="formulir['berkas']"
+        :fungsi="formulir['fungsi']"
+        :angkatan="Number(params.angkatan) > 1 ? 2 : 1"
+        :statistik="formulir['statistik']"
+        :isEdit="formulir['is_edit']"
+        :isDisable="formulir['is_disable']"
+        :initValue="formulir['init']"
+        :jenis="jenis"
+        :obj="obj"
+      ></form-berkas>
+    </base-modal-full>
   </div>
 </template>
 
@@ -158,6 +178,7 @@
 import { mapActions, mapState } from 'vuex';
 import list from '@mixins/list';
 import actions from './actions';
+import FormBerkas from '../formulir/Berkas';
 export default {
   name: 'Index',
   mixins: [list],
@@ -169,6 +190,7 @@ export default {
       listLaporan: [],
     };
   },
+  components: { FormBerkas },
   computed: {
     ...mapState('master', {
       masters: (state) => Object.assign({}, state.masters),
@@ -244,9 +266,13 @@ export default {
     obj() {
       return this.$route.meta.paudkey;
     },
+
+    jenis() {
+      return this.$route.meta.tipe;
+    },
   },
   created() {
-    this.getMasters({ name: ['m_berkas_pengajar_paud', 'm_berkas_lpd_paud'].join(';'), filter: {} });
+    this.getMasters({ name: ['m_berkas_pengajar_paud', 'm_berkas_lpd_paud', 'm_kualifikasi'].join(';'), filter: {} });
   },
 
   mounted() {
@@ -313,11 +339,8 @@ export default {
       this.$set(this.formulir, 'statistik', statistik);
       this.$set(this.formulir, 'init', null);
 
-      this.getDetail({ id: item.id }).then(({ data }) => {
-        const prosesAjuan = this.$getDeepObj(data, 'psp_profil_proseses.data').filter(
-          (item) => item.k_profil_proses_psp === 8
-        )[0];
-
+      this.getDetail({ id: item.id, tipe: this.$route.meta.tipe }).then(({ data }) => {
+        console.log(data);
         this.$set(this.formulir, 'alasan_verval', this.$getDeepObj(data, 'meta.alasan-verval'));
         this.$set(this.formulir, 'is_disable', !this.isAllowAkses(data.policies));
         this.$set(this.formulir, 'is_edit', this.isAllowAkses(data.policies));
@@ -330,8 +353,6 @@ export default {
           this.$set(this.formulir, 'detail', data);
           this.$set(this.formulir, 'berkas', this.$getDeepObj(data, 'psp_profil_berkases.data'));
           this.$set(this.formulir.detail, 'status', status);
-          this.$set(this.formulir.detail, 'alasan', (prosesAjuan && prosesAjuan.catatan) || '');
-          this.$set(this.formulir.detail, 'verifikator', this.lockedAkun(item));
         });
       });
     },

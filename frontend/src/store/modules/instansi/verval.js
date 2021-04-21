@@ -12,6 +12,14 @@ export const actions = {
     return await $ajax.get('/', { params: payload.params });
   },
 
+  async getDetail({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    $ajax = kitsu({
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/verval/${payload.tipe}/${payload.id}`,
+    });
+    return await $ajax.get('/');
+  },
+
   update({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     const url = `/i/${id}/verval/${payload.jenis}/${payload.id}/update`;
