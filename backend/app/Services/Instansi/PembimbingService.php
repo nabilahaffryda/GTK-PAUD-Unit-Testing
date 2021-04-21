@@ -94,7 +94,6 @@ class PembimbingService
     {
         return $pembimbing->loadMissing([
             'akun',
-            'mPcpPaud',
             'mVervalPaud',
             'paudPembimbingBerkases',
         ]);
