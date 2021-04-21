@@ -114,6 +114,6 @@ class PaudPembimbingBerkas extends Eloquent
      */
     public function paudPembimbing()
     {
-        return $this->belongsTo('App\Models\PaudPembimbing', 'paud_pembimbing_id', 'paud_pengajar_id');
+        return $this->belongsTo('App\Models\PaudPembimbing', 'paud_pembimbing_id', 'paud_pembimbing_id');
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\PaudPembimbing
  *
- * @property int $paud_pengajar_id
+ * @property int $paud_pembimbing_id
  * @property null|string $akun_id
  * @property null|int $tahun
  * @property null|int $angkatan
@@ -42,7 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read MVervalPaud $mVervalPaud
  * @property-read Collection|PaudPembimbingBerkas[] $paudPembimbingBerkases
  *
- * @method static Builder|PaudPembimbing wherePaudPengajarId($value)
+ * @method static Builder|PaudPembimbing wherePaudPembimbingId($value)
  * @method static Builder|PaudPembimbing whereAkunId($value)
  * @method static Builder|PaudPembimbing whereTahun($value)
  * @method static Builder|PaudPembimbing whereAngkatan($value)
@@ -82,7 +82,7 @@ class PaudPembimbing extends Eloquent
      *
      * @var string
      */
-    protected $primaryKey = 'paud_pengajar_id';
+    protected $primaryKey = 'paud_pembimbing_id';
 
     /**
      * The attributes that should be cast.
@@ -122,7 +122,7 @@ class PaudPembimbing extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'paud_pengajar_id',
+        'paud_pembimbing_id',
         'akun_id',
         'tahun',
         'angkatan',
@@ -168,6 +168,6 @@ class PaudPembimbing extends Eloquent
      */
     public function paudPembimbingBerkases()
     {
-        return $this->hasMany('App\Models\PaudPembimbingBerkas', 'paud_pembimbing_id', 'paud_pengajar_id');
+        return $this->hasMany('App\Models\PaudPembimbingBerkas', 'paud_pembimbing_id', 'paud_pembimbing_id');
     }
 }
