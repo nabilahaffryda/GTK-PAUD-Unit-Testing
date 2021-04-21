@@ -300,7 +300,10 @@ export default {
         .then(({ data, meta }) => {
           this.detail = Object.assign({}, data);
           this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
-          this.id = this.$getDeepObj(data, 'paud_pengajar_id') || this.$getDeepObj(data, 'paud_instansi_id');
+          this.id =
+            this.$getDeepObj(data, 'paud_pengajar_id') ||
+            this.$getDeepObj(data, 'paud_instansi_id') ||
+            this.$getDeepObj(data, 'paud_admin_id');
         })
         .then(() => {
           if (this.jenis !== 'admin-kelas') this.fetchDokumen();
@@ -330,15 +333,17 @@ export default {
         }
       });
 
-      if (!diklats.length) {
-        this.$error('Mohon isikan data diklat minimal 1 (satu)');
-        this.$refs.modal.loading = false;
-        return;
-      } else {
-        diklats.forEach((key, index) => {
-          formData.append('pengalaman' + `[${index}][nama]`, key['nama']);
-          formData.append('pengalaman' + `[${index}][tahun]`, key['tahun']);
-        });
+      if (this.jenis !== 'admin-kelas') {
+        if (!diklats.length) {
+          this.$error('Mohon isikan data diklat minimal 1 (satu)');
+          this.$refs.modal.loading = false;
+          return;
+        } else {
+          diklats.forEach((key, index) => {
+            formData.append('pengalaman' + `[${index}][nama]`, key['nama']);
+            formData.append('pengalaman' + `[${index}][tahun]`, key['tahun']);
+          });
+        }
       }
 
       if (photo) {

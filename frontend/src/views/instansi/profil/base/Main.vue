@@ -151,8 +151,7 @@ export default {
           },
         },
       },
-    });
-    this.fetchProfil();
+    }).then(this.fetchProfil());
   },
 };
 </script>

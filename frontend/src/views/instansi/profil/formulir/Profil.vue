@@ -210,10 +210,10 @@ export default {
               title: 'Kota/Kab. dan Provinsi',
               value: [
                 this.$getDeepObj(item, 'akun.data.k_kota')
-                  ? this.masters.m_kota[this.$getDeepObj(item, 'akun.data.k_kota')]
+                  ? this.masters.m_kota && this.masters.m_kota[this.$getDeepObj(item, 'akun.data.k_kota')]
                   : '-',
                 this.$getDeepObj(item, 'akun.data.k_propinsi')
-                  ? this.masters.m_propinsi[this.$getDeepObj(item, 'akun.data.k_propinsi')]
+                  ? this.masters.m_propinsi && this.masters.m_propinsi[this.$getDeepObj(item, 'akun.data.k_propinsi')]
                   : '-',
               ].join(' - '),
               grid: { cols: 12, md: 6, sm: 12 },

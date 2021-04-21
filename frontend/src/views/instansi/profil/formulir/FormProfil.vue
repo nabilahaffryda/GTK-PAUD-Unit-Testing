@@ -727,6 +727,7 @@ export default {
         { name: 'instansi_k_propinsi' },
         { name: 'instansi_k_kota' },
       ];
+
       for (const item of formulir) {
         if (item.name) {
           this.$set(this.form, item.name, this.$getDeepObj(value, item.name) || '');
