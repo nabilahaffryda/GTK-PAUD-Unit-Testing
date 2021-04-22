@@ -58,6 +58,16 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/reset', [Akun\AdminProgramController::class, 'reset']);
     });
 
+    Route::group(['prefix' => 'akun/admin-gtk'], function () {
+        Route::get('', [Akun\AdminGtkController::class, 'index']);
+        Route::get('download', [Akun\AdminGtkController::class, 'download']);
+        Route::post('create', [Akun\AdminGtkController::class, 'create']);
+        Route::get('{paudAdmin}', [Akun\AdminGtkController::class, 'fetch']);
+        Route::post('{paudAdmin}/update', [Akun\AdminGtkController::class, 'update']);
+        Route::post('{paudAdmin}/delete', [Akun\AdminGtkController::class, 'delete']);
+        Route::post('{paudAdmin}/reset', [Akun\AdminGtkController::class, 'reset']);
+    });
+
     Route::group(['prefix' => 'akun/admin-program-lpd'], function () {
         Route::get('', [Akun\AdminProgramLpdController::class, 'index']);
         Route::get('download', [Akun\AdminProgramLpdController::class, 'download']);
