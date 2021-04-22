@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|int $instansi_k_kota
  * @property null|string $instansi_kodepos
  * @property null|int $is_diklat_dasar
- * @property null|string $pengalaman
+ * @property null|array $pengalaman
  * @property null|string $akun_id_verval
  * @property null|string $alasan
  * @property null|string $catatan
@@ -107,7 +107,7 @@ class PaudPembimbing extends Eloquent
         'instansi_k_kota'     => 'int',
         'instansi_kodepos'    => 'string',
         'is_diklat_dasar'     => 'int',
-        'pengalaman'          => 'string',
+        'pengalaman'          => 'array',
         'akun_id_verval'      => 'string',
         'alasan'              => 'string',
         'catatan'             => 'string',
