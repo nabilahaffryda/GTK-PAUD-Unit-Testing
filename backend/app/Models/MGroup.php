@@ -203,6 +203,15 @@ class MGroup extends Eloquent
     public const PENGAJAR_TAMBAHAN_DIKLAT_PAUD = 175;
     public const PEMBIMBING_PRAKTIK_DIKLAT_PAUD = 176;
     public const ADM_KELAS_DIKLAT_PAUD = 177;
+    public const AP_VOKASI = 178;
+    public const AP_VOKASI_BALAI = 179;
+    public const OP_VOKASI_BALAI = 180;
+    public const ADM_LMS_PSP_PUSAT = 181;
+    public const AP_PSP_P4TK = 182;
+    public const ADM_LMS_PSP_P4TK = 183;
+    public const NARASUMBER_PSP = 184;
+    public const INSTRUKTUR_PSP = 185;
+    public const ADM_GTK_PAUD_DIKLAT_PAUD = 186;
 
     /**
      * The table associated with the model.
