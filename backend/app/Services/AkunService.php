@@ -25,6 +25,7 @@ class AkunService
     {
         return [
             MGroup::AP_GTK_PAUD_DIKLAT_PAUD,
+            MGroup::ADM_GTK_PAUD_DIKLAT_PAUD,
             MGroup::AP_LPD_DIKLAT_PAUD,
             MGroup::OP_LPD_DIKLAT_PAUD,
             MGroup::PENGAJAR_BIMTEK_DIKLAT_PAUD,
@@ -39,6 +40,9 @@ class AkunService
     {
         $groups = [
             MGroup::AP_GTK_PAUD_DIKLAT_PAUD  => [
+                MGroup::ADM_GTK_PAUD_DIKLAT_PAUD,
+            ],
+            MGroup::ADM_GTK_PAUD_DIKLAT_PAUD  => [
                 MGroup::AP_LPD_DIKLAT_PAUD,
                 MGroup::PENGAJAR_BIMTEK_DIKLAT_PAUD,
                 MGroup::PENGAJAR_DIKLAT_PAUD,
