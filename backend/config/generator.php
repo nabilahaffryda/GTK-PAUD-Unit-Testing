@@ -226,7 +226,23 @@ return [
             ],
         ],
 
+        'paud_instansi' => [
+            'model' => [
+                'cast' => [
+                    'diklat' => 'array',
+                ],
+            ],
+        ],
+
         'paud_pengajar' => [
+            'model' => [
+                'cast' => [
+                    'pengalaman' => 'array',
+                ],
+            ],
+        ],
+
+        'paud_pembimbing' => [
             'model' => [
                 'cast' => [
                     'pengalaman' => 'array',
