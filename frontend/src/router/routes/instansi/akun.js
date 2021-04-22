@@ -70,4 +70,14 @@ export default [
       tipe: 'admin-kelas',
     },
   },
+  {
+    path: '/i/:id(\\d+)/akun/gtk',
+    name: 'akun-gtk',
+    component: () => lazyLoadView(import('@views/instansi/akun/list/gtk/Index')),
+    meta: {
+      title: 'Kelola Admin GTK',
+      k_group: '186',
+      tipe: 'admin-gtk',
+    },
+  },
 ];

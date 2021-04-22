@@ -26,6 +26,16 @@ export default [
         to: { name: 'akun-program' },
       },
       {
+        icon: 'mdi-account-tie',
+        title: 'Kelola Admin GTK',
+        desc: 'Pengelolaan data Akun Admin GTK',
+        color: 'pink',
+        deepColor: 'darken-4',
+        akses: 'akun-admin-gtk.index',
+        link: 'akun-gtk',
+        to: { name: 'akun-gtk' },
+      },
+      {
         icon: 'mdi-account-cog',
         title: 'Kelola Operator LPD',
         desc: 'Pengelolaan data Operator LPD',

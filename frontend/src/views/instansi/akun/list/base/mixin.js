@@ -219,7 +219,7 @@ export default {
 
     getInstansi() {
       let mInstansi = {};
-      if (Number(this.kGroup) === 171 && !Object.keys(this.instansis).length) {
+      if ([171].includes(Number(this.kGroup)) && !Object.keys(this.instansis).length) {
         this.listInstansis()
           .then((resp) => {
             const instansi = resp || [];
