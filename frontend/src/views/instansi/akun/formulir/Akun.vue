@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto" flat>
     <v-card-text>
-      <template v-if="useUpload && !isPilih">
+      <template v-if="useUpload && !isPilih && !isEdit">
         <h2 class="">Akun Baru</h2>
         <span class="my-2">
           Untuk menambah data akun baru, terdapat dua pilihan dengan cara unggah data melalui excel atau membuat akun
@@ -58,7 +58,7 @@
           </v-btn>
         </div>
       </template>
-      <v-container v-if="!useUpload ? true : isPilih === 'manual'">
+      <v-container v-if="!useUpload || isEdit ? true : isPilih === 'manual'">
         <v-stepper v-model="step" class="elevation-0">
           <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
             <v-stepper-step color="secondary" :complete="step > 1" step="1"> Tambah Akun </v-stepper-step>
@@ -79,7 +79,7 @@
                 <v-card-actions class="pa-0">
                   <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
                   <v-spacer></v-spacer>
-                  <v-btn class="text-md-right" right text @click="onResetPilih">
+                  <v-btn v-if="useUpload || step !== 1" class="text-md-right" right text @click="onResetPilih">
                     Kembali
                   </v-btn>
                   <v-btn class="text-md-right" right color="secondary" @click="onCheck">
