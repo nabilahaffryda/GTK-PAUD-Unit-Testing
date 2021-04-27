@@ -13,6 +13,7 @@ use App\Models\MJenisInstansi;
 use App\Models\MStatusEmail;
 use App\Models\PaudAdmin;
 use App\Models\Ptk;
+use App\Remotes\Paspor;
 use App\Remotes\Paspor\User;
 use App\Services\AkunService;
 use Arr;
@@ -624,5 +625,18 @@ class AdminService
             'batch' => $batch,
             'data'  => $data,
         ];
+    }
+
+    public function findEmail(string $email): ?Akun
+    {
+        if ($akun = Akun::whereEmail($email)->first()) {
+            return $akun;
+        }
+
+        if ($ptk = Ptk::whereEmail($email)->first()) {
+            return new Akun($ptk->toArray());
+        }
+
+        return null;
     }
 }

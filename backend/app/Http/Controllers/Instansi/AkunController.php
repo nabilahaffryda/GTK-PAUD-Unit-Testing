@@ -199,7 +199,7 @@ class AkunController extends Controller
      */
     public function email($email)
     {
-        return BaseResource::make(Akun::whereEmail($email)->first());
+        return BaseResource::make($this->service->findEmail($email));
     }
 
     /**
