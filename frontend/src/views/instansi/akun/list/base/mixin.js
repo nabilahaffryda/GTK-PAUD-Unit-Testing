@@ -60,6 +60,11 @@ export default {
 
     onCheck(email) {
       this.$set(this.formulir, 'errorEmail', null);
+      if (email && !this.validateEmail(email)) {
+        this.$set(this.formulir, 'errorEmail', 'Pastikan Anda memasukan data email yang Valid');
+        return;
+      }
+
       this.lookup(email)
         .then((resp) => {
           this.$set(this.formulir, 'init', this.$isObject(resp) ? resp : { email });
@@ -71,6 +76,11 @@ export default {
           this.$set(this.formulir, 'isExist', false);
           this.$set(this.formulir, 'errorEmail', resp.error || 'Pastikan anda memasukan data email yang Valid');
         });
+    },
+
+    validateEmail(email) {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
     },
 
     onValidate() {
@@ -99,7 +109,7 @@ export default {
           this.$refs.modal.close();
           this.fetchData();
 
-          if (!isEdit && !this.formulir.isExist) {
+          if (!isEdit) {
             this.resetAkun(this.$getDeepObj(data, 'id'));
           }
         })
@@ -114,7 +124,7 @@ export default {
         const group = this.$getIncluded('m_group', this.$getRelasi(data, 'm_group')['id'], included);
         this.$set(this.akun, 'nama', this.$getAttr(ptk, 'nama') || '-');
         this.$set(this.akun, 'email', this.$getAttr(ptk, 'email') || '-');
-        this.$set(this.akun, 'password', this.$getAttr(ptk, 'passwd') || '*********');
+        this.$set(this.akun, 'password', !this.formulir.isExist ? this.$getAttr(ptk, 'passwd') : '*********');
         this.$set(this.akun, 'peran', (this.$getAttr(group, 'keterangan') || '-').toUpperCase());
         this.$nextTick(() => {
           this.$refs.akun.print();

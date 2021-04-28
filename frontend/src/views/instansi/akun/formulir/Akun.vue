@@ -73,6 +73,13 @@
             <v-stepper-content step="1" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
+                  <v-alert
+                      class="mb-4"
+                      type="error"
+                      v-if="errorEmail"
+                  >
+                    {{ errorEmail }}
+                  </v-alert>
                   <base-form-generator :schema="schema.unchecked" v-model="form" />
                   <v-divider class="my-4" />
                 </v-card-text>
@@ -375,6 +382,7 @@ export default {
               singleLine: true,
               grid: { cols: 12, md: 12 },
               labelColor: 'secondary',
+              counter: 100,
             },
             {
               type: 'VTextField',
@@ -513,6 +521,7 @@ export default {
               singleLine: true,
               grid: { cols: 12, md: 12 },
               labelColor: 'secondary',
+              counter: 100,
             },
             {
               type: 'VTextField',
@@ -634,21 +643,7 @@ export default {
               singleLine: true,
               grid: { cols: 12, md: 12 },
               labelColor: 'secondary',
-            },
-            {
-              type: 'VTextField',
-              name: 'email',
-              label: `Alamat Surel`,
-              labelColor: 'secondary',
-              hideDetails: false,
-              placeholder: 'Alamat Surel',
-              hint: 'wajib diisi',
-              grid: { cols: 12, md: 12 },
-              required: true,
-              outlined: true,
-              dense: true,
-              disabled: true,
-              singleLine: true,
+              counter: 100,
             },
             {
               type: 'VTextField',
@@ -660,7 +655,7 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
-              grid: { cols: 12, md: 6 },
+              grid: { cols: 12, md: 3 },
               labelColor: 'secondary',
             },
             {
@@ -673,8 +668,57 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
+              grid: { cols: 12, md: 3 },
+              labelColor: 'secondary',
+            },
+            {
+              type: 'VRadio',
+              name: 'kelamin',
+              label: 'Jenis Kelamin',
+              hint: 'wajib diisi',
+              items: [
+                { value: 'L', text: 'Laki-Laki' },
+                { value: 'P', text: 'Perempuan' },
+              ],
+              required: true,
+              hideDetails: false,
+              outlined: true,
+              dense: true,
+              row: true,
+              singleLine: false,
               grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
+            },
+            {
+              type: 'VTextField',
+              name: 'email',
+              label: `Alamat Surel`,
+              labelColor: 'secondary',
+              hideDetails: false,
+              placeholder: 'Alamat Surel',
+              hint: 'wajib diisi',
+              grid: { cols: 12, md: 6 },
+              required: true,
+              outlined: true,
+              dense: true,
+              disabled: true,
+              singleLine: true,
+            },
+            {
+              type: 'VTextField',
+              name: `no_hp`,
+              label: `Nomor HP/WA`,
+              labelColor: 'secondary',
+              hideDetails: false,
+              placeholder: 'Nomor Handphone',
+              hint: 'wajib diisi',
+              grid: { cols: 12, md: 6 },
+              required: true,
+              dense: true,
+              outlined: true,
+              singleLine: true,
+              mask: '##############',
+              counter: 14,
             },
           ],
           kelas: [
@@ -690,6 +734,7 @@ export default {
               singleLine: true,
               grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
+              counter: 100,
             },
             {
               type: 'VTextField',
