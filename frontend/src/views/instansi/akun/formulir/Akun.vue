@@ -73,11 +73,7 @@
             <v-stepper-content step="1" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
-                  <v-alert
-                      class="mb-4"
-                      type="error"
-                      v-if="errorEmail"
-                  >
+                  <v-alert class="mb-4" type="error" v-if="errorEmail">
                     {{ errorEmail }}
                   </v-alert>
                   <base-form-generator :schema="schema.unchecked" v-model="form" />

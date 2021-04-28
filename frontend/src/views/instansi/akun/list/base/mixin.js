@@ -132,6 +132,30 @@ export default {
       });
     },
 
+    onNonAktif(item) {
+      this.$confirm(`Apakan anda ingin menon-aktifkan ${this.title} berikut ?`, `Non-Aktifkan ${this.title}`, {
+        tipe: 'error',
+        data: this.confirmHtml(item),
+      }).then(() => {
+        this.action({ id: item.paud_admin_id, type: 'non-aktif', name: this.attr.tipe }).then(() => {
+          this.$success(`Akun ${this.title} berhasil dinon-aktifkan`);
+          this.fetchData();
+        });
+      });
+    },
+
+    onAktif(item) {
+      this.$confirm(`Apakan anda ingin mengaktifkan ${this.title} berikut ?`, `Aktifkan ${this.title}`, {
+        tipe: 'error',
+        data: this.confirmHtml(item),
+      }).then(() => {
+        this.action({ id: item.paud_admin_id, type: 'aktif', name: this.attr.tipe }).then(() => {
+          this.$success(`Akun ${this.title} berhasil diaktifkan`);
+          this.fetchData();
+        });
+      });
+    },
+
     onDelete(item) {
       this.$confirm(`Apakan anda ingin menghapus ${this.title} berikut ?`, `Hapus ${this.title}`, {
         tipe: 'error',

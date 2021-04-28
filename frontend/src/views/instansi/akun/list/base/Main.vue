@@ -274,10 +274,10 @@ export default {
       let disabled = false;
       switch (action.event) {
         case 'onAktif':
-          disabled = !Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
+          disabled = !Number(this.$getDeepObj(data, 'is_aktif') || 0);
           break;
         case 'onNonAktif':
-          disabled = Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
+          disabled = Number(this.$getDeepObj(data, 'is_aktif') || 0);
           break;
         default:
           disabled = this.$allow(action.akses, data.policies || false);
