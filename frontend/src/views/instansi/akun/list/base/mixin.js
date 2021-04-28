@@ -27,6 +27,14 @@ export default {
       this.groups = temp;
     },
 
+    onDetail(data) {
+      this.$set(this.formulir, 'title', `Detail ${this.title}`);
+      this.$set(this.formulir, 'detail', data);
+      this.$set(this.formulir, 'component', 'DetailView');
+      this.$set(this.formulir, 'isValid', false);
+      this.$refs.modal.open();
+    },
+
     onAdd() {
       this.$set(this.formulir, 'title', 'Tambah Data');
       this.$set(this.formulir, 'isEdit', false);

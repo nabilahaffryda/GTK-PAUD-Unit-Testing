@@ -56,7 +56,7 @@
                   <v-list-item-content>
                     <v-row>
                       <v-col class="py-0" cols="12" md="4">
-                        <v-list-item class="px-0">
+                        <v-list-item class="px-0" @click="onDetail($getDeepObj(item, 'akun.data'))">
                           <v-list-item-avatar color="secondary">
                             <v-icon dark>mdi-account-circle</v-icon>
                           </v-list-item-avatar>
@@ -134,12 +134,14 @@
       :title="formulir.title"
       @save="onSave"
     >
-      <form-akun
+      <component
         ref="formulir"
+        :is="formulir.component || 'FormAkun'"
         :title="title"
         :isChecked="formulir.isChecked"
         :isEdit="formulir.isEdit"
         :initValue="formulir.init"
+        :detail="formulir.detail"
         :errorEmail="formulir.errorEmail"
         :groups="groups"
         :instansis="instansis"
@@ -172,6 +174,7 @@
 <script>
 import { mapState } from 'vuex';
 import FormAkun from '@views/instansi/akun/formulir/Akun';
+import DetailView from './Detail';
 import Akun from '@components/cetak/Akun';
 import PopupUpload from '@components/popup/Upload';
 import mixin from './mixin';
@@ -202,7 +205,7 @@ export default {
     },
   },
   mixins: [list, mixin],
-  components: { FormAkun, Akun, PopupUpload },
+  components: { DetailView, FormAkun, Akun, PopupUpload },
   data() {
     return {
       formulir: {},
