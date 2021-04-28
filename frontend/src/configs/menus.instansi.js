@@ -17,8 +17,8 @@ export default [
       },
       {
         icon: 'mdi-account-tie',
-        title: 'Kelola Admin program',
-        desc: 'Pengelolaan data Akun Admin Program',
+        title: 'Kelola Admin Program LPD',
+        desc: 'Pengelolaan data Akun Admin Program LPD',
         color: 'blue',
         deepColor: 'darken-4',
         akses: 'akun-admin-program-lpd.index',

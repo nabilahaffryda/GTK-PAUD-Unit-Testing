@@ -5,7 +5,7 @@ export default [
     name: 'akun-program',
     component: () => lazyLoadView(import('@views/instansi/akun/list/program/Index')),
     meta: {
-      title: 'Kelola Akun Admin Program',
+      title: 'Kelola Akun Admin Program LPD',
       k_group: '171',
       tipe: 'admin-program-lpd',
     },
