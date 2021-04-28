@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('create', [Akun\AdminProgramController::class, 'create']);
         Route::get('{paudAdmin}', [Akun\AdminProgramController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\AdminProgramController::class, 'update']);
+        Route::post('{paudAdmin}/aktif', [Akun\AdminProgramController::class, 'aktif']);
+        Route::post('{paudAdmin}/non-aktif', [Akun\AdminProgramController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\AdminProgramController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\AdminProgramController::class, 'reset']);
     });
@@ -64,6 +66,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('create', [Akun\AdminGtkController::class, 'create']);
         Route::get('{paudAdmin}', [Akun\AdminGtkController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\AdminGtkController::class, 'update']);
+        Route::post('{paudAdmin}/aktif', [Akun\AdminGtkController::class, 'aktif']);
+        Route::post('{paudAdmin}/non-aktif', [Akun\AdminGtkController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\AdminGtkController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\AdminGtkController::class, 'reset']);
     });
@@ -74,6 +78,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('create', [Akun\AdminProgramLpdController::class, 'create']);
         Route::get('{paudAdmin}', [Akun\AdminProgramLpdController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\AdminProgramLpdController::class, 'update']);
+        Route::post('{paudAdmin}/aktif', [Akun\AdminProgramLpdController::class, 'aktif']);
+        Route::post('{paudAdmin}/non-aktif', [Akun\AdminProgramLpdController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\AdminProgramLpdController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\AdminProgramLpdController::class, 'reset']);
     });
@@ -84,6 +90,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('create', [Akun\OperatorLpdController::class, 'create']);
         Route::get('{paudAdmin}', [Akun\OperatorLpdController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\OperatorLpdController::class, 'update']);
+        Route::post('{paudAdmin}/aktif', [Akun\OperatorLpdController::class, 'aktif']);
+        Route::post('{paudAdmin}/non-aktif', [Akun\OperatorLpdController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\OperatorLpdController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\OperatorLpdController::class, 'reset']);
     });
@@ -97,6 +105,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('upload', [Akun\PengajarBimtekController::class, 'upload']);
         Route::get('{paudAdmin}', [Akun\PengajarBimtekController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\PengajarBimtekController::class, 'update']);
+        Route::post('{paudAdmin}/aktif', [Akun\PengajarBimtekController::class, 'aktif']);
+        Route::post('{paudAdmin}/non-aktif', [Akun\PengajarBimtekController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\PengajarBimtekController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\PengajarBimtekController::class, 'reset']);
     });
@@ -110,6 +120,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('upload', [Akun\PengajarController::class, 'upload']);
         Route::get('{paudAdmin}', [Akun\PengajarController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\PengajarController::class, 'update']);
+        Route::post('{paudAdmin}/aktif', [Akun\PengajarController::class, 'aktif']);
+        Route::post('{paudAdmin}/non-aktif', [Akun\PengajarController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\PengajarController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\PengajarController::class, 'reset']);
     });
@@ -123,6 +135,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('upload', [Akun\PengajarTambahanController::class, 'upload']);
         Route::get('{paudAdmin}', [Akun\PengajarTambahanController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\PengajarTambahanController::class, 'update']);
+        Route::post('{paudAdmin}/aktif', [Akun\PengajarTambahanController::class, 'aktif']);
+        Route::post('{paudAdmin}/non-aktif', [Akun\PengajarTambahanController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\PengajarTambahanController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\PengajarTambahanController::class, 'reset']);
     });
@@ -136,6 +150,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('upload', [Akun\PembimbingPraktikController::class, 'upload']);
         Route::get('{paudAdmin}', [Akun\PembimbingPraktikController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\PembimbingPraktikController::class, 'update']);
+        Route::post('{paudAdmin}/aktif', [Akun\PembimbingPraktikController::class, 'aktif']);
+        Route::post('{paudAdmin}/non-aktif', [Akun\PembimbingPraktikController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\PembimbingPraktikController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\PembimbingPraktikController::class, 'reset']);
     });
@@ -149,6 +165,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('upload', [Akun\AdminKelasController::class, 'upload']);
         Route::get('{paudAdmin}', [Akun\AdminKelasController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\AdminKelasController::class, 'update']);
+        Route::post('{paudAdmin}/aktif', [Akun\AdminKelasController::class, 'aktif']);
+        Route::post('{paudAdmin}/non-aktif', [Akun\AdminKelasController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\AdminKelasController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\AdminKelasController::class, 'reset']);
     });
