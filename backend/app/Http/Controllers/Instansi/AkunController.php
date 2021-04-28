@@ -161,6 +161,38 @@ class AkunController extends Controller
     /**
      * @param PaudAdmin $paudAdmin
      * @return BaseResource
+     * @throws SaveException
+     */
+    public function aktif(PaudAdmin $paudAdmin)
+    {
+        if ($paudAdmin->k_group != $this->kGroup) {
+            abort(404);
+        }
+
+        $this->validateGroup();
+
+        return BaseResource::make($this->service->setAktif($paudAdmin, true));
+    }
+
+    /**
+     * @param PaudAdmin $paudAdmin
+     * @return BaseResource
+     * @throws SaveException
+     */
+    public function nonAktif(PaudAdmin $paudAdmin)
+    {
+        if ($paudAdmin->k_group != $this->kGroup) {
+            abort(404);
+        }
+
+        $this->validateGroup();
+
+        return BaseResource::make($this->service->setAktif($paudAdmin, false));
+    }
+
+    /**
+     * @param PaudAdmin $paudAdmin
+     * @return BaseResource
      * @throws FlowException
      * @throws SaveException
      */

@@ -627,6 +627,30 @@ class AdminService
         ];
     }
 
+    public function setAktif(PaudAdmin $paudAdmin, $isAktif)
+    {
+        /** @var AkunInstansi $akunInstansi */
+        $akunInstansi = AkunInstansi::query()
+            ->where([
+                'akun_id'     => $paudAdmin->akun_id,
+                'k_group'     => $paudAdmin->k_group,
+                'instansi_id' => $paudAdmin->instansi_id,
+            ])
+            ->first();
+
+        if ($akunInstansi) {
+            $akunInstansi->update([
+                'is_aktif' => $isAktif,
+            ]);
+        }
+
+        $paudAdmin->update([
+            'is_aktif' => $isAktif,
+        ]);
+
+        return $paudAdmin;
+    }
+
     public function findEmail(string $email): ?Akun
     {
         if ($akun = Akun::whereEmail($email)->first()) {
