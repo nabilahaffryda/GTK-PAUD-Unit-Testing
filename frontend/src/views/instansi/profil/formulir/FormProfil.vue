@@ -28,6 +28,19 @@
             <div v-for="(item, i) in schema" :key="i">
               <div v-if="i !== 'dasar'" class="text-h6 my-3 font-weight-bold"> Data {{ $titleCase(i) }} </div>
               <base-form-generator :schema="item" v-model="form" />
+              <template v-if="i === 'dasar' && Number(form && form.k_pcp_paud) === 9">
+                <v-row dense>
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      label="Keikutsertaan PCP Lainnya"
+                      v-model="form[' kcp_paud_lain']"
+                      outlined
+                      dense
+                      single-line
+                    />
+                  </v-col>
+                </v-row>
+              </template>
             </div>
 
             <template v-if="jenis !== 'admin-kelas'">
@@ -321,7 +334,7 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
-              grid: { cols: 12, md: 4 },
+              grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
             },
             {
@@ -730,6 +743,7 @@ export default {
         { name: 'k_kota' },
         { name: 'instansi_k_propinsi' },
         { name: 'instansi_k_kota' },
+        { name: 'kcp_paud_lain' },
       ];
 
       for (const item of formulir) {
