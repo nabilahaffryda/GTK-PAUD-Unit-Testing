@@ -2,7 +2,7 @@
   <div>
     <v-card flat style="margin-bottom: 10%">
       <v-toolbar flat>
-        <v-toolbar-title>Verval Ajuan</v-toolbar-title>
+        <v-toolbar-title>Verval Ajuan Profil</v-toolbar-title>
         <v-spacer />
         <v-chip dark :color="$getDeepObj(detail, 'status.color')">
           {{ $getDeepObj(detail, 'status.keterangan') }}
@@ -62,7 +62,9 @@
             <v-col cols="12" md="12" sm="12">
               <div class="text-h6 my-3 font-weight-bold"> Data Diklat </div>
               <v-list three-line>
-                <template v-for="(item, index) in $getDeepObj(detail, 'diklat') || $getDeepObj(detail, 'pengalaman')">
+                <template
+                  v-for="(item, index) in $getDeepObj(detail, 'diklat') || $getDeepObj(detail, 'pengalaman') || []"
+                >
                   <v-list-item :key="index">
                     <v-list-item-avatar tile>
                       <v-avatar tile color="secondary">
@@ -130,7 +132,7 @@
                           dark
                           :color="item.color"
                           :outlined="pilihan !== item.value"
-                          @click="pilihan = item.value"
+                          @click="onSelected(item.value)"
                           style="background-color: white"
                         >
                           <v-icon small left>{{ item.icon }}</v-icon
@@ -140,6 +142,35 @@
                     </template>
                   </v-row>
                 </v-card>
+              </v-col>
+              <v-col cols="12" :class="[isEdit ? 'mt-3' : '']">
+                <template v-if="pilihan && !isDisable">
+                  <div class="pa-4" v-if="$isObject(schema[pilihan])">
+                    <b class="black--text">{{ schema[pilihan]['label'] }} *</b><br />
+                    <validation-provider
+                      mode="passive"
+                      :name="schema[pilihan]['label']"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
+                      <v-textarea
+                        required
+                        v-model="form.alasan"
+                        :error-messages="errors"
+                        :disabled="isDisable"
+                        rows="1"
+                        single-line
+                        outlined
+                      />
+                    </validation-provider>
+                  </div>
+                </template>
+                <template v-if="$isObject(schema[pilihan]) && (!isEdit || isDisable)">
+                  <b class="black--text">Catatan Verval*</b><br />
+                  <v-card flat outlined>
+                    <v-card-text v-html="catatan"></v-card-text>
+                  </v-card>
+                </template>
               </v-col>
             </v-row>
           </v-container>
@@ -152,11 +183,16 @@
 <script>
 import BerkasCollection from './CollectionBerkas';
 import PopupPreviewDetail from '@components/popup/PreviewDetil';
+import { ValidationProvider } from 'vee-validate';
 export default {
   props: {
     detail: {
       type: Object,
       default: () => {},
+    },
+    berkas: {
+      type: Array,
+      default: () => [],
     },
     masters: {
       type: Object,
@@ -187,10 +223,11 @@ export default {
       default: null,
     },
   },
-  components: { BerkasCollection, PopupPreviewDetail },
+  components: { BerkasCollection, PopupPreviewDetail, ValidationProvider },
   data() {
     return {
       preview: {},
+      form: {},
       pilihan: null,
       tab: null,
       tambahans: [
@@ -232,7 +269,6 @@ export default {
       ],
     };
   },
-
   computed: {
     profils() {
       const item = this.$getDeepObj(this, 'detail') || {};
@@ -284,7 +320,7 @@ export default {
     },
 
     berkases() {
-      const berkas = this.$getDeepObj(this, `detail.paud_${this.jenis}_berkases.data`) || [];
+      const berkas = this.berkas || [];
       const masters = this.$mapForMaster(this.$getDeepObj(this, `masters.m_berkas_${this.jenis}_paud`));
       const mBerkas = this.$arrToObj(berkas, `k_berkas_${this.jenis}_paud`);
 
@@ -300,8 +336,21 @@ export default {
           value: mBerkas[key.value],
         });
       });
-
       return temp;
+    },
+
+    schema() {
+      return {
+        1: {
+          label: 'Alasan ajuan ditolak',
+          items: this.$mapForMaster(this.masters['alasan_verval'] && this.masters['alasan_verval']['tolak']),
+        },
+        2: {},
+        3: {
+          label: 'Alasan ajuan butuh diperbaiki',
+          items: this.$mapForMaster(this.masters['alasan_verval'] && this.masters['alasan_verval']['perbaikan']),
+        },
+      };
     },
   },
 
@@ -326,6 +375,10 @@ export default {
 
     initForm(value) {
       this.$set(this, 'pilihan', (value && value.pilihan) || null);
+    },
+
+    onSelected(value) {
+      this.$set(this, 'pilihan', value);
     },
   },
   watch: {

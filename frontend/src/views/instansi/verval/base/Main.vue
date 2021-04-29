@@ -7,10 +7,8 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline secondary--text"> <strong>Verval</strong> Daftar Riwayat Hidup (CV)</h1>
-            <div>
-              Modul ini digunakan untuk melakukan Verval Ajuan Daftar Riwayat Hidup (CV) {{ $route.meta.title }}
-            </div>
+            <h1 class="headline secondary--text"> <strong>Verval</strong> Profil</h1>
+            <div> Modul ini digunakan untuk melakukan {{ $route.meta.title }} </div>
           </v-col>
         </v-row>
       </v-card-text>
@@ -358,7 +356,9 @@ export default {
       this.$set(this.formulir, 'init', null);
 
       this.getDetail({ id: item.id, tipe: this.$route.meta.tipe }).then(({ data }) => {
-        this.$set(this.formulir, 'alasan_verval', this.$getDeepObj(data, 'meta.alasan-verval'));
+        console.log(data);
+
+        this.$set(this.formulir, 'alasan_verval', this.$getDeepObj(data, 'catatan'));
         this.$set(this.formulir, 'is_disable', kVerval > 3);
         this.$set(this.formulir, 'is_edit', this.$allow(`${this.jenis}-verval.update`) && kVerval <= 3);
         this.$set(this.formulir, 'autoClose', kVerval > 3);
@@ -368,7 +368,7 @@ export default {
           this.$refs.formulir.reset();
           this.$set(this.formulir, 'init', init);
           this.$set(this.formulir, 'detail', data);
-          this.$set(this.formulir, 'berkas', this.$getDeepObj(data, 'psp_profil_berkases.data'));
+          this.$set(this.formulir, 'berkas', this.$getDeepObj(data, 'paud_instansi_berkases.data'));
           this.$set(this.formulir.detail, 'status', status);
         });
       });
@@ -377,7 +377,7 @@ export default {
     onSave() {
       const formulir = Object.assign({}, this.$refs.formulir.getValue());
       const status = formulir.pilihan;
-      // const alasan = formulir.alasan;
+      const alasan = formulir.alasan;
       const id = formulir.id;
 
       if (status) {
@@ -389,7 +389,7 @@ export default {
         this.$confirm(html, 'Konfirmasi', { tipe: status === 1 ? 'error' : status === 2 ? 'success' : 'warning' }).then(
           () => {
             this.$refs.modal.loading = true;
-            this.action({ id: id, jenis: this.jenis, params: { k_verval_paud: aksi } })
+            this.action({ id: id, jenis: this.jenis, params: { k_verval_paud: aksi, alasan } })
               .then(() => {
                 this.$success('Data ajuan berhasil di ubah');
                 this.$refs.modal.dialog = false;
