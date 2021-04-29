@@ -212,6 +212,14 @@ class MGroup extends Eloquent
     public const NARASUMBER_PSP = 184;
     public const INSTRUKTUR_PSP = 185;
     public const ADM_GTK_PAUD_DIKLAT_PAUD = 186;
+    public const NARASUMBER_PSP_PUSAT = 187;
+    public const PEMANTAU_DIKLAT_PSP_PUSAT = 188;
+    public const AP_PSP_DIKDAS = 189;
+    public const ADM_LMS_PSP_DIKDAS = 190;
+    public const INSTRUKTUR_PSP_DIKDAS = 191;
+    public const AP_PSP_DIKMEN = 192;
+    public const ADM_LMS_PSP_DIKMEN = 193;
+    public const INSTRUKTUR_PSP_DIKMEN = 194;
 
     /**
      * The table associated with the model.

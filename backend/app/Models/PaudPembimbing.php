@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|int $instansi_k_propinsi
  * @property null|int $instansi_k_kota
  * @property null|string $instansi_kodepos
+ * @property null|int $k_pcp_paud
+ * @property null|string $kcp_paud_lain
  * @property null|int $is_diklat_dasar
  * @property null|array $pengalaman
  * @property null|string $akun_id_verval
@@ -39,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $admin_id
  *
  * @property-read Akun $akun
+ * @property-read MPcpPaud $mPcpPaud
  * @property-read MVervalPaud $mVervalPaud
  * @property-read Collection|PaudPembimbingBerkas[] $paudPembimbingBerkases
  *
@@ -59,6 +62,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudPembimbing whereInstansiKPropinsi($value)
  * @method static Builder|PaudPembimbing whereInstansiKKota($value)
  * @method static Builder|PaudPembimbing whereInstansiKodepos($value)
+ * @method static Builder|PaudPembimbing whereKPcpPaud($value)
+ * @method static Builder|PaudPembimbing whereKcpPaudLain($value)
  * @method static Builder|PaudPembimbing whereIsDiklatDasar($value)
  * @method static Builder|PaudPembimbing wherePengalaman($value)
  * @method static Builder|PaudPembimbing whereAkunIdVerval($value)
@@ -106,6 +111,8 @@ class PaudPembimbing extends Eloquent
         'instansi_k_propinsi' => 'int',
         'instansi_k_kota'     => 'int',
         'instansi_kodepos'    => 'string',
+        'k_pcp_paud'          => 'int',
+        'kcp_paud_lain'       => 'string',
         'is_diklat_dasar'     => 'int',
         'pengalaman'          => 'array',
         'akun_id_verval'      => 'string',
@@ -139,6 +146,8 @@ class PaudPembimbing extends Eloquent
         'instansi_k_propinsi',
         'instansi_k_kota',
         'instansi_kodepos',
+        'k_pcp_paud',
+        'kcp_paud_lain',
         'is_diklat_dasar',
         'pengalaman',
         'akun_id_verval',
@@ -153,6 +162,14 @@ class PaudPembimbing extends Eloquent
     public function akun()
     {
         return $this->belongsTo('App\Models\Akun', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mPcpPaud()
+    {
+        return $this->belongsTo('App\Models\MPcpPaud', 'k_pcp_paud', 'k_pcp_paud');
     }
 
     /**

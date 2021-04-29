@@ -10,24 +10,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * App\Models\PaudInstansiBerkas
  *
- * @property int                 $paud_instansi_berkas_id
- * @property int                 $paud_instansi_id
- * @property null|int            $instansi_id
- * @property null|int            $tahun
- * @property null|int            $angkatan
- * @property int                 $k_berkas_lpd_paud
- * @property null|string         $nama
- * @property null|string         $file
- * @property null|string         $keterangan
- * @property null|Carbon         $created_at
- * @property null|Carbon         $updated_at
- * @property null|string         $akun_id
+ * @property int $paud_instansi_berkas_id
+ * @property int $paud_instansi_id
+ * @property null|int $instansi_id
+ * @property null|int $tahun
+ * @property null|int $angkatan
+ * @property int $k_berkas_lpd_paud
+ * @property null|string $nama
+ * @property null|string $file
+ * @property null|string $keterangan
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|string $akun_id
  *
- * @property-read null|string    $url
+ * @property-read null|string $url
  *
- * @property-read Instansi       $instansi
+ * @property-read Instansi $instansi
  * @property-read MBerkasLpdPaud $mBerkasLpdPaud
- * @property-read PaudInstansi   $paudInstansi
+ * @property-read PaudInstansi $paudInstansi
  *
  * @method static Builder|PaudInstansiBerkas wherePaudInstansiBerkasId($value)
  * @method static Builder|PaudInstansiBerkas wherePaudInstansiId($value)

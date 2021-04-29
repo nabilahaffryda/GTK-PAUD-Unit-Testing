@@ -158,7 +158,7 @@ return [
     |--------------------------------------------------------------------------
     | <singular> = <plural> : Custom mapping (default use Str::singular and Str::singular)
     */
-    'plural' => [
+    'plural'  => [
         'kota'   => 'kotas',
         'akses'  => 'akseses',
         'berkas' => 'berkases',
@@ -237,6 +237,7 @@ return [
         'paud_pengajar' => [
             'model' => [
                 'cast' => [
+                    'data_akun'  => 'array',
                     'pengalaman' => 'array',
                 ],
             ],
@@ -245,6 +246,7 @@ return [
         'paud_pembimbing' => [
             'model' => [
                 'cast' => [
+                    'data_akun'  => 'array',
                     'pengalaman' => 'array',
                 ],
             ],
