@@ -161,7 +161,7 @@ export default {
             {
               type: 'VTextField',
               name: 'nip',
-              label: 'NUPTK/NUPTK',
+              label: 'NIP/NUPTK',
               hint: '',
               required: true,
               hideDetails: false,

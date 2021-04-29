@@ -12,7 +12,7 @@
             <v-radio value="manual">
               <template v-slot:label>
                 <div class="pa-4">
-                  <div class="font-weight-bold">Tambah Pengajar Mengunakan Form Input</div>
+                  <div class="font-weight-bold">Tambah {{ title }} Mengunakan Form Input</div>
                   <div class="caption">
                     Anda dapat menambahkan akun baru secara <b>manual satu persatu</b> melalui form input yang di
                     sediakan sistem
@@ -25,7 +25,7 @@
             <v-radio value="excel">
               <template v-slot:label>
                 <div class="pa-4">
-                  <div class="font-weight-bold">Tambah Pengajar Mengunakan Excel</div>
+                  <div class="font-weight-bold">Tambah {{ title }} Mengunakan Excel</div>
                   <div class="caption">
                     Anda dapat menambahkan template baru di bawah ini.
                     <ol>
@@ -176,7 +176,7 @@
                     <v-col cols="12" md="10" sm="12" class="px-0">
                       <h2>Unggah Akun Secara Kolektif</h2>
                       <span
-                        >Silakan unggah data pengajar yang sudah di isi sesuai format template yang telah Anda unduh
+                        >Silakan unggah data {{ title }} yang sudah di isi sesuai format template yang telah Anda unduh
                         pada langkah sebelumnnya. Pastikan data yang Anda masukan bersifat final</span
                       >
                       <div class="mt-2">
