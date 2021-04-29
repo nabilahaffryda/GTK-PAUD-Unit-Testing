@@ -33,6 +33,6 @@ export const actions = {
     $ajax = kitsu({
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}`,
     });
-    return await $ajax.get('/instansi', payload.params);
+    return await $ajax.get('/instansi', { params: payload.params });
   },
 };

@@ -9,7 +9,6 @@ export const actions = {
     $ajax = kitsu({
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}/lpd`,
     });
-    console.log(payload.params);
     return await $ajax.get('/', { params: payload.params });
   },
 

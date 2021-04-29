@@ -9,7 +9,7 @@ export const actions = {
     $ajax = kitsu({
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${payload.jenis}/profil`,
     });
-    return await $ajax.get('/', payload.params);
+    return await $ajax.get('/', { params: payload.params });
   },
   update({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
@@ -27,7 +27,7 @@ export const actions = {
     $ajax = kitsu({
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${payload.jenis}/profil/${payload.id}/berkas`,
     });
-    return await $ajax.get('/', payload.params);
+    return await $ajax.get('/', { params: payload.params });
   },
   setBerkas({ rootState }, payload) {
     const id = rootState.auth.instansi_id;

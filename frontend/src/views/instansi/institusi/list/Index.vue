@@ -19,11 +19,9 @@
           @search="onSearch"
           :btnFilter="true"
           :btnAdd="$allow('akun-admin-program-lpd.create')"
-          :btnDownload="true"
           @add="onAdd"
           @reload="onReload"
           @filter="onFilter"
-          @download="onDownload"
         >
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text"> {{ total }} Institusi LPD</div>
