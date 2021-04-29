@@ -223,7 +223,7 @@ class PengajarService
             throw new FlowException("Pastikan Anda telah melengkapi Profil dan Berkas");
         }
 
-        $pengajar->k_verval_paud = MVervalPaud::KANDIDAT;
+        $pengajar->k_verval_paud = MVervalPaud::DIAJUKAN;
         $pengajar->save();
     }
 
