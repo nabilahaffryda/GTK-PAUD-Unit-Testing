@@ -96,6 +96,7 @@
     <div class="my-5">
       <h3 class="my-5">PERSYARATAN REGISTRASI</h3>
       <daftar
+        v-if="masters && $isObject(masters)"
         :contents="contents"
         :berkases="berkases[jenis]"
         :detail="detail"
@@ -149,7 +150,9 @@ export default {
           },
         },
       },
-    }).then(this.fetchProfil());
+    }).then(() => {
+      this.fetchProfil();
+    });
   },
 };
 </script>

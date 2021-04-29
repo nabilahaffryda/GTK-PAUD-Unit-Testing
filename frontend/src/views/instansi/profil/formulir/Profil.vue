@@ -83,6 +83,7 @@ export default {
 
     profils() {
       const item = Object.assign({}, this.detail);
+      console.log(item);
       const profil = {
         pengajar: {
           dasar: [

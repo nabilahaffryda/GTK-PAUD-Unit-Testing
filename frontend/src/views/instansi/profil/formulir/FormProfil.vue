@@ -737,8 +737,8 @@ export default {
           this.$set(this.form, item.name, this.$getDeepObj(value, item.name) || '');
         }
       }
-      this.id = (value && value.paud_admin_id) || '';
 
+      this.id = (value && value.paud_admin_id) || '';
       if (value?.pengalaman?.length || value?.diklat?.length) {
         const pengalaman = value.pengalaman || value.diklat;
         pengalaman.forEach((key) => {

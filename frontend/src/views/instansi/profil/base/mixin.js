@@ -355,16 +355,14 @@ export default {
       this.$set(this.formulir, 'init', null);
       this.$refs.modal.open();
       this.$nextTick(() => {
-        this.$refs.formulir.reset();
-        this.$set(
-          this.formulir,
-          'init',
-          Object.assign(
-            this.detail,
-            this.$getDeepObj(this, 'detail.akun.data') || {},
-            this.$getDeepObj(this, 'detail.instansi.data') || {}
-          )
+        const initValue = Object.assign(
+          {},
+          this.$getDeepObj(this.detail, 'akun.data') || {},
+          this.$getDeepObj(this.detail, 'instansi.data') || {},
+          this.detail
         );
+        this.$refs.formulir.reset();
+        this.$set(this.formulir, 'init', initValue);
       });
     },
 
