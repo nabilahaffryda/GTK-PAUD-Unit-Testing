@@ -112,6 +112,7 @@ class AkunService
                 $query->selectRaw(1)
                     ->from('akun_instansi')
                     ->where('akun_instansi.akun_id', '=', $akun->akun_id)
+                    ->where('akun_instansi.is_aktif', '=', '1')
                     ->whereIn('akun_instansi.k_group', $this->kGroups())
                     ->whereColumn('instansi.instansi_id', 'akun_instansi.instansi_id');
             });

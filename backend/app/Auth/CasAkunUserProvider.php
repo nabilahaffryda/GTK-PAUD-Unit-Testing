@@ -24,7 +24,7 @@ class CasAkunUserProvider extends CasUserProvider
         }
 
         $akunInstansi = app(AkunService::class)->akunInstansi($akun);
-        if (!$akunInstansi) {
+        if (!$akunInstansi && $akunInstansi->is_aktif) {
             return null;
         }
 
