@@ -163,7 +163,7 @@ export default {
               title: 'Keikutsertaan PCP',
               value:
                 Number(this.$getDeepObj(item, 'k_pcp_paud')) === 9
-                  ? this.$getDeepObj(item, 'kcp_paud_lain') || '-'
+                  ? this.$getDeepObj(item, 'pcp_paud_lain') || '-'
                   : this.$getDeepObj(item, 'm_pcp_paud.data.keterangan') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },

@@ -33,7 +33,7 @@
                   <v-col cols="12" md="6">
                     <v-text-field
                       label="Keikutsertaan PCP Lainnya"
-                      v-model="form[' kcp_paud_lain']"
+                      v-model="form['pcp_paud_lain']"
                       outlined
                       dense
                       single-line
@@ -743,7 +743,7 @@ export default {
         { name: 'k_kota' },
         { name: 'instansi_k_propinsi' },
         { name: 'instansi_k_kota' },
-        { name: 'kcp_paud_lain' },
+        { name: 'pcp_paud_lain' },
       ];
 
       for (const item of formulir) {
