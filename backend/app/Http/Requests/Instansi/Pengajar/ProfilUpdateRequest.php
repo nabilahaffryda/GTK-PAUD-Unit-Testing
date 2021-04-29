@@ -56,7 +56,7 @@ class ProfilUpdateRequest extends FormRequest
             'kodepos'             => ['nullable', 'digits_between:5,6'],
             'alamat'              => ['nullable', 'string', 'max:255'],
             'k_pcp_paud'          => ['required', 'integer', 'exists:m_pcp_paud,k_pcp_paud'],
-            'pcp_paud_lain'       => ['nullable', 'string', 'max:100'],
+            'kcp_paud_lain'       => ['nullable', 'string', 'max:100'],
             'no_hp'               => ['required', 'digits_between:5,20'],
             'instansi_nama'       => ['required', 'string', 'max:100'],
             'instansi_jabatan'    => ['required', 'string', 'max:100'],
