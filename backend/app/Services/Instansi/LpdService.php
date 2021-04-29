@@ -141,7 +141,7 @@ class LpdService
             $instansi->k_propinsi && $instansi->k_kota && $paudInstansi->nama_penanggung_jawab &&
             $paudInstansi->nama_sekretaris && $paudInstansi->nama_bendahara && $paudInstansi->telp_penanggung_jawab &&
             $paudInstansi->telp_sekretaris && $paudInstansi->telp_bendahara && $paudInstansi->diklat &&
-            (count($paudInstansi->diklat) >= 1);
+            is_array($paudInstansi->diklat ) && (count($paudInstansi->diklat) >= 1);
 
         $isLengkapBerkas = $paudInstansi->paudInstansiBerkases->count() == 7;
 
