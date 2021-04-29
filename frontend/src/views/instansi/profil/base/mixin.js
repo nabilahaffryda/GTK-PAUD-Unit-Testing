@@ -88,7 +88,7 @@ export default {
         pengajar: [
           {
             title: 'Pakta Integritas',
-            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
+            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="https://files1.simpkb.id/berkas/paud/PAKTA_INTEGRITAS_PENGAJAR.docx" target="_blank">UNDUH DISINI</a> </b>`,
             valid: !!mBerkas['1'],
             type: 'integritas',
             withAction: withAction,
@@ -125,7 +125,7 @@ export default {
         bimtek: [
           {
             title: 'Pakta Integritas',
-            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
+            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="https://files1.simpkb.id/berkas/paud/PAKTA_INTEGRITAS_PEMBIMBING_PRAKTIK.docx" target="_blank">UNDUH DISINI</a> </b>`,
             valid: true,
             type: 'integritas',
             withAction: withAction,
@@ -207,7 +207,7 @@ export default {
           },
           {
             title: 'Pakta Integritas',
-            pesan: ``,
+            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="https://files1.simpkb.id/berkas/paud/PAKTA_INTEGRITAS_LPD.docx" target="_blank">UNDUH DISINI</a> </b>`,
             valid: !!mBerkas['6'],
             type: 'integritas',
             withAction: withAction,
@@ -227,7 +227,7 @@ export default {
         pembimbing: [
           {
             title: 'Pakta Integritas',
-            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="#" target="_blank">UNDUH DISINI</a> </b>`,
+            pesan: `* Silakan unduh template pakta integritas terlebih dahulu. <b><a href="https://files1.simpkb.id/berkas/paud/PAKTA_INTEGRITAS_PEMBIMBING_PRAKTIK.docx" target="_blank">UNDUH DISINI</a> </b>`,
             valid: !!mBerkas['1'],
             type: 'integritas',
             withAction: withAction,
