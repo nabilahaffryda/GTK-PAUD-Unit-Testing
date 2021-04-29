@@ -128,7 +128,7 @@
     <base-modal-full
       ref="modal"
       colorBtn="primary"
-      lblBtn="Simpan & Cetak"
+      :lblBtn="formulir.lblBtn || `Simpan & Cetak`"
       generalError
       :use-save="formulir.isValid"
       :title="formulir.title"

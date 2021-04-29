@@ -94,6 +94,11 @@ export default {
     onValidate() {
       this.$refs.modal.onValidate().then((valid) => {
         this.$set(this.formulir, 'isValid', valid);
+        this.$set(
+          this.formulir,
+          'lblBtn',
+          this.$refs.formulir.isPilih === 'excel' ? 'Unggah Berkas' : 'Simpan & Cetak'
+        );
         if (valid) this.$refs.formulir.next(valid);
       });
     },
@@ -322,7 +327,9 @@ export default {
         })
         .catch(() => {
           this.$refs.modal.loading = false;
-          this.$error('Terdapat kesalahan saat mengunggah berkas, silakan periksa berkas Anda kemudian coba kembali!');
+          this.$error(
+            'Terdapat kesalahan pada Data pada berkas yang diunggah, silakan periksa berkas Anda dan pastikan tidak ada Data yang sama kemudian coba kembali!'
+          );
         });
     },
 

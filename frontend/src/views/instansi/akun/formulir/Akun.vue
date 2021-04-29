@@ -32,7 +32,7 @@
                       <li>Download format template dibawah ini.</li>
                       <li>Silakan isi data sesuai format yang tersedia pada template</li>
                       <li>
-                        Unggah file yang sudah Anda isi pada langkah selanjutnya. Silakan tekan
+                        Unggah Berkas yang sudah Anda isi pada langkah selanjutnya. Silakan tekan
                         <b>tombol selanjutnya</b>
                       </li>
                     </ol>
@@ -181,7 +181,7 @@
                       >
                       <div class="mt-2">
                         <v-btn depressed color="secondary" @click="$emit('upload')">
-                          <v-icon left>mdi-upload</v-icon>Unggah File
+                          <v-icon left>mdi-upload</v-icon>Pilih Berkas
                         </v-btn>
                       </div>
                     </v-col>
@@ -221,7 +221,7 @@
                     </v-col>
                     <v-col cols="12" md="10" sm="10" class="my-auto">
                       <div class="ml-n5">
-                        <h3>Nama File</h3>
+                        <h3>Nama Berkas</h3>
                         {{ $getDeepObj(file, 'file.name') || '' }}
                       </div>
                     </v-col>
