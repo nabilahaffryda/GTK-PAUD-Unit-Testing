@@ -27,7 +27,9 @@ class UpdateRequest extends FormRequest
             'telp_sekretaris'       => ['required', 'digits_between:5,20'],
             'nama_bendahara'        => ['required', 'string', 'max:100'],
             'telp_bendahara'        => ['required', 'digits_between:5,20'],
-            'diklat'                => ['nullable'],
+            'diklat'                => ['required', 'array', 'min:1'],
+            'diklat.*.nama'         => ['required', 'string', 'max:100'],
+            'diklat.*.tahun'        => ['required', 'string', 'max:50'],
         ];
     }
 }
