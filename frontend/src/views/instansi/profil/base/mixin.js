@@ -423,8 +423,8 @@ export default {
               this.$refs.modal.loading = false;
               return;
             }
-            formData.append('pengalaman' + `[${i}][nama]`, diklats[i]['nama']);
-            formData.append('pengalaman' + `[${i}][tahun]`, diklats[i]['tahun']);
+            formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][nama]`, diklats[i]['nama']);
+            formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][tahun]`, diklats[i]['tahun']);
           }
         }
       }
