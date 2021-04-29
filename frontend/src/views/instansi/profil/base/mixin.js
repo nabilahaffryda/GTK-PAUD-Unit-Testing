@@ -288,7 +288,7 @@ export default {
     },
 
     isAjuan() {
-      return ![1, 5].includes(this.kVerval);
+      return this.jenis === 'pengajar' && ![1, 5].includes(this.kVerval);
     },
   },
   methods: {

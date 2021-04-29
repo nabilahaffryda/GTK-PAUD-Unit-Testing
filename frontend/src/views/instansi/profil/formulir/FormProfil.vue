@@ -723,7 +723,7 @@ export default {
           ],
         },
       };
-      return forms[this.jenis];
+      return forms[this.jenis === 'pembimbing' ? 'pengajar' : this.jenis];
     },
   },
   methods: {
