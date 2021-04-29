@@ -65,41 +65,53 @@
             <!--ajuan button-->
             <div>
               <v-btn
-                  v-if="[2, 3, 6].includes(Number(detail && detail.k_verval_paud))"
-                  depressed
-                  color="success"
-                  class="mt-2"
-                  outlined
+                v-if="[2, 3, 6].includes(Number(detail && detail.k_verval_paud))"
+                depressed
+                color="success"
+                class="mt-2"
+                outlined
               >
                 {{ kVerval === 6 ? 'Berkas Telah Disetujui' : 'Berkas Terkirim' }}
               </v-btn>
               <v-btn
-                  v-else-if="$allow(`${jenis}-profil-ajuan.create`) && Number(detail && detail.k_verval_paud) === 5"
-                  depressed
-                  color="success"
-                  class="mt-2"
-                  :disabled="!isLengkap"
-                  @click="onAjuan"
+                v-else-if="$allow(`${jenis}-profil-ajuan.create`) && Number(detail && detail.k_verval_paud) === 5"
+                depressed
+                color="success"
+                class="mt-2"
+                :disabled="!isLengkap"
+                @click="onAjuan"
               >
                 Kirim Ulang Berkas
               </v-btn>
-              <v-btn v-else-if="Number(detail && detail.k_verval_paud) === 4" depressed color="error" class="mt-2" outlined>
+              <v-btn
+                v-else-if="Number(detail && detail.k_verval_paud) === 4"
+                depressed
+                color="error"
+                class="mt-2"
+                outlined
+              >
                 Berkas Ditolak
               </v-btn>
               <v-btn
-                  v-else-if="$allow(`${jenis}-profil-ajuan.create`)"
-                  depressed
-                  color="success"
-                  class="mt-2"
-                  :disabled="!isLengkap"
-                  @click="onAjuan"
+                v-else-if="$allow(`${jenis}-profil-ajuan.create`)"
+                depressed
+                color="success"
+                class="mt-2"
+                :disabled="!isLengkap"
+                @click="onAjuan"
               >
                 Kirim Berkas
               </v-btn>
             </div>
             <template v-if="[1, 2, 3].includes(Number(detail && detail.k_verval_paud))">
               <!-- is_kirim_ci -->
-              <v-alert dense text type="info" class="mt-4" v-if="[2, 3].includes(Number(detail && detail.k_verval_paud))">
+              <v-alert
+                dense
+                text
+                type="info"
+                class="mt-4"
+                v-if="[2, 3].includes(Number(detail && detail.k_verval_paud))"
+              >
                 <template v-if="Number(detail && detail.k_verval_paud) === 2">
                   Anda sudah mengirimkan berkas Anda untuk diproses, Informasi lebih lanjut tentang pendaftaran akun
                   kami kirimkan ke alamat surel Anda, Apabila Anda ingin membatalkan pengiriman berkas dan mengubah
@@ -116,12 +128,12 @@
             </template>
             <template v-else>
               <v-alert
-                  icon="mdi-information"
-                  colored-border
-                  border="left"
-                  class="pa-2 my-2 bg-notif"
-                  color="warning"
-                  v-if="[4, 5].includes(kVerval)"
+                icon="mdi-information"
+                colored-border
+                border="left"
+                class="pa-2 my-2 bg-notif"
+                color="warning"
+                v-if="[4, 5].includes(kVerval)"
               >
                 <template v-if="kVerval === 5">
                   Mohon melakukan perbaikan sesuai informasi tim Verifikasi sebagai berikut:<br />

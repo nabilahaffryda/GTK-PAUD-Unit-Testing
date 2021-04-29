@@ -413,7 +413,12 @@ export default {
           return;
         } else {
           for (let i = 0; i < diklats.length; i++) {
-            if ((diklats[i]['nama'] && !diklats[i]['tahun']) || (diklats[i]['tahun'] && !diklats[i]['nama'])) {
+            if (
+              !diklats[i]['nama'] ||
+              diklats[i]['nama'].trim() === '' ||
+              !diklats[i]['tahun'] ||
+              diklats[i]['tahun'].trim() === ''
+            ) {
               this.$error('Mohon lengkapi data Diklat Anda');
               this.$refs.modal.loading = false;
               return;
