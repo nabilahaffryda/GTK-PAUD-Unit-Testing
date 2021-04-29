@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|int $instansi_k_kota
  * @property null|string $instansi_kodepos
  * @property null|int $k_pcp_paud
+ * @property null|string $kcp_paud_lain
  * @property null|array $pengalaman
  * @property null|int $is_tambahan
  * @property null|int $is_pembimbing
@@ -63,6 +64,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudPengajar whereInstansiKKota($value)
  * @method static Builder|PaudPengajar whereInstansiKodepos($value)
  * @method static Builder|PaudPengajar whereKPcpPaud($value)
+ * @method static Builder|PaudPengajar whereKcpPaudLain($value)
  * @method static Builder|PaudPengajar wherePengalaman($value)
  * @method static Builder|PaudPengajar whereIsTambahan($value)
  * @method static Builder|PaudPengajar whereIsPembimbing($value)
@@ -111,6 +113,7 @@ class PaudPengajar extends Eloquent
         'instansi_k_kota'     => 'int',
         'instansi_kodepos'    => 'string',
         'k_pcp_paud'          => 'int',
+        'kcp_paud_lain'       => 'string',
         'pengalaman'          => 'array',
         'is_tambahan'         => 'int',
         'is_pembimbing'       => 'int',
@@ -145,6 +148,7 @@ class PaudPengajar extends Eloquent
         'instansi_k_kota',
         'instansi_kodepos',
         'k_pcp_paud',
+        'kcp_paud_lain',
         'pengalaman',
         'is_tambahan',
         'is_pembimbing',
