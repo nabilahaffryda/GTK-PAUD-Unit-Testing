@@ -62,9 +62,7 @@
             <v-col cols="12" md="12" sm="12">
               <div class="text-h6 my-3 font-weight-bold"> Data Diklat </div>
               <v-list three-line>
-                <template
-                  v-for="(item, index) in $getDeepObj(detail, 'diklat') || $getDeepObj(detail, 'pengalaman') || []"
-                >
+                <template v-for="(item, index) in diklats">
                   <v-list-item :key="index">
                     <v-list-item-avatar tile>
                       <v-avatar tile color="secondary">
@@ -317,6 +315,11 @@ export default {
           },
         ],
       };
+    },
+
+    diklats() {
+      const data = this.$getDeepObj(this.detail, 'diklat') || this.$getDeepObj(this.detail, 'pengalaman') || [];
+      return typeof data === 'string' ? JSON.parse(data) : data;
     },
 
     berkases() {
