@@ -186,6 +186,105 @@ export default {
             },
           ],
         },
+        pembimbing: {
+          dasar: [
+            {
+              title: 'Nama Lengkap',
+              value: this.$getDeepObj(item, 'akun.data.nama') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Jenis Kelamin',
+              value: this.$fGender(this.$getDeepObj(item, 'akun.data.kelamin')) || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'NIP / NUPTK',
+              value: this.$getDeepObj(item, 'akun.data.nip') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Pendidikan Terakhir',
+              value:
+                (this.$getDeepObj(this, `masters.m_kualifikasi.${this.$getDeepObj(item, 'k_kualifikasi')}`) || '-') +
+                ' - ' +
+                (this.$getDeepObj(item, 'lulusan') || '-'),
+              grid: { cols: 12, md: 3, sm: 12 },
+            },
+            {
+              title: 'Prodi',
+              value: this.$getDeepObj(item, 'prodi') || '-',
+              grid: { cols: 12, md: 3, sm: 12 },
+            },
+            {
+              title: 'NIK',
+              value: this.$getDeepObj(item, 'akun.data.nik') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Email',
+              value: this.$getDeepObj(item, 'akun.data.email') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Tempat Tanggal Lahir',
+              value:
+                (this.$getDeepObj(item, 'akun.data.tmp_lahir') || '-') +
+                ', ' +
+                (this.$localDate(this.$getDeepObj(item, 'akun.data.tgl_lahir')) || '-'),
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Nomor HP Aktif',
+              value: this.$getDeepObj(item, 'akun.data.no_hp') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Alamat Sesuai KTP',
+              value: this.$getDeepObj(item, 'akun.data.alamat') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Kota/Kab. dan Provinsi',
+              value: [
+                this.$getDeepObj(item, 'akun.data.k_kota')
+                  ? this.masters.m_kota && this.masters.m_kota[this.$getDeepObj(item, 'akun.data.k_kota')]
+                  : '-',
+                this.$getDeepObj(item, 'akun.data.k_propinsi')
+                  ? this.masters.m_propinsi && this.masters.m_propinsi[this.$getDeepObj(item, 'akun.data.k_propinsi')]
+                  : '-',
+              ].join(' - '),
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Kodepos',
+              value: this.$getDeepObj(item, 'akun.data.kodepos') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Status Keikutsertaan Diklat Dasar',
+              value: Number(this.$getDeepObj(item, 'is_diklat_dasar')) === 1 ? 'Ya' : 'Tidak',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+          ],
+          instansi: [
+            {
+              title: 'Instansi',
+              value: this.$getDeepObj(item, 'instansi_nama') || '-',
+              grid: { cols: 12, md: 12, sm: 12 },
+            },
+            {
+              title: 'Jabatan',
+              value: this.$getDeepObj(item, 'instansi_jabatan') || '-',
+              grid: { cols: 12, md: 12, sm: 12 },
+            },
+            {
+              title: 'Alamat Instansi',
+              value: this.$getDeepObj(item, 'instansi_alamat') || '-',
+              grid: { cols: 12, md: 12, sm: 12 },
+            },
+          ],
+        },
         'admin-kelas': {
           dasar: [
             {
@@ -312,7 +411,7 @@ export default {
         },
       };
 
-      return profil[this.jenis === 'pembimbing' ? 'pengajar' : this.jenis];
+      return profil[this.jenis];
     },
   },
 };
