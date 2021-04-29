@@ -74,7 +74,7 @@
           hide-default-footer
           show-select
         >
-          <template v-slot:header.data-table-select>
+          <template v-slot:[`header.data-table-select`]>
             <v-row align="center">
               <v-chip label outlined>
                 <v-checkbox v-model="selectAll" :value="1" hide-details class="shrink mr-2 mt-0"></v-checkbox>
