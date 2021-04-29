@@ -105,7 +105,7 @@
         </v-container>
       </v-card-text>
     </v-card>
-    <div style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 1" v-if="!isDisable">
+    <div style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 1">
       <v-card flat>
         <v-card-text>
           <v-container>
@@ -163,7 +163,7 @@
                     </validation-provider>
                   </div>
                 </template>
-                <template v-if="$isObject(schema[pilihan]) && (!isEdit || isDisable)">
+                <template v-if="!isEdit || isDisable">
                   <b class="black--text">Catatan Verval*</b><br />
                   <v-card flat outlined>
                     <v-card-text v-html="catatan"></v-card-text>
@@ -346,24 +346,29 @@ export default {
       return {
         1: {
           label: 'Alasan ajuan ditolak',
-          items: this.$mapForMaster(this.masters['alasan_verval'] && this.masters['alasan_verval']['tolak']),
+          items: this.$getDeepObj(this.detail, 'alasan'),
         },
         2: {},
         3: {
           label: 'Alasan ajuan butuh diperbaiki',
-          items: this.$mapForMaster(this.masters['alasan_verval'] && this.masters['alasan_verval']['perbaikan']),
+          items: this.$getDeepObj(this.detail, 'alasan'),
         },
       };
+    },
+
+    catatan() {
+      return this.$getDeepObj(this.detail, 'alasan');
     },
   },
 
   methods: {
     getValue() {
-      return { pilihan: this.pilihan, id: this.id };
+      return { pilihan: this.pilihan, id: this.id, alasan: (this.form && this.form.alasan) || '' };
     },
 
     reset() {
       this.pilihan = null;
+      this.$set(this, 'form', {});
       this.tab = 0;
     },
 

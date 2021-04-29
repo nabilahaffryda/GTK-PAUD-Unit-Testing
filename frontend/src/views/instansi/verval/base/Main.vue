@@ -356,9 +356,6 @@ export default {
       this.$set(this.formulir, 'init', null);
 
       this.getDetail({ id: item.id, tipe: this.$route.meta.tipe }).then(({ data }) => {
-        console.log(data);
-
-        this.$set(this.formulir, 'alasan_verval', this.$getDeepObj(data, 'catatan'));
         this.$set(this.formulir, 'is_disable', kVerval > 3);
         this.$set(this.formulir, 'is_edit', this.$allow(`${this.jenis}-verval.update`) && kVerval <= 3);
         this.$set(this.formulir, 'autoClose', kVerval > 3);
