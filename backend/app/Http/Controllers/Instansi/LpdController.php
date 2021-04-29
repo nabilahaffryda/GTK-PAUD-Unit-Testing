@@ -25,9 +25,11 @@ class LpdController extends Controller
      */
     public function index(Request $request)
     {
+        $params = $request->input('filter', []);
+
         return BaseCollection::make($this
             ->service
-            ->query($request->all())
+            ->query($params)
             ->paginate((int)$request->get('count', 10))
         );
     }
