@@ -144,6 +144,23 @@ export default {
               grid: { cols: 12, md: 6, sm: 12 },
             },
             {
+              title: 'Kota/Kab. dan Provinsi',
+              value: [
+                this.$getDeepObj(item, 'akun.data.k_kota')
+                  ? this.masters.m_kota && this.masters.m_kota[this.$getDeepObj(item, 'akun.data.k_kota')]
+                  : '-',
+                this.$getDeepObj(item, 'akun.data.k_propinsi')
+                  ? this.masters.m_propinsi && this.masters.m_propinsi[this.$getDeepObj(item, 'akun.data.k_propinsi')]
+                  : '-',
+              ].join(' - '),
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Kodepos',
+              value: this.$getDeepObj(item, 'akun.data.kodepos') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
               title: 'Keikutsertaan PCP',
               value:
                 Number(this.$getDeepObj(item, 'k_pcp_paud')) === 9

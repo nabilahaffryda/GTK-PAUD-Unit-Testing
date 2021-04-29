@@ -352,6 +352,7 @@ export default {
 
       this.$set(this.formulir, 'form', 'FormProfil');
       this.$set(this.formulir, 'title', `Ubah Profil`);
+      this.$set(this.formulir, 'mode', 'form');
       this.$set(this.formulir, 'init', null);
       this.$refs.modal.open();
       this.$nextTick(() => {
