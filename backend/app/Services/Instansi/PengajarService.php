@@ -117,9 +117,13 @@ class PengajarService
     {
         return $pengajar->loadMissing([
             'akun',
+            'akun.mKota',
+            'akun.mPropinsi',
             'mPcpPaud',
             'mVervalPaud',
             'paudPengajarBerkases',
+            'instansiKota',
+            'instansiPropinsi',
         ]);
     }
 
