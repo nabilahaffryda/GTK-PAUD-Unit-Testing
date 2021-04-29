@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Instansi\Akun;
 
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Requests\Instansi\Admin\CreateRequest;
+use App\Http\Requests\Instansi\Admin\UpdateRequest;
 use App\Http\Resources\BaseResource;
 use App\Models\MGroup;
 use App\Models\MVervalPaud;
+use App\Models\PaudAdmin;
 use App\Services\Instansi\PengajarService;
-use Illuminate\Http\Request;
 
 class PengajarController extends AkunController
 {
@@ -28,5 +29,11 @@ class PengajarController extends AkunController
             'is_tambahan'   => 0,
         ]);
         return BaseResource::make($paudAdmin);
+    }
+
+    public function update(UpdateRequest $request, PaudAdmin $paudAdmin)
+    {
+        app(PengajarService::class)->validateAdmin($paudAdmin);
+        return parent::update($request, $paudAdmin);
     }
 }

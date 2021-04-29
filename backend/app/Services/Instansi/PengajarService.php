@@ -125,6 +125,7 @@ class PengajarService
 
     /**
      * @throws SaveException
+     * @throws FlowException
      */
     public function create(PaudAdmin $admin, array $params)
     {
@@ -133,6 +134,10 @@ class PengajarService
             'tahun'    => $admin->tahun,
             'angkatan' => $admin->angkatan,
         ], $params);
+
+        if ($pengajar->exists && !($pengajar->isVervalKandidat() || $pengajar->isVervalRevisi())) {
+            throw new FlowException("Pengajar telah melakukan pengajuan. Perubahan data hanya bisa dilakukan mandiri.");
+        }
 
         $pengajar->admin_id = akunId();
         if (!$pengajar->save()) {
@@ -307,5 +312,13 @@ class PengajarService
         }
 
         return $pengajar;
+    }
+
+    public function validateAdmin(PaudAdmin $admin)
+    {
+        $pengajar = $this->getPengajar($admin->akun);
+        if ($pengajar && $pengajar->exists && !($pengajar->isVervalKandidat() || $pengajar->isVervalRevisi())) {
+            throw new FlowException("Pengajar telah melakukan pengajuan. Perubahan data hanya bisa dilakukan mandiri.");
+        }
     }
 }
