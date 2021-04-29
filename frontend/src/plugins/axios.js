@@ -63,7 +63,12 @@ _axios.interceptors.response.use(
         return (window.location = error.response.data && error.response.data.redirect);
 
       if (status !== 401) {
-        Vue.prototype.$error(message || (status === 500 ? errorMessage : conectionLost));
+        const listError = Object.values(error.response && error.response.data && error.response.data.errors);
+        const flatten = [].concat.apply([], listError).map((item) => `<li>${item}</li>`);
+
+        Vue.prototype.$error(
+          status === 422 ? `<ul>${flatten}</ul>` : message || (status === 500 ? errorMessage : conectionLost)
+        );
       } else {
         if (store.getters['auth/loggedIn']) {
           Vue.prototype.$error('Mohon maaf, sesi Anda telah habis. Silakan melakukan relogin!', [

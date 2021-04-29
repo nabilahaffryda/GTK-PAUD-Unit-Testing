@@ -411,10 +411,15 @@ export default {
           this.$refs.modal.loading = false;
           return;
         } else {
-          diklats.forEach((key, index) => {
-            formData.append('pengalaman' + `[${index}][nama]`, key['nama']);
-            formData.append('pengalaman' + `[${index}][tahun]`, key['tahun']);
-          });
+          for (let i = 0; i < diklats.length; i++) {
+            if ((diklats[i]['nama'] && !diklats[i]['tahun']) || (diklats[i]['tahun'] && !diklats[i]['nama'])) {
+              this.$error('Mohon lengkapi data Diklat Anda');
+              this.$refs.modal.loading = false;
+              return;
+            }
+            formData.append('pengalaman' + `[${i}][nama]`, diklats[i]['nama']);
+            formData.append('pengalaman' + `[${i}][tahun]`, diklats[i]['tahun']);
+          }
         }
       }
 
