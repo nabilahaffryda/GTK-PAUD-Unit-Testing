@@ -1,8 +1,6 @@
 <template>
   <div id="dasbor">
-    <div class="corner-ribbon top-left red shadow" v-if="env !== 'production'">
-      DEMO
-    </div>
+    <div class="corner-ribbon top-left red shadow" v-if="env !== 'production'"> DEMO </div>
     <left-bar v-model="drawerL"></left-bar>
     <topbar @toggleL="drawerL = !drawerL" @toggleR="drawerR = !drawerR"></topbar>
     <right-bar v-model="drawerR"></right-bar>

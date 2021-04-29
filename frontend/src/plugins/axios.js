@@ -35,7 +35,7 @@ _axios.interceptors.request.use(
 
 // Add a response interceptor
 _axios.interceptors.response.use(
-  function(response) {
+  function (response) {
     ajaxRequestCall--;
     // hide loader jika semua request selesai
     if (ajaxRequestCall === 0) {
@@ -44,7 +44,7 @@ _axios.interceptors.response.use(
     // Do something with response data
     return response;
   },
-  function(error) {
+  function (error) {
     ajaxRequestCall = 0;
     store.commit('SET_LOADING', false);
 

@@ -47,13 +47,9 @@
       </v-card-text>
       <v-divider />
       <v-card-actions>
-        <v-btn color="blue darken-1" text @click.native="dialog = false">
-          Batal
-        </v-btn>
+        <v-btn color="blue darken-1" text @click.native="dialog = false"> Batal </v-btn>
         <v-spacer />
-        <v-btn color="red darken-1" right :disabled="!valid" text @click="submit">
-          Simpan
-        </v-btn>
+        <v-btn color="red darken-1" right :disabled="!valid" text @click="submit"> Simpan </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

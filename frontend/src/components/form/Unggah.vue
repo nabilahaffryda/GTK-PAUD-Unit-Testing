@@ -44,11 +44,9 @@
                     append-icon="mdi-paperclip"
                     prepend-icon=""
                     :accept="accept"
-                    :hint="
-                      `Jenis file unggahan ${format || 'JPG/JPEG/PNG/GIF/PDF'} (${min} KB - ${roundDecimal(
-                        max / 1000
-                      )} MB). ${format ? '' : 'Untuk berkas multi halaman gunakan format PDF'}`
-                    "
+                    :hint="`Jenis file unggahan ${format || 'JPG/JPEG/PNG/GIF/PDF'} (${min} KB - ${roundDecimal(
+                      max / 1000
+                    )} MB). ${format ? '' : 'Untuk berkas multi halaman gunakan format PDF'}`"
                     :rules="[
                       (value) =>
                         !value ||
@@ -106,11 +104,9 @@
               append-icon="mdi-paperclip"
               prepend-icon=""
               :accept="accept"
-              :hint="
-                `Jenis file unggahan ${format || 'JPG/JPEG/PNG/GIF/PDF'} (${min} KB - ${roundDecimal(
-                  max / 1000
-                )} MB). ${format ? '' : 'Untuk berkas multi halaman gunakan format PDF'}`
-              "
+              :hint="`Jenis file unggahan ${format || 'JPG/JPEG/PNG/GIF/PDF'} (${min} KB - ${roundDecimal(
+                max / 1000
+              )} MB). ${format ? '' : 'Untuk berkas multi halaman gunakan format PDF'}`"
               :rules="[
                 (value) =>
                   !value ||

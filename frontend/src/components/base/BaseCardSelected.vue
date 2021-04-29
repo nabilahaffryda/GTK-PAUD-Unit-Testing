@@ -17,9 +17,7 @@
       </v-list-item-content>
       <v-list-item-action>
         <v-btn icon>
-          <v-icon color="grey lighten-1">
-            mdi-arrow-down-drop-circle-outline
-          </v-icon>
+          <v-icon color="grey lighten-1"> mdi-arrow-down-drop-circle-outline </v-icon>
         </v-btn>
       </v-list-item-action>
     </v-list-item>

@@ -2,16 +2,16 @@
   <div>
     <v-card>
       <v-card-text>
-        <div class="text-h4 font-weight-bold">Profil Pengajar</div>
+        <div class="text-h4 font-weight-bold">{{ title }}</div>
         Lengkapi CV dibawah ini sesuai dengan form yang tersedia
         <v-row class="my-5">
           <v-col cols="12" md="2" sm="12">
             <base-photo-profil
               :photo="
                 photo ||
-                  this.$getDeepObj(detail, 'akun.data.foto_url') ||
-                  this.$getDeepObj(detail, 'instansi.data.foto_url') ||
-                  ''
+                this.$getDeepObj(detail, 'akun.data.foto_url') ||
+                this.$getDeepObj(detail, 'instansi.data.foto_url') ||
+                ''
               "
               photodef="default_foto_gp.png"
               :useBase64="true"
@@ -20,9 +20,7 @@
               @upload="onChangePhoto"
             >
               <template v-slot:render>
-                <v-btn class="mt-2" id="edit-profpic" depressed block color="secondary">
-                  UNGGAH FOTO
-                </v-btn>
+                <v-btn class="mt-2" id="edit-profpic" depressed block color="secondary"> UNGGAH FOTO </v-btn>
               </template>
             </base-photo-profil>
           </v-col>
@@ -81,6 +79,10 @@ export default {
     detail: {
       type: Object,
       default: () => {},
+    },
+    title: {
+      type: String,
+      default: 'pengajar',
     },
     jenis: {
       type: String,
@@ -641,7 +643,7 @@ export default {
             {
               type: 'VTextField',
               name: 'telp_penanggung_jawab',
-              label: 'Penanggung Jawab',
+              label: 'Telepon Penanggung Jawab',
               dense: true,
               hint: 'wajib diisi',
               required: true,

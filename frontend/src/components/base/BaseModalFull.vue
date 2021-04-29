@@ -34,9 +34,7 @@
               type="error"
               v-if="(!valid && showError(errors).length) || (error && error.show)"
             >
-              <template v-if="generalError">
-                Pastikan Anda telah melengkapi semua isian data yang diwajibkan
-              </template>
+              <template v-if="generalError"> Pastikan Anda telah melengkapi semua isian data yang diwajibkan </template>
               <template v-else>
                 <v-row align="center">
                   <v-col class="grow">

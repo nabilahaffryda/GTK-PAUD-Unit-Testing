@@ -7,7 +7,7 @@
         </v-toolbar>
       </v-card-title>
       <v-divider></v-divider>
-      <v-card-text style="min-height: 150px;">
+      <v-card-text style="min-height: 150px">
         <v-container class="py-5">
           <template v-if="step === 0">
             <form-unggah
@@ -37,12 +37,8 @@
                         <template v-slot:default>
                           <thead>
                             <tr>
-                              <th class="text-left">
-                                No.
-                              </th>
-                              <th class="text-left">
-                                Kesalahan
-                              </th>
+                              <th class="text-left"> No. </th>
+                              <th class="text-left"> Kesalahan </th>
                             </tr>
                           </thead>
                           <tbody>

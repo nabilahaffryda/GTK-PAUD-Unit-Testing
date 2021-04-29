@@ -57,9 +57,7 @@
         </div>
         <v-checkbox class="mt-2 mb-3" v-model="isChecked" hide-details>
           <template v-slot:label>
-            <div class="black--text">
-              Saya paham dan menyetujui Batal Pendaftaran Program Sekolah Penggerak
-            </div>
+            <div class="black--text"> Saya paham dan menyetujui Batal Pendaftaran Program Sekolah Penggerak </div>
           </template>
         </v-checkbox>
       </v-card-text>
@@ -70,9 +68,7 @@
           <v-btn text class="mr-2" :color="isChecked ? 'black' : 'grey'" left @click="onReset" :disabled="!isChecked">
             BATAL PENDAFTARAN
           </v-btn>
-          <v-btn color="error" right @click="close" elevation="0">
-            BATAL
-          </v-btn>
+          <v-btn color="error" right @click="close" elevation="0"> BATAL </v-btn>
         </div>
       </v-card-actions>
     </v-card>

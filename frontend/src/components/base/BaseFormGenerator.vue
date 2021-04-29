@@ -112,8 +112,8 @@
           <template
             v-if="
               ['VAutocomplete', 'VSelect'].indexOf(field.type) > -1 &&
-                field.useOthers &&
-                formData[field.name] === field.othersValue
+              field.useOthers &&
+              formData[field.name] === field.othersValue
             "
           >
             <template v-if="field.others.required || field.others.rules">
@@ -204,7 +204,7 @@ export default {
     validate() {},
   },
   watch: {
-    value: function(value) {
+    value: function (value) {
       this.formData = value;
     },
   },

@@ -6,9 +6,7 @@
           <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
             <v-stepper-step :complete="step > 1" step="1"> Data Institusi LPD</v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step step="2">
-              Konfirmasi Data
-            </v-stepper-step>
+            <v-stepper-step step="2"> Konfirmasi Data </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">
@@ -20,9 +18,7 @@
                 <v-card-actions class="pa-0">
                   <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
                   <v-spacer></v-spacer>
-                  <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')">
-                    Selanjutnya
-                  </v-btn>
+                  <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')"> Selanjutnya </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
@@ -46,9 +42,7 @@
                   </v-row>
                 </v-card-text>
                 <v-card-actions class="pa-0">
-                  <v-btn right color="primary" @click="back">
-                    Sebelumnya
-                  </v-btn>
+                  <v-btn right color="primary" @click="back"> Sebelumnya </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>

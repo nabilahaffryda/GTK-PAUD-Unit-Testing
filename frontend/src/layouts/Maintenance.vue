@@ -5,9 +5,7 @@
         <v-img :src="$imgUrl('bg-maintenance.png')" class="my-3" contain height="200" />
       </v-flex>
       <v-flex mb-4>
-        <h1 class="headline font-weight-bold mb-3">
-          Situs eWarga Sedang Dalam Pemutakhiran
-        </h1>
+        <h1 class="headline font-weight-bold mb-3"> Situs eWarga Sedang Dalam Pemutakhiran </h1>
         <p class="subheading grey--text">
           Maaf, situs eWarga sedang dalam perawatan berkala, hal ini dilakukan untuk memberikan layanan Aplikasi yang
           lebih baik lagi kepada pengguna

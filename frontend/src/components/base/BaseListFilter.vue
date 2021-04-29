@@ -110,12 +110,8 @@
         <v-divider></v-divider>
         <v-card-actions class="grey lighten-4 pa-3">
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Batal
-          </v-btn>
-          <v-btn color="warning darken-1" text @click="reset">
-            Setel Ulang
-          </v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false"> Batal </v-btn>
+          <v-btn color="warning darken-1" text @click="reset"> Setel Ulang </v-btn>
           <v-btn color="secondary" @click="save">Terapkan</v-btn>
         </v-card-actions>
       </v-card>
@@ -148,7 +144,7 @@ export default {
     },
     filtered: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
       },
     },

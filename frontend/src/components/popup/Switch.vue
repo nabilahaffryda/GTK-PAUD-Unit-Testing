@@ -29,9 +29,7 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn right color="primary" text @click.native="dialog = false">
-          Batal
-        </v-btn>
+        <v-btn right color="primary" text @click.native="dialog = false"> Batal </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -59,7 +57,7 @@ export default {
       this.dialog = true;
     },
 
-    fetchData: function() {
+    fetchData: function () {
       const params = Object.assign(this.params, this.$isObject(this.filter) ? { filter: this.filter } : {});
       this.getInstansi({ params }).then(({ data, meta, included }) => {
         this.data = data || [];

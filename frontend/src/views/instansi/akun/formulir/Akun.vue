@@ -53,9 +53,7 @@
         </v-radio-group>
         <v-divider class="my-2"></v-divider>
         <div class="text-md-right">
-          <v-btn right color="secondary" :disabled="!pilihan" @click="onPilih">
-            Selanjutnya
-          </v-btn>
+          <v-btn right color="secondary" :disabled="!pilihan" @click="onPilih"> Selanjutnya </v-btn>
         </div>
       </template>
       <v-container v-if="!useUpload || isEdit ? true : isPilih === 'manual'">
@@ -65,9 +63,7 @@
             <v-divider></v-divider>
             <v-stepper-step color="secondary" :complete="step > 2" step="2"> Data {{ title }} </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step color="secondary" step="3">
-              Konfirmasi Akun
-            </v-stepper-step>
+            <v-stepper-step color="secondary" step="3"> Konfirmasi Akun </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">
@@ -85,9 +81,7 @@
                   <v-btn v-if="useUpload || step !== 1" class="text-md-right" right text @click="onResetPilih">
                     Kembali
                   </v-btn>
-                  <v-btn class="text-md-right" right color="secondary" @click="onCheck">
-                    Selanjutnya
-                  </v-btn>
+                  <v-btn class="text-md-right" right color="secondary" @click="onCheck"> Selanjutnya </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
@@ -196,9 +190,7 @@
                 </v-card-text>
                 <v-card-actions class="pa-0">
                   <v-spacer></v-spacer>
-                  <v-btn class="text-md-right" right text @click="onResetPilih">
-                    Kembali
-                  </v-btn>
+                  <v-btn class="text-md-right" right text @click="onResetPilih"> Kembali </v-btn>
                   <v-btn
                     class="text-md-right"
                     :disabled="!file"

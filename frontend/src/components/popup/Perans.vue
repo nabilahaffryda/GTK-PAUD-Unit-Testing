@@ -18,9 +18,7 @@
       <v-divider />
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click.native="dialog = false">
-          Batal
-        </v-btn>
+        <v-btn color="blue darken-1" text @click.native="dialog = false"> Batal </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

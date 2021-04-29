@@ -44,7 +44,7 @@
                 <v-row>
                   <v-col v-for="(item, index) in profils[jenis]" :key="index" v-bind="item.grid">
                     <div class="caption grey--text">{{ $getDeepObj(item, 'title') || '-' }}</div>
-                    <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(item, 'value') || '-'"/></h2>
+                    <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(item, 'value') || '-'" /></h2>
                   </v-col>
                 </v-row>
               </div>

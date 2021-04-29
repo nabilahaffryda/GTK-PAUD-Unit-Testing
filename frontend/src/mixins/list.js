@@ -46,7 +46,7 @@ export default {
     },
   },
   methods: {
-    fetchData: function() {
+    fetchData: function () {
       return new Promise((resolve) => {
         const params = Object.assign({}, this.params, this.$isObject(this.filters) ? { filter: this.filters } : {});
         const attr = Object.assign({}, this.attr);
@@ -88,7 +88,7 @@ export default {
                   value: '',
                 },
                 on: {
-                  input: function(event) {
+                  input: function (event) {
                     url.dokumen = event.target.value;
                   },
                 },

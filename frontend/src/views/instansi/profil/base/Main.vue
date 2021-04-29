@@ -21,9 +21,7 @@
               </v-row>
             </h1>
             <div>
-              <h3 class="subtitle-1 black--text">
-                Silakan lengkapi persyaratan dibawah ini
-              </h3>
+              <h3 class="subtitle-1 black--text"> Silakan lengkapi persyaratan dibawah ini </h3>
             </div>
             <v-simple-table dense>
               <template v-slot:default>
@@ -112,7 +110,7 @@
         ref="formulir"
         :is="formulir.form"
         :masters="masters"
-        :title="formulir.title"
+        :title="title"
         :initValue="formulir.init"
         :type="formulir.type"
         :max="formulir.max"

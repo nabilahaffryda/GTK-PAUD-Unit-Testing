@@ -28,7 +28,7 @@
             <v-row>
               <v-col v-for="(sub, s) in profil" :key="s" v-bind="sub.grid">
                 <div class="caption grey--text">{{ $getDeepObj(sub, 'title') || '-' }}</div>
-                <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(sub, 'value') || '-'"/></h2>
+                <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(sub, 'value') || '-'" /></h2>
               </v-col>
             </v-row>
           </v-col>

@@ -231,7 +231,7 @@ export default {
                   value: '',
                 },
                 on: {
-                  input: function(event) {
+                  input: function (event) {
                     url.dokumen = event.target.value;
                   },
                 },

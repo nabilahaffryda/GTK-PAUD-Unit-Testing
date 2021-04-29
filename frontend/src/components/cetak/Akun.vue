@@ -2,7 +2,7 @@
   <div class="print-header" style="display: none">
     <table class="tbl-head">
       <tr>
-        <td width="60" class="ac"><img :src="$imgUrl('logo-diknas.png')"/></td>
+        <td width="60" class="ac"><img :src="$imgUrl('logo-diknas.png')" /></td>
         <td class="head-titemle">
           <h3>KEMENTERIAN PENDIDIKAN DAN KEBUDAYAAN REPUBLIK INDONESIA</h3>
           <h2>DIRJEN GURU & TENAGA KEPENDIDIKAN</h2>
