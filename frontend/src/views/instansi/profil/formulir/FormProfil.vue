@@ -31,7 +31,9 @@
             </div>
 
             <template v-if="jenis !== 'admin-kelas'">
-              <v-alert type="info">Tambahkan data diklat minimal <b>1</b> dan maksimal <b>5 diklat</b></v-alert>
+              <v-alert type="info" class="mt-2"
+                >Tambahkan data diklat minimal <b>1</b> dan maksimal <b>5 diklat</b></v-alert
+              >
               <div>
                 <v-row v-for="(diklat, i) in diklats" :key="i">
                   <v-col cols="12" md="5" sm="12">
@@ -303,7 +305,7 @@ export default {
               hideDetails: false,
               placeholder: 'Alamat KTP',
               grid: { cols: 12, md: 12 },
-              required: false,
+              required: true,
               outlined: true,
               dense: true,
               singleLine: true,
@@ -517,7 +519,7 @@ export default {
               hideDetails: false,
               placeholder: 'Alamat KTP',
               grid: { cols: 12, md: 12 },
-              required: false,
+              required: true,
               outlined: true,
               dense: true,
               singleLine: true,
@@ -569,7 +571,7 @@ export default {
               hideDetails: false,
               placeholder: 'Alamat',
               grid: { cols: 12, md: 12, sm: 12 },
-              required: false,
+              required: true,
               outlined: true,
               dense: true,
               singleLine: true,
