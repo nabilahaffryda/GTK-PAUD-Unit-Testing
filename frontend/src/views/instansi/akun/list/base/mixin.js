@@ -113,7 +113,7 @@ export default {
 
       this[isEdit ? 'update' : 'create']({ params, id, name })
         .then(({ data }) => {
-          this.$success(`Data admin berhasil di ${isEdit ? 'diubah' : 'ditambahkan'}`);
+          this.$success(`Data ${this.title} berhasil di ${isEdit ? 'diubah' : 'ditambahkan'}`);
           this.$refs.modal.close();
           this.fetchData();
 
