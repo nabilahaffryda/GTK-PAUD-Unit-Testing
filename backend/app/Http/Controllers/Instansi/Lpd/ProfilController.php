@@ -22,6 +22,10 @@ class ProfilController extends Controller
         $paudInstansi = $this->service->getPaudInstansi(instansi(), $operator);
         $status       = $this->service->getStatusLengkap($paudInstansi);
 
+        if ($paudInstansi->diklat) {
+            $paudInstansi->diklat = json_decode($paudInstansi->diklat);
+        }
+
         return BaseResource::make($paudInstansi)
             ->additional([
                 'meta' => [
