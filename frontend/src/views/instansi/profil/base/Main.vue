@@ -63,31 +63,80 @@
             </div>
 
             <!--ajuan button-->
-            <template>
-              <div>
-                <v-btn
-                  v-if="$allow(`${jenis}-profil-ajuan.create`) && Number(detail && detail.k_verval_paud) === 1"
+            <div>
+              <v-btn
+                  v-if="[2, 3, 6].includes(Number(detail && detail.k_verval_paud))"
                   depressed
                   color="success"
                   class="mt-2"
-                  @click="onAjuan"
+                  outlined
+              >
+                {{ kVerval === 6 ? 'Berkas Telah Disetujui' : 'Berkas Terkirim' }}
+              </v-btn>
+              <v-btn
+                  v-else-if="$allow(`${jenis}-profil-ajuan.create`) && Number(detail && detail.k_verval_paud) === 5"
+                  depressed
+                  color="success"
+                  class="mt-2"
                   :disabled="!isLengkap"
-                >
-                  Kirim Berkas
-                </v-btn>
-                <v-btn class="my-1" v-else-if="Number(detail && detail.k_verval_paud) > 1" outlined color="success"
-                  >Berkas Terkirim</v-btn
-                >
-                <template v-if="Number(detail && detail.k_verval_paud) > 1 && $allow(`${jenis}-profil-ajuan.delete`)">
-                  <!-- is_kirim_ci -->
-                  <v-alert dense text type="info" class="mt-4">
-                    Anda sudah mengirimkan berkas Anda untuk diproses, Informasi lebih lanjut tentang pendaftaran akun
-                    kami kirimkan ke alamat surel Anda, Apabila Anda ingin membatalkan pengiriman berkas dan mengubah
-                    isian berkas Anda.<br />
-                    <a style="font-weight: bold; text-decoration: underline" @click="onBatalAjuan">klik disini</a>
-                  </v-alert>
+                  @click="onAjuan"
+              >
+                Kirim Ulang Berkas
+              </v-btn>
+              <v-btn v-else-if="Number(detail && detail.k_verval_paud) === 4" depressed color="error" class="mt-2" outlined>
+                Berkas Ditolak
+              </v-btn>
+              <v-btn
+                  v-else-if="$allow(`${jenis}-profil-ajuan.create`)"
+                  depressed
+                  color="success"
+                  class="mt-2"
+                  :disabled="!isLengkap"
+                  @click="onAjuan"
+              >
+                Kirim Berkas
+              </v-btn>
+            </div>
+            <template v-if="[1, 2, 3].includes(Number(detail && detail.k_verval_paud))">
+              <!-- is_kirim_ci -->
+              <v-alert dense text type="info" class="mt-4" v-if="[2, 3].includes(Number(detail && detail.k_verval_paud))">
+                <template v-if="Number(detail && detail.k_verval_paud) === 2">
+                  Anda sudah mengirimkan berkas Anda untuk diproses, Informasi lebih lanjut tentang pendaftaran akun
+                  kami kirimkan ke alamat surel Anda, Apabila Anda ingin membatalkan pengiriman berkas dan mengubah
+                  isian berkas Anda.<br />
+                  <a style="font-weight: bold; text-decoration: underline" @click="onBatalAjuan">klik disini</a>
                 </template>
-              </div>
+                <template v-else>
+                  Berkas Anda sudah dalam proses verifikasi, pantau terus hasil verifikasi di halaman ini.
+                </template>
+              </v-alert>
+              <v-alert v-else dense text type="info" class="mt-4">
+                Pastikan Anda melengkapi semua tugas, agar dapat melakukan proses pengiriman berkas
+              </v-alert>
+            </template>
+            <template v-else>
+              <v-alert
+                  icon="mdi-information"
+                  colored-border
+                  border="left"
+                  class="pa-2 my-2 bg-notif"
+                  color="warning"
+                  v-if="[4, 5].includes(kVerval)"
+              >
+                <template v-if="kVerval === 5">
+                  Mohon melakukan perbaikan sesuai informasi tim Verifikasi sebagai berikut:<br />
+                  <p class="pa-2 my-2 mr-5 white darken-2 subtitle-2">
+                    <strong v-html="detail && detail.catatan"></strong>
+                  </p>
+                </template>
+                <template v-else>
+                  <br />
+                  Mohon maaf pendaftaran Anda ditolak dengan alasan sebagai berikut:<br />
+                  <p class="pa-2 my-2 mr-5 white darken-2 subtitle-2">
+                    <strong v-html="detail && detail.catatan"></strong>
+                  </p>
+                </template>
+              </v-alert>
             </template>
           </v-col>
         </v-row>
