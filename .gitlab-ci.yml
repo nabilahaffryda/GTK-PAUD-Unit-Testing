@@ -137,6 +137,32 @@ build-frontend:
         --volume $HOME/.runner-home:/home \
         build bash -c "cd frontend && yarn install && yarn build"
 
+release-sentry:
+  stage: build
+  tags:
+    - common
+    - shell-runner
+    - docker
+
+  only:
+    - demo
+    - devel
+    - real
+
+  script:
+    - |
+      REMOTE=`git remote`
+      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
+
+      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
+      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
+        --user `id -u`:`id -g` \
+        --volume $HOME/.runner-home:/home \
+        build bash -c \
+          "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG new --project=$SENTRY_PROJECT $SOURCE_SHA \
+          && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG set-commits --auto $SOURCE_SHA \
+          && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG finalize $SOURCE_SHA"
+
 deploy-devel:
   stage: deploy
   tags:
