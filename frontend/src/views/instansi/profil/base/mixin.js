@@ -102,6 +102,7 @@ export default {
             type: 'ijasah',
             withAction: withAction,
             kBerkas: 3,
+            value: mBerkas['3'] || {},
           },
           {
             title: 'Surat Keterangan Sudah Menjalankan Fungsi Sebagai Pengajar Diklat PAUD',
