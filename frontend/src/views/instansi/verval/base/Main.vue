@@ -365,7 +365,7 @@ export default {
           this.$refs.formulir.reset();
           this.$set(this.formulir, 'init', init);
           this.$set(this.formulir, 'detail', data);
-          this.$set(this.formulir, 'berkas', this.$getDeepObj(data, 'paud_instansi_berkases.data'));
+          this.$set(this.formulir, 'berkas', this.$getDeepObj(data, `paud_${this.obj}_berkases.data`));
           this.$set(this.formulir.detail, 'status', status);
         });
       });
