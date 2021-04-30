@@ -179,13 +179,22 @@ export default {
             kBerkas: 1,
           },
           {
-            title: 'Foto Lembaga Pelatihan',
+            title: 'Profil Lembaga Pelatihan',
             pesan: ``,
             valid: !!mBerkas['2'],
             type: 'profillembaga',
             withAction: withAction,
             value: mBerkas['2'] || {},
             kBerkas: 2,
+          },
+          {
+            title: 'Foto Kartu NPWP atas nama Lembaga',
+            pesan: ``,
+            valid: !!mBerkas['3'],
+            type: 'profillembaga',
+            withAction: withAction,
+            value: mBerkas['3'] || {},
+            kBerkas: 3,
           },
           {
             title: 'SK Lembaga Pelatihan Yang Terakreditasi',
@@ -288,7 +297,7 @@ export default {
     },
 
     isAjuan() {
-      return this.jenis === 'pengajar' && ![1, 5].includes(this.kVerval);
+      return ['lpd', 'pengajar'].includes(this.jenis) && ![1, 5].includes(this.kVerval);
     },
   },
   methods: {
@@ -297,7 +306,7 @@ export default {
 
     upload(type) {
       if (this.isAjuan) {
-        const msg = `<p class="title mb-2">Mohon maaf! Ajuan sedang diperiksa oleh tim verval`;
+        const msg = `<p class="title mb-2">Mohon maaf! Anda sudah mengajukan Berkas untuk diperiksa Tim Verval`;
         this.$info(msg, `Perubahan data tidak diperbolehkan`, {
           tipe: 'warning',
           data: '',
@@ -342,7 +351,7 @@ export default {
 
     edit() {
       if (this.isAjuan) {
-        const msg = `<p class="title mb-2">Mohon maaf! Ajuan sedang diperiksa oleh tim verval`;
+        const msg = `<p class="title mb-2">Mohon maaf! Anda sudah mengajukan Berkas untuk diperiksa Tim Verval`;
         this.$info(msg, `Perubahan data tidak diperbolehkan`, {
           tipe: 'warning',
           data: '',
