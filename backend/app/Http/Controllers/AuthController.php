@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\FlowException;
 use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Subfission\Cas\Facades\Cas;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
     /**
-     * @param Request $request
-     *
      * @return RedirectResponse
-     * @throws FlowException
      */
     public function login(Request $request)
     {
@@ -30,8 +27,8 @@ class AuthController extends Controller
         }
 
         if (!$akun && !$ptk) {
-            $error = "Untuk masuk silakan menggunakan akun Program Diklat GTK PAUD";
-            throw new FlowException($error);
+            $error = "Untuk masuk silakan menggunakan akun yang telah terdaftar pada Program Diklat GTK PAUD";
+            abort(Response::HTTP_FORBIDDEN, $error);
         }
 
         if ($akun) {
