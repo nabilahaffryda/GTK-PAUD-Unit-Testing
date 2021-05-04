@@ -355,7 +355,7 @@ deploy-real:
             --filter "P /storage/logs/**" \
             --rsh 'ssh -o ConnectTimeout=2 -o ServerAliveInterval=2 -o ServerAliveCountMax=2 -oStrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
             ${PWD}/backend/ \
-            ${SERVER}/backend/ 2>&1 | sed -e "s/^/${LOGIN_HOST}-backend:\ /"
+            ${SERVER}/ 2>&1 | sed -e "s/^/${LOGIN_HOST}-backend:\ /"
         ) &
         PIDS+=($!)
       done
@@ -376,7 +376,7 @@ deploy-real:
             --exclude=.git* \
             --rsh 'ssh -o ConnectTimeout=2 -o ServerAliveInterval=2 -o ServerAliveCountMax=2 -oStrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
             ${PWD}/frontend/dist/ \
-            ${SERVER}/frontend/ 2>&1 | sed -e "s/^/${LOGIN_HOST}-frontend:\ /"
+            ${SERVER}/ 2>&1 | sed -e "s/^/${LOGIN_HOST}-frontend:\ /"
         ) &
         PIDS+=($!)
       done
