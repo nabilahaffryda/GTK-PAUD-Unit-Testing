@@ -378,7 +378,7 @@ export default {
     onSave() {
       const formulir = Object.assign({}, this.$refs.formulir.getValue());
       const status = formulir.pilihan;
-      const alasan = formulir.alasan;
+      const alasan = formulir.alasan || '-';
       const id = formulir.id;
 
       if (status) {
