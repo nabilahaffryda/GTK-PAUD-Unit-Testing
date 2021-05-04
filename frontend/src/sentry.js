@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/vue';
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
     Vue: Vue,
-    dsn: 'https://e3a97e9478414aa4b9f6e94eeb2e3f1c@sentry.siap.id/36',
+    dsn: 'https://96ac6a897b714fad91fd16897e55f713@sentry.siap.id/50',
     environment: process.env.VUE_APP_ENV,
     release: process.env.VUE_APP_RELEASE,
     ignoreErrors: [
