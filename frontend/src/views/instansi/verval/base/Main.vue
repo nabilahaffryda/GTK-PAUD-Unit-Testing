@@ -72,7 +72,7 @@
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             <template>
-                              {{ $getDeepObj(item, `${obj}.data.no_telpon`) || '-' }}
+                              {{ $getDeepObj(item, `${obj}.data.no_hp`) || '-' }}
                             </template>
                           </v-list-item-subtitle>
                         </v-list-item-content>
@@ -228,7 +228,7 @@ export default {
     },
 
     formFilter() {
-      let master = Object.assign({}, this.masters[`m_berkas_${this.obj}_paud`]);
+      let master = Object.assign({}, this.masters[`m_berkas_${this.keyTipe}_paud`]);
       // delete kandidat
       delete master[1];
       return [
@@ -262,7 +262,7 @@ export default {
 
     filtersMaster() {
       return {
-        k_verval_psp: this.masters && this.masters[`m_berkas_${this.obj}_paud`],
+        k_verval_psp: this.masters && this.masters[`m_berkas_${this.keyTipe}_paud`],
         k_propinsi: this.masters && this.masters['propinsi'],
         k_kota: this.masters && this.masters['kota'],
         akun_id: this.mapTimVerval,
@@ -270,6 +270,10 @@ export default {
     },
 
     obj() {
+      return this.$route.meta.atribut;
+    },
+
+    keyTipe() {
       return this.$route.meta.paudkey;
     },
 
@@ -365,7 +369,7 @@ export default {
           this.$refs.formulir.reset();
           this.$set(this.formulir, 'init', init);
           this.$set(this.formulir, 'detail', data);
-          this.$set(this.formulir, 'berkas', this.$getDeepObj(data, `paud_${this.obj}_berkases.data`));
+          this.$set(this.formulir, 'berkas', this.$getDeepObj(data, `paud_${this.keyTipe}_berkases.data`));
           this.$set(this.formulir.detail, 'status', status);
         });
       });

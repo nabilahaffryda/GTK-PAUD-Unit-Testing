@@ -8,6 +8,7 @@ export default [
       title: 'Verval Pengajar',
       tipe: 'pengajar',
       paudkey: 'pengajar',
+      atribut: 'akun',
     },
   },
   {
@@ -17,6 +18,7 @@ export default [
     meta: {
       title: 'Verval Lembaga LPD',
       tipe: 'lpd',
+      atribut: 'instansi',
       paudkey: 'instansi',
     },
   },
