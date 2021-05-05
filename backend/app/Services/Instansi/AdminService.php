@@ -357,6 +357,14 @@ class AdminService
             'is_aktif' => 1,
         ]);
 
+        // batasi akun hanya boleh jadi pengajar, pengajar tambahan atau pembimbing praktik saja. tidak boleh dobel
+        $singleGroup = [MGroup::PENGAJAR_DIKLAT_PAUD, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD];
+        if (in_array($akunInstansi->k_group, $singleGroup)) {
+            if ($temp = AkunInstansi::where('akun_id', $akun->akun_id)->whereIn('k_group', $singleGroup)->with('mGroup')->first()) {
+                throw new SaveException("Akun sudah menjadi " . $temp->mGroup->keterangan);
+            }
+        }
+
         if ($akunInstansi->exists && !$akunInstansi->is_aktif) {
             $akunInstansi->is_aktif = 1;
         }
