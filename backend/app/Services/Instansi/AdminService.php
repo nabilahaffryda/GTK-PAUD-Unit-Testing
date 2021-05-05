@@ -13,7 +13,6 @@ use App\Models\MJenisInstansi;
 use App\Models\MStatusEmail;
 use App\Models\PaudAdmin;
 use App\Models\Ptk;
-use App\Remotes\Paspor;
 use App\Remotes\Paspor\User;
 use App\Services\AkunService;
 use Arr;
@@ -331,8 +330,8 @@ class AdminService
                     'email'    => $akun->email,
                     'is_aktif' => '1',
                     'is_email' => '1',
-                    'admin_id' => akun()->paspor_id
-                ]
+                    'admin_id' => akun()->paspor_id,
+                ],
             ];
 
             $paspor->add($users, [config('services.paspor.layanan_id')], akun()->paspor_id);
@@ -422,7 +421,7 @@ class AdminService
             },
             'paudAdmins'    => function ($query) use ($instansi) {
                 $query->where('instansi_id', $instansi->instansi_id);
-            }
+            },
         ]);
 
         return $paudAdmin;
@@ -603,7 +602,7 @@ class AdminService
 
                     $unique = $params['email'];
                     if (isset($uniques[$unique])) {
-                        $duplikat = $uniques[$unique];
+                        $duplikat       = $uniques[$unique];
                         $errors[$index] = "Baris $index: {$unique} sudah ada di Baris {$duplikat}";
                     } else {
                         $uniques[$unique] = $index;
