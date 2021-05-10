@@ -59,6 +59,15 @@ export default {
                 max: 10,
                 optional: true,
               },
+              diklat: {
+                component: 'Daftar',
+                form: 'FormCollection',
+                title: 'Data Pengalaman Diklat',
+                status: 'diklat',
+                deskripsi: 'Tuliskan pelatihan yang relevan dengan profesi Snda yang pernah anda ikuti',
+                max: 10,
+                optional: true,
+              },
             }
           : {
               profil: {
@@ -66,6 +75,15 @@ export default {
                 form: 'FormProfil',
                 title: this.$route.meta.title,
                 deskripsi: '',
+                max: 10,
+                optional: true,
+              },
+              diklat: {
+                component: 'Daftar',
+                form: 'FormCollection',
+                title: 'Pengalaman Mengikuti Pelatihan',
+                status: 'diklat',
+                deskripsi: 'Tuliskan pelatihan yang relevan dengan profesi Snda yang pernah anda ikuti',
                 max: 10,
                 optional: true,
               },
@@ -350,7 +368,7 @@ export default {
       });
     },
 
-    edit() {
+    edit(type) {
       if (this.isAjuan) {
         const msg = `<p class="title mb-2">Mohon maaf! Anda sudah mengajukan Berkas untuk diperiksa Tim Verval`;
         this.$info(msg, `Perubahan data tidak diperbolehkan`, {
@@ -360,8 +378,8 @@ export default {
         return;
       }
 
-      this.$set(this.formulir, 'form', 'FormProfil');
-      this.$set(this.formulir, 'title', `Ubah Profil`);
+      this.$set(this.formulir, 'form', this.contents[type]['form']);
+      this.$set(this.formulir, 'title', `Ubah ${this.contents[type]['title']}`);
       this.$set(this.formulir, 'mode', 'form');
       this.$set(this.formulir, 'init', null);
       this.$refs.modal.open();

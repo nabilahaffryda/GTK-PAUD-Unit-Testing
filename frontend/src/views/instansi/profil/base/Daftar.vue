@@ -2,7 +2,7 @@
   <div>
     <v-expansion-panels v-model="panel" multiple>
       <v-expansion-panel v-for="(item, i) in contents" :key="i">
-        <v-expansion-panel-header>
+        <v-expansion-panel-header class="pb-0">
           <span class="text-h6">{{ item.title }}</span>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -26,8 +26,60 @@
               @upload="$emit('upload', item.type)"
             />
           </template>
+          <template v-if="i === 'diklat'">
+            <v-list-item class="px-0">
+              <v-list-item-content>
+                <div class="font-weight-bold">Data Pengalaman Diklat</div>
+                <span>
+                  Lengkapi data persyaratan sesuai kebutuhan sistem, Silakan <b>tekan tombol/icon pensil</b> di sebelah
+                  kanan untuk melakukan edit.
+                </span>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn depressed @click="$emit('edit', i)">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+            <v-row>
+              <v-col cols="12" md="6">
+                <h2 class="subtitle-1 font-weight-bold">Data Diklat</h2>
+                <collection
+                  v-for="(item, b) in berkases"
+                  :key="b"
+                  :berkas="item"
+                  :type="item.type"
+                  :valid="item.valid"
+                  :with-action="item.withAction"
+                  :value="item.value || {}"
+                  @detil="onDetil"
+                  @upload="$emit('upload', item.type)"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <h2 class="subtitle-1 font-weight-bold">Data Diklat Lainnya</h2>
+                <collection
+                  v-for="(item, b) in berkases"
+                  :key="b"
+                  :berkas="item"
+                  :type="item.type"
+                  :valid="item.valid"
+                  :with-action="item.withAction"
+                  :value="item.value || {}"
+                  @detil="onDetil"
+                  @upload="$emit('upload', item.type)"
+                />
+              </v-col>
+            </v-row>
+          </template>
           <template v-else>
-            <component :is="item.component" :detail="detail" :masters="masters" :jenis="jenis" @edit="$emit('edit')" />
+            <component
+              :is="item.component"
+              :detail="detail"
+              :masters="masters"
+              :jenis="jenis"
+              @edit="$emit('edit', i)"
+            />
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -38,6 +90,7 @@
 <script>
 import Berkas from '../formulir/Berkas';
 import Profil from '../formulir/Profil';
+import Collection from '../formulir/Collection';
 import PopupPreviewDetail from '@components/popup/PreviewDetil';
 export default {
   props: {
@@ -62,7 +115,7 @@ export default {
       default: 'pengajar',
     },
   },
-  components: { Berkas, Profil, PopupPreviewDetail },
+  components: { Berkas, Profil, Collection, PopupPreviewDetail },
   data() {
     return {
       panel: [0, 1],

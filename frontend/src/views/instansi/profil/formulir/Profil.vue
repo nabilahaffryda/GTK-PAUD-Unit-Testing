@@ -1,18 +1,19 @@
 <template>
   <div>
-    <v-toolbar flat>
-      <v-toolbar-title class="subtitle-1">
-        <div class="font-weight-bold">Data CV</div>
+    <v-list-item class="px-0">
+      <v-list-item-content>
+        <div class="subtitle-1 font-weight-bold">Data CV</div>
         <span>
           Lengkapi data persyaratan sesuai kebutuhan sistem, Silakan <b>tekan tombol/icon pensil</b> di sebelah kanan
           untuk melakukan edit.
         </span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn v-if="$allow(`${jenis}-profil.update`)" depressed @click="$emit('edit')">
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-    </v-toolbar>
+      </v-list-item-content>
+      <v-list-item-action>
+        <v-btn v-if="$allow(`${jenis}-profil.update`)" depressed @click="$emit('edit')">
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+      </v-list-item-action>
+    </v-list-item>
     <v-row class="my-5">
       <v-col cols="12" md="2" sm="12">
         <base-photo-profil

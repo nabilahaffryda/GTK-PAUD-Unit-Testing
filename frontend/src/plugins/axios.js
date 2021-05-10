@@ -62,10 +62,10 @@ _axios.interceptors.response.use(
       if (status === 403 && error.response && error.response.data && error.response.data.redirect)
         return (window.location = error.response.data && error.response.data.redirect);
       if (status !== 401) {
-        const listError = Object.values(error.response && error.response.data && error.response.data.errors || {});
+        const listError = Object.values((error.response && error.response.data && error.response.data.errors) || {});
         const flatten = [].concat.apply([], listError).map((item) => `<li>${item}</li>`);
         Vue.prototype.$error(
-          status === 422 ? `<ul>${flatten}</ul>` : (message || (status === 500 ? errorMessage : conectionLost))
+          status === 422 ? `<ul>${flatten}</ul>` : message || (status === 500 ? errorMessage : conectionLost)
         );
       } else {
         if (store.getters['auth/loggedIn']) {
