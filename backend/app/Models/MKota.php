@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|int $is_3t
  * @property null|int $timezone
  * @property null|int $is_aktif
+ * @property null|string $kode_dapodik
+ * @property null|int $kode_dagri
  *
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|Akun[] $akuns
@@ -38,6 +40,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|MKota whereIs3t($value)
  * @method static Builder|MKota whereTimezone($value)
  * @method static Builder|MKota whereIsAktif($value)
+ * @method static Builder|MKota whereKodeDapodik($value)
+ * @method static Builder|MKota whereKodeDagri($value)
  */
 class MKota extends Eloquent
 {
@@ -68,15 +72,17 @@ class MKota extends Eloquent
      * @var array
      */
     protected $casts = [
-        'k_propinsi' => 'int',
-        'singkat'    => 'string',
-        'keterangan' => 'string',
-        'kode_ukg'   => 'string',
-        'is_kota'    => 'int',
-        'is_ibukota' => 'int',
-        'is_3t'      => 'int',
-        'timezone'   => 'int',
-        'is_aktif'   => 'int',
+        'k_propinsi'   => 'int',
+        'singkat'      => 'string',
+        'keterangan'   => 'string',
+        'kode_ukg'     => 'string',
+        'is_kota'      => 'int',
+        'is_ibukota'   => 'int',
+        'is_3t'        => 'int',
+        'timezone'     => 'int',
+        'is_aktif'     => 'int',
+        'kode_dapodik' => 'string',
+        'kode_dagri'   => 'int',
     ];
 
     /**
@@ -102,6 +108,8 @@ class MKota extends Eloquent
         'is_3t',
         'timezone',
         'is_aktif',
+        'kode_dapodik',
+        'kode_dagri',
     ];
 
     /**

@@ -61,10 +61,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|AkunInstansi[] $akunInstansis
  * @property-read Collection|PaudAdmin[] $paudAdmins
- * @property-read Collection|PaudPembimbingBerkas[] $paudPembimbingBerkases
- * @property-read Collection|PaudPembimbing[] $paudPembimbings
- * @property-read Collection|PaudPengajarBerkas[] $paudPengajarBerkases
- * @property-read Collection|PaudPengajar[] $paudPengajars
+ * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
+ * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
+ * @property-read Collection|PaudPetugas[] $paudPetugases
  *
  * @method static Builder|Akun whereAkunId($value)
  * @method static Builder|Akun whereNip($value)
@@ -306,33 +305,25 @@ class Akun extends Authenticatable
     /**
      * @return HasMany
      */
-    public function paudPembimbingBerkases()
+    public function paudPetugasBerkases()
     {
-        return $this->hasMany('App\Models\PaudPembimbingBerkas', 'akun_id', 'akun_id');
+        return $this->hasMany('App\Models\PaudPetugasBerkas', 'akun_id', 'akun_id');
     }
 
     /**
      * @return HasMany
      */
-    public function paudPembimbings()
+    public function paudPetugasDiklats()
     {
-        return $this->hasMany('App\Models\PaudPembimbing', 'akun_id', 'akun_id');
+        return $this->hasMany('App\Models\PaudPetugasDiklat', 'akun_id', 'akun_id');
     }
 
     /**
      * @return HasMany
      */
-    public function paudPengajarBerkases()
+    public function paudPetugases()
     {
-        return $this->hasMany('App\Models\PaudPengajarBerkas', 'akun_id', 'akun_id');
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function paudPengajars()
-    {
-        return $this->hasMany('App\Models\PaudPengajar', 'akun_id', 'akun_id');
+        return $this->hasMany('App\Models\PaudPetugas', 'akun_id', 'akun_id');
     }
 
     /**

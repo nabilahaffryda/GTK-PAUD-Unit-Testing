@@ -42,6 +42,7 @@ class MGolongan extends Eloquent
     public const IVD = 16;
     public const IVE = 17;
     public const TIDAK_ADA = 99;
+
     /**
      * The table associated with the model.
      *

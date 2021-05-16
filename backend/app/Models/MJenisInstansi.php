@@ -46,6 +46,7 @@ class MJenisInstansi extends Eloquent
     public const BPPAUD = 21;
     public const PL_POP = 22;
     public const LPD_PAUD = 23;
+    public const MITRAS_DUDI = 24;
 
     /**
      * The table associated with the model.

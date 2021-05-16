@@ -8,33 +8,37 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\MPcpPaud
+ * App\Models\MBerkasPetugasPaud
  *
- * @property int $k_pcp_paud
+ * @property int $k_berkas_petugas_paud
  * @property null|string $singkat
  * @property null|string $keterangan
+ * @property null|int $maks
+ * @property null|string $validasi
  *
- * @property-read Collection|PaudPengajar[] $paudPengajars
+ * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
  *
- * @method static Builder|MPcpPaud whereKPcpPaud($value)
- * @method static Builder|MPcpPaud whereSingkat($value)
- * @method static Builder|MPcpPaud whereKeterangan($value)
+ * @method static Builder|MBerkasPetugasPaud whereKBerkasPetugasPaud($value)
+ * @method static Builder|MBerkasPetugasPaud whereSingkat($value)
+ * @method static Builder|MBerkasPetugasPaud whereKeterangan($value)
+ * @method static Builder|MBerkasPetugasPaud whereMaks($value)
+ * @method static Builder|MBerkasPetugasPaud whereValidasi($value)
  */
-class MPcpPaud extends Eloquent
+class MBerkasPetugasPaud extends Eloquent
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'm_pcp_paud';
+    protected $table = 'm_berkas_petugas_paud';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'k_pcp_paud';
+    protected $primaryKey = 'k_berkas_petugas_paud';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -51,6 +55,8 @@ class MPcpPaud extends Eloquent
     protected $casts = [
         'singkat'    => 'string',
         'keterangan' => 'string',
+        'maks'       => 'int',
+        'validasi'   => 'string',
     ];
 
     /**
@@ -66,16 +72,18 @@ class MPcpPaud extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'k_pcp_paud',
+        'k_berkas_petugas_paud',
         'singkat',
         'keterangan',
+        'maks',
+        'validasi',
     ];
 
     /**
      * @return HasMany
      */
-    public function paudPengajars()
+    public function paudPetugasBerkases()
     {
-        return $this->hasMany('App\Models\PaudPengajar', 'k_pcp_paud', 'k_pcp_paud');
+        return $this->hasMany('App\Models\PaudPetugasBerkas', 'k_berkas_petugas_paud', 'k_berkas_petugas_paud');
     }
 }

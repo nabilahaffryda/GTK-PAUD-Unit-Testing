@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $keterangan
  * @property null|string $kode_ukg
  * @property null|int $timezone
+ * @property null|string $kode_dapodik
+ * @property null|int $kode_dagri
  *
  * @property-read Collection|Akun[] $akuns
  * @property-read Collection|Akun[] $instansiAkuns
@@ -27,6 +29,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|MPropinsi whereKeterangan($value)
  * @method static Builder|MPropinsi whereKodeUkg($value)
  * @method static Builder|MPropinsi whereTimezone($value)
+ * @method static Builder|MPropinsi whereKodeDapodik($value)
+ * @method static Builder|MPropinsi whereKodeDagri($value)
  */
 class MPropinsi extends Eloquent
 {
@@ -57,10 +61,12 @@ class MPropinsi extends Eloquent
      * @var array
      */
     protected $casts = [
-        'singkat'    => 'string',
-        'keterangan' => 'string',
-        'kode_ukg'   => 'string',
-        'timezone'   => 'int',
+        'singkat'      => 'string',
+        'keterangan'   => 'string',
+        'kode_ukg'     => 'string',
+        'timezone'     => 'int',
+        'kode_dapodik' => 'string',
+        'kode_dagri'   => 'int',
     ];
 
     /**
@@ -81,6 +87,8 @@ class MPropinsi extends Eloquent
         'keterangan',
         'kode_ukg',
         'timezone',
+        'kode_dapodik',
+        'kode_dagri',
     ];
 
     /**

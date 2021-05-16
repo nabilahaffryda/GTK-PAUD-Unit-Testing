@@ -21,6 +21,7 @@ class MStatusEmail extends Eloquent
     public const BELUM_AKTIVASI = 1;
     public const ANGGAP_AKTIVASI = 2;
     public const SUDAH_AKTIVASI = 3;
+
     /**
      * The table associated with the model.
      *

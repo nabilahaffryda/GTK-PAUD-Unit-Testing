@@ -8,37 +8,37 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\MBerkasPengajarPaud
+ * App\Models\MTingkatDiklatPaud
  *
- * @property int $k_berkas_pengajar_paud
+ * @property int $k_tingkat_diklat_paud
  * @property null|string $singkat
  * @property null|string $keterangan
- * @property null|int $maks
- * @property null|string $validasi
  *
- * @property-read Collection|PaudPengajarBerkas[] $paudPengajarBerkases
+ * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
  *
- * @method static Builder|MBerkasPengajarPaud whereKBerkasPengajarPaud($value)
- * @method static Builder|MBerkasPengajarPaud whereSingkat($value)
- * @method static Builder|MBerkasPengajarPaud whereKeterangan($value)
- * @method static Builder|MBerkasPengajarPaud whereMaks($value)
- * @method static Builder|MBerkasPengajarPaud whereValidasi($value)
+ * @method static Builder|MTingkatDiklatPaud whereKTingkatDiklatPaud($value)
+ * @method static Builder|MTingkatDiklatPaud whereSingkat($value)
+ * @method static Builder|MTingkatDiklatPaud whereKeterangan($value)
  */
-class MBerkasPengajarPaud extends Eloquent
+class MTingkatDiklatPaud extends Eloquent
 {
+    public const DASAR = 1;
+    public const LANJUT = 2;
+    public const MAHIR = 3;
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'm_berkas_pengajar_paud';
+    protected $table = 'm_tingkat_diklat_paud';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'k_berkas_pengajar_paud';
+    protected $primaryKey = 'k_tingkat_diklat_paud';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -55,8 +55,6 @@ class MBerkasPengajarPaud extends Eloquent
     protected $casts = [
         'singkat'    => 'string',
         'keterangan' => 'string',
-        'maks'       => 'int',
-        'validasi'   => 'string',
     ];
 
     /**
@@ -72,18 +70,16 @@ class MBerkasPengajarPaud extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'k_berkas_pengajar_paud',
+        'k_tingkat_diklat_paud',
         'singkat',
         'keterangan',
-        'maks',
-        'validasi',
     ];
 
     /**
      * @return HasMany
      */
-    public function paudPengajarBerkases()
+    public function paudPetugasDiklats()
     {
-        return $this->hasMany('App\Models\PaudPengajarBerkas', 'k_berkas_pengajar_paud', 'k_berkas_pengajar_paud');
+        return $this->hasMany('App\Models\PaudPetugasDiklat', 'k_tingkat_diklat_paud', 'k_tingkat_diklat_paud');
     }
 }

@@ -220,6 +220,16 @@ class MGroup extends Eloquent
     public const AP_PSP_DIKMEN = 192;
     public const ADM_LMS_PSP_DIKMEN = 193;
     public const INSTRUKTUR_PSP_DIKMEN = 194;
+    public const AP_PSP_DINAS_KOTA = 195;
+    public const ADM_PSP_DINAS_KOTA = 196;
+    public const AP_PSP_DINAS_PROVINSI = 197;
+    public const ADM_PSP_DINAS_PROVINSI = 198;
+    public const AP_VOKASI_MITRAS = 199;
+    public const OP_VOKASI_MITRAS = 200;
+    public const AP_PSP_LP2KS = 201;
+    public const ADM_PSP_LP2KS = 202;
+    public const ADM_LMS_PSP_LP2KS = 203;
+    public const ADM_PSP_P4TK = 204;
 
     /**
      * The table associated with the model.
