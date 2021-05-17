@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Instansi\Pembimbing;
+namespace App\Http\Requests\Instansi\Petugas;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,11 +25,10 @@ class ProfilUpdateRequest extends FormRequest
             'k_kualifikasi'       => ['required', 'integer', 'exists:m_kualifikasi,k_kualifikasi', 'in:9,10,11'],
             'k_propinsi'          => ['required', 'integer', 'exists:m_propinsi,k_propinsi'],
             'k_kota'              => ['required', 'integer', 'exists:m_kota,k_kota'],
+            'k_kecamatan'         => ['nullable', 'integer', 'exists:m_kecamatan,k_kecamatan'],
+            'k_kelurahan'         => ['nullable', 'integer', 'exists:m_kelurahan,k_kelurahan'],
             'kodepos'             => ['nullable', 'digits_between:5,6'],
             'alamat'              => ['nullable', 'string', 'max:255'],
-            'k_pcp_paud'          => ['nullable', 'integer', 'exists:m_pcp_paud,k_pcp_paud'],
-            'kcp_paud_lain'       => ['nullable', 'string', 'max:100'],
-            'is_diklat_dasar'     => ['nullable', 'in:0,1'],
             'no_hp'               => ['required', 'digits_between:5,20'],
             'instansi_nama'       => ['required', 'string', 'max:100'],
             'instansi_jabatan'    => ['required', 'string', 'max:100'],
@@ -37,9 +36,6 @@ class ProfilUpdateRequest extends FormRequest
             'instansi_k_propinsi' => ['required', 'string', 'exists:m_propinsi,k_propinsi'],
             'instansi_k_kota'     => ['required', 'string', 'exists:m_kota,k_kota'],
             'instansi_kodepos'    => ['nullable', 'string', 'digits_between:5,6'],
-            'pengalaman'          => ['required', 'array', 'min:1'],
-            'pengalaman.*.nama'   => ['required', 'string', 'max:100'],
-            'pengalaman.*.tahun'  => ['required', 'string', 'max:50'],
         ];
     }
 }

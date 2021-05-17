@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Requests\Instansi\Pengajar\Profil;
+namespace App\Http\Requests\Instansi\Petugas\Profil;
 
 use App\Exceptions\FlowException;
-use App\Models\MBerkasPengajarPaud;
+use App\Models\MBerkasPetugasPaud;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 
@@ -12,8 +12,6 @@ use Illuminate\Http\UploadedFile;
  *
  * @property-read int $k_berkas
  * @property-read UploadedFile $file
- *
- * @package Modules\Psp\Http\Requests\Gtk\Profil\Profil
  */
 class BerkasCreateRequest extends FormRequest
 {
@@ -27,18 +25,19 @@ class BerkasCreateRequest extends FormRequest
      */
     public function rules()
     {
-        $mBerkas = MBerkasPengajarPaud::whereKBerkasPengajarPaud($this->k_berkas)->first();
+        $mBerkas = MBerkasPetugasPaud::whereKBerkasPetugasPaud($this->k_berkas)->first();
         if (!$mBerkas) {
             throw new FlowException("Jenis Berkas tidak valid");
         }
 
         $this->berkasAtributes = [
-            'file' => $mBerkas->keterangan
+            'file' => $mBerkas->keterangan,
         ];
 
         return [
-            'k_berkas' => ['required', 'int'],
-            'file'     => array_merge(['required', 'file'], explode('|', $mBerkas->validation)),
+            'k_berkas'   => ['required', 'int'],
+            'keterangan' => ['nullable', 'string'],
+            'file'       => array_merge(['required', 'file'], explode('|', $mBerkas->validation)),
         ];
     }
 

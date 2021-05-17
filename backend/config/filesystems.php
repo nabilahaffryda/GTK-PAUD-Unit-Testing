@@ -82,25 +82,16 @@ return [
             'url'      => env('LPD_BERKAS_URL', 'https://upload.dev.siap.id/gpo/paud/lpd-berkas'),
         ],
 
-        'pengajar-berkas' => [
+        'petugas-berkas' => [
             'driver'   => 'ftp',
-            'passive'  => env('PENGAJAR_BERKAS_PASSIVE', env('FTP_PASSIVE', true)),
-            'host'     => env('PENGAJAR_BERKAS_HOST', env('FTP_HOST', '172.17.1.20')),
-            'username' => env('PENGAJAR_BERKAS_USER', env('FTP_USER', 'webmaster')),
-            'password' => env('PENGAJAR_BERKAS_PASS', env('FTP_PASS', 'w3bmaster')),
-            'path'     => env('PENGAJAR_BERKAS_PATH', '/upload/gpo/paud/pengajar-berkas'),
-            'url'      => env('PENGAJAR_BERKAS_URL', 'https://upload.dev.siap.id/gpo/paud/pengajar-berkas'),
+            'passive'  => env('PETUGAS_BERKAS_PASSIVE', env('FTP_PASSIVE', true)),
+            'host'     => env('PETUGAS_BERKAS_HOST', env('FTP_HOST', '172.17.1.20')),
+            'username' => env('PETUGAS_BERKAS_USER', env('FTP_USER', 'webmaster')),
+            'password' => env('PETUGAS_BERKAS_PASS', env('FTP_PASS', 'w3bmaster')),
+            'path'     => env('PETUGAS_BERKAS_PATH', '/upload/gpo/paud/petugas-berkas'),
+            'url'      => env('PETUGAS_BERKAS_URL', 'https://upload.dev.siap.id/gpo/paud/petugas-berkas'),
         ],
 
-        'pembimbing-berkas' => [
-            'driver'   => 'ftp',
-            'passive'  => env('PEMBIMBING_BERKAS_PASSIVE', env('FTP_PASSIVE', true)),
-            'host'     => env('PEMBIMBING_BERKAS_HOST', env('FTP_HOST', '172.17.1.20')),
-            'username' => env('PEMBIMBING_BERKAS_USER', env('FTP_USER', 'webmaster')),
-            'password' => env('PEMBIMBING_BERKAS_PASS', env('FTP_PASS', 'w3bmaster')),
-            'path'     => env('PEMBIMBING_BERKAS_PATH', '/upload/gpo/paud/pembimbing-berkas'),
-            'url'      => env('PEMBIMBING_BERKAS_URL', 'https://upload.dev.siap.id/gpo/paud/pembimbing-berkas'),
-        ],
     ],
 
     /*
