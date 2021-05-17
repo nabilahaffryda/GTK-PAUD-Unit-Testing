@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read Collection|Akun[] $akuns
  * @property-read Collection|Akun[] $instansiAkuns
+ * @property-read Collection|PaudPetugas[] $instansiPropinsis
  * @property-read Collection|Instansi[] $instansis
  * @property-read Collection|MKota[] $mKotas
  * @property-read Collection|Ptk[] $ptks
@@ -105,6 +106,14 @@ class MPropinsi extends Eloquent
     public function instansiAkuns()
     {
         return $this->hasMany('App\Models\Akun', 'instansi_k_propinsi', 'k_propinsi');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function instansiPropinsis()
+    {
+        return $this->hasMany('App\Models\PaudPetugas', 'instansi_k_propinsi', 'k_propinsi');
     }
 
     /**

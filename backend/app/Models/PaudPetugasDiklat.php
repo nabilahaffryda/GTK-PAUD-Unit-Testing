@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|string $created_by
  * @property null|string $updated_by
  *
+ * @property-read null|string $url
+ *
  * @property-read Akun $akun
  * @property-read MDiklatPaud $mDiklatPaud
  * @property-read MTingkatDiklatPaud $mTingkatDiklatPaud
@@ -95,6 +97,15 @@ class PaudPetugasDiklat extends Eloquent
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var string[]
@@ -148,5 +159,10 @@ class PaudPetugasDiklat extends Eloquent
     public function paudPetugas()
     {
         return $this->belongsTo('App\Models\PaudPetugas', 'paud_petugas_id', 'paud_petugas_id');
+    }
+
+    public function getUrlAttribute()
+    {
+        return $this->file ? sprintf("%s/%s", config('filesystems.disks.petugas-berkas.url'), $this->file) : null;
     }
 }

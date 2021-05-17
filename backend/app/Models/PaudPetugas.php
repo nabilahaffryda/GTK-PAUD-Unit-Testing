@@ -35,6 +35,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $updated_by
  *
  * @property-read Akun $akun
+ * @property-read MKota $instansiKota
+ * @property-read MPropinsi $instansiPropinsi
  * @property-read MPetugasPaud $mPetugasPaud
  * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
  * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
@@ -140,6 +142,22 @@ class PaudPetugas extends Eloquent
     public function akun()
     {
         return $this->belongsTo('App\Models\Akun', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function instansiKota()
+    {
+        return $this->belongsTo('App\Models\MKota', 'instansi_k_kota', 'k_kota');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function instansiPropinsi()
+    {
+        return $this->belongsTo('App\Models\MPropinsi', 'instansi_k_propinsi', 'k_propinsi');
     }
 
     /**
