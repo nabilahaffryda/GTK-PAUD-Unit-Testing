@@ -163,12 +163,14 @@
       />
     </div>
     <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title" @save="onSave">
+      {{ formulir.max }}
       <component
         ref="formulir"
         :is="formulir.form"
         :masters="masters"
         :title="title"
         :initValue="formulir.init"
+        :items="formulir.items"
         :type="formulir.type"
         :max="formulir.max"
         :format="formulir.format"
@@ -184,9 +186,10 @@ import mixin from './mixin';
 import Daftar from './Daftar';
 import FormUnggah from '@components/form/Unggah';
 import FormProfil from '../formulir/FormProfil';
+import FormCollection from '../formulir/FormCollection';
 export default {
   mixins: [mixin],
-  components: { Daftar, FormUnggah, FormProfil },
+  components: { FormCollection, Daftar, FormUnggah, FormProfil },
   computed: {
     jenis() {
       return this.$route.meta.tipe;
