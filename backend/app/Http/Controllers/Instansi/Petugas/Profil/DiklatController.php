@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Instansi\Petugas\Profil;
 
 use App\Exceptions\FlowException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Instansi\Petugas\Profil\BerkasCreateRequest;
+use App\Http\Requests\Instansi\Petugas\Profil\DiklatCreateRequest;
 use App\Http\Resources\BaseCollection;
 use App\Models\PaudPetugas;
 use App\Services\Instansi\PetugasService;
@@ -32,7 +32,7 @@ class DiklatController extends Controller
     /**
      * @throws FlowException
      */
-    public function update(PaudPetugas $petugas, BerkasCreateRequest $request)
+    public function update(PaudPetugas $petugas, DiklatCreateRequest $request)
     {
         if ($petugas->akun_id != akunId()) {
             abort(404);
