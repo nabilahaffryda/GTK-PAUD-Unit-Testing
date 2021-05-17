@@ -14,6 +14,7 @@ use App\Models\PaudPetugas;
 use App\Models\PaudPetugasBerkas;
 use App\Models\PaudPetugasDiklat;
 use App\Models\PaudPetugasPeran;
+use App\Models\PaudPetugasPeranBerkas;
 use App\Services\AkunService;
 use Arr;
 use Carbon\Carbon;
@@ -205,6 +206,48 @@ class PetugasService
         if ($foto && $ext && $oldFoto) {
             // app(AkunService::class)->deleteFoto($oldFoto);
         }
+    }
+
+    public function delete(PaudAdmin $admin)
+    {
+        $petugas = PaudPetugas::firstWhere([
+            'akun_id'  => $admin->akun_id,
+            'tahun'    => $admin->tahun,
+            'angkatan' => $admin->angkatan,
+        ]);
+
+        if (!$petugas) {
+            return;
+        }
+
+        if ($petugas->k_petugas_paud == MPetugasPaud::PENGAJAR_TAMBAHAN) {
+            $peran = PaudPetugasPeran::firstWhere([
+                'paud_petugas_id' => $petugas->paud_petugas_id,
+            ]);
+
+            if ($peran) {
+                $berkases = PaudPetugasPeranBerkas::where([
+                    'paud_petugas_peran_id' => $peran->paud_petugas_peran_id,
+                ])->get();
+
+                $peran->delete();
+                foreach ($berkases as $berkas) {
+                    //TODO: delete file
+                    $berkas->delete();
+                }
+            }
+        }
+
+        $diklats = PaudPetugasDiklat::where([
+            'paud_petugas_id' => $petugas->paud_petugas_id,
+        ])->get();
+
+        foreach ($diklats as $diklat) {
+            //TODO: delete file
+            $diklat->delete();
+        }
+
+        $petugas->delete();
     }
 
     /**

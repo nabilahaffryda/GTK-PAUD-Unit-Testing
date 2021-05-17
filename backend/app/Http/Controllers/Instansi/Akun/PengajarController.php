@@ -42,4 +42,10 @@ class PengajarController extends AkunController
     {
         throw new FlowException('Data akun bisa diubah secara mandiri melalui login Akun yang bersangkutan');
     }
+
+    public function delete(PaudAdmin $paudAdmin)
+    {
+        app(PetugasService::class)->delete($paudAdmin);
+        parent::delete($paudAdmin);
+    }
 }
