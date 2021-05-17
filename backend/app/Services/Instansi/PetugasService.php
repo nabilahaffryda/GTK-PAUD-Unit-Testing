@@ -122,7 +122,6 @@ class PetugasService
             'akun',
             'akun.mKota',
             'akun.mPropinsi',
-            'mVervalPaud',
             'paudPetugasDiklats',
             'paudPetugasBerkases',
             'instansiKota',
@@ -398,7 +397,7 @@ class PetugasService
             ->get()
             ->keyBy('paud_petugas_diklat_id');
 
-        $data = collect($data);
+        $data = collect($data['data']);
 
         $mDiklats = MDiklatPaud::get()->keyBy('k_diklat_paud');
 
@@ -419,8 +418,9 @@ class PetugasService
                 $diklat->angkatan        = $petugas->angkatan;
                 $diklat->k_diklat_paud   = $item['k_diklat_paud'];
 
-                $diklatNews[] = $diklat;
             }
+
+            $diklatNews[] = $diklat;
 
             if ($diklat->k_diklat_paud == MDiklatPaud::DIKLAT_LAINNYA) {
                 $diklat->nama      = $item['nama'];
@@ -435,7 +435,7 @@ class PetugasService
 
             /** @var UploadedFile $file */
             if ($file = $item['file'] ?? null) {
-                if ($diklat->exists) {
+                if ($diklat->exists && $diklat->file) {
                     $oldFiles[] = $diklat->file;
                 }
 
