@@ -64,7 +64,7 @@ export default {
                 form: 'FormCollection',
                 title: 'Data Pengalaman Diklat',
                 status: 'diklat',
-                deskripsi: 'Tuliskan pelatihan yang relevan dengan profesi Snda yang pernah anda ikuti',
+                deskripsi: 'Tuliskan pelatihan yang relevan dengan profesi Anda yang pernah anda ikuti',
                 max: 10,
                 optional: true,
               },
@@ -81,9 +81,9 @@ export default {
               diklat: {
                 component: 'Daftar',
                 form: 'FormCollection',
-                title: 'Pengalaman Mengikuti Pelatihan',
+                title: 'Data Pengalaman Diklat',
                 status: 'diklat',
-                deskripsi: 'Tuliskan pelatihan yang relevan dengan profesi Snda yang pernah anda ikuti',
+                deskripsi: 'Tuliskan pelatihan yang relevan dengan profesi Anda yang pernah anda ikuti',
                 max: 10,
                 optional: true,
               },
@@ -378,18 +378,26 @@ export default {
         return;
       }
 
+      const initValue =
+        type === 'diklat'
+          ? this.$getDeepObj(this.detail, 'pengalaman') || []
+          : Object.assign(
+              {},
+              this.$getDeepObj(this.detail, 'akun.data') || {},
+              this.$getDeepObj(this.detail, 'instansi.data') || {},
+              this.detail
+            );
+
+      console.log(Number(this.$getDeepObj(this.contents, `${type}.max`)));
+
       this.$set(this.formulir, 'form', this.contents[type]['form']);
-      this.$set(this.formulir, 'title', `Ubah ${this.contents[type]['title']}`);
+      this.$set(this.formulir, 'title', this.contents[type]['title']);
+      this.$set(this.formulir, 'max', Number(this.$getDeepObj(this.contents, `${type}.max`)) || '');
+      this.$set(this.formulir, 'items', this.$getDeepObj(this.detail, 'pengalaman') || []);
       this.$set(this.formulir, 'mode', 'form');
       this.$set(this.formulir, 'init', null);
       this.$refs.modal.open();
       this.$nextTick(() => {
-        const initValue = Object.assign(
-          {},
-          this.$getDeepObj(this.detail, 'akun.data') || {},
-          this.$getDeepObj(this.detail, 'instansi.data') || {},
-          this.detail
-        );
         this.$refs.formulir.reset();
         this.$set(this.formulir, 'init', initValue);
       });
