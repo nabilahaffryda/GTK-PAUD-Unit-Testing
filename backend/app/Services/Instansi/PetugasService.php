@@ -7,6 +7,7 @@ use App\Exceptions\SaveException;
 use App\Models\Akun;
 use App\Models\MBerkasPetugasPaud;
 use App\Models\MDiklatPaud;
+use App\Models\MPetugasPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudAdmin;
 use App\Models\PaudPetugas;
@@ -149,15 +150,17 @@ class PetugasService
             throw new SaveException("Penyimpanan Data Petugas tidak berhasil");
         }
 
-        $peran = new PaudPetugasPeran([
-            'paud_petugas_id' => $petugas->paud_petugas_id,
-            'akun_id'         => $admin->akun_id,
-            'tahun'           => $petugas->tahun,
-            'angkatan'        => $petugas->angkatan,
-            'k_verval_paud'   => MVervalPaud::KANDIDAT,
-        ]);
+        if ($petugas->k_petugas_paud == MPetugasPaud::PENGAJAR_TAMBAHAN) {
+            $peran = new PaudPetugasPeran([
+                'paud_petugas_id' => $petugas->paud_petugas_id,
+                'akun_id'         => $admin->akun_id,
+                'tahun'           => $petugas->tahun,
+                'angkatan'        => $petugas->angkatan,
+                'k_verval_paud'   => MVervalPaud::KANDIDAT,
+            ]);
 
-        $petugas->paudPetugasPerans()->save($peran);
+            $petugas->paudPetugasPerans()->save($peran);
+        }
 
         return $petugas;
     }
