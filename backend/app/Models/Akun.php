@@ -63,7 +63,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property-read Collection|PaudAdmin[] $paudAdmins
  * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
  * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
+ * @property-read Collection|PaudPetugasPeranBerkas[] $paudPetugasPeranBerkases
+ * @property-read Collection|PaudPetugasPeran[] $paudPetugasPerans
  * @property-read Collection|PaudPetugas[] $paudPetugases
+ * @property-read Collection|PaudPetugasPeran[] $vervalPaudPetugasPerans
  *
  * @method static Builder|Akun whereAkunId($value)
  * @method static Builder|Akun whereNip($value)
@@ -321,9 +324,33 @@ class Akun extends Authenticatable
     /**
      * @return HasMany
      */
+    public function paudPetugasPeranBerkases()
+    {
+        return $this->hasMany('App\Models\PaudPetugasPeranBerkas', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPetugasPerans()
+    {
+        return $this->hasMany('App\Models\PaudPetugasPeran', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function paudPetugases()
     {
         return $this->hasMany('App\Models\PaudPetugas', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function vervalPaudPetugasPerans()
+    {
+        return $this->hasMany('App\Models\PaudPetugasPeran', 'akun_id_verval', 'akun_id');
     }
 
     /**

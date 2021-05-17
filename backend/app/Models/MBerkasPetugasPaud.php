@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $validasi
  *
  * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
+ * @property-read Collection|PaudPetugasPeranBerkas[] $paudPetugasPeranBerkases
  *
  * @method static Builder|MBerkasPetugasPaud whereKBerkasPetugasPaud($value)
  * @method static Builder|MBerkasPetugasPaud whereSingkat($value)
@@ -85,5 +86,13 @@ class MBerkasPetugasPaud extends Eloquent
     public function paudPetugasBerkases()
     {
         return $this->hasMany('App\Models\PaudPetugasBerkas', 'k_berkas_petugas_paud', 'k_berkas_petugas_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPetugasPeranBerkases()
+    {
+        return $this->hasMany('App\Models\PaudPetugasPeranBerkas', 'k_berkas_petugas_paud', 'k_berkas_petugas_paud');
     }
 }

@@ -22,9 +22,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class MTingkatDiklatPaud extends Eloquent
 {
-    public const DASAR = 1;
+    public const DASAR  = 1;
     public const LANJUT = 2;
-    public const MAHIR = 3;
+    public const MAHIR  = 3;
 
     /**
      * The table associated with the model.

@@ -38,6 +38,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read MPetugasPaud $mPetugasPaud
  * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
  * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
+ * @property-read Collection|PaudPetugasPeran[] $paudPetugasPerans
+ * @property-read Collection|PaudPetugasPeranBerkas[] $peranPaudPetugasPeranBerkases
  *
  * @method static Builder|PaudPetugas wherePaudPetugasId($value)
  * @method static Builder|PaudPetugas whereAkunId($value)
@@ -162,5 +164,21 @@ class PaudPetugas extends Eloquent
     public function paudPetugasDiklats()
     {
         return $this->hasMany('App\Models\PaudPetugasDiklat', 'paud_petugas_id', 'paud_petugas_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPetugasPerans()
+    {
+        return $this->hasMany('App\Models\PaudPetugasPeran', 'paud_petugas_id', 'paud_petugas_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function peranPaudPetugasPeranBerkases()
+    {
+        return $this->hasMany('App\Models\PaudPetugasPeranBerkas', 'paud_petugas_peran_id', 'paud_petugas_id');
     }
 }

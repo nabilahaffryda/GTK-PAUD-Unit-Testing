@@ -23,30 +23,30 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class MJenisInstansi extends Eloquent
 {
-    public const SEKOLAH = 1;
-    public const DINAS_KOTA = 2;
-    public const DINAS_PROPINSI = 3;
-    public const DEPAG = 4;
-    public const KANWIL_DEPAG = 5;
-    public const LPMP = 6;
-    public const KEMDIKBUD = 7;
-    public const P4TK = 8;
-    public const KEMENAG = 9;
-    public const DIKDAS = 10;
-    public const DIKMEN = 11;
-    public const TENDIK = 12;
-    public const LP2KS = 13;
-    public const PAUD = 14;
-    public const LPTK = 15;
+    public const SEKOLAH             = 1;
+    public const DINAS_KOTA          = 2;
+    public const DINAS_PROPINSI      = 3;
+    public const DEPAG               = 4;
+    public const KANWIL_DEPAG        = 5;
+    public const LPMP                = 6;
+    public const KEMDIKBUD           = 7;
+    public const P4TK                = 8;
+    public const KEMENAG             = 9;
+    public const DIKDAS              = 10;
+    public const DIKMEN              = 11;
+    public const TENDIK              = 12;
+    public const LP2KS               = 13;
+    public const PAUD                = 14;
+    public const LPTK                = 15;
     public const EVALUATOR_PENGGERAK = 16;
-    public const GPR = 17;
-    public const VOKASI = 18;
-    public const LPD = 19;
-    public const P3GTK = 20;
-    public const BPPAUD = 21;
-    public const PL_POP = 22;
-    public const LPD_PAUD = 23;
-    public const MITRAS_DUDI = 24;
+    public const GPR                 = 17;
+    public const VOKASI              = 18;
+    public const LPD                 = 19;
+    public const P3GTK               = 20;
+    public const BPPAUD              = 21;
+    public const PL_POP              = 22;
+    public const LPD_PAUD            = 23;
+    public const MITRAS_DUDI         = 24;
 
     /**
      * The table associated with the model.

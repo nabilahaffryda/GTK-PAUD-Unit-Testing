@@ -23,6 +23,10 @@ use Illuminate\Database\Eloquent\Builder;
  * @property null|string $created_by
  * @property null|string $updated_by
  *
+ * @property-read Akun $akun
+ * @property-read MBerkasPetugasPaud $mBerkasPetugasPaud
+ * @property-read PaudPetugas $paudPetugasPeran
+ *
  * @method static Builder|PaudPetugasPeranBerkas wherePaudPetugasPeranBerkasId($value)
  * @method static Builder|PaudPetugasPeranBerkas wherePaudPetugasPeranId($value)
  * @method static Builder|PaudPetugasPeranBerkas whereAkunId($value)
@@ -91,4 +95,28 @@ class PaudPetugasPeranBerkas extends Eloquent
         'created_by',
         'updated_by',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function akun()
+    {
+        return $this->belongsTo('App\Models\Akun', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mBerkasPetugasPaud()
+    {
+        return $this->belongsTo('App\Models\MBerkasPetugasPaud', 'k_berkas_petugas_paud', 'k_berkas_petugas_paud');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function paudPetugasPeran()
+    {
+        return $this->belongsTo('App\Models\PaudPetugas', 'paud_petugas_peran_id', 'paud_petugas_id');
+    }
 }

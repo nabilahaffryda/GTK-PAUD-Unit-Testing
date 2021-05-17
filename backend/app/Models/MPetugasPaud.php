@@ -22,10 +22,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class MPetugasPaud extends Eloquent
 {
-    public const PENGAJAR = 1;
-    public const PENGAJAR_TAMBAHAN = 2;
+    public const PENGAJAR           = 1;
+    public const PENGAJAR_TAMBAHAN  = 2;
     public const PEMBIMBING_PRAKTIK = 3;
-    public const ADMIN_KELAS = 4;
+    public const ADMIN_KELAS        = 4;
 
     /**
      * The table associated with the model.

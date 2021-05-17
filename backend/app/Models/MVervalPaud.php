@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $keterangan
  *
  * @property-read Collection|PaudInstansi[] $paudInstansis
+ * @property-read Collection|PaudPetugasPeran[] $paudPetugasPerans
  *
  * @method static Builder|MVervalPaud whereKVervalPaud($value)
  * @method static Builder|MVervalPaud whereSingkat($value)
@@ -22,11 +23,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class MVervalPaud extends Eloquent
 {
-    public const KANDIDAT = 1;
-    public const DIAJUKAN = 2;
-    public const DIPROSES = 3;
-    public const DITOLAK = 4;
-    public const REVISI = 5;
+    public const KANDIDAT  = 1;
+    public const DIAJUKAN  = 2;
+    public const DIPROSES  = 3;
+    public const DITOLAK   = 4;
+    public const REVISI    = 5;
     public const DISETUJUI = 6;
 
     /**
@@ -86,4 +87,11 @@ class MVervalPaud extends Eloquent
         return $this->hasMany('App\Models\PaudInstansi', 'k_verval_paud', 'k_verval_paud');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function paudPetugasPerans()
+    {
+        return $this->hasMany('App\Models\PaudPetugasPeran', 'k_verval_paud', 'k_verval_paud');
+    }
 }

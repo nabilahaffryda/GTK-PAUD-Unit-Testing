@@ -23,9 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class MDiklatPaud extends Eloquent
 {
     public const DIKLAT_BERJENJANG = 1;
-    public const DIKLAT_PCP = 2;
-    public const DIKLAT_MOT = 3;
-    public const DIKLAT_LAINNYA = 4;
+    public const DIKLAT_PCP        = 2;
+    public const DIKLAT_MOT        = 3;
+    public const DIKLAT_LAINNYA    = 4;
 
     /**
      * The table associated with the model.

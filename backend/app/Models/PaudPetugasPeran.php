@@ -5,11 +5,13 @@ namespace App\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\PaudPetugasPeran
  *
  * @property int $paud_petugas_peran_id
+ * @property null|int $paud_petugas_id
  * @property null|string $akun_id
  * @property null|int $tahun
  * @property null|int $angkatan
@@ -24,7 +26,13 @@ use Illuminate\Database\Eloquent\Builder;
  * @property null|string $created_by
  * @property null|string $updated_by
  *
+ * @property-read Akun $akun
+ * @property-read Akun $akunVerval
+ * @property-read MVervalPaud $mVervalPaud
+ * @property-read PaudPetugas $paudPetugas
+ *
  * @method static Builder|PaudPetugasPeran wherePaudPetugasPeranId($value)
+ * @method static Builder|PaudPetugasPeran wherePaudPetugasId($value)
  * @method static Builder|PaudPetugasPeran whereAkunId($value)
  * @method static Builder|PaudPetugasPeran whereTahun($value)
  * @method static Builder|PaudPetugasPeran whereAngkatan($value)
@@ -61,19 +69,20 @@ class PaudPetugasPeran extends Eloquent
      * @var array
      */
     protected $casts = [
-        'akun_id'        => 'string',
-        'tahun'          => 'int',
-        'angkatan'       => 'int',
-        'k_verval_paud'  => 'int',
-        'wkt_ajuan'      => 'datetime',
-        'wkt_verval'     => 'datetime',
-        'akun_id_verval' => 'string',
-        'alasan'         => 'string',
-        'catatan'        => 'string',
-        'created_at'     => 'datetime',
-        'updated_at'     => 'datetime',
-        'created_by'     => 'string',
-        'updated_by'     => 'string',
+        'paud_petugas_id' => 'int',
+        'akun_id'         => 'string',
+        'tahun'           => 'int',
+        'angkatan'        => 'int',
+        'k_verval_paud'   => 'int',
+        'wkt_ajuan'       => 'datetime',
+        'wkt_verval'      => 'datetime',
+        'akun_id_verval'  => 'string',
+        'alasan'          => 'string',
+        'catatan'         => 'string',
+        'created_at'      => 'datetime',
+        'updated_at'      => 'datetime',
+        'created_by'      => 'string',
+        'updated_by'      => 'string',
     ];
 
     /**
@@ -83,6 +92,7 @@ class PaudPetugasPeran extends Eloquent
      */
     protected $fillable = [
         'paud_petugas_peran_id',
+        'paud_petugas_id',
         'akun_id',
         'tahun',
         'angkatan',
@@ -95,4 +105,51 @@ class PaudPetugasPeran extends Eloquent
         'created_by',
         'updated_by',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function akun()
+    {
+        return $this->belongsTo('App\Models\Akun', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function akunVerval()
+    {
+        return $this->belongsTo('App\Models\Akun', 'akun_id_verval', 'akun_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mVervalPaud()
+    {
+        return $this->belongsTo('App\Models\MVervalPaud', 'k_verval_paud', 'k_verval_paud');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function paudPetugas()
+    {
+        return $this->belongsTo('App\Models\PaudPetugas', 'paud_petugas_id', 'paud_petugas_id');
+    }
+
+    public function isVervalKandidat()
+    {
+        return $this->k_verval_paud == MVervalPaud::KANDIDAT;
+    }
+
+    public function isVervalRevisi()
+    {
+        return $this->k_verval_paud == MVervalPaud::REVISI;
+    }
+
+    public function isVervalDiajukan()
+    {
+        return $this->k_verval_paud == MVervalPaud::DIAJUKAN;
+    }
 }
