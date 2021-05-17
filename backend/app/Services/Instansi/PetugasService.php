@@ -149,6 +149,16 @@ class PetugasService
             throw new SaveException("Penyimpanan Data Petugas tidak berhasil");
         }
 
+        $peran = new PaudPetugasPeran([
+            'paud_petugas_id' => $petugas->paud_petugas_id,
+            'akun_id'         => $admin->akun_id,
+            'tahun'           => $petugas->tahun,
+            'angkatan'        => $petugas->angkatan,
+            'k_verval_paud'   => MVervalPaud::KANDIDAT,
+        ]);
+
+        $petugas->paudPetugasPerans()->save($peran);
+
         return $petugas;
     }
 
