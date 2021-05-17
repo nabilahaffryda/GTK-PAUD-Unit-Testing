@@ -18,7 +18,7 @@ class DiklatCreateRequest extends FormRequest
         return [
             'data'                          => ['required', 'array', 'min:1'],
             'data.*.paud_petugas_diklat_id' => ['nullable', 'int'],
-            'data.*.k_diklat_paud'          => ['required_without:data.*.paud_petugas_diklat_id', 'int', 'in:1,2,3,4'],
+            'data.*.k_diklat_paud'          => ['required', 'int', 'in:1,2,3,4'],
             'data.*.nama'                   => ['required_if:data.*.k_diklat_paud,4', 'string', 'max:100'],
             'data.*.penyelenggara'          => ['required', 'string', 'max:100'],
             'data.*.k_tingkat_diklat_paud'  => ['required_if:data.*.k_diklat_paud,1,2,3', 'int', 'in:1,2,3'],
