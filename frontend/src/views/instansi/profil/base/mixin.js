@@ -6,6 +6,7 @@ export default {
       formulir: {},
       detail: {},
       lengkap: {},
+      diklat: [],
       berkas: [],
       id: '',
     };
@@ -321,7 +322,7 @@ export default {
   },
   methods: {
     ...mapActions('master', ['getMasters']),
-    ...mapActions('profil', ['fetch', 'update', 'getBerkas', 'setBerkas', 'ajuan', 'batalAjuan']),
+    ...mapActions('profil', ['fetch', 'update', 'getDiklat', 'getBerkas', 'setBerkas', 'ajuan', 'batalAjuan']),
 
     upload(type) {
       if (this.isAjuan) {
@@ -380,7 +381,7 @@ export default {
 
       const initValue =
         type === 'diklat'
-          ? this.$getDeepObj(this.detail, 'pengalaman') || []
+          ? this.diklat || []
           : Object.assign(
               {},
               this.$getDeepObj(this.detail, 'akun.data') || {},
@@ -388,13 +389,12 @@ export default {
               this.detail
             );
 
-      console.log(Number(this.$getDeepObj(this.contents, `${type}.max`)));
-
       this.$set(this.formulir, 'form', this.contents[type]['form']);
       this.$set(this.formulir, 'title', this.contents[type]['title']);
       this.$set(this.formulir, 'max', Number(this.$getDeepObj(this.contents, `${type}.max`)) || '');
-      this.$set(this.formulir, 'items', this.$getDeepObj(this.detail, 'pengalaman') || []);
+      this.$set(this.formulir, 'items', this.diklat || []);
       this.$set(this.formulir, 'mode', 'form');
+      this.$set(this.formulir, 'type', type);
       this.$set(this.formulir, 'init', null);
       this.$refs.modal.open();
       this.$nextTick(() => {
@@ -408,15 +408,18 @@ export default {
         .then(({ data, meta }) => {
           this.detail = Object.assign({}, data);
           this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
-          this.id =
-            this.$getDeepObj(data, 'paud_pengajar_id') ||
-            this.$getDeepObj(data, 'paud_instansi_id') ||
-            this.$getDeepObj(data, 'paud_pembimbing_id') ||
-            this.$getDeepObj(data, 'paud_admin_id');
+          this.id = this.$getDeepObj(data, 'id');
         })
         .then(() => {
           if (this.jenis !== 'admin-kelas') this.fetchDokumen();
+          this.fetchDiklat();
         });
+    },
+
+    fetchDiklat() {
+      this.getDiklat({ jenis: this.jenis, id: this.id }).then(({ data }) => {
+        this.diklat = data || [];
+      });
     },
 
     fetchDokumen() {
@@ -432,47 +435,54 @@ export default {
       }
 
       const data = this.$refs.formulir.getValue();
-      const { form, photo, diklats } = data;
-
+      const type = this.formulir.type;
       let formData = new FormData();
 
-      Object.keys(form).forEach((key) => {
-        if (form[key]) {
-          formData.append(key, form[key]);
-        }
-      });
+      if (type !== 'diklat') {
+        const { form, photo } = data;
 
-      if (this.jenis !== 'admin-kelas') {
-        if (!diklats.length) {
+        Object.keys(form).forEach((key) => {
+          if (form[key]) {
+            formData.append(key, form[key]);
+          }
+        });
+
+        if (photo) {
+          for (let item of photo.entries()) {
+            formData.append(item[0], item[1]);
+          }
+        }
+      } else {
+        const hasData = data.filter((item) => item && item.penyelenggara);
+        if (!hasData.length) {
           this.$error('Mohon isikan data diklat minimal 1 (satu)');
           this.$refs.modal.loading = false;
           return;
         } else {
-          for (let i = 0; i < diklats.length; i++) {
-            if (
-              !diklats[i]['nama'] ||
-              diklats[i]['nama'].trim() === '' ||
-              !diklats[i]['tahun'] ||
-              diklats[i]['tahun'].trim() === ''
-            ) {
+          for (let i = 0; i < hasData.length; i++) {
+            if (!hasData[i]['penyelenggara'] || !hasData[i]['tahun_diklat'] || !hasData[i]['file']) {
               this.$error('Mohon lengkapi data Diklat Anda');
               this.$refs.modal.loading = false;
               return;
             }
-            formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][nama]`, diklats[i]['nama']);
-            formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][tahun]`, diklats[i]['tahun']);
+            formData.append(`data[${i}][nama]`, hasData[i]['nama']);
+            formData.append(`data[${i}][k_diklat_paud]`, hasData[i]['k_diklat_paud']);
+            formData.append(`data[${i}][penyelenggara]`, hasData[i]['penyelenggara']);
+            formData.append(`data[${i}][tahun_diklat]`, hasData[i]['tahun_diklat']);
+
+            if (hasData[i]['k_tingkat_diklat_paud'])
+              formData.append(`data[${i}][k_tingkat_diklat_paud]`, hasData[i]['k_tingkat_diklat_paud']);
+            if (hasData[i]['tingkatan']) formData.append(`data[${i}][tingkatan]`, hasData[i]['tingkatan']);
+            if (hasData[i]['paud_petugas_diklat_id'])
+              formData.append(`data[${i}][paud_petugas_diklat_id]`, hasData[i]['paud_petugas_diklat_id']);
+
+            if (typeof hasData[i]['file'] !== 'string') formData.append(`data[${i}][file]`, hasData[i]['file']);
           }
         }
       }
 
-      if (photo) {
-        for (let item of photo.entries()) {
-          formData.append(item[0], item[1]);
-        }
-      }
-
       const payload = {
-        jenis: this.jenis,
+        jenis: type,
         id: this.id,
         params: formData,
       };

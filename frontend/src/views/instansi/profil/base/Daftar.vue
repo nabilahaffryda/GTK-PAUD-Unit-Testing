@@ -2,7 +2,7 @@
   <div>
     <v-expansion-panels v-model="panel" multiple>
       <v-expansion-panel v-for="(item, i) in contents" :key="i">
-        <v-expansion-panel-header class="pb-0">
+        <v-expansion-panel-header>
           <span class="text-h6">{{ item.title }}</span>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -45,29 +45,21 @@
               <v-col cols="12" md="6">
                 <h2 class="subtitle-1 font-weight-bold">Data Diklat</h2>
                 <collection
-                  v-for="(item, b) in berkases"
+                  v-for="(item, b) in diklats.filter((value) => value.k_diklat_paud !== 4)"
                   :key="b"
-                  :berkas="item"
-                  :type="item.type"
-                  :valid="item.valid"
-                  :with-action="item.withAction"
-                  :value="item.value || {}"
-                  @detil="onDetil"
-                  @upload="$emit('upload', item.type)"
+                  :nomor="b + 1"
+                  :diklat="item"
+                  @detil="onDetilDiklat"
                 />
               </v-col>
               <v-col cols="12" md="6">
                 <h2 class="subtitle-1 font-weight-bold">Data Diklat Lainnya</h2>
                 <collection
-                  v-for="(item, b) in berkases"
+                  v-for="(item, b) in diklats.filter((value) => value.k_diklat_paud === 4)"
                   :key="b"
-                  :berkas="item"
-                  :type="item.type"
-                  :valid="item.valid"
-                  :with-action="item.withAction"
-                  :value="item.value || {}"
-                  @detil="onDetil"
-                  @upload="$emit('upload', item.type)"
+                  :nomor="b + 1"
+                  :diklat="item"
+                  @detil="onDetilDiklat"
                 />
               </v-col>
             </v-row>
@@ -102,6 +94,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    diklats: {
+      type: Array,
+      default: () => [],
+    },
     detail: {
       type: Object,
       default: () => {},
@@ -127,6 +123,14 @@ export default {
       this.$set(this, 'preview', {});
       this.preview.url = this.$getDeepObj(berkas, 'value.url');
       this.preview.title = this.$getDeepObj(berkas, 'title');
+      this.$nextTick(() => {
+        this.$refs.popup.open();
+      });
+    },
+    onDetilDiklat(data) {
+      this.$set(this, 'preview', {});
+      this.preview.url = this.$getDeepObj(data, 'url');
+      this.preview.title = this.$getDeepObj(data, 'nama');
       this.$nextTick(() => {
         this.$refs.popup.open();
       });

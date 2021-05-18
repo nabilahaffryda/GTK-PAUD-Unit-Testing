@@ -4,7 +4,7 @@
       <v-toolbar-title><span v-html="title"></span></v-toolbar-title>
     </v-toolbar>
     <v-container>
-      <v-alert v-if="deskripsi" text type="info" dense>
+      <v-alert v-if="deskripsi" text type="secondary" dense>
         <div v-html="deskripsi" />
       </v-alert>
 
@@ -15,11 +15,11 @@
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="(item, i) in tabs" :key="i">
-          <template v-for="(f, id) in forms">
-            <div :key="id" class="mt-3 mb-4">
-              <v-row no-gutters dense>
+          <template v-for="(f, id) in forms[item.k_tipe]">
+            <div :key="id" class="my-4">
+              <v-row no-gutters dense v-if="item.type === 'diklat_lain'">
                 <v-col cols="12" md="10" sm="12">
-                  <span class="title orange--text text--darken-3"> Data riwayat ({{ id + 1 }}) </span>
+                  <span class="title orange--text text--darken-3"> Data Diklat ({{ id + 1 }}) </span>
                 </v-col>
                 <v-col cols="12" md="2" sm="12" class="my-auto">
                   <div class="text-right">
@@ -38,27 +38,31 @@
                   </div>
                 </v-col>
               </v-row>
-              <base-form-generator :schema="schema(item.type)" v-model="form[id]" />
-              <v-row>
+              <base-form-generator :schema="schema(item.type)" v-model="form[item.k_tipe][id]" />
+              <input type="hidden" v-model="form[item.k_tipe][id]['k_diklat_paud']" />
+              <input type="hidden" v-model="form[item.k_tipe][id]['paud_petugas_diklat_id']" />
+              <v-row class="mt-9">
                 <v-col cols="12" md="6" class="py-0">
-                  <v-subheader :class="[`px-0 body-2 secondary--text`]" style="height: 24px"> Unggah Berkas* </v-subheader>
-                  <template v-if="form.berkas && form.berkas.length">
+                  <v-subheader :class="[`px-0 body-2 secondary--text`]" style="height: 24px">
+                    Unggah Berkas*
+                  </v-subheader>
+                  <template v-if="form[item.k_tipe][id]['url']">
                     <v-chip
                       color="secondary"
                       dark
                       label
                       close
-                      :href="form.berkas[0] && form.berkas[0]['url_berkas']"
+                      :href="form[item.k_tipe][id]['url']"
                       target="_blank"
-                      @click:close="onRemoveFile"
+                      @click:close="onRemoveFile(item.k_tipe, id)"
                     >
-                      {{ form.berkas[0] && form.berkas[0]['file_berkas'] }}
+                      {{ form[item.k_tipe][id]['nama_file'] }}
                     </v-chip>
                   </template>
                   <template v-else>
                     <validation-provider name="Pindaian Berkas" rules="required" v-slot="{ errors }">
                       <v-file-input
-                        v-model="form.file"
+                        v-model="form[item.k_tipe][id]['file']"
                         :error-messages="errors"
                         label="Pindaian Berkas Ijazah (20 KB - 1,5 MB)"
                         append-icon="mdi-paperclip"
@@ -79,6 +83,7 @@
           </template>
           <v-divider></v-divider>
           <v-btn
+            v-if="item.type === 'diklat_lain'"
             depressed
             :color="max === (forms || []).length ? '' : 'secondary'"
             :class="max === (forms || []).length ? 'grey--text mt-3' : 'mt-3'"
@@ -110,7 +115,7 @@ export default {
     },
     initValue: {
       type: Array,
-      default: () => null,
+      default: () => [],
     },
     masters: {
       type: Object,
@@ -145,13 +150,13 @@ export default {
     return {
       tab: null,
       tabs: [
-        { tab: 'Diklat Berjenjang', type: 'diklat' },
-        { tab: 'Diklat PCP', type: 'diklat' },
-        { tab: 'Diklat MOT', type: 'diklat' },
-        { tab: 'Diklat Lainnya', type: 'diklat_lain' },
+        { tab: 'Diklat Berjenjang', type: 'diklat', k_tipe: 1 },
+        { tab: 'Diklat PCP', type: 'diklat', k_tipe: 2 },
+        { tab: 'Diklat MOT', type: 'diklat', k_tipe: 3 },
+        { tab: 'Diklat Lainnya', type: 'diklat_lain', k_tipe: 4 },
       ],
-      forms: [],
-      form: [],
+      forms: {},
+      form: {},
       currTahun: new Date().getFullYear(),
     };
   },
@@ -163,7 +168,7 @@ export default {
             type: 'VTextField',
             name: 'penyelenggara',
             label: 'Nama Pelatihan',
-            labelColor: 'info',
+            labelColor: 'secondary',
             placeholder: 'Tuliskan Nama pelatihan yang pernah Anda ikuti',
             hint: 'wajib diisi',
             grid: { cols: 12, md: 12 },
@@ -174,12 +179,12 @@ export default {
           },
           {
             type: 'VSelect',
-            name: 'k_jenjang',
+            name: 'k_tingkat_diklat_paud',
             label: 'Tingkatan Diklat',
-            labelColor: 'info',
+            labelColor: 'secondary',
             placeholder: 'Pilih Tingkatan Diklat',
             hint: 'wajib diisi',
-            items: this.$mapForMaster(this.masters['diklat_instansi'], 'k_profil_opsi_psp'),
+            items: this.$mapForMaster(this.masters['m_tingkat_diklat_paud']),
             itemText: 'text',
             itemValue: 'value',
             required: true,
@@ -191,12 +196,12 @@ export default {
           },
           {
             type: 'VSelect',
-            name: 'tahun',
+            name: 'tahun_diklat',
             label: 'Tahun',
-            labelColor: 'info',
+            labelColor: 'secondary',
             placeholder: 'Pilih Tahun Diklat',
             hint: 'wajib diisi',
-            items: this.$mapForMaster(range(this.currTahun, this.currTahun - 3, 1)),
+            items: this.$mapForMaster(range(this.currTahun, this.currTahun - 5, 1)),
             itemText: 'text',
             itemValue: 'value',
             required: true,
@@ -212,7 +217,7 @@ export default {
             type: 'VTextField',
             name: 'nama',
             label: 'Nama Diklat',
-            labelColor: 'info',
+            labelColor: 'secondary',
             placeholder: 'Tuliskan Nama Diklat yang pernah Anda ikuti',
             hint: 'wajib diisi',
             grid: { cols: 12, md: 6 },
@@ -222,34 +227,26 @@ export default {
             singleLine: true,
           },
           {
-            type: 'VSelect',
-            name: 'k_diklat_instansi_psp',
+            type: 'VTextField',
+            name: 'penyelenggara',
             label: 'Penyelenggara',
-            labelColor: 'info',
-            placeholder: 'Pilih Penyelenggara',
+            labelColor: 'secondary',
+            placeholder: 'Isi Penyelenggara',
             hint: 'wajib diisi',
-            items: this.$mapForMaster(this.masters['diklat_instansi'], 'k_profil_opsi_psp'),
-            itemText: 'text',
-            itemValue: 'value',
             required: true,
-            hideDetails: true,
             outlined: true,
             dense: true,
             singleLine: true,
             grid: { cols: 12, md: 6 },
           },
           {
-            type: 'VSelect',
-            name: 'k_jenjang',
+            type: 'VTextField',
+            name: 'tingkatan',
             label: 'Tingkatan Diklat',
-            labelColor: 'info',
-            placeholder: 'Pilih Tingkatan Diklat',
+            labelColor: 'secondary',
+            placeholder: 'Isi Tingkatan Diklat',
             hint: 'wajib diisi',
-            items: this.$mapForMaster(this.masters['diklat_instansi'], 'k_profil_opsi_psp'),
-            itemText: 'text',
-            itemValue: 'value',
             required: true,
-            hideDetails: true,
             outlined: true,
             dense: true,
             singleLine: true,
@@ -257,9 +254,9 @@ export default {
           },
           {
             type: 'VSelect',
-            name: 'tahun',
+            name: 'tahun_diklat',
             label: 'Tahun',
-            labelColor: 'info',
+            labelColor: 'secondary',
             placeholder: 'Pilih Tahun Diklat',
             hint: 'wajib diisi',
             items: this.$mapForMaster(range(this.currTahun, this.currTahun - 3, 1)),
@@ -278,99 +275,49 @@ export default {
       return collection[type];
     },
     add() {
-      if (this.max) {
-        if (this.forms.length === this.max) {
-          this.$error(`Maksimal ${this.max} data ${this.title}.`);
-          return;
-        }
-
-        this.forms.push({});
-        this.form.push({});
-      } else {
-        this.forms.push({});
-        this.form.push({});
+      if (this.forms[4].length === this.max) {
+        this.$error(`Maksimal ${this.max} data ${this.title}.`);
+        return;
       }
+      this.forms[4].push({k_diklat_paud: 4});
     },
     remove(idx) {
       this.$confirm(
-        `<span class="black--text">Anda yakin ingin menghapus <strong>Data Riwayat (${idx + 1})</strong> ?</span>`,
-        `Hapus Riwayat`,
+        `<span class="black--text">Anda yakin ingin menghapus <strong>Data Diklat (${idx + 1})</strong> ?</span>`,
+        `Hapus Diklat`,
         {
           tipe: 'error',
           data: '',
         }
       ).then(() => {
-        this.form.splice(idx, 1);
-        this.forms.splice(idx, 1);
+        this.form[4].splice(idx, 1);
+        this.forms[4].splice(idx, 1);
       });
     },
     reset() {
-      this.form = [];
-      this.forms = [].concat(this.items);
-
-      if (this.action === 'add') {
-        this.add();
-      }
+      this.form = {};
+      this.forms = {};
     },
     getValue() {
       let result = [];
-      if (this.action === 'add') {
-        for (const i in this.initValue) {
-          let param = {};
-          const formulir = [...this.schema(this.type)];
-          for (const f of formulir) {
-            const item = this.initValue[i] || {};
-            if (Object.keys(item).length) {
-              if (['pendampingan', 'pengajaran'].indexOf(this.type) > -1) {
-                param['is_pendampingan'] = this.type === 'pendampingan' ? 1 : 0;
-              } else if (['pendidikan', 'nonpendidikan'].indexOf(this.type) > -1) {
-                param['is_pendidikan'] = this.type === 'pendidikan' ? 1 : 0;
-                if (+param['k_jabatan_gpm'] !== 99) {
-                  param['peran'] = '';
-                }
-              }
-            }
-            param[f.name] = this.$getDeepObj(item, f.name) || '';
-          }
-          result.push(param);
-        }
+      for (const item of this.tabs) {
+        result.push(...this.form[item.k_tipe]);
       }
-
-      for (const f in this.form) {
-        if (Object.keys(this.form[f] || {}).length) {
-          if (['pendampingan', 'pengajaran'].indexOf(this.type) > -1) {
-            this.form[f]['is_pendampingan'] = this.type === 'pendampingan' ? 1 : 0;
-          } else if (['pendidikan', 'nonpendidikan'].indexOf(this.type) > -1) {
-            this.form[f]['is_pendidikan'] = this.type === 'pendidikan' ? 1 : 0;
-            if (+this.form[f]['k_jabatan_gpm'] !== 99) {
-              this.form[f]['peran'] = '';
-            }
-          }
-
-          if (this.form[f].pendampingan) {
-            this.form[f].pendampingan = this.form[f].pendampingan.join(' dan ');
-          }
-          result.push(this.form[f]);
-        }
-      }
-
       return result;
     },
+    onRemoveFile(k_tipe, idx) {
+      let form = Object.assign({}, this.form[k_tipe][idx]);
+      delete form.url;
+      delete form.file;
+      this.$set(this.form[k_tipe], idx, form);
+    },
     initForm(value) {
-      const formulir = [...this.schema(this.type), { name: 'duplikasi_id' }];
-      for (const i in value) {
-        const item = value[i] || {};
-        this.form.push({});
-        for (const f of formulir) {
-          if (f.name) {
-            if (this.form[i]) {
-              this.$set(this.form[i], f.name, this.$getDeepObj(item, f.name) || (f && f.type === 'Checkbox' ? [] : ''));
-            } else {
-              this.$set(this.form, i, {});
-              this.$set(this.form[i], f.name, this.$getDeepObj(item, f.name) || (f && f.type === 'Checkbox' ? [] : ''));
-            }
-          }
-        }
+      for (const item of this.tabs) {
+        const data = (value || []).filter((val) => val.k_diklat_paud === item.k_tipe).length
+          ? value.filter((val) => val.k_diklat_paud === item.k_tipe)
+          : [{ k_diklat_paud: item.k_tipe }];
+        this.$set(this.form, `${item.k_tipe}`, data);
+        this.$set(this.forms, `${item.k_tipe}`, data);
       }
     },
   },

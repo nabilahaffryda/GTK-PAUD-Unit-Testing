@@ -155,6 +155,7 @@
         v-if="masters && $isObject(masters)"
         :contents="contents"
         :berkases="berkases[jenis]"
+        :diklats="diklat"
         :detail="detail"
         :masters="masters"
         :jenis="jenis"
@@ -163,7 +164,6 @@
       />
     </div>
     <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title" @save="onSave">
-      {{ formulir.max }}
       <component
         ref="formulir"
         :is="formulir.form"
@@ -200,7 +200,7 @@ export default {
   },
   created() {
     this.getMasters({
-      name: ['m_propinsi', 'm_kota', 'm_kualifikasi', 'm_pcp_paud'].join(';'),
+      name: ['m_propinsi', 'm_kota', 'm_kualifikasi', 'm_pcp_paud', 'm_diklat_paud', 'm_tingkat_diklat_paud'].join(';'),
       filter: {
         0: {
           k_propinsi: {

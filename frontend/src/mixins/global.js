@@ -129,7 +129,7 @@ export default {
     },
 
     $isObject(data) {
-      return isObject(data);
+      return isObject(data || {});
     },
 
     $isArray(data) {
