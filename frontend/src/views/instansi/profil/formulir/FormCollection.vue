@@ -279,7 +279,7 @@ export default {
         this.$error(`Maksimal ${this.max} data ${this.title}.`);
         return;
       }
-      this.forms[4].push({k_diklat_paud: 4});
+      this.forms[4].push({ k_diklat_paud: 4 });
     },
     remove(idx) {
       this.$confirm(
