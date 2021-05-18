@@ -24,7 +24,8 @@ class DiklatController extends Controller
         }
 
         $diklats = $petugas
-            ->paudPetugasDiklats;
+            ->paudPetugasDiklats
+            ->loadMissing(['mDiklatPaud', 'mTingkatDiklatPaud']);
 
         return BaseCollection::make($diklats);
     }
