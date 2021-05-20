@@ -9,7 +9,7 @@
         </span>
       </v-list-item-content>
       <v-list-item-action>
-        <v-btn v-if="$allow(`${jenis}-profil.update`)" depressed @click="$emit('edit')">
+        <v-btn :disabled="!$allow(`petugas-profil.update`)" depressed @click="$emit('edit')">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </v-list-item-action>
