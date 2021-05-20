@@ -59,12 +59,14 @@ export default {
     },
 
     onDelete(item) {
-      this.$confirm('Apakan anda ingin menghapus akun berikut ?', 'Hapus Akun', { tipe: 'error' }).then(() => {
-        this.action({ id: item.akun_instansi_id, type: 'delete' }).then(() => {
-          this.$success('Akun berhasil di hapus');
-          this.fetchData();
-        });
-      });
+      this.$confirm('Apakan anda ingin menghapus Institusi berikut ?', 'Hapus Institusi', { tipe: 'error' }).then(
+        () => {
+          this.action({ id: item.akun_instansi_id, type: 'delete' }).then(() => {
+            this.$success('Institusi berhasil di hapus');
+            this.fetchData();
+          });
+        }
+      );
     },
 
     onSave() {
