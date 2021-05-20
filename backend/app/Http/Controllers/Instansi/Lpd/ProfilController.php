@@ -20,9 +20,6 @@ class ProfilController extends Controller
         $akun         = akun();
         $operator     = $this->service->getOperatorLpd($akun, instansi());
         $paudInstansi = $this->service->getPaudInstansi(instansi(), $operator);
-        if ($paudInstansi->diklat) {
-            $paudInstansi->diklat = json_decode($paudInstansi->diklat);
-        }
 
         $status = $this->service->getStatusLengkap($paudInstansi);
 

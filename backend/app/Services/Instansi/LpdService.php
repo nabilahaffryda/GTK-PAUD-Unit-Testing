@@ -207,10 +207,7 @@ class LpdService
 
         $oldFoto = $instansi->foto ? $instansi->getOriginal('foto') : null;
 
-        $paudInstansi->fill(Arr::except($data, 'diklat'));
-        if ($diklat = Arr::get($data, 'diklat')) {
-            $paudInstansi->diklat = json_encode($diklat);
-        }
+        $paudInstansi->fill($data);
         if (!$paudInstansi->save()) {
             throw new SaveException("Penyimpanan Data Lembaga Tidak Berhasil");
         }
