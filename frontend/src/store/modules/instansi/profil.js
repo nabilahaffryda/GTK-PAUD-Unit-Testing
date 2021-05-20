@@ -43,12 +43,16 @@ export const actions = {
   },
   ajuan({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/${payload.jenis}/${payload.jenis === 'lpd' ? '' : 'profil/'}${payload.id}/ajuan/create`;
+    const url = `/i/${id}/${payload.jenis === 'lpd' ? payload.jenis : 'petugas'}/${
+      payload.jenis === 'lpd' ? '' : 'profil/'
+    }${payload.id}/ajuan/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
   batalAjuan({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/${payload.jenis}/${payload.jenis === 'lpd' ? '' : 'profil/'}${payload.id}/ajuan/delete`;
+    const url = `/i/${id}/${payload.jenis === 'lpd' ? payload.jenis : 'petugas'}/${
+      payload.jenis === 'lpd' ? '' : 'profil/'
+    }${payload.id}/ajuan/delete`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 };

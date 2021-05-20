@@ -162,8 +162,8 @@ export default [
     submenu: false,
     menu: [
       {
-        icon: 'mdi-account-voice',
-        title: 'Verval Pendaftaran LPD',
+        icon: 'mdi-card-bulleted',
+        title: 'Verval LPD',
         desc: 'Evaluasi dan Verifikasi Dokumen Penting Lembaga LPD',
         color: 'success',
         deepColor: 'darken-1',
@@ -172,8 +172,8 @@ export default [
         to: { name: 'verval-lembaga' },
       },
       {
-        icon: 'mdi-account-voice',
-        title: 'Verval Pendaftaran Pengajar',
+        icon: 'mdi-account-check',
+        title: 'Verval Pengajar',
         desc: 'Evaluasi dan Verifikasi Dokumen Penting Pengajar',
         color: 'red',
         deepColor: 'darken-1',
