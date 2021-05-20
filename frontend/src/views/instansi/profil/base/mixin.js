@@ -308,7 +308,7 @@ export default {
     },
 
     kVerval() {
-      return this.detail?.k_verval_paud ?? 1;
+      return this.$getDeepObj(this.detail, 'paud_petugas_perans.data.0.k_verval_paud') || 1;
     },
 
     isAjuan() {
