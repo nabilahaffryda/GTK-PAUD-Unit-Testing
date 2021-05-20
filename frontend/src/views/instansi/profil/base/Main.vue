@@ -63,7 +63,7 @@
             </div>
 
             <!--ajuan button-->
-            <template v-if="$allow(`${jenis}-profil-ajuan.create`)">
+            <template v-if="$allow(`${jenis === 'lpd' ? jenis: 'petugas'}-profil-ajuan.create`)">
               <div>
                 <v-btn
                   v-if="[2, 3, 6].includes(Number(detail && detail.k_verval_paud))"
