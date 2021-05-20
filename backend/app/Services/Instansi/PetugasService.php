@@ -302,7 +302,7 @@ class PetugasService
         }
 
         $peran->k_verval_paud = MVervalPaud::KANDIDAT;
-        if (!$petugas->save()) {
+        if (!$peran->save()) {
             throw new SaveException("Penyimpanan Status Ajuan tidak berhasil");
         }
     }
