@@ -117,7 +117,14 @@
         <base-table-footer :pageTotal="pageTotal" @changePage="onChangePage"></base-table-footer>
       </v-card-actions>
     </v-card>
-    <base-modal-full ref="modal" generalError :title="formulir.title" :useSave="formulir.useSave" @save="onSave">
+    <base-modal-full
+      ref="modal"
+      colorBtn="primary"
+      generalError
+      :title="formulir.title"
+      :useSave="formulir.useSave"
+      @save="onSave"
+    >
       <form-lpd
         ref="formulir"
         :isEdit="formulir.isEdit"
