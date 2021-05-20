@@ -124,6 +124,7 @@ class PetugasService
             'akun.mPropinsi',
             'paudPetugasDiklats',
             'paudPetugasBerkases',
+            'paudPetugasPerans',
             'instansiKota',
             'instansiPropinsi',
         ]);
