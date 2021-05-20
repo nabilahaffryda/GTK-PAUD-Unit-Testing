@@ -33,7 +33,7 @@ return [
         'failed_jobs',
         'migrations',
         'password_resets',
-        'clockwork',
+        'clockwork*',
     ],
 
     /*
@@ -51,7 +51,7 @@ return [
             | null  = load from App/Models
             | other path = load from there
             */
-            'reference' => null,
+            'reference' => false,
 
             /*
             |--------------------------------------------------------------------------
@@ -159,9 +159,12 @@ return [
     | <singular> = <plural> : Custom mapping (default use Str::singular and Str::singular)
     */
     'plural'  => [
-        'kota'   => 'kotas',
-        'akses'  => 'akseses',
-        'berkas' => 'berkases',
+        'akses'   => 'akseses',
+        'berkas'  => 'berkases',
+        'kelas'   => 'kelases',
+        'kota'    => 'kotas',
+        'peserta' => 'pesertas',
+        'petugas' => 'petugases',
     ],
 
     /*
@@ -196,6 +199,12 @@ return [
             ],
         ],
 
+        'm_diklat_paud' => [
+            'model' => [
+                'const' => ['k_diklat_paud', 'keterangan'],
+            ],
+        ],
+
         'm_group' => [
             'model' => [
                 'const' => ['k_group', 'singkat'],
@@ -214,15 +223,33 @@ return [
             ],
         ],
 
-        'm_verval_paud' => [
+        'm_konfirmasi_paud' => [
             'model' => [
-                'const' => ['k_verval_paud', 'singkat'],
+                'const' => ['k_konfirmasi_paud', 'keterangan'],
+            ],
+        ],
+
+        'm_petugas_paud' => [
+            'model' => [
+                'const' => ['k_petugas_paud', 'keterangan'],
             ],
         ],
 
         'm_status_email' => [
             'model' => [
                 'const' => ['k_status_email', 'singkat'],
+            ],
+        ],
+
+        'm_tingkat_diklat_paud' => [
+            'model' => [
+                'const' => ['k_tingkat_diklat_paud', 'singkat'],
+            ],
+        ],
+
+        'm_verval_paud' => [
+            'model' => [
+                'const' => ['k_verval_paud', 'singkat'],
             ],
         ],
 
@@ -234,20 +261,10 @@ return [
             ],
         ],
 
-        'paud_pengajar' => [
+        'paud_petugas' => [
             'model' => [
                 'cast' => [
-                    'data_akun'  => 'array',
-                    'pengalaman' => 'array',
-                ],
-            ],
-        ],
-
-        'paud_pembimbing' => [
-            'model' => [
-                'cast' => [
-                    'data_akun'  => 'array',
-                    'pengalaman' => 'array',
+                    'data_akun' => 'array',
                 ],
             ],
         ],
