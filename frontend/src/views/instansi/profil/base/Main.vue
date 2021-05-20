@@ -15,7 +15,17 @@
                 </v-col>
                 <v-col cols="12" md="4" sm="4" class="text-right right-aligned">
                   <v-chip class="caption" color="error" dark>
-                    {{ $titleCase(jenis === 'lpd' ? 'Lembaga' : jenis) }}
+                    {{
+                      $titleCase(
+                        ['pengajar', 'pembimbing'].includes(jenis)
+                          ? masters &&
+                              masters['petugas_paud'] &&
+                              masters['petugas_paud'][$getDeepObj(detail, 'k_petugas_paud')]
+                          : jenis === 'lpd'
+                          ? 'Lembaga'
+                          : jenis
+                      )
+                    }}
                   </v-chip>
                 </v-col>
               </v-row>
@@ -63,7 +73,7 @@
             </div>
 
             <!--ajuan button-->
-            <template v-if="$allow(`${jenis === 'lpd' ? jenis: 'petugas'}-profil-ajuan.create`)">
+            <template v-if="$allow(`${jenis === 'lpd' ? jenis : 'petugas'}-profil-ajuan.create`)">
               <div>
                 <v-btn
                   v-if="[2, 3, 6].includes(Number(detail && detail.k_verval_paud))"
@@ -200,7 +210,15 @@ export default {
   },
   created() {
     this.getMasters({
-      name: ['m_propinsi', 'm_kota', 'm_kualifikasi', 'm_pcp_paud', 'm_diklat_paud', 'm_tingkat_diklat_paud'].join(';'),
+      name: [
+        'm_propinsi',
+        'm_kota',
+        'm_kualifikasi',
+        'm_pcp_paud',
+        'm_diklat_paud',
+        'm_tingkat_diklat_paud',
+        'petugas_paud',
+      ].join(';'),
       filter: {
         0: {
           k_propinsi: {

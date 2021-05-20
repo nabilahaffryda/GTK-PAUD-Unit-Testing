@@ -31,6 +31,10 @@ export default {
               label: `${this.$route.meta.title}`,
               value: this.lengkap?.profil ? 'passed' : 'not_complete',
             },
+            {
+              label: `Diklat`,
+              value: this.lengkap?.diklat ? 'passed' : 'not_complete',
+            },
             { label: 'Berkas Persyaratan Lainnya', value: this.lengkap?.berkas ? 'passed' : 'not_complete' },
           ];
     },
@@ -398,12 +402,15 @@ export default {
       this.fetch({ jenis: this.jenis })
         .then(({ data, meta }) => {
           this.detail = Object.assign({}, data);
+          console.log(this.detail);
           this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
           this.id = this.$getDeepObj(data, 'id');
         })
         .then(() => {
-          if (this.jenis !== 'admin-kelas') this.fetchDokumen();
-          this.fetchDiklat();
+          if (this.jenis !== 'admin-kelas') {
+            this.fetchDokumen();
+            this.fetchDiklat();
+          }
         });
     },
 
@@ -473,7 +480,8 @@ export default {
       }
 
       const payload = {
-        jenis: type,
+        jenis: this.jenis,
+        tipe: this.formulir.tipe,
         id: this.id,
         params: formData,
       };

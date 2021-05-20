@@ -211,7 +211,7 @@ export default {
     },
 
     $titleCase(kata) {
-      return kata.charAt(0).toUpperCase() + kata.slice(1);
+      return (kata && kata.charAt(0).toUpperCase() + kata.slice(1)) || '';
     },
 
     $currency(data) {
