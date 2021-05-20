@@ -28,19 +28,6 @@
             <div v-for="(item, i) in schema" :key="i">
               <div v-if="i !== 'dasar'" class="text-h6 my-3 font-weight-bold"> Data {{ $titleCase(i) }} </div>
               <base-form-generator :schema="item" v-model="form" />
-              <template v-if="i === 'dasar' && Number(form && form.k_pcp_paud) === 9">
-                <v-row dense>
-                  <v-col cols="12" md="6">
-                    <v-text-field
-                      label="Keikutsertaan PCP Lainnya"
-                      v-model="form['kcp_paud_lain']"
-                      outlined
-                      dense
-                      single-line
-                    />
-                  </v-col>
-                </v-row>
-              </template>
             </div>
           </v-col>
         </v-row>
@@ -292,20 +279,6 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
-            },
-            {
-              type: 'VSelect',
-              name: 'k_pcp_paud',
-              label: 'Keikutsertaan PCP',
-              hint: 'wajib dipilh',
-              items: this.$mapForMaster(this.masters.m_pcp_paud),
-              required: true,
-              hideDetails: false,
-              outlined: true,
-              dense: true,
-              singleLine: true,
-              grid: { cols: 12, md: 6 },
-              labelColor: 'secondary',
             },
             {
               type: 'VTextField',
