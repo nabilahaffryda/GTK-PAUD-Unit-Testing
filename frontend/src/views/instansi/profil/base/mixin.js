@@ -319,6 +319,34 @@ export default {
     ...mapActions('master', ['getMasters']),
     ...mapActions('profil', ['fetch', 'update', 'getDiklat', 'getBerkas', 'setBerkas', 'ajuan', 'batalAjuan']),
 
+    fetchProfil() {
+      this.fetch({ jenis: this.jenis })
+        .then(({ data, meta }) => {
+          this.detail = Object.assign({}, data);
+          console.log(this.detail);
+          this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
+          this.id = this.$getDeepObj(data, 'id');
+        })
+        .then(() => {
+          if (this.jenis !== 'admin-kelas') {
+            this.fetchDokumen();
+            this.fetchDiklat();
+          }
+        });
+    },
+
+    fetchDiklat() {
+      this.getDiklat({ jenis: this.jenis, id: this.id }).then(({ data }) => {
+        this.diklat = data || [];
+      });
+    },
+
+    fetchDokumen() {
+      this.getBerkas({ jenis: this.jenis, id: this.id }).then(({ data }) => {
+        this.berkas = data || [];
+      });
+    },
+
     upload(type) {
       if (this.isAjuan) {
         const msg = `<p class="title mb-2">Mohon maaf! Anda sudah mengajukan Berkas untuk diperiksa Tim Verval`;
@@ -398,34 +426,6 @@ export default {
       });
     },
 
-    fetchProfil() {
-      this.fetch({ jenis: this.jenis })
-        .then(({ data, meta }) => {
-          this.detail = Object.assign({}, data);
-          console.log(this.detail);
-          this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
-          this.id = this.$getDeepObj(data, 'id');
-        })
-        .then(() => {
-          if (this.jenis !== 'admin-kelas') {
-            this.fetchDokumen();
-            this.fetchDiklat();
-          }
-        });
-    },
-
-    fetchDiklat() {
-      this.getDiklat({ jenis: this.jenis, id: this.id }).then(({ data }) => {
-        this.diklat = data || [];
-      });
-    },
-
-    fetchDokumen() {
-      this.getBerkas({ jenis: this.jenis, id: this.id }).then(({ data }) => {
-        this.berkas = data || [];
-      });
-    },
-
     onSave() {
       if (this.formulir.mode === 'upload') {
         this.uploadData();
@@ -481,7 +481,7 @@ export default {
 
       const payload = {
         jenis: this.jenis,
-        tipe: this.formulir.tipe,
+        tipe: this.formulir.type,
         id: this.id,
         params: formData,
       };
