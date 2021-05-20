@@ -323,7 +323,6 @@ export default {
       this.fetch({ jenis: this.jenis })
         .then(({ data, meta }) => {
           this.detail = Object.assign({}, data);
-          console.log(this.detail);
           this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
           this.id = this.$getDeepObj(data, 'id');
         })
