@@ -233,11 +233,6 @@ export default {
               value: this.$getDeepObj(item, 'akun.data.kodepos') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },
-            {
-              title: 'Status Keikutsertaan Diklat Dasar',
-              value: Number(this.$getDeepObj(item, 'is_diklat_dasar')) === 1 ? 'Ya' : 'Tidak',
-              grid: { cols: 12, md: 6, sm: 12 },
-            },
           ],
           instansi: [
             {

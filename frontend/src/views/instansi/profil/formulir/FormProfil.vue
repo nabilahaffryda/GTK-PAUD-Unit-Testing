@@ -544,19 +544,6 @@ export default {
               singleLine: true,
             },
             {
-              type: 'VRadio',
-              name: 'is_diklat_dasar',
-              label: 'Status Keikutsertaan Diklat Dasar',
-              labelColor: 'secondary',
-              hint: 'wajib diisi',
-              required: true,
-              items: [
-                { value: '1', text: 'Ya' },
-                { value: '0', text: 'Tidak' },
-              ],
-              grid: { cols: 12, md: 6 },
-            },
-            {
               type: 'VTextField',
               name: `no_hp`,
               label: `Nomor HP Aktif`,
