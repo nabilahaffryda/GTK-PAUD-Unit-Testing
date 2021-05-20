@@ -60,15 +60,6 @@ export default {
                 max: 10,
                 optional: true,
               },
-              diklat: {
-                component: 'Daftar',
-                form: 'FormCollection',
-                title: 'Data Pengalaman Diklat',
-                status: 'diklat',
-                deskripsi: 'Tuliskan pelatihan yang relevan dengan profesi Anda yang pernah anda ikuti',
-                max: 10,
-                optional: true,
-              },
             }
           : {
               profil: {
@@ -101,8 +92,8 @@ export default {
     },
 
     berkases() {
-      const mBerkas = this.$arrToObj(this.berkas, `k_berkas_${this.jenis}_paud`);
-      const withAction = this.$allow(`${this.jenis}-profil-berkas.create`);
+      const mBerkas = this.$arrToObj(this.berkas, `k_berkas_petugas_paud`);
+      const withAction = this.$allow(`petugas-profil-berkas.create`);
       return {
         pengajar: [
           {

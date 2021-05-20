@@ -36,7 +36,7 @@
                 </span>
               </v-list-item-content>
               <v-list-item-action>
-                <v-btn depressed @click="$emit('edit', i)">
+                <v-btn :disabled="!$allow('petugas-profil-diklat.update')" depressed @click="$emit('edit', i)">
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
               </v-list-item-action>
