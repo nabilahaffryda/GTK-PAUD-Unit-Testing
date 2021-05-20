@@ -108,6 +108,20 @@ class LpdService
         return $paudInstansi;
     }
 
+    /**
+     * @return PaudInstansi
+     */
+    public function update(PaudInstansi $paudInstansi, array $data)
+    {
+        $instansi = $paudInstansi->instansi;
+
+        $instansi->nama = $data['nama'] ?? $instansi->nama;
+
+        $instansi->save();
+
+        return $paudInstansi;
+    }
+
     public function getOperatorLpd(Akun $akun, Instansi $instansi)
     {
         $operator = PaudAdmin::whereAkunId($akun->akun_id)
@@ -201,7 +215,11 @@ class LpdService
         return Storage::disk('lpd-berkas')->delete($delete);
     }
 
-    public function update(PaudInstansi $paudInstansi, array $data, ?string $foto, ?string $ext)
+    /**
+     * @throws SaveException
+     * @throws FlowException
+     */
+    public function updateProfil(PaudInstansi $paudInstansi, array $data, ?string $foto, ?string $ext)
     {
         $instansi = $paudInstansi->instansi;
 

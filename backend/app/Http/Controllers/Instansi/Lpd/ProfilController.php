@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Instansi\Lpd;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FotoRequest;
-use App\Http\Requests\Instansi\Lpd\UpdateRequest;
+use App\Http\Requests\Instansi\Lpd\Profil\UpdateRequest;
 use App\Http\Resources\BaseResource;
 use App\Models\PaudInstansi;
 use App\Services\Instansi\LpdService;
@@ -37,7 +37,7 @@ class ProfilController extends Controller
             abort(404);
         }
 
-        $this->service->update($paudInstansi, $request->validated(), $foto->data, $foto->ext);
+        $this->service->updateProfil($paudInstansi, $request->validated(), $foto->data, $foto->ext);
 
         return BaseResource::make($paudInstansi->loadMissing('instansi'));
     }
