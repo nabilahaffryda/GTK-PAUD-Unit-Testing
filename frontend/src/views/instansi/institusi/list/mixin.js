@@ -39,6 +39,7 @@ export default {
     },
 
     async onEdit(item) {
+      this.id = item.id;
       this.$set(this.formulir, 'isEdit', true);
       this.$set(this.formulir, 'useSave', false);
       this.$refs.modal.open();
@@ -68,12 +69,12 @@ export default {
 
     onSave() {
       const isEdit = this.formulir.isEdit;
-      const id = this.$refs.formulir.id;
+      const id = this.id;
       const params = Object.assign({}, this.$refs.formulir.getValue());
 
       this[isEdit ? 'update' : 'create']({ params, id })
         .then(() => {
-          this.$success(`Data admin berhasil di ${isEdit ? 'diubah' : 'ditambahkan'}`);
+          this.$success(`Data Institusi berhasil ${isEdit ? 'diubah' : 'ditambahkan'}`);
           this.$refs.modal.close();
           this.fetchData();
         })
