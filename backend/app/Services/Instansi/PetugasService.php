@@ -246,6 +246,15 @@ class PetugasService
             $diklat->delete();
         }
 
+        $berkases = PaudPetugasBerkas::where([
+            'paud_petugas_id' => $petugas->paud_petugas_id,
+        ])->get();
+
+        foreach ($berkases as $berkas) {
+            //TODO: delete file
+            $berkas->delete();
+        }
+
         $petugas->delete();
     }
 
