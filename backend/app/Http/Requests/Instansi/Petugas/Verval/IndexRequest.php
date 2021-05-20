@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Instansi\Pengajar\Verval;
+namespace App\Http\Requests\Instansi\Petugas\Verval;
 
 use Illuminate\Foundation\Http\FormRequest;
 

@@ -1,18 +1,19 @@
 <template>
   <div>
-    <v-toolbar flat>
-      <v-toolbar-title class="subtitle-1">
-        <div class="font-weight-bold">Data CV</div>
+    <v-list-item class="px-0">
+      <v-list-item-content>
+        <div class="subtitle-1 font-weight-bold">Data CV</div>
         <span>
           Lengkapi data persyaratan sesuai kebutuhan sistem, Silakan <b>tekan tombol/icon pensil</b> di sebelah kanan
           untuk melakukan edit.
         </span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn v-if="$allow(`${jenis}-profil.update`)" depressed @click="$emit('edit')">
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-    </v-toolbar>
+      </v-list-item-content>
+      <v-list-item-action>
+        <v-btn :disabled="!$allow(`petugas-profil.update`)" depressed @click="$emit('edit')">
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+      </v-list-item-action>
+    </v-list-item>
     <v-row class="my-5">
       <v-col cols="12" md="2" sm="12">
         <base-photo-profil
@@ -31,27 +32,6 @@
                 <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(sub, 'value') || '-'" /></h2>
               </v-col>
             </v-row>
-          </v-col>
-          <!-- Sheet Diklat -->
-          <v-col cols="12" md="6" sm="12" v-if="jenis !== 'admin-kelas'">
-            <div class="text-h6 my-3 font-weight-bold"> Data Diklat </div>
-            <div class="grey--text">Pengalaman Melatih 2 Tahun Terakhir</div>
-            <v-list three-line>
-              <template v-for="(item, index) in diklats">
-                <v-list-item :key="index">
-                  <v-list-item-avatar tile>
-                    <v-avatar tile color="secondary">
-                      <span class="white--text">{{ index + 1 }}</span>
-                    </v-avatar>
-                  </v-list-item-avatar>
-
-                  <v-list-item-content>
-                    <v-list-item-title v-html="item.nama"></v-list-item-title>
-                    <v-list-item-subtitle v-html="item.tahun"></v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list>
           </v-col>
         </v-row>
       </v-col>
@@ -159,14 +139,6 @@ export default {
               value: this.$getDeepObj(item, 'akun.data.kodepos') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },
-            {
-              title: 'Keikutsertaan PCP',
-              value:
-                Number(this.$getDeepObj(item, 'k_pcp_paud')) === 9
-                  ? this.$getDeepObj(item, 'kcp_paud_lain') || '-'
-                  : this.$getDeepObj(item, 'm_pcp_paud.data.keterangan') || '-',
-              grid: { cols: 12, md: 6, sm: 12 },
-            },
           ],
           instansi: [
             {
@@ -259,11 +231,6 @@ export default {
             {
               title: 'Kodepos',
               value: this.$getDeepObj(item, 'akun.data.kodepos') || '-',
-              grid: { cols: 12, md: 6, sm: 12 },
-            },
-            {
-              title: 'Status Keikutsertaan Diklat Dasar',
-              value: Number(this.$getDeepObj(item, 'is_diklat_dasar')) === 1 ? 'Ya' : 'Tidak',
               grid: { cols: 12, md: 6, sm: 12 },
             },
           ],

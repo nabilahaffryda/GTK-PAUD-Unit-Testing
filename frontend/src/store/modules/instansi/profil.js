@@ -7,13 +7,17 @@ export const actions = {
   async fetch({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${payload.jenis}/profil`,
+      baseURL:
+        process.env.VUE_APP_API_URL +
+        `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/profil`,
     });
     return await $ajax.get('/', { params: payload.params });
   },
   update({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/${payload.jenis}/profil/${payload.id}/update`;
+    const url = `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/profil/${
+      payload.id
+    }${payload.tipe === 'diklat' ? '/diklat' : ''}/update`;
     return http
       .post(url, payload.params, {
         headers: {
@@ -22,26 +26,47 @@ export const actions = {
       })
       .then(({ data }) => data);
   },
+  async getDiklat({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    $ajax = kitsu({
+      baseURL:
+        process.env.VUE_APP_API_URL +
+        `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/profil/${
+          payload.id
+        }/diklat`,
+    });
+    return await $ajax.get('/', { params: payload.params });
+  },
   async getBerkas({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${payload.jenis}/profil/${payload.id}/berkas`,
+      baseURL:
+        process.env.VUE_APP_API_URL +
+        `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/profil/${
+          payload.id
+        }/berkas`,
     });
     return await $ajax.get('/', { params: payload.params });
   },
   setBerkas({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/${payload.jenis}/profil/${payload.id}/berkas/create`;
+    const url = `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/profil/${
+      payload.id
+    }/berkas/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
   ajuan({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/${payload.jenis}/${payload.jenis === 'lpd' ? '' : 'profil/'}${payload.id}/ajuan/create`;
+    const url = `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/${
+      payload.jenis === 'lpd' ? '' : 'profil/'
+    }${payload.id}/ajuan/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
   batalAjuan({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/${payload.jenis}/${payload.jenis === 'lpd' ? '' : 'profil/'}${payload.id}/ajuan/delete`;
+    const url = `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/${
+      payload.jenis === 'lpd' ? '' : 'profil/'
+    }${payload.id}/ajuan/delete`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 };

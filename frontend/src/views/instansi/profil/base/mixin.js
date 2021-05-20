@@ -6,6 +6,7 @@ export default {
       formulir: {},
       detail: {},
       lengkap: {},
+      diklat: [],
       berkas: [],
       id: '',
     };
@@ -29,6 +30,10 @@ export default {
             {
               label: `${this.$route.meta.title}`,
               value: this.lengkap?.profil ? 'passed' : 'not_complete',
+            },
+            {
+              label: `Diklat`,
+              value: this.lengkap?.diklat ? 'passed' : 'not_complete',
             },
             { label: 'Berkas Persyaratan Lainnya', value: this.lengkap?.berkas ? 'passed' : 'not_complete' },
           ];
@@ -69,6 +74,15 @@ export default {
                 max: 10,
                 optional: true,
               },
+              diklat: {
+                component: 'Daftar',
+                form: 'FormCollection',
+                title: 'Data Pengalaman Diklat',
+                status: 'diklat',
+                deskripsi: 'Tuliskan pelatihan yang relevan dengan profesi Anda yang pernah anda ikuti',
+                max: 10,
+                optional: true,
+              },
               berkas: {
                 component: 'Berkas',
                 form: 'FormUnggah',
@@ -82,8 +96,8 @@ export default {
     },
 
     berkases() {
-      const mBerkas = this.$arrToObj(this.berkas, `k_berkas_${this.jenis}_paud`);
-      const withAction = this.$allow(`${this.jenis}-profil-berkas.create`);
+      const mBerkas = this.$arrToObj(this.berkas, `k_berkas_petugas_paud`);
+      const withAction = this.$allow(`petugas-profil-berkas.create`);
       return {
         pengajar: [
           {
@@ -294,7 +308,7 @@ export default {
     },
 
     kVerval() {
-      return this.detail?.k_verval_paud ?? 1;
+      return this.$getDeepObj(this.detail, 'paud_petugas_perans.data.0.k_verval_paud') || 1;
     },
 
     isAjuan() {
@@ -303,7 +317,34 @@ export default {
   },
   methods: {
     ...mapActions('master', ['getMasters']),
-    ...mapActions('profil', ['fetch', 'update', 'getBerkas', 'setBerkas', 'ajuan', 'batalAjuan']),
+    ...mapActions('profil', ['fetch', 'update', 'getDiklat', 'getBerkas', 'setBerkas', 'ajuan', 'batalAjuan']),
+
+    fetchProfil() {
+      this.fetch({ jenis: this.jenis })
+        .then(({ data, meta }) => {
+          this.detail = Object.assign({}, data);
+          this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
+          this.id = this.$getDeepObj(data, 'id');
+        })
+        .then(() => {
+          if (this.jenis !== 'admin-kelas') {
+            this.fetchDokumen();
+            this.fetchDiklat();
+          }
+        });
+    },
+
+    fetchDiklat() {
+      this.getDiklat({ jenis: this.jenis, id: this.id }).then(({ data }) => {
+        this.diklat = data || [];
+      });
+    },
+
+    fetchDokumen() {
+      this.getBerkas({ jenis: this.jenis, id: this.id }).then(({ data }) => {
+        this.berkas = data || [];
+      });
+    },
 
     upload(type) {
       if (this.isAjuan) {
@@ -350,7 +391,7 @@ export default {
       });
     },
 
-    edit() {
+    edit(type) {
       if (this.isAjuan) {
         const msg = `<p class="title mb-2">Mohon maaf! Anda sudah mengajukan Berkas untuk diperiksa Tim Verval`;
         this.$info(msg, `Perubahan data tidak diperbolehkan`, {
@@ -360,42 +401,27 @@ export default {
         return;
       }
 
-      this.$set(this.formulir, 'form', 'FormProfil');
-      this.$set(this.formulir, 'title', `Ubah Profil`);
+      const initValue =
+        type === 'diklat'
+          ? this.diklat || []
+          : Object.assign(
+              {},
+              this.$getDeepObj(this.detail, 'akun.data') || {},
+              this.$getDeepObj(this.detail, 'instansi.data') || {},
+              this.detail
+            );
+
+      this.$set(this.formulir, 'form', this.contents[type]['form']);
+      this.$set(this.formulir, 'title', this.contents[type]['title']);
+      this.$set(this.formulir, 'max', Number(this.$getDeepObj(this.contents, `${type}.max`)) || '');
+      this.$set(this.formulir, 'items', this.diklat || []);
       this.$set(this.formulir, 'mode', 'form');
+      this.$set(this.formulir, 'type', type);
       this.$set(this.formulir, 'init', null);
       this.$refs.modal.open();
       this.$nextTick(() => {
-        const initValue = Object.assign(
-          {},
-          this.$getDeepObj(this.detail, 'akun.data') || {},
-          this.$getDeepObj(this.detail, 'instansi.data') || {},
-          this.detail
-        );
         this.$refs.formulir.reset();
         this.$set(this.formulir, 'init', initValue);
-      });
-    },
-
-    fetchProfil() {
-      this.fetch({ jenis: this.jenis })
-        .then(({ data, meta }) => {
-          this.detail = Object.assign({}, data);
-          this.lengkap = Object.assign({}, (meta && meta.status_lengkap) || {});
-          this.id =
-            this.$getDeepObj(data, 'paud_pengajar_id') ||
-            this.$getDeepObj(data, 'paud_instansi_id') ||
-            this.$getDeepObj(data, 'paud_pembimbing_id') ||
-            this.$getDeepObj(data, 'paud_admin_id');
-        })
-        .then(() => {
-          if (this.jenis !== 'admin-kelas') this.fetchDokumen();
-        });
-    },
-
-    fetchDokumen() {
-      this.getBerkas({ jenis: this.jenis, id: this.id }).then(({ data }) => {
-        this.berkas = data || [];
       });
     },
 
@@ -406,47 +432,55 @@ export default {
       }
 
       const data = this.$refs.formulir.getValue();
-      const { form, photo, diklats } = data;
-
+      const type = this.formulir.type;
       let formData = new FormData();
 
-      Object.keys(form).forEach((key) => {
-        if (form[key]) {
-          formData.append(key, form[key]);
-        }
-      });
+      if (type !== 'diklat') {
+        const { form, photo } = data;
 
-      if (this.jenis !== 'admin-kelas') {
-        if (!diklats.length) {
+        Object.keys(form).forEach((key) => {
+          if (form[key]) {
+            formData.append(key, form[key]);
+          }
+        });
+
+        if (photo) {
+          for (let item of photo.entries()) {
+            formData.append(item[0], item[1]);
+          }
+        }
+      } else {
+        const hasData = data.filter((item) => item && item.penyelenggara);
+        if (!hasData.length) {
           this.$error('Mohon isikan data diklat minimal 1 (satu)');
           this.$refs.modal.loading = false;
           return;
         } else {
-          for (let i = 0; i < diklats.length; i++) {
-            if (
-              !diklats[i]['nama'] ||
-              diklats[i]['nama'].trim() === '' ||
-              !diklats[i]['tahun'] ||
-              diklats[i]['tahun'].trim() === ''
-            ) {
+          for (let i = 0; i < hasData.length; i++) {
+            if (!hasData[i]['penyelenggara'] || !hasData[i]['tahun_diklat'] || !hasData[i]['file']) {
               this.$error('Mohon lengkapi data Diklat Anda');
               this.$refs.modal.loading = false;
               return;
             }
-            formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][nama]`, diklats[i]['nama']);
-            formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][tahun]`, diklats[i]['tahun']);
-          }
-        }
-      }
+            formData.append(`data[${i}][nama]`, hasData[i]['nama']);
+            formData.append(`data[${i}][k_diklat_paud]`, hasData[i]['k_diklat_paud']);
+            formData.append(`data[${i}][penyelenggara]`, hasData[i]['penyelenggara']);
+            formData.append(`data[${i}][tahun_diklat]`, hasData[i]['tahun_diklat']);
 
-      if (photo) {
-        for (let item of photo.entries()) {
-          formData.append(item[0], item[1]);
+            if (hasData[i]['k_tingkat_diklat_paud'])
+              formData.append(`data[${i}][k_tingkat_diklat_paud]`, hasData[i]['k_tingkat_diklat_paud']);
+            if (hasData[i]['tingkatan']) formData.append(`data[${i}][tingkatan]`, hasData[i]['tingkatan']);
+            if (hasData[i]['paud_petugas_diklat_id'])
+              formData.append(`data[${i}][paud_petugas_diklat_id]`, hasData[i]['paud_petugas_diklat_id']);
+
+            if (typeof hasData[i]['file'] !== 'string') formData.append(`data[${i}][file]`, hasData[i]['file']);
+          }
         }
       }
 
       const payload = {
         jenis: this.jenis,
+        tipe: this.formulir.type,
         id: this.id,
         params: formData,
       };

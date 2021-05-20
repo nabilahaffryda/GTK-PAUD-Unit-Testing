@@ -15,7 +15,17 @@
                 </v-col>
                 <v-col cols="12" md="4" sm="4" class="text-right right-aligned">
                   <v-chip class="caption" color="error" dark>
-                    {{ $titleCase(jenis === 'lpd' ? 'Lembaga' : jenis) }}
+                    {{
+                      $titleCase(
+                        ['pengajar', 'pembimbing'].includes(jenis)
+                          ? masters &&
+                              masters['petugas_paud'] &&
+                              masters['petugas_paud'][$getDeepObj(detail, 'k_petugas_paud')]
+                          : jenis === 'lpd'
+                          ? 'Lembaga'
+                          : jenis
+                      )
+                    }}
                   </v-chip>
                 </v-col>
               </v-row>
@@ -63,19 +73,13 @@
             </div>
 
             <!--ajuan button-->
-            <template v-if="$allow(`${jenis}-profil-ajuan.create`)">
+            <template v-if="$allow(`${jenis === 'lpd' ? jenis : 'petugas'}-profil-ajuan.create`)">
               <div>
-                <v-btn
-                  v-if="[2, 3, 6].includes(Number(detail && detail.k_verval_paud))"
-                  depressed
-                  color="success"
-                  class="mt-2"
-                  outlined
-                >
+                <v-btn v-if="[2, 3, 6].includes(Number(kVerval))" depressed color="success" class="mt-2" outlined>
                   {{ kVerval === 6 ? 'Berkas Telah Disetujui' : 'Berkas Terkirim' }}
                 </v-btn>
                 <v-btn
-                  v-else-if="Number(detail && detail.k_verval_paud) === 5"
+                  v-else-if="Number(kVerval) === 5"
                   depressed
                   color="success"
                   class="mt-2"
@@ -84,29 +88,17 @@
                 >
                   Kirim Ulang Berkas
                 </v-btn>
-                <v-btn
-                  v-else-if="Number(detail && detail.k_verval_paud) === 4"
-                  depressed
-                  color="error"
-                  class="mt-2"
-                  outlined
-                >
+                <v-btn v-else-if="Number(kVerval) === 4" depressed color="error" class="mt-2" outlined>
                   Berkas Ditolak
                 </v-btn>
                 <v-btn v-else depressed color="success" class="mt-2" :disabled="!isLengkap" @click="onAjuan">
                   Kirim Berkas
                 </v-btn>
               </div>
-              <template v-if="[1, 2, 3].includes(Number(detail && detail.k_verval_paud))">
+              <template v-if="[1, 2, 3].includes(Number(kVerval))">
                 <!-- is_kirim_ci -->
-                <v-alert
-                  dense
-                  text
-                  type="info"
-                  class="mt-4"
-                  v-if="[2, 3].includes(Number(detail && detail.k_verval_paud))"
-                >
-                  <template v-if="Number(detail && detail.k_verval_paud) === 2">
+                <v-alert dense text type="info" class="mt-4" v-if="[2, 3].includes(Number(kVerval))">
+                  <template v-if="Number(kVerval) === 2">
                     Anda sudah mengirimkan berkas Anda untuk diproses, Informasi lebih lanjut tentang pendaftaran akun
                     kami kirimkan ke alamat surel Anda, Apabila Anda ingin membatalkan pengiriman berkas dan mengubah
                     isian berkas Anda.<br />
@@ -155,6 +147,7 @@
         v-if="masters && $isObject(masters)"
         :contents="contents"
         :berkases="berkases[jenis]"
+        :diklats="diklat"
         :detail="detail"
         :masters="masters"
         :jenis="jenis"
@@ -169,6 +162,7 @@
         :masters="masters"
         :title="title"
         :initValue="formulir.init"
+        :items="formulir.items"
         :type="formulir.type"
         :max="formulir.max"
         :format="formulir.format"
@@ -184,9 +178,10 @@ import mixin from './mixin';
 import Daftar from './Daftar';
 import FormUnggah from '@components/form/Unggah';
 import FormProfil from '../formulir/FormProfil';
+import FormCollection from '../formulir/FormCollection';
 export default {
   mixins: [mixin],
-  components: { Daftar, FormUnggah, FormProfil },
+  components: { FormCollection, Daftar, FormUnggah, FormProfil },
   computed: {
     jenis() {
       return this.$route.meta.tipe;
@@ -197,7 +192,16 @@ export default {
   },
   created() {
     this.getMasters({
-      name: ['m_propinsi', 'm_kota', 'm_kualifikasi', 'm_pcp_paud'].join(';'),
+      name: [
+        'm_propinsi',
+        'm_kota',
+        'm_kualifikasi',
+        'm_pcp_paud',
+        'm_diklat_paud',
+        'm_tingkat_diklat_paud',
+        'petugas_paud',
+        'verval_paud',
+      ].join(';'),
       filter: {
         0: {
           k_propinsi: {
