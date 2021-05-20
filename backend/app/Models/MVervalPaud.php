@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $singkat
  * @property null|string $keterangan
  *
+ * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|PaudInstansi[] $paudInstansis
  * @property-read Collection|PaudPetugasPeran[] $paudPetugasPerans
  *
@@ -78,6 +79,14 @@ class MVervalPaud extends Eloquent
         'singkat',
         'keterangan',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function paudDiklats()
+    {
+        return $this->hasMany('App\Models\PaudDiklat', 'k_verval_paud', 'k_verval_paud');
+    }
 
     /**
      * @return HasMany
