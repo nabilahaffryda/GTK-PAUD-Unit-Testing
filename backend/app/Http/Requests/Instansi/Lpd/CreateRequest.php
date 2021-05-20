@@ -28,9 +28,9 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama'                  => ['required', 'string', 'max:50'],
-            'email'                 => ['required', 'email'],
-            'alamat'                => ['required', 'string', 'max:255'],
+            'nama'                  => ['required', 'string', 'max:100'],
+            'email'                 => ['required', 'email', 'max:100'],
+            'alamat'                => ['required', 'string', 'max:100'],
             'k_propinsi'            => ['required', 'integer'],
             'k_kota'                => ['required', 'integer'],
             'kodepos'               => ['required', 'string', 'max:6'],
