@@ -287,7 +287,6 @@ export default {
   computed: {
     profils() {
       const item = this.$getDeepObj(this, 'detail') || {};
-      console.log(item);
       return {
         petugas: [
           {

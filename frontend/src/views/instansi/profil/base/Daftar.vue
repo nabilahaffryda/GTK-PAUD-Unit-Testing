@@ -38,7 +38,7 @@
               </v-list-item-content>
               <v-list-item-action>
                 <v-btn
-                  :disabled="!$allow(`${jenis === 'lpd-profil' ? jenis : 'petugas-profil-diklat.'}.update`)"
+                  :disabled="!$allow(`${jenis === 'lpd' ? `${jenis}-profil` : 'petugas-profil-diklat.'}.update`)"
                   depressed
                   @click="$emit('edit', i)"
                 >
