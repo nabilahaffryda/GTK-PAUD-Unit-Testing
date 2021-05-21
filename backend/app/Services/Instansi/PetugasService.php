@@ -113,7 +113,7 @@ class PetugasService
                         'angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
                     ]);
             })
-            ->with(['akun', 'mVervalPaud']);
+            ->with(['akun', 'paudPetugasPerans.mVervalPaud']);
     }
 
     public function fetch(PaudPetugas $petugas)
