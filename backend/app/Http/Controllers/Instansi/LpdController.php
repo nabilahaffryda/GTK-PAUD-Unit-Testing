@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Instansi;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Instansi\Lpd\CreateRequest;
+use App\Http\Requests\Instansi\Lpd\UpdateRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\PaudAdmin;
@@ -55,5 +56,17 @@ class LpdController extends Controller
     public function fetch(PaudInstansi $paudInstansi)
     {
         return BaseResource::make($this->service->fetch($paudInstansi));
+    }
+
+    /**
+     * @return BaseResource
+     */
+    public function update(PaudInstansi $paudInstansi, UpdateRequest $request)
+    {
+        $paudInstansi = $this
+            ->service
+            ->update($paudInstansi, $request->validated());
+
+        return BaseResource::make($paudInstansi);
     }
 }
