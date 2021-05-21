@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Collection|Akun[] $instansiAkuns
  * @property-read Collection|PaudPetugas[] $instansiPetugases
  * @property-read Collection|Instansi[] $instansis
+ * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|Ptk[] $ptks
  *
  * @method static Builder|MKota whereKKota($value)
@@ -151,6 +152,14 @@ class MKota extends Eloquent
     public function mPropinsi()
     {
         return $this->belongsTo('App\Models\MPropinsi', 'k_propinsi', 'k_propinsi');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudDiklats()
+    {
+        return $this->hasMany('App\Models\PaudDiklat', 'k_kota', 'k_kota');
     }
 
     /**

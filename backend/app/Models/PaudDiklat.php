@@ -13,17 +13,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * App\Models\PaudDiklat
  *
  * @property int $paud_diklat_id
- * @property null|int $paud_instansi_id
+ * @property null|int $paud_periode_id
  * @property null|int $instansi_id
  * @property null|int $tahun
  * @property null|int $angkatan
- * @property null|int $k_verval_paud
- * @property null|Carbon $wkt_ajuan
- * @property null|Carbon $wkt_verval
- * @property null|int $paud_tahapan_id
+ * @property null|string $nama
+ * @property null|string $singkatan
+ * @property null|string $deskripsi
  * @property null|int $k_propinsi
  * @property null|int $k_kota
  * @property null|int $jml_kelas
+ * @property null|int $k_verval_paud
+ * @property null|Carbon $wkt_verval
+ * @property null|Carbon $wkt_ajuan
+ * @property null|string $akun_id_verval
  * @property null|string $alasan
  * @property null|string $catatan
  * @property null|Carbon $created_at
@@ -35,22 +38,24 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read MKota $mKota
  * @property-read MPropinsi $mPropinsi
  * @property-read MVervalPaud $mVervalPaud
- * @property-read PaudInstansi $paudInstansi
- * @property-read PaudTahapan $paudTahapan
+ * @property-read PaudInstansi $paudPeriode
  * @property-read Collection|PaudKelas[] $paudKelases
  *
  * @method static Builder|PaudDiklat wherePaudDiklatId($value)
- * @method static Builder|PaudDiklat wherePaudInstansiId($value)
+ * @method static Builder|PaudDiklat wherePaudPeriodeId($value)
  * @method static Builder|PaudDiklat whereInstansiId($value)
  * @method static Builder|PaudDiklat whereTahun($value)
  * @method static Builder|PaudDiklat whereAngkatan($value)
- * @method static Builder|PaudDiklat whereKVervalPaud($value)
- * @method static Builder|PaudDiklat whereWktAjuan($value)
- * @method static Builder|PaudDiklat whereWktVerval($value)
- * @method static Builder|PaudDiklat wherePaudTahapanId($value)
+ * @method static Builder|PaudDiklat whereNama($value)
+ * @method static Builder|PaudDiklat whereSingkatan($value)
+ * @method static Builder|PaudDiklat whereDeskripsi($value)
  * @method static Builder|PaudDiklat whereKPropinsi($value)
  * @method static Builder|PaudDiklat whereKKota($value)
  * @method static Builder|PaudDiklat whereJmlKelas($value)
+ * @method static Builder|PaudDiklat whereKVervalPaud($value)
+ * @method static Builder|PaudDiklat whereWktVerval($value)
+ * @method static Builder|PaudDiklat whereWktAjuan($value)
+ * @method static Builder|PaudDiklat whereAkunIdVerval($value)
  * @method static Builder|PaudDiklat whereAlasan($value)
  * @method static Builder|PaudDiklat whereCatatan($value)
  * @method static Builder|PaudDiklat whereCreatedAt($value)
@@ -80,23 +85,26 @@ class PaudDiklat extends Eloquent
      * @var array
      */
     protected $casts = [
-        'paud_instansi_id' => 'int',
-        'instansi_id'      => 'int',
-        'tahun'            => 'int',
-        'angkatan'         => 'int',
-        'k_verval_paud'    => 'int',
-        'wkt_ajuan'        => 'datetime',
-        'wkt_verval'       => 'datetime',
-        'paud_tahapan_id'  => 'int',
-        'k_propinsi'       => 'int',
-        'k_kota'           => 'int',
-        'jml_kelas'        => 'int',
-        'alasan'           => 'string',
-        'catatan'          => 'string',
-        'created_at'       => 'datetime',
-        'updated_at'       => 'datetime',
-        'created_by'       => 'string',
-        'updated_by'       => 'string',
+        'paud_periode_id' => 'int',
+        'instansi_id'     => 'int',
+        'tahun'           => 'int',
+        'angkatan'        => 'int',
+        'nama'            => 'string',
+        'singkatan'       => 'string',
+        'deskripsi'       => 'string',
+        'k_propinsi'      => 'int',
+        'k_kota'          => 'int',
+        'jml_kelas'       => 'int',
+        'k_verval_paud'   => 'int',
+        'wkt_verval'      => 'datetime',
+        'wkt_ajuan'       => 'datetime',
+        'akun_id_verval'  => 'string',
+        'alasan'          => 'string',
+        'catatan'         => 'string',
+        'created_at'      => 'datetime',
+        'updated_at'      => 'datetime',
+        'created_by'      => 'string',
+        'updated_by'      => 'string',
     ];
 
     /**
@@ -106,17 +114,20 @@ class PaudDiklat extends Eloquent
      */
     protected $fillable = [
         'paud_diklat_id',
-        'paud_instansi_id',
+        'paud_periode_id',
         'instansi_id',
         'tahun',
         'angkatan',
-        'k_verval_paud',
-        'wkt_ajuan',
-        'wkt_verval',
-        'paud_tahapan_id',
+        'nama',
+        'singkatan',
+        'deskripsi',
         'k_propinsi',
         'k_kota',
         'jml_kelas',
+        'k_verval_paud',
+        'wkt_verval',
+        'wkt_ajuan',
+        'akun_id_verval',
         'alasan',
         'catatan',
         'created_by',
@@ -155,13 +166,6 @@ class PaudDiklat extends Eloquent
         return $this->belongsTo('App\Models\MVervalPaud', 'k_verval_paud', 'k_verval_paud');
     }
 
-    /**
-     * @return BelongsTo
-     */
-    public function paudInstansi()
-    {
-        return $this->belongsTo('App\Models\PaudInstansi', 'paud_instansi_id', 'paud_instansi_id');
-    }
 
     /**
      * @return HasMany
@@ -174,8 +178,8 @@ class PaudDiklat extends Eloquent
     /**
      * @return BelongsTo
      */
-    public function paudTahapan()
+    public function paudPeriode()
     {
-        return $this->belongsTo('App\Models\PaudTahapan', 'paud_tahapan_id', 'paud_tahapan_id');
+        return $this->belongsTo('App\Models\PaudInstansi', 'paud_periode_id', 'paud_instansi_id');
     }
 }

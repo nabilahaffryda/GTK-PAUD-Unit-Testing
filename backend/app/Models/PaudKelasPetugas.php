@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read MKonfirmasiPaud $mKonfirmasiPaud
  * @property-read MPetugasPaud $mPetugasPaud
  * @property-read PaudKelas $paudKelas
+ * @property-read PaudPetugas $paudPetugas
  *
  * @method static Builder|PaudKelasPetugas wherePaudKelasPetugasId($value)
  * @method static Builder|PaudKelasPetugas wherePaudKelasId($value)
@@ -135,5 +136,13 @@ class PaudKelasPetugas extends Eloquent
     public function paudKelas()
     {
         return $this->belongsTo('App\Models\PaudKelas', 'paud_kelas_id', 'paud_kelas_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function paudPetugas()
+    {
+        return $this->belongsTo('App\Models\PaudPetugas', 'paud_petugas_id', 'paud_petugas_id');
     }
 }

@@ -7,11 +7,12 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * App\Models\PaudTahapan
+ * App\Models\PaudPeriode
  *
- * @property int $paud_tahapan_id
+ * @property int $paud_periode_id
  * @property null|int $tahun
  * @property null|int $angkatan
+ * @property null|string $nama
  * @property null|Carbon $tgl_daftar_mulai
  * @property null|Carbon $tgl_daftar_selesai
  * @property null|Carbon $tgl_diklat_mulai
@@ -23,37 +24,36 @@ use Illuminate\Database\Eloquent\Builder;
  * @property null|string $created_by
  * @property null|string $updated_by
  *
- * @property-read Collection|PaudDiklat[] $paudDiklats
- *
- * @method static Builder|PaudTahapan wherePaudTahapanId($value)
- * @method static Builder|PaudTahapan whereTahun($value)
- * @method static Builder|PaudTahapan whereAngkatan($value)
- * @method static Builder|PaudTahapan whereTglDaftarMulai($value)
- * @method static Builder|PaudTahapan whereTglDaftarSelesai($value)
- * @method static Builder|PaudTahapan whereTglDiklatMulai($value)
- * @method static Builder|PaudTahapan whereTglDiklatSelesai($value)
- * @method static Builder|PaudTahapan whereTglTugasMulai($value)
- * @method static Builder|PaudTahapan whereTglTugasSelesai($value)
- * @method static Builder|PaudTahapan whereCreatedAt($value)
- * @method static Builder|PaudTahapan whereUpdatedAt($value)
- * @method static Builder|PaudTahapan whereCreatedBy($value)
- * @method static Builder|PaudTahapan whereUpdatedBy($value)
+ * @method static Builder|PaudPeriode wherePaudPeriodeId($value)
+ * @method static Builder|PaudPeriode whereTahun($value)
+ * @method static Builder|PaudPeriode whereAngkatan($value)
+ * @method static Builder|PaudPeriode whereNama($value)
+ * @method static Builder|PaudPeriode whereTglDaftarMulai($value)
+ * @method static Builder|PaudPeriode whereTglDaftarSelesai($value)
+ * @method static Builder|PaudPeriode whereTglDiklatMulai($value)
+ * @method static Builder|PaudPeriode whereTglDiklatSelesai($value)
+ * @method static Builder|PaudPeriode whereTglTugasMulai($value)
+ * @method static Builder|PaudPeriode whereTglTugasSelesai($value)
+ * @method static Builder|PaudPeriode whereCreatedAt($value)
+ * @method static Builder|PaudPeriode whereUpdatedAt($value)
+ * @method static Builder|PaudPeriode whereCreatedBy($value)
+ * @method static Builder|PaudPeriode whereUpdatedBy($value)
  */
-class PaudTahapan extends Eloquent
+class PaudPeriode extends Eloquent
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'paud_tahapan';
+    protected $table = 'paud_periode';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'paud_tahapan_id';
+    protected $primaryKey = 'paud_periode_id';
 
     /**
      * The attributes that should be cast.
@@ -63,6 +63,7 @@ class PaudTahapan extends Eloquent
     protected $casts = [
         'tahun'              => 'int',
         'angkatan'           => 'int',
+        'nama'               => 'string',
         'tgl_daftar_mulai'   => 'date:Y-m-d',
         'tgl_daftar_selesai' => 'date:Y-m-d',
         'tgl_diklat_mulai'   => 'date:Y-m-d',
@@ -81,9 +82,10 @@ class PaudTahapan extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'paud_tahapan_id',
+        'paud_periode_id',
         'tahun',
         'angkatan',
+        'nama',
         'tgl_daftar_mulai',
         'tgl_daftar_selesai',
         'tgl_diklat_mulai',
@@ -93,12 +95,4 @@ class PaudTahapan extends Eloquent
         'created_by',
         'updated_by',
     ];
-
-    /**
-     * @return HasMany
-     */
-    public function paudDiklats()
-    {
-        return $this->hasMany('App\Models\PaudDiklat', 'paud_tahapan_id', 'paud_tahapan_id');
-    }
 }

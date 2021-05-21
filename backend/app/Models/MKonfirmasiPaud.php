@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\MKonfirmasiPaud
@@ -11,6 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int $k_konfirmasi_paud
  * @property null|string $singkat
  * @property null|string $keterangan
+ *
+ * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
  *
  * @method static Builder|MKonfirmasiPaud whereKKonfirmasiPaud($value)
  * @method static Builder|MKonfirmasiPaud whereSingkat($value)
@@ -72,4 +76,12 @@ class MKonfirmasiPaud extends Eloquent
         'singkat',
         'keterangan',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasPetugases()
+    {
+        return $this->hasMany('App\Models\PaudKelasPetugas', 'k_konfirmasi_paud', 'k_konfirmasi_paud');
+    }
 }
