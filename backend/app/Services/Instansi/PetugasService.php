@@ -376,7 +376,7 @@ class PetugasService
             'angkatan'        => $petugas->angkatan,
         ])->first();
 
-        if (!$peran || !($peran->isVervalKandidat() || $peran->isVervalRevisi())) {
+        if (!$peran || !$peran->isVervalDiajukan()) {
             throw new FlowException("Ajuan data petugas tidak ditemukan");
         }
 
