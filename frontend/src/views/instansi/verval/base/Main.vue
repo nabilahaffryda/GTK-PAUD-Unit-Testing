@@ -97,8 +97,22 @@
                             <v-label color="caption"><small>Status</small></v-label>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
-                            <v-chip :color="getColor(item.k_verval_paud)" dark small>
-                              {{ $getDeepObj(item, 'm_verval_paud.data.keterangan') || '-' }}
+                            <v-chip
+                              :color="
+                                getColor(
+                                  jenis === 'petugas'
+                                    ? $getDeepObj(item, 'paud_petugas_perans.data.0.k_verval_paud')
+                                    : item.k_verval_paud
+                                )
+                              "
+                              dark
+                              small
+                            >
+                              {{
+                                jenis === 'petugas'
+                                  ? $getDeepObj(item, 'paud_petugas_perans.data.0.m_verval_paud.data.keterangan') || '-'
+                                  : $getDeepObj(item, 'm_verval_paud.data.keterangan') || '-'
+                              }}
                             </v-chip>
                             <span
                               style="cursor: pointer"
@@ -124,16 +138,20 @@
                             <v-label color="caption"><small>Aksi Selanjutnya</small></v-label>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
-                            <v-btn
-                              v-if="$allow(`${jenis}-verval.update`) && Number(item.k_verval_paud) <= 3"
-                              color="primary"
-                              small
-                              block
-                              @click="onVerval(item)"
-                            >
-                              Verval Ajuan
+                            <v-btn color="primary" small block @click="onVerval(item)">
+                              {{
+                                $allow(`${jenis}-verval.update`) &&
+                                [2, 3].includes(
+                                  Number(
+                                    jenis === 'petugas'
+                                      ? $getDeepObj(item, 'paud_petugas_perans.data.0.k_verval_paud')
+                                      : item.k_verval_paud
+                                  )
+                                )
+                                  ? 'Verval Ajuan'
+                                  : 'LIHAT DETAIL'
+                              }}
                             </v-btn>
-                            <v-btn v-else color="primary" small block @click="onVerval(item)"> LIHAT DETAIL </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -283,10 +301,10 @@ export default {
   },
   created() {
     this.getMasters({
-      name: ['m_berkas_pengajar_paud', 'm_berkas_lpd_paud', 'm_kualifikasi'].join(';'),
+      name: ['m_berkas_petugas_paud', 'm_berkas_lpd_paud', 'm_kualifikasi', 'tingkat_diklat_paud'].join(';'),
       filter: {
         0: {
-          k_berkas_pengajar_paud: {
+          k_berkas_petugas_paud: {
             op: '<>',
             val: 2,
           },
@@ -340,10 +358,17 @@ export default {
     },
 
     async onVerval(item) {
-      const kVerval = Number(item.k_verval_paud);
+      const kVerval = Number(
+        this.jenis === 'petugas'
+          ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.k_verval_paud')
+          : item.k_verval_paud
+      );
       const status = {
         color: this.getColor(kVerval),
-        keterangan: this.$getDeepObj(item, 'm_verval_paud.data.keterangan') || '-',
+        keterangan:
+          this.jenis === 'petugas'
+            ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.m_verval_paud.data.keterangan') || '-'
+            : this.$getDeepObj(item, 'm_verval_paud.data.keterangan') || '-',
       };
 
       let init = {};
