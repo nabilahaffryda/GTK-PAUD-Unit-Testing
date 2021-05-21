@@ -147,7 +147,8 @@ class PetugasService
             throw new FlowException("Perubahan data petugas bisa dilakukan mandiri dari akun petugas.");
         }
 
-        $petugas->created_by = akunId();
+        $petugas->instansi_id = $admin->instansi_id;
+        $petugas->created_by  = akunId();
         if (!$petugas->save()) {
             throw new SaveException("Penyimpanan Data Petugas tidak berhasil");
         }
