@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|int $tahun
  * @property null|int $angkatan
  * @property int $is_aktif
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property null|string $admin_id
  *
  * @property-read Akun $akun
