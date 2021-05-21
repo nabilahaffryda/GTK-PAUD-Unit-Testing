@@ -10,7 +10,7 @@
       </v-list-item-content>
       <v-list-item-action>
         <v-btn
-          :disabled="!$allow(`${jenis === 'lpd' ? 'lpd' : 'petugas'}-profil.update`)"
+          :disabled="!$allow(`${['lpd', 'admin-kelas'].includes(jenis) ? jenis : 'petugas'}-profil.update`)"
           depressed
           @click="$emit('edit')"
         >

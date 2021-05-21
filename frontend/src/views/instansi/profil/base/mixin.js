@@ -310,7 +310,9 @@ export default {
     },
 
     kVerval() {
-      return this.$getDeepObj(this.detail, 'paud_petugas_perans.data.0.k_verval_paud') || 1;
+      return ['lpd', 'admin-kelas'].includes(this.jenis)
+        ? this.$getDeepObj(this.detail, 'k_verval_paud') || 1
+        : this.$getDeepObj(this.detail, 'paud_petugas_perans.data.0.k_verval_paud') || 1;
     },
 
     isAjuan() {
