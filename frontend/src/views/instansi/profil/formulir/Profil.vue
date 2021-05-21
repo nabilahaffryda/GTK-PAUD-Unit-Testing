@@ -9,7 +9,11 @@
         </span>
       </v-list-item-content>
       <v-list-item-action>
-        <v-btn :disabled="!$allow(`petugas-profil.update`)" depressed @click="$emit('edit')">
+        <v-btn
+          :disabled="!$allow(`${jenis === 'lpd' ? 'lpd' : 'petugas'}-profil.update`)"
+          depressed
+          @click="$emit('edit')"
+        >
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </v-list-item-action>
@@ -32,6 +36,27 @@
                 <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(sub, 'value') || '-'" /></h2>
               </v-col>
             </v-row>
+          </v-col>
+          <!-- Sheet Diklat -->
+          <v-col cols="12" md="6" sm="12" v-if="jenis === 'lpd'">
+            <div class="text-h6 my-3 font-weight-bold"> Data Diklat </div>
+            <div class="grey--text">Pengalaman Melatih 2 Tahun Terakhir</div>
+            <v-list three-line>
+              <template v-for="(item, index) in diklats">
+                <v-list-item :key="index">
+                  <v-list-item-avatar tile>
+                    <v-avatar tile color="secondary">
+                      <span class="white--text">{{ index + 1 }}</span>
+                    </v-avatar>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <v-list-item-title v-html="item.nama"></v-list-item-title>
+                    <v-list-item-subtitle v-html="item.tahun"></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list>
           </v-col>
         </v-row>
       </v-col>

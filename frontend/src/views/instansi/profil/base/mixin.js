@@ -65,6 +65,25 @@ export default {
                 optional: true,
               },
             }
+          : this.jenis === 'lpd'
+          ? {
+              profil: {
+                component: 'Profil',
+                form: 'FormProfil',
+                title: this.$route.meta.title,
+                deskripsi: '',
+                max: 10,
+                optional: true,
+              },
+              berkas: {
+                component: 'Berkas',
+                form: 'FormUnggah',
+                title: 'Berkas Persyaratan Lainnya',
+                deskripsi: '',
+                max: 10,
+                optional: true,
+              },
+            }
           : {
               profil: {
                 component: 'Profil',
