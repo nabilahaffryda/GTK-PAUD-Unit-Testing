@@ -331,7 +331,7 @@ export default {
         .then(() => {
           if (this.jenis !== 'admin-kelas') {
             this.fetchDokumen();
-            this.fetchDiklat();
+            if (this.jenis !== 'lpd') this.fetchDiklat();
           }
         });
     },
@@ -438,13 +438,36 @@ export default {
       let formData = new FormData();
 
       if (type !== 'diklat') {
-        const { form, photo } = data;
+        const { form, diklats, photo } = data;
 
         Object.keys(form).forEach((key) => {
           if (form[key]) {
             formData.append(key, form[key]);
           }
         });
+
+        if (this.jenis === 'lpd') {
+          if (!diklats.length) {
+            this.$error('Mohon isikan data diklat minimal 1 (satu)');
+            this.$refs.modal.loading = false;
+            return;
+          } else {
+            for (let i = 0; i < diklats.length; i++) {
+              if (
+                !diklats[i]['nama'] ||
+                diklats[i]['nama'].trim() === '' ||
+                !diklats[i]['tahun'] ||
+                diklats[i]['tahun'].trim() === ''
+              ) {
+                this.$error('Mohon lengkapi data Diklat Anda');
+                this.$refs.modal.loading = false;
+                return;
+              }
+              formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][nama]`, diklats[i]['nama']);
+              formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][tahun]`, diklats[i]['tahun']);
+            }
+          }
+        }
 
         if (photo) {
           for (let item of photo.entries()) {
