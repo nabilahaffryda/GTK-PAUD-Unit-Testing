@@ -177,7 +177,7 @@ export default [
         desc: 'Evaluasi dan Verifikasi Dokumen Penting Pengajar',
         color: 'red',
         deepColor: 'darken-1',
-        akses: 'pengajar-verval.index',
+        akses: 'petugas-verval.index',
         link: 'verval-pengajar',
         to: { name: 'verval-pengajar' },
       },
