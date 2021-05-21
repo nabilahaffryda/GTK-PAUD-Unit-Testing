@@ -98,6 +98,7 @@ export default {
     berkases() {
       const mBerkas = this.$arrToObj(this.berkas, `k_berkas_petugas_paud`);
       const withAction = this.$allow(`petugas-profil-berkas.create`);
+
       return {
         pengajar: [
           {
@@ -284,24 +285,6 @@ export default {
             withAction: withAction,
             kBerkas: 4,
             value: mBerkas['4'] || {},
-          },
-          {
-            title: 'Sertifikasi Diklat Dasar',
-            pesan: ``,
-            valid: !!mBerkas['5'],
-            type: 'diklat',
-            withAction: withAction,
-            kBerkas: 5,
-            value: mBerkas['5'] || {},
-          },
-          {
-            title: 'Sertifikasi Diklat Paud Lainnya',
-            pesan: ``,
-            valid: !!mBerkas['6'],
-            type: 'sertifikat',
-            withAction: withAction,
-            kBerkas: 6,
-            value: mBerkas['6'] || {},
           },
         ],
       };

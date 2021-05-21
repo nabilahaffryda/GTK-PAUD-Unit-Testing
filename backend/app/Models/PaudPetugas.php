@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $paud_petugas_id
  * @property null|string $akun_id
+ * @property null|int $instansi_id
  * @property null|int $tahun
  * @property null|int $angkatan
  * @property int $k_petugas_paud
@@ -35,6 +36,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $updated_by
  *
  * @property-read Akun $akun
+ * @property-read Instansi $instansi
  * @property-read MKota $instansiKota
  * @property-read MPropinsi $instansiPropinsi
  * @property-read MPetugasPaud $mPetugasPaud
@@ -46,6 +48,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @method static Builder|PaudPetugas wherePaudPetugasId($value)
  * @method static Builder|PaudPetugas whereAkunId($value)
+ * @method static Builder|PaudPetugas whereInstansiId($value)
  * @method static Builder|PaudPetugas whereTahun($value)
  * @method static Builder|PaudPetugas whereAngkatan($value)
  * @method static Builder|PaudPetugas whereKPetugasPaud($value)
@@ -89,6 +92,7 @@ class PaudPetugas extends Eloquent
      */
     protected $casts = [
         'akun_id'             => 'string',
+        'instansi_id'         => 'int',
         'tahun'               => 'int',
         'angkatan'            => 'int',
         'k_petugas_paud'      => 'int',
@@ -118,6 +122,7 @@ class PaudPetugas extends Eloquent
     protected $fillable = [
         'paud_petugas_id',
         'akun_id',
+        'instansi_id',
         'tahun',
         'angkatan',
         'k_petugas_paud',
@@ -143,6 +148,14 @@ class PaudPetugas extends Eloquent
     public function akun()
     {
         return $this->belongsTo('App\Models\Akun', 'akun_id', 'akun_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function instansi()
+    {
+        return $this->belongsTo('App\Models\Instansi', 'instansi_id', 'instansi_id');
     }
 
     /**

@@ -14,19 +14,20 @@
                 kanan untuk melakukan edit
               </span>
             </div>
-            <berkas
-              v-for="(item, b) in berkases"
-              :key="b"
-              :berkas="item"
-              :type="item.type"
-              :valid="item.valid"
-              :with-action="item.withAction"
-              :value="item.value || {}"
-              @detil="onDetil"
-              @upload="$emit('upload', item.type)"
-            />
+            <template v-for="(item, b) in berkases">
+              <berkas
+                :key="b"
+                :berkas="item"
+                :type="item.type"
+                :valid="item.valid"
+                :with-action="item.withAction"
+                :value="item.value || {}"
+                @detil="onDetil"
+                @upload="$emit('upload', item.type)"
+              />
+            </template>
           </template>
-          <template v-if="i === 'diklat'">
+          <template v-else-if="i === 'diklat'">
             <v-list-item class="px-0">
               <v-list-item-content>
                 <div class="font-weight-bold">Data Pengalaman Diklat</div>
