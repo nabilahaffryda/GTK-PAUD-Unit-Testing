@@ -39,6 +39,7 @@ export default {
     },
 
     async onEdit(item) {
+      this.id = item.id;
       this.$set(this.formulir, 'isEdit', true);
       this.$set(this.formulir, 'useSave', false);
       this.$refs.modal.open();
@@ -58,22 +59,24 @@ export default {
     },
 
     onDelete(item) {
-      this.$confirm('Apakan anda ingin menghapus akun berikut ?', 'Hapus Akun', { tipe: 'error' }).then(() => {
-        this.action({ id: item.akun_instansi_id, type: 'delete' }).then(() => {
-          this.$success('Akun berhasil di hapus');
-          this.fetchData();
-        });
-      });
+      this.$confirm('Apakan anda ingin menghapus Institusi berikut ?', 'Hapus Institusi', { tipe: 'error' }).then(
+        () => {
+          this.action({ id: item.akun_instansi_id, type: 'delete' }).then(() => {
+            this.$success('Institusi berhasil di hapus');
+            this.fetchData();
+          });
+        }
+      );
     },
 
     onSave() {
       const isEdit = this.formulir.isEdit;
-      const id = this.$refs.formulir.id;
+      const id = this.id;
       const params = Object.assign({}, this.$refs.formulir.getValue());
 
       this[isEdit ? 'update' : 'create']({ params, id })
         .then(() => {
-          this.$success(`Data admin berhasil di ${isEdit ? 'diubah' : 'ditambahkan'}`);
+          this.$success(`Data Institusi berhasil ${isEdit ? 'diubah' : 'ditambahkan'}`);
           this.$refs.modal.close();
           this.fetchData();
         })

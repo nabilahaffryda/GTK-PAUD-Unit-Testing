@@ -89,6 +89,7 @@ export default {
         label: ['Provinsi', 'Kota/Kabupaten'],
         options: [M_PROPINSI, M_KOTA],
         grid: [{ cols: 6 }, { cols: 6 }],
+        disabled: [this.isEdit || false, this.isEdit || false],
       };
     },
     schema() {
@@ -118,20 +119,21 @@ export default {
           required: true,
           outlined: true,
           dense: true,
-          disable: true,
           singleLine: true,
+          disabled: this.isEdit || false,
         },
         {
           type: 'VTextarea',
           name: 'alamat',
           label: 'Alamat',
           hint: 'wajib diisi',
+          labelColor: 'secondary',
           required: true,
           grid: { cols: 12 },
           outlined: true,
           dense: true,
           singleLine: true,
-          labelColor: 'secondary',
+          disabled: this.isEdit || false,
         },
         {
           type: 'cascade',
@@ -152,6 +154,7 @@ export default {
           mask: '######',
           grid: { cols: 12, md: 6 },
           labelColor: 'secondary',
+          disabled: this.isEdit || false,
         },
         {
           type: 'VTextField',
@@ -165,6 +168,7 @@ export default {
           singleLine: true,
           grid: { cols: 12, md: 6 },
           labelColor: 'secondary',
+          disabled: this.isEdit || false,
         },
         {
           type: 'VTextField',
@@ -181,6 +185,7 @@ export default {
           singleLine: true,
           mask: '##############',
           counter: 14,
+          disabled: this.isEdit || false,
         },
       ];
     },

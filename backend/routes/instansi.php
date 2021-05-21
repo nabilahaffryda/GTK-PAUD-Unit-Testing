@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('profil/{paudInstansi}/berkas/create', [Lpd\Profil\BerkasController::class, 'create']);
 
         Route::get('{paudInstansi}', [LpdController::class, 'fetch']);
+        Route::post('{paudInstansi}/update', [LpdController::class, 'update']);
         Route::post('{paudInstansi}/ajuan/create', [Lpd\Profil\AjuanController::class, 'create']);
         Route::post('{paudInstansi}/ajuan/delete', [Lpd\Profil\AjuanController::class, 'delete']);
     });
