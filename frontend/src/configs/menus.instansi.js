@@ -184,6 +184,17 @@ export default [
     ],
   },
   {
+    icon: 'mdi-account-cog',
+    title: 'Diklatku',
+    desc: 'Kelola diklat kelas dan peserta diklat',
+    color: 'success',
+    deepColor: 'darken-1',
+    dividerTop: true,
+    akses: false,
+    link: 'diklat',
+    to: { name: 'diklat' },
+  },
+  {
     icon: 'mdi-webhook',
     title: 'ke Aplikasi SIMPKB',
     desc: '',
