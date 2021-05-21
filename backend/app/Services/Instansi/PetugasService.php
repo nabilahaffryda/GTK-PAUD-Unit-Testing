@@ -111,6 +111,7 @@ class PetugasService
                     ->where([
                         'tahun'    => Arr::get($params, 'tahun', config('paud.tahun')),
                         'angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
+                        ['k_verval_paud', '<>', MVervalPaud::KANDIDAT],
                     ]);
             })
             ->with(['akun', 'paudPetugasPerans.mVervalPaud']);
