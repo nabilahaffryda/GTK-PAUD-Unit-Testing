@@ -48,6 +48,14 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('petugas/{petugas}', [Petugas\VervalController::class, 'update']);
     });
 
+    Route::group(['prefix' => 'diklat'], function () {
+        Route::get('', [Lpd\DiklatController::class, 'index']);
+        Route::post('create', [Lpd\DiklatController::class, 'create']);
+        Route::get('{paudDiklat}', [Lpd\DiklatController::class, 'fetch']);
+        Route::post('{paudDiklat}/update', [Lpd\DiklatController::class, 'update']);
+        Route::post('{paudDiklat}/delete', [Lpd\DiklatController::class, 'delete']);
+    });
+
     Route::group(['prefix' => 'akun/admin-program'], function () {
         Route::get('', [Akun\AdminProgramController::class, 'index']);
         Route::get('download', [Akun\AdminProgramController::class, 'download']);
