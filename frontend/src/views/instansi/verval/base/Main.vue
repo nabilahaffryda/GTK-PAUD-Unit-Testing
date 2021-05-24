@@ -24,7 +24,7 @@
           @reload="onReload"
         >
           <template v-slot:subtitle>
-            <div class="body-1 black--text"> Daftar Kandididat yang perlu di periksa</div>
+            <div class="body-1 black--text"> {{ total }} Daftar Kandidat yang perlu di periksa</div>
           </template>
         </base-table-header>
         <v-divider />

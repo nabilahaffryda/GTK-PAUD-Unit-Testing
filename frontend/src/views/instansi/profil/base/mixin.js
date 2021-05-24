@@ -327,6 +327,14 @@ export default {
     isAjuan() {
       return ['lpd', 'pengajar'].includes(this.jenis) && ![1, 5].includes(this.kVerval);
     },
+
+    catatan() {
+      const catatan =
+        this.jenis === 'lpd'
+          ? this.$getDeepObj(this.detail, 'alasan')
+          : this.$getDeepObj(this.detail, 'paud_petugas_perans.data.0.alasan');
+      return catatan;
+    },
   },
   methods: {
     ...mapActions('master', ['getMasters']),

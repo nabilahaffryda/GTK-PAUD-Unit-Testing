@@ -124,14 +124,14 @@
                   <template v-if="kVerval === 5">
                     Mohon melakukan perbaikan sesuai informasi tim Verifikasi sebagai berikut:<br />
                     <p class="pa-2 my-2 mr-5 white darken-2 subtitle-2">
-                      <strong v-html="(detail && detail.alasan) || '-'"></strong>
+                      <strong v-html="catatan || '-'"></strong>
                     </p>
                   </template>
                   <template v-else>
                     <br />
                     Mohon maaf pendaftaran Anda ditolak dengan alasan sebagai berikut:<br />
                     <p class="pa-2 my-2 mr-5 white darken-2 subtitle-2">
-                      <strong v-html="(detail && detail.alasan) || '-'"></strong>
+                      <strong v-html="catatan || '-'"></strong>
                     </p>
                   </template>
                 </v-alert>
