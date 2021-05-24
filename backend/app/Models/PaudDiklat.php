@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $paud_diklat_id
  * @property null|int $paud_periode_id
+ * @property null|int $paud_instansi_id
  * @property null|int $instansi_id
  * @property null|int $tahun
  * @property null|int $angkatan
@@ -38,11 +39,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read MKota $mKota
  * @property-read MPropinsi $mPropinsi
  * @property-read MVervalPaud $mVervalPaud
- * @property-read PaudInstansi $paudPeriode
+ * @property-read PaudInstansi $paudInstansi
+ * @property-read PaudPeriode $paudPeriode
  * @property-read Collection|PaudKelas[] $paudKelases
  *
  * @method static Builder|PaudDiklat wherePaudDiklatId($value)
  * @method static Builder|PaudDiklat wherePaudPeriodeId($value)
+ * @method static Builder|PaudDiklat wherePaudInstansiId($value)
  * @method static Builder|PaudDiklat whereInstansiId($value)
  * @method static Builder|PaudDiklat whereTahun($value)
  * @method static Builder|PaudDiklat whereAngkatan($value)
@@ -86,6 +89,7 @@ class PaudDiklat extends Eloquent
      */
     protected $casts = [
         'paud_periode_id' => 'int',
+        'paud_instansi_id' => 'int',
         'instansi_id'     => 'int',
         'tahun'           => 'int',
         'angkatan'        => 'int',
@@ -115,6 +119,7 @@ class PaudDiklat extends Eloquent
     protected $fillable = [
         'paud_diklat_id',
         'paud_periode_id',
+        'paud_instansi_id',
         'instansi_id',
         'tahun',
         'angkatan',
@@ -166,6 +171,13 @@ class PaudDiklat extends Eloquent
         return $this->belongsTo('App\Models\MVervalPaud', 'k_verval_paud', 'k_verval_paud');
     }
 
+    /**
+     * @return BelongsTo
+     */
+    public function paudInstansi()
+    {
+        return $this->belongsTo('App\Models\PaudInstansi', 'paud_instansi_id', 'paud_instansi_id');
+    }
 
     /**
      * @return HasMany
@@ -180,6 +192,6 @@ class PaudDiklat extends Eloquent
      */
     public function paudPeriode()
     {
-        return $this->belongsTo('App\Models\PaudInstansi', 'paud_periode_id', 'paud_instansi_id');
+        return $this->belongsTo('App\Models\PaudPeriode', 'paud_periode_id', 'paud_periode_id');
     }
 }

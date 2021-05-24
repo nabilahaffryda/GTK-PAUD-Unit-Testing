@@ -5,7 +5,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\PaudPeriode
  *
@@ -23,6 +24,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property null|Carbon $updated_at
  * @property null|string $created_by
  * @property null|string $updated_by
+ *
+ * @property-read Collection|PaudDiklat[] $paudDiklats
  *
  * @method static Builder|PaudPeriode wherePaudPeriodeId($value)
  * @method static Builder|PaudPeriode whereTahun($value)
@@ -95,4 +98,12 @@ class PaudPeriode extends Eloquent
         'created_by',
         'updated_by',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function paudDiklats()
+    {
+        return $this->hasMany('App\Models\PaudDiklat', 'paud_periode_id', 'paud_periode_id');
+    }
 }
