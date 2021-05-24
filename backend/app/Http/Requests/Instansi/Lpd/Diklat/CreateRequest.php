@@ -14,14 +14,12 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama'               => ['required', 'string'],
-            'singkatan'          => ['required', 'string'],
-            'deskripsi'          => ['nullable', 'string'],
-            'k_propinsi'         => ['required', 'integer', 'exists:m_propinsi,k_propinsi'],
-            'k_kota'             => ['required', 'integer', 'exists:m_kota,k_kota'],
-            'periode_diklat'     => ['required', 'string'],
-            'tgl_daftar_mulai'   => ['required', 'date_format:Y-m-d'],
-            'tgl_daftar_selesai' => ['required', 'date_format:Y-m-d'],
+            'nama'            => ['required', 'string'],
+            'singkatan'       => ['required', 'string'],
+            'deskripsi'       => ['nullable', 'string'],
+            'k_propinsi'      => ['required', 'integer', 'exists:m_propinsi,k_propinsi'],
+            'k_kota'          => ['required', 'integer', 'exists:m_kota,k_kota'],
+            'paud_periode_id' => ['required', 'integer', 'exists:paud_periode_id,paud_periode'],
         ];
     }
 }
