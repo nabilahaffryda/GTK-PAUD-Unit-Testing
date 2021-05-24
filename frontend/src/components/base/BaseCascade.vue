@@ -69,7 +69,7 @@ export default {
     this.update();
   },
   methods: {
-    ...mapActions('master', ['getMasters']),
+    ...mapActions('master', ['fetchMasters']),
 
     isEmpty(obj) {
       return !isObject(obj);
@@ -153,9 +153,7 @@ export default {
           let params = '';
           if (this.configs && this.configs.useSchema) {
             params = {
-              name: {
-                0: key,
-              },
+              name: key,
               filter: {
                 0: {
                   [options.parent_key || options.parent]: selected,
@@ -167,7 +165,7 @@ export default {
           }
 
           // request
-          this.getMasters(params).then((resp) => {
+          this.fetchMasters(params).then((resp) => {
             this.options[options.child] = resp[key] || {};
             if (!(this.options[options.child] && this.options[options.child][this.formData[options.child]])) {
               this.$set(this.formData, options.child, '');

@@ -41,4 +41,24 @@ export const actions = {
 
     return state.masters;
   },
+
+  async fetchMasters({ state, commit, rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const mastersRequest = (payload.name || '').split(';') || [];
+
+    if (mastersRequest.length) {
+      const data = await http
+        .get(`/i/${id}/master?${queryString({ name: mastersRequest, filter: payload.filter })}`)
+        .then(({ data }) => data);
+
+      let master = {};
+      mastersRequest.forEach((key, index) => {
+        master[key] = data['data'][index];
+      });
+
+      commit('SET_MASTERS', master);
+    }
+
+    return state.masters;
+  },
 };

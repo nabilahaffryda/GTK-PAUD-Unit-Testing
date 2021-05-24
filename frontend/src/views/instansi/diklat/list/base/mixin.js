@@ -16,9 +16,19 @@ export default {
     ...mapActions('master', ['getMasters']),
 
     onAdd() {
-      this.$set(this.formulir, 'title', 'Tambah Data');
+      this.$set(this.formulir, 'title', 'Tambah Kelas');
       this.$set(this.formulir, 'isEdit', false);
-      this.$set(this.formulir, 'useSave', false);
+      this.$set(this.formulir, 'useSave', true);
+      this.$refs.modal.open();
+      this.$nextTick(() => {
+        this.$refs.formulir.reset();
+      });
+    },
+
+    onAddDiklat() {
+      this.$set(this.formulir, 'title', 'Tambah Diklat');
+      this.$set(this.formulir, 'isEdit', false);
+      this.$set(this.formulir, 'useSave', true);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();

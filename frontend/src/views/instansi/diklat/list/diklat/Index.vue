@@ -27,7 +27,7 @@
           @search="onSearch"
           :btnFilter="true"
           :btnAdd="$allow('akun-admin-program-lpd.create')"
-          @add="onAdd"
+          @add="onAddDiklat"
           @reload="onReload"
           @filter="onFilter"
         >
@@ -133,19 +133,19 @@
       :useSave="formulir.useSave"
       @save="onSave"
     >
-      <detail-kelas ref="formulir"></detail-kelas>
+      <form-diklat ref="formulir" :masters="masters"></form-diklat>
     </base-modal-full>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex';
-import DetailKelas from '../../formulir/Detail';
+import FormDiklat from '../../formulir/FormDiklat';
 import mixin from '../base/mixin';
 import list from '@mixins/list';
 import actions from './actions';
 export default {
   mixins: [list, mixin],
-  components: { DetailKelas },
+  components: { FormDiklat },
   data() {
     return {
       formulir: {},
