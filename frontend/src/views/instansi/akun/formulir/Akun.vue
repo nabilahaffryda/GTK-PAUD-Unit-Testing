@@ -92,16 +92,15 @@
                   <template v-if="jenis === 'program'">
                     <v-row>
                       <v-col cols="12" md="6">
-                        <span class="px-0 body-2 secondary--text" style="height: 24px"> Institusi <span>*</span></span>
+                        <span class="px-0 body-2 secondary--text" style="height: 24px"> Instansi<span>*</span></span>
                         <v-autocomplete
                           v-model="form.instansi_id"
                           :items="this.instansis ? this.$mapForMaster(this.instansis) : []"
                           :search-input.sync="search"
                           item-text="text"
                           item-value="value"
-                          label="Cari institusi"
-                          placeholder="Cari institusi"
-                          return-object
+                          label="Cari Instansi"
+                          placeholder="Cari Instansi"
                           single-line
                           outlined
                           dense
