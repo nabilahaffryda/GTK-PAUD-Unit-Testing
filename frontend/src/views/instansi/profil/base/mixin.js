@@ -123,7 +123,10 @@ export default {
     },
 
     berkases() {
-      const mBerkas = this.$arrToObj(this.berkas, `k_berkas_petugas_paud`);
+      const mBerkas = this.$arrToObj(
+        this.berkas,
+        `k_berkas_${['lpd', 'admin-kelas'].includes(this.jenis) ? this.jenis : 'petugas'}_paud`
+      );
       const withAction = this.$allow(
         `${['lpd', 'admin-kelas'].includes(this.jenis) ? this.jenis : 'petugas'}-profil-berkas.create`
       );
