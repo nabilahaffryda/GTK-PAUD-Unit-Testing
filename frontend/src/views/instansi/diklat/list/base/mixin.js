@@ -17,6 +17,7 @@ export default {
 
     onAdd() {
       this.$set(this.formulir, 'title', 'Tambah Kelas');
+      this.$set(this.formulir, 'form', 'form-diklat');
       this.$set(this.formulir, 'isEdit', false);
       this.$set(this.formulir, 'useSave', true);
       this.$refs.modal.open();
@@ -27,8 +28,20 @@ export default {
 
     onAddDiklat() {
       this.$set(this.formulir, 'title', 'Tambah Diklat');
+      this.$set(this.formulir, 'form', 'form-diklat');
       this.$set(this.formulir, 'isEdit', false);
       this.$set(this.formulir, 'useSave', true);
+      this.$refs.modal.open();
+      this.$nextTick(() => {
+        this.$refs.formulir.reset();
+      });
+    },
+
+    onDetailDiklat() {
+      this.$set(this.formulir, 'title', 'Info dan Detil Kelas');
+      this.$set(this.formulir, 'form', 'detil-kelas');
+      this.$set(this.formulir, 'isEdit', false);
+      this.$set(this.formulir, 'useSave', false);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();

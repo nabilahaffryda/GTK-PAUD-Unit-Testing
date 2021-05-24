@@ -133,19 +133,20 @@
       :useSave="formulir.useSave"
       @save="onSave"
     >
-      <form-diklat ref="formulir" :masters="masters"></form-diklat>
+      <component :is="formulir.form" :masters="masters"></component>
     </base-modal-full>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex';
 import FormDiklat from '../../formulir/FormDiklat';
+import DetilKelas from '../../formulir/Detail';
 import mixin from '../base/mixin';
 import list from '@mixins/list';
 import actions from './actions';
 export default {
   mixins: [list, mixin],
-  components: { FormDiklat },
+  components: { FormDiklat, DetilKelas },
   data() {
     return {
       formulir: {},
