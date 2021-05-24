@@ -12,35 +12,35 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\PaudDiklat
  *
- * @property int $paud_diklat_id
- * @property null|int $paud_periode_id
- * @property null|int $paud_instansi_id
- * @property null|int $instansi_id
- * @property null|int $tahun
- * @property null|int $angkatan
- * @property null|string $nama
- * @property null|string $singkatan
- * @property null|string $deskripsi
- * @property null|int $k_propinsi
- * @property null|int $k_kota
- * @property null|int $jml_kelas
- * @property null|int $k_verval_paud
- * @property null|Carbon $wkt_verval
- * @property null|Carbon $wkt_ajuan
- * @property null|string $akun_id_verval
- * @property null|string $alasan
- * @property null|string $catatan
- * @property null|Carbon $created_at
- * @property null|Carbon $updated_at
- * @property null|string $created_by
- * @property null|string $updated_by
+ * @property int                         $paud_diklat_id
+ * @property null|int                    $paud_periode_id
+ * @property null|int                    $paud_instansi_id
+ * @property null|int                    $instansi_id
+ * @property null|int                    $tahun
+ * @property null|int                    $angkatan
+ * @property null|string                 $nama
+ * @property null|string                 $singkatan
+ * @property null|string                 $deskripsi
+ * @property null|int                    $k_propinsi
+ * @property null|int                    $k_kota
+ * @property null|int                    $jml_kelas
+ * @property null|int                    $k_verval_paud
+ * @property null|Carbon                 $wkt_verval
+ * @property null|Carbon                 $wkt_ajuan
+ * @property null|string                 $akun_id_verval
+ * @property null|string                 $alasan
+ * @property null|string                 $catatan
+ * @property null|Carbon                 $created_at
+ * @property null|Carbon                 $updated_at
+ * @property null|string                 $created_by
+ * @property null|string                 $updated_by
  *
- * @property-read Instansi $instansi
- * @property-read MKota $mKota
- * @property-read MPropinsi $mPropinsi
- * @property-read MVervalPaud $mVervalPaud
- * @property-read PaudInstansi $paudInstansi
- * @property-read PaudPeriode $paudPeriode
+ * @property-read Instansi               $instansi
+ * @property-read MKota                  $mKota
+ * @property-read MPropinsi              $mPropinsi
+ * @property-read MVervalPaud            $mVervalPaud
+ * @property-read PaudInstansi           $paudInstansi
+ * @property-read PaudPeriode            $paudPeriode
  * @property-read Collection|PaudKelas[] $paudKelases
  *
  * @method static Builder|PaudDiklat wherePaudDiklatId($value)
@@ -88,27 +88,27 @@ class PaudDiklat extends Eloquent
      * @var array
      */
     protected $casts = [
-        'paud_periode_id' => 'int',
+        'paud_periode_id'  => 'int',
         'paud_instansi_id' => 'int',
-        'instansi_id'     => 'int',
-        'tahun'           => 'int',
-        'angkatan'        => 'int',
-        'nama'            => 'string',
-        'singkatan'       => 'string',
-        'deskripsi'       => 'string',
-        'k_propinsi'      => 'int',
-        'k_kota'          => 'int',
-        'jml_kelas'       => 'int',
-        'k_verval_paud'   => 'int',
-        'wkt_verval'      => 'datetime',
-        'wkt_ajuan'       => 'datetime',
-        'akun_id_verval'  => 'string',
-        'alasan'          => 'string',
-        'catatan'         => 'string',
-        'created_at'      => 'datetime',
-        'updated_at'      => 'datetime',
-        'created_by'      => 'string',
-        'updated_by'      => 'string',
+        'instansi_id'      => 'int',
+        'tahun'            => 'int',
+        'angkatan'         => 'int',
+        'nama'             => 'string',
+        'singkatan'        => 'string',
+        'deskripsi'        => 'string',
+        'k_propinsi'       => 'int',
+        'k_kota'           => 'int',
+        'jml_kelas'        => 'int',
+        'k_verval_paud'    => 'int',
+        'wkt_verval'       => 'datetime',
+        'wkt_ajuan'        => 'datetime',
+        'akun_id_verval'   => 'string',
+        'alasan'           => 'string',
+        'catatan'          => 'string',
+        'created_at'       => 'datetime',
+        'updated_at'       => 'datetime',
+        'created_by'       => 'string',
+        'updated_by'       => 'string',
     ];
 
     /**

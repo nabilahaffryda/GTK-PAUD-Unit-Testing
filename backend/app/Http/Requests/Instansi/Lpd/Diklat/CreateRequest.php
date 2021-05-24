@@ -19,7 +19,7 @@ class CreateRequest extends FormRequest
             'deskripsi'       => ['nullable', 'string'],
             'k_propinsi'      => ['required', 'integer', 'exists:m_propinsi,k_propinsi'],
             'k_kota'          => ['required', 'integer', 'exists:m_kota,k_kota'],
-            'paud_periode_id' => ['required', 'integer', 'exists:paud_periode_id,paud_periode'],
+            'paud_periode_id' => ['required', 'integer', 'exists:paud_periode,paud_periode_id'],
         ];
     }
 }
