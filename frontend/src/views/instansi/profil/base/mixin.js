@@ -26,6 +26,14 @@ export default {
               value: this.lengkap?.profil ? 'passed' : 'not_complete',
             },
           ]
+        : this.jenis === 'lpd'
+        ? [
+            {
+              label: `${this.$route.meta.title}`,
+              value: this.lengkap?.profil ? 'passed' : 'not_complete',
+            },
+            { label: 'Berkas Persyaratan Lainnya', value: this.lengkap?.berkas ? 'passed' : 'not_complete' },
+          ]
         : [
             {
               label: `${this.$route.meta.title}`,

@@ -157,6 +157,7 @@
         "
         @upload="onUpload"
         @unduhTemplate="unduhTemplate"
+        @getInstansi="getInstansi"
       />
     </base-modal-full>
     <Akun ref="akun" :akun="akun" />
@@ -270,7 +271,6 @@ export default {
         },
       },
     });
-    this.getInstansi();
   },
   methods: {
     allow(action, data) {

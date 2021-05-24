@@ -61,6 +61,7 @@ export default {
             paud_admin_id: item.paud_admin_id,
             k_group: this.$getDeepObj(item, 'akun.data.k_golongan'),
             instansi_id: item.instansi_id,
+            instansi: item.instansi,
           })
         );
       });
@@ -264,10 +265,10 @@ export default {
       });
     },
 
-    getInstansi() {
+    getInstansi(val) {
       let mInstansi = {};
       if ([171].includes(Number(this.kGroup)) && !Object.keys(this.instansis).length) {
-        this.listInstansis()
+        this.listInstansis({ params: { filter: { keyword: val } } })
           .then((resp) => {
             const instansi = resp || [];
             instansi.forEach((item) => {
