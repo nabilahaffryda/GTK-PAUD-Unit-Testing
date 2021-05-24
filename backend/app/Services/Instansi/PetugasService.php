@@ -84,7 +84,7 @@ class PetugasService
 
         $isLengkap2 = $petugas->paudPetugasDiklats()->count() > 0;
 
-        $isLengkap3 = $petugas->paudPetugasBerkases()->count() == 4;
+        $isLengkap3 = $petugas->paudPetugasBerkases()->count() >= 4;
 
         return [
             'profil' => $isLengkap1,
