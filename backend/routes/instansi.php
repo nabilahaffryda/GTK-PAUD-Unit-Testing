@@ -49,7 +49,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     });
 
     Route::group(['prefix' => 'diklat'], function () {
-        Route::get('periode', [Lpd\PeriodeController::class, 'index']);
+        Route::get('periode', [Lpd\Diklat\PeriodeController::class, 'index']);
+        Route::get('mapel-kelas', [Lpd\Diklat\MapelKelasController::class, 'index']);
 
         Route::get('', [Lpd\DiklatController::class, 'index']);
         Route::post('create', [Lpd\DiklatController::class, 'create']);

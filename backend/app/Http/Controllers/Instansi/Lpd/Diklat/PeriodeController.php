@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Instansi\Lpd;
+namespace App\Http\Controllers\Instansi\Lpd\Diklat;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BaseCollection;
