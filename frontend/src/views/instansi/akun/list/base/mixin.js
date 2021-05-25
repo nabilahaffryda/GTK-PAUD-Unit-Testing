@@ -1,13 +1,18 @@
 import { mapActions } from 'vuex';
 
 export default {
+  data() {
+    return {
+      paramsInstasi: {},
+      cacheInstansi: {},
+    };
+  },
   methods: {
     ...mapActions('akun', [
       'fetch',
       'create',
       'update',
       'listGroups',
-      'listInstansis',
       'action',
       'lookup',
       'getDetail',
@@ -15,6 +20,8 @@ export default {
       'templateUpload',
       'upload',
     ]),
+
+    ...mapActions('institusi', { listInstansis: 'fetch' }),
 
     ...mapActions('master', ['getMasters']),
 
@@ -267,16 +274,23 @@ export default {
 
     getInstansi(val) {
       let mInstansi = {};
-      this.listInstansis({ params: { filter: { keyword: val } } })
-        .then((resp) => {
-          const instansi = resp || [];
-          instansi.forEach((item) => {
-            this.$set(mInstansi, this.$getDeepObj(item, 'instansi_id'), this.$getDeepObj(item, 'instansi.data.nama'));
+      const keyword = this.$getDeepObj(this.paramsInstasi, 'filter.keyword');
+      if (this.cacheInstansi && this.cacheInstansi[keyword] && Object.keys(this.cacheInstansi[keyword]).length) {
+        this.$set(this, 'instansis', this.cacheInstansi);
+      } else {
+        this.paramsInstasi = Object.assign({}, { page: 1 }, { filter: { keyword: val } });
+        this.listInstansis({ params: this.paramsInstasi })
+          .then(({ data }) => {
+            const instansi = data || [];
+            instansi.forEach((item) => {
+              this.$set(mInstansi, this.$getDeepObj(item, 'instansi_id'), this.$getDeepObj(item, 'instansi.data.nama'));
+            });
+          })
+          .then(() => {
+            this.cacheInstansi[keyword] = mInstansi;
+            this.$set(this, 'instansis', mInstansi);
           });
-        })
-        .then(() => {
-          this.$set(this, 'instansis', mInstansi);
-        });
+      }
     },
 
     confirmHtml(data) {
