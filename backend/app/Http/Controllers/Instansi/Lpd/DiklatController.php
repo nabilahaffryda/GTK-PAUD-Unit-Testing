@@ -35,8 +35,7 @@ class DiklatController extends Controller
 
     public function fetch(PaudDiklat $paudDiklat)
     {
-        return BaseResource::make($this->service->fetch($paudDiklat)
-            ->loadMissing(['mVervalPaud', 'paudInstansiBerkases']));
+        return BaseResource::make($this->service->fetch($paudDiklat));
     }
 
     public function update( PaudDiklat $paudDiklat, CreateRequest $request)
