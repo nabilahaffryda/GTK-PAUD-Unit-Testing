@@ -2,7 +2,7 @@
   <list-admin
     jenis="program"
     akses="admin-program-lpd"
-    title="Akun Admin Program"
+    title="Akun Admin Program LPD"
     desc="Lorem Ipsum"
     :actions="actions"
   ></list-admin>
