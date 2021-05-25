@@ -65,7 +65,7 @@ class PaudKelasPetugas extends Eloquent
      *
      * @var bool
      */
-    public $incrementing = false;
+    public $incrementing = true;
 
     /**
      * The attributes that should be cast.
