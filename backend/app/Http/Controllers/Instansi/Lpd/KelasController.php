@@ -25,7 +25,7 @@ class KelasController extends Controller
 
     public function create(PaudDiklat $paudDiklat, CreateRequest $request)
     {
-        $paudKelas = $this->service->create($paudDiklat, $request->validated())->load('paudPeriode');
+        $paudKelas = $this->service->create($paudDiklat, $request->validated());
 
         return BaseResource::make($paudKelas);
     }
