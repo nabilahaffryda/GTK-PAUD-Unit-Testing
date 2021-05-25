@@ -45,6 +45,7 @@ class DiklatService
             'instansi',
             'mPropinsi',
             'mKota',
+            'paudPeriode'
         ]);
 
         return $paudDiklat;
