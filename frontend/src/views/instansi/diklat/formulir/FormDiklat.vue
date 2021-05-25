@@ -19,6 +19,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    initValue: {
+      type: Object,
+      default: () => null,
+    },
+    periodes: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -26,6 +34,10 @@ export default {
     };
   },
   computed: {
+    mPeriode() {
+      return this.$arrToObj(this.periodes, 'paud_periode_id');
+    },
+
     configs() {
       const M_PROPINSI = this.masters.m_propinsi || {};
       const M_KOTA = this.masters.m_kota || {};
@@ -70,7 +82,7 @@ export default {
             },
             {
               type: 'VTextField',
-              name: 'nama_singkat',
+              name: 'singkatan',
               label: 'Nama Singkat Diklat',
               hint: '',
               placeholder: 'Isikan Nama Singkat Diklat',
@@ -101,11 +113,14 @@ export default {
               labelColor: 'secondary',
             },
             {
-              type: 'VTextField',
-              name: 'tahapan',
+              type: 'VSelect',
+              name: 'paud_periode_id',
               label: 'Tahapan Diklat',
               hint: '',
               placeholder: '',
+              items: this.periodes,
+              itemValue: 'paud_periode_id',
+              itemText: 'nama',
               required: true,
               grid: { cols: 12 },
               outlined: true,
@@ -116,29 +131,31 @@ export default {
           ],
           pendaftaran_peserta: [
             {
-              type: 'VDatePicker',
-              name: 'tgl_mulai',
+              type: 'VTextField',
+              name: 'tgl_daftar_mulai',
               label: 'Tanggal Mulai',
               dense: true,
-              hint: 'wajib diisi',
+              hint: '',
               placeholder: '',
-              required: true,
+              required: false,
               hideDetails: false,
               outlined: true,
+              readonly: true,
               singleLine: true,
               grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
             },
             {
-              type: 'VDatePicker',
-              name: 'tgl_selesai',
+              type: 'VTextField',
+              name: 'tgl_daftar_selesai',
               label: 'Tanggal Selesai',
               dense: true,
-              hint: 'wajib diisi',
+              hint: '',
               placeholder: '',
-              required: true,
+              required: false,
               hideDetails: false,
               outlined: true,
+              readonly: true,
               singleLine: true,
               grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
@@ -202,6 +219,37 @@ export default {
   methods: {
     reset() {
       this.form = {};
+    },
+
+    getValue() {
+      return { form: this.form };
+    },
+
+    initForm(value) {
+      const formulir = [
+        ...(this.schemas.diklat.tambah_diklat || []),
+        ...(this.schemas.diklat.pendaftaran_peserta || []),
+        { name: 'k_propinsi' },
+        { name: 'k_kota' },
+      ];
+
+      for (const item of formulir) {
+        if (item.name) {
+          this.$set(this.form, item.name, this.$getDeepObj(value, item.name) || '');
+        }
+      }
+    },
+  },
+
+  watch: {
+    initValue: 'initForm',
+    'form.paud_periode_id': {
+      handler(value) {
+        if (!value) return;
+        this.$set(this.form, 'tgl_daftar_mulai', this.mPeriode[value]['tgl_daftar_mulai']);
+        this.$set(this.form, 'tgl_daftar_selesai', this.mPeriode[value]['tgl_daftar_selesai']);
+      },
+      deep: true,
     },
   },
 };

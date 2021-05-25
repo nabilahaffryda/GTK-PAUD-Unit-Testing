@@ -53,7 +53,14 @@
             </v-toolbar>
 
             <div class="my-4">
-              <v-data-table v-model="peserta" :headers="headers" :items="[]" single-select item-key="name" show-select>
+              <v-data-table
+                v-model="peserta"
+                :headers="headers"
+                :items="items"
+                :single-select="false"
+                item-key="name"
+                show-select
+              >
               </v-data-table>
             </div>
           </v-tab-item>
@@ -88,6 +95,11 @@ export default {
         { text: '', value: 'aksi', sortable: false },
       ],
     };
+  },
+  computed: {
+    items() {
+      return [];
+    },
   },
   methods: {
     reset() {},

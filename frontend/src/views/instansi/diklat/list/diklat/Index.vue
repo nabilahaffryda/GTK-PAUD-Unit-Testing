@@ -26,7 +26,7 @@
         <base-table-header
           @search="onSearch"
           :btnFilter="true"
-          :btnAdd="$allow('akun-admin-program-lpd.create')"
+          :btnAdd="true"
           @add="onAddDiklat"
           @reload="onReload"
           @filter="onFilter"
@@ -62,39 +62,38 @@
                     <v-col class="py-0" cols="12" md="4">
                       <v-list-item class="px-0">
                         <v-list-item-avatar color="secondary">
-                          <v-icon dark>mdi-office-building-outline</v-icon>
+                          <v-icon dark>mdi-account</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="py-0 mt-3">
-                          <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</h2>
-                          <p class="caption">
-                            <span>ID Institusi: {{ $getDeepObj(item, 'instansi.data.instansi_id') || '-' }}</span>
-                          </p>
+                          <div class="label--text">Nama Diklat</div>
+                          <div class="body-2">{{ $getDeepObj(item, 'nama') || '-' }}</div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                     <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <span class="caption">Penanggung Jawab</span>
-                          <p>
-                            <span>{{ $getDeepObj(item, 'nama_penanggung_jawab') || '-' }}</span
-                            ><br />
-                            <span>{{ $getDeepObj(item, 'telp_penanggung_jawab') || '-' }}</span>
-                          </p>
+                          <div class="label--text">Tahapan Diklat</div>
+                          <div class="body-2">Periode {{ $getDeepObj(item, 'paud_periode.data.angkatan') || '1' }}</div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                     <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <span class="caption">Alamat Email</span>
+                          <span class="caption">Tanggal Pendaftaran</span>
                           <p>
-                            <span>{{ $getDeepObj(item, 'instansi.data.email') || '-' }}</span>
+                            <span>{{
+                              $durasi(
+                                $getDeepObj(item, 'paud_periode.data.tgl_daftar_mulai'),
+                                $getDeepObj(item, 'paud_periode.data.tgl_daftar_selesai')
+                              )
+                            }}</span>
                           </p>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="2">
+                    <v-col v-if="false" class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content>
                           <span class="caption">Alamat</span>
@@ -133,7 +132,13 @@
       :useSave="formulir.useSave"
       @save="onSave"
     >
-      <component :is="formulir.form" :masters="masters"></component>
+      <component
+        ref="formulir"
+        :is="formulir.form"
+        :masters="masters"
+        :periodes="periodes"
+        :initValue="formulir.init"
+      ></component>
     </base-modal-full>
   </div>
 </template>
@@ -153,6 +158,7 @@ export default {
       actions: actions,
       akun: {},
       groups: {},
+      periodes: [],
     };
   },
   computed: {
@@ -205,6 +211,8 @@ export default {
         },
       },
     });
+
+    this.listPeriodes();
   },
   methods: {
     allow(action, data) {
