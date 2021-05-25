@@ -14,6 +14,7 @@ use App\Models\PaudKelasPeserta;
 use App\Models\PaudKelasPetugas;
 use App\Models\PaudPetugas;
 use Arr;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class KelasService
@@ -72,7 +73,7 @@ class KelasService
         }
     }
 
-    public function indexPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    public function indexPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Builder
     {
         $this->validateKelas($paudDiklat, $kelas);
 
@@ -88,7 +89,7 @@ class KelasService
         return $query;
     }
 
-    public function indexPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    public function indexPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Builder
     {
         $this->validateKelas($paudDiklat, $kelas);
 
@@ -105,7 +106,7 @@ class KelasService
         return $query;
     }
 
-    public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): PaudKelasPetugas
     {
         $this->validateKelas($paudDiklat, $kelas);
 
@@ -127,5 +128,33 @@ class KelasService
         }
 
         return $paudKelasPetugas->load('akun');
+    }
+
+    public function ajuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        $kelas->wkt_ajuan     = Carbon::now();
+        $kelas->k_verval_paud = MVervalPaud::DIAJUKAN;
+
+        if (!$kelas->save()) {
+            throw new FlowException('Proses ajuan tidak berhasil');
+        }
+
+        return $kelas;
+    }
+
+    public function batalAjuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        $kelas->wkt_ajuan     = null;
+        $kelas->k_verval_paud = MVervalPaud::KANDIDAT;
+
+        if (!$kelas->save()) {
+            throw new FlowException('Proses ajuan tidak berhasil');
+        }
+
+        return $kelas;
     }
 }

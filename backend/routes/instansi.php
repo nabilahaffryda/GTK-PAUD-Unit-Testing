@@ -64,6 +64,9 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
             Route::get('kelas/{kelas}', [Lpd\KelasController::class, 'fetch']);
             Route::post('kelas/{kelas}/update', [Lpd\KelasController::class, 'update']);
 
+            Route::post('kelas/{kelas}/ajuan/create', [Lpd\Kelas\AjuanController::class, 'create']);
+            Route::post('kelas/{kelas}/ajuan/delete', [Lpd\Kelas\AjuanController::class, 'delete']);
+
             Route::get('kelas/{kelas}/peserta', [Lpd\Kelas\PesertaController::class, 'index']);
             Route::get('kelas/{kelas}/peserta/{peserta}/delete', [Lpd\Kelas\PesertaController::class, 'delete']);
 
