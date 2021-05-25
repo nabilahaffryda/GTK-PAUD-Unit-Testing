@@ -15,6 +15,19 @@ export default {
       this.$router.push({ name: 'diklat-kelas', params: { diklat_id: item.id } });
     },
 
+    async onDetail(item) {
+      const data = await this.getDetail({ diklat_id: this.diklatId, id: item.id }).then(({ data }) => data);
+      this.$set(this.formulir, 'title', 'Detail Diklat');
+      this.$set(this.formulir, 'form', 'detail-kelas');
+      this.$set(this.formulir, 'useSave', false);
+      this.$refs.modal.open();
+
+      this.$nextTick(() => {
+        this.$refs.formulir.reset();
+        this.$refs.formulir.kelas = data || {};
+      });
+    },
+
     onAdd() {
       this.$set(this.formulir, 'title', 'Tambah Kelas Diklat');
       this.$set(this.formulir, 'form', 'form-diklat');

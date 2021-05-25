@@ -12,11 +12,11 @@
           <v-col cols="12" md="9" sm="9" class="px-0">
             <div>
               <div class="label--text">Nama Kelas</div>
-              <div class="body-1 font-weight-medium">Diklat Metematika Dasar - Kelas A</div>
+              <div class="body-1 font-weight-medium">{{ $getDeepObj(kelas, 'nama') }}</div>
             </div>
             <div class="my-5">
               <div class="label--text">Deskripsi Kelas</div>
-              <div class="body-1">Diklat Metematika Dasar - Kelas A</div>
+              <div class="body-1">{{ $getDeepObj(kelas, 'deskripsi') }}</div>
             </div>
             <v-row class="my-5">
               <v-col>
@@ -58,7 +58,7 @@
                 :headers="headers"
                 :items="items"
                 :single-select="false"
-                item-key="name"
+                item-key="nama"
                 show-select
               >
               </v-data-table>
@@ -70,9 +70,18 @@
   </v-card>
 </template>
 <script>
+import { mapActions } from 'vuex';
 export default {
+  props: {
+    detail: {
+      type: Object,
+      default: () => {},
+    },
+  },
+
   data() {
     return {
+      kelas: {},
       pesertas: [],
       peserta: null,
       tab: null,
@@ -98,11 +107,46 @@ export default {
   },
   computed: {
     items() {
-      return [];
+      return this.pesertas.map((item) => {
+        return {
+          nama: this.$getDeepObj(item, 'ptk.data.nama') || '-',
+          email: this.$getDeepObj(item, 'ptk.data.email') || '-',
+          status: 'Belum Kofirmasi',
+        };
+      });
     },
   },
   methods: {
-    reset() {},
+    ...mapActions('diklatKelas', ['getListKelas']),
+
+    reset() {
+      this.tab = 0;
+      this.kelas = {};
+    },
+
+    fetch(tipe) {
+      if (!Object.keys(this.kelas).length) return;
+      this.getListKelas({
+        diklat_id: this.detail.paud_diklat_id,
+        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
+        tipe: tipe,
+      }).then(({ data }) => {
+        this.pesertas = data || [];
+      });
+    },
+  },
+  watch: {
+    tab: function (value) {
+      switch (Number(value)) {
+        case 0:
+          this.fetch('peserta');
+          break;
+      }
+    },
+    kelas: function (value) {
+      if (!value) return;
+      this.fetch('peserta');
+    },
   },
 };
 </script>
