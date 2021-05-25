@@ -89,6 +89,26 @@
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
                   <base-form-generator :schema="schema.biodata[jenis]" v-model="form" />
+                  <template v-if="jenis === 'program'">
+                    <v-row>
+                      <v-col cols="12" md="6">
+                        <span class="px-0 body-2 secondary--text" style="height: 24px"> Instansi<span>*</span></span>
+                        <v-autocomplete
+                          v-model="form.instansi_id"
+                          :items="this.instansis ? this.$mapForMaster(this.instansis) : []"
+                          :search-input.sync="search"
+                          item-text="text"
+                          item-value="value"
+                          label="Cari Instansi"
+                          placeholder="Cari Instansi"
+                          single-line
+                          outlined
+                          dense
+                          :error-messages="errors"
+                        ></v-autocomplete>
+                      </v-col>
+                    </v-row>
+                  </template>
                   <v-divider class="my-4" />
                 </v-card-text>
                 <v-card-actions class="pa-0">
@@ -258,6 +278,7 @@
 <script>
 import BaseFormGenerator from '@components/base/BaseFormGenerator';
 import BaseListInfo from '@components/base/BaseListInfo';
+import debounce from 'lodash.debounce';
 export default {
   components: { BaseListInfo, BaseFormGenerator },
   props: {
@@ -307,6 +328,8 @@ export default {
       isPilih: '',
       stepUnggah: 1,
       file: null,
+      search: '',
+      keyword: '',
     };
   },
   computed: {
@@ -475,23 +498,6 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
-              grid: { cols: 12, md: 6 },
-              labelColor: 'secondary',
-            },
-            {
-              type: 'VSelect',
-              name: 'instansi_id',
-              label: 'Instansi',
-              hint: 'wajib diisi',
-              items: this.$mapForMaster(this.instansis),
-              value: 'value',
-              text: 'text',
-              required: true,
-              hideDetails: false,
-              outlined: true,
-              dense: true,
-              singleLine: true,
-              disabled: this.isEdit,
               grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
             },
@@ -858,16 +864,29 @@ export default {
         { name: 'k_propinsi' },
         { name: 'k_kota' },
       ];
+      if (this.jenis === 'program') {
+        formulir.push({ name: 'instansi_id' });
+      }
+
       for (const item of formulir) {
         if (item.name) {
           this.$set(this.form, item.name, this.$getDeepObj(value, item.name) || '');
         }
       }
       this.id = (value && value.paud_admin_id) || '';
+
+      // if (this.$getDeepObj(value, 'instansi.data.nama')) {
+      //   this.$emit('getInstansi', this.$getDeepObj(value, 'instansi.data.nama') || '');
+      this.keyword = this.$getDeepObj(value, 'instansi.data.nama') || '';
+      // }
     },
 
     getValue() {
       let keys = ['email', 'k_propinsi', 'k_kota'];
+      if (this.jenis === 'program') {
+        keys.push('instansi_id');
+      }
+
       keys = keys.concat(
         (this.schema.biodata[this.jenis] || []).map((item) => {
           return item.name;
@@ -1005,9 +1024,14 @@ export default {
     setFile(file) {
       this.file = file;
     },
+
+    searchInstansi: debounce(function (e) {
+      this.$emit('getInstansi', e || this.keyword || '');
+    }, 500),
   },
   watch: {
     initValue: 'initForm',
+    search: 'searchInstansi',
   },
 };
 </script>

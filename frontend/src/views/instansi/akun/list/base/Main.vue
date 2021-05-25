@@ -56,7 +56,7 @@
                   <v-list-item-content>
                     <v-row>
                       <v-col class="py-0" cols="12" md="4">
-                        <v-list-item class="px-0" @click="onDetail($getDeepObj(item, 'akun.data'))">
+                        <v-list-item class="px-0" @click="onDetail(item)">
                           <v-list-item-avatar color="secondary">
                             <v-icon dark>mdi-account-circle</v-icon>
                           </v-list-item-avatar>
@@ -157,6 +157,7 @@
         "
         @upload="onUpload"
         @unduhTemplate="unduhTemplate"
+        @getInstansi="getInstansi"
       />
     </base-modal-full>
     <Akun ref="akun" :akun="akun" />
@@ -270,7 +271,6 @@ export default {
         },
       },
     });
-    this.getInstansi();
   },
   methods: {
     allow(action, data) {
