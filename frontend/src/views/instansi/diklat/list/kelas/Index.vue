@@ -11,7 +11,8 @@
             <base-breadcrumbs :items="breadcrumbs" class="px-0 pb-0" />
             <div class="my-2" />
             <div class="body-1"> Selamat Datang di Detail Diklat GTK PAUD </div>
-            <div class="body-1 font-weight-medium">Diklat {{ diklatName }}</div>
+            <div class="body-1 font-weight-medium">{{ $getDeepObj(detail, 'nama') || '' }}</div>
+            <div class="body-1">{{ $getDeepObj(detail, 'singkatan') || '' }}</div>
           </v-col>
         </v-row>
       </v-card-text>
@@ -116,6 +117,7 @@
         :is="formulir.form"
         :type="formulir.type"
         :mapels="mapels"
+        :detail="detail"
         :masters="masters"
         :initValue="formulir.init"
       ></component>
@@ -138,6 +140,7 @@ export default {
       formulir: {},
       actions: actions,
       mapels: [],
+      detail: {},
     };
   },
   computed: {
@@ -146,7 +149,7 @@ export default {
     }),
 
     breadcrumbs() {
-      return [{ text: 'Daftar Diklat', to: 'diklat' }, { text: this.diklatName }];
+      return [{ text: 'Daftar Diklat', to: 'diklat' }, { text: this.$getDeepObj(this, 'detail.nama') }];
     },
 
     configs() {
@@ -204,12 +207,16 @@ export default {
     });
 
     this.listMapels();
+    this.fetchDiklat();
   },
   mounted() {
     Object.assign(this.attr, { diklat_id: this.diklatId });
   },
   methods: {
     ...mapActions('diklatKelas', ['fetch', 'create', 'update', 'action', 'getDetail', 'getMapels', 'downloadList']),
+    ...mapActions('diklat', {
+      getDiklat: 'getDetail',
+    }),
 
     allow(action, data) {
       let disabled = false;

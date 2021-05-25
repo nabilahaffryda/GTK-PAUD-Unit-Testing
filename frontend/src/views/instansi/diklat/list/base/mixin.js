@@ -4,8 +4,15 @@ export default {
   methods: {
     ...mapActions('master', ['getMasters']),
 
+    fetchDiklat() {
+      if (!this.diklatId) return;
+      this.getDiklat({ id: this.diklatId }).then(({ data }) => {
+        this.detail = data || {};
+      });
+    },
+
     onDetailDiklat(item) {
-      this.$router.push({ name: 'diklat-kelas', params: { diklat_id: item.id, diklat_name: item.nama } });
+      this.$router.push({ name: 'diklat-kelas', params: { diklat_id: item.id } });
     },
 
     onAdd() {
@@ -37,12 +44,20 @@ export default {
       this.$set(this.formulir, 'form', 'form-diklat');
       this.$set(this.formulir, 'type', 'kelas');
       this.$set(this.formulir, 'isEdit', true);
+      this.$set(this.formulir, 'id', item.id);
       this.$set(this.formulir, 'useSave', true);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
         this.$set(this.formulir, 'title', 'Ubah Data');
-        this.$set(this.formulir, 'init', Object.assign({}, item));
+        this.$set(
+          this.formulir,
+          'init',
+          Object.assign({}, item, {
+            k_propinsi: this.$getDeepObj(this, 'detail.k_propinsi'),
+            k_kota: this.$getDeepObj(this, 'detail.k_kota'),
+          })
+        );
       });
     },
 

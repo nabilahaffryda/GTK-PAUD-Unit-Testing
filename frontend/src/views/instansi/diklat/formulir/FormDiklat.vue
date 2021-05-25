@@ -35,6 +35,10 @@ export default {
       type: String,
       default: 'diklat',
     },
+    detail: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -61,6 +65,7 @@ export default {
           required: ['k_propinsi', 'k_kota', 'k_kecamatan', 'k_kelurahan'],
           label: ['Provinsi', 'Kota/Kabupaten', 'Kecamatan', 'Kelurahan'],
           options: [M_PROPINSI, M_KOTA, M_KECAMATAN, M_KELURAHAN],
+          disabled: [true, true, false, false],
           grid: [{ cols: 6 }, { cols: 6 }, { cols: 6 }, { cols: 6 }],
           useSchema: true,
         },
@@ -233,6 +238,10 @@ export default {
   methods: {
     reset() {
       this.form = {};
+      if (this.type === 'kelas') {
+        this.$set(this.form, 'k_propinsi', this.$getDeepObj(this.detail, 'k_propinsi'));
+        this.$set(this.form, 'k_kota', this.$getDeepObj(this.detail, 'k_kota'));
+      }
     },
 
     getValue() {
