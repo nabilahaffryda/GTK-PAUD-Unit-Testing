@@ -275,7 +275,7 @@ export default {
     getInstansi(val) {
       let mInstansi = {};
       if (this.cacheInstansi && this.cacheInstansi[val] && Object.keys(this.cacheInstansi[val] || {}).length) {
-        this.$set(this, 'instansis', this.cacheInstansi);
+        this.$set(this, 'instansis', this.cacheInstansi[val]);
       } else {
         this.paramsInstasi = Object.assign({}, { page: 1 }, { filter: { keyword: val } });
         this.listInstansis({ params: this.paramsInstasi })
