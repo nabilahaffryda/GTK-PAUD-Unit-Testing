@@ -48,9 +48,9 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('petugas/{petugas}', [Petugas\VervalController::class, 'update']);
     });
 
-    Route::get('periode', [Lpd\PeriodeController::class, 'index']);
-
     Route::group(['prefix' => 'diklat'], function () {
+        Route::get('periode', [Lpd\PeriodeController::class, 'index']);
+
         Route::get('', [Lpd\DiklatController::class, 'index']);
         Route::post('create', [Lpd\DiklatController::class, 'create']);
         Route::get('{paudDiklat}', [Lpd\DiklatController::class, 'fetch']);
