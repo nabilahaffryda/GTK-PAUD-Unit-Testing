@@ -57,6 +57,11 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('{paudDiklat}', [Lpd\DiklatController::class, 'fetch']);
         Route::post('{paudDiklat}/update', [Lpd\DiklatController::class, 'update']);
         Route::post('{paudDiklat}/delete', [Lpd\DiklatController::class, 'delete']);
+
+        Route::get('{paudDiklat}/kelas', [Lpd\KelasController::class, 'index']);
+        Route::post('{paudDiklat}/kelas/create', [Lpd\KelasController::class, 'create']);
+        Route::get('{paudDiklat}/kelas/{kelas}', [Lpd\KelasController::class, 'fetch']);
+        Route::post('{paudDiklat}/kelas/{kelas}/update', [Lpd\KelasController::class, 'update']);
     });
 
     Route::group(['prefix' => 'akun/admin-program'], function () {
