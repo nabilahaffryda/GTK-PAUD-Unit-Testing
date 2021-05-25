@@ -66,6 +66,10 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
 
             Route::get('kelas/{kelas}/peserta', [Lpd\Kelas\PesertaController::class, 'index']);
             Route::get('kelas/{kelas}/peserta/{peserta}/delete', [Lpd\Kelas\PesertaController::class, 'delete']);
+
+            Route::get('kelas/{kelas}/petugas', [Lpd\Kelas\PetugasController::class, 'index']);
+            Route::post('kelas/{kelas}/petugas/create', [Lpd\Kelas\PetugasController::class, 'create']);
+            Route::get('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Kelas\PetugasController::class, 'delete']);
         });
     });
 
