@@ -61,6 +61,9 @@
                 item-key="nama"
                 show-select
               >
+                <template v-slot:[`item.aksi`]="{ item }">
+                  <v-btn icon @click="onDelete(item)"> <v-icon small>mdi-trash-can</v-icon></v-btn>
+                </template>
               </v-data-table>
             </div>
           </v-tab-item>
@@ -134,6 +137,8 @@ export default {
         this.pesertas = data || [];
       });
     },
+
+    onDelete() {},
   },
   watch: {
     tab: function (value) {
@@ -143,9 +148,13 @@ export default {
           break;
       }
     },
-    kelas: function (value) {
-      if (!value) return;
-      this.fetch('peserta');
+    kelas: {
+      handler(value) {
+        if (value && value.paud_kelas_id) {
+          this.fetch('peserta');
+        }
+      },
+      deep: true,
     },
   },
 };
