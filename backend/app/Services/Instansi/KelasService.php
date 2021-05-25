@@ -6,9 +6,12 @@ namespace App\Services\Instansi;
 
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
+use App\Models\MKonfirmasiPaud;
 use App\Models\PaudDiklat;
 use App\Models\PaudKelas;
 use App\Models\PaudKelasPeserta;
+use App\Models\PaudKelasPetugas;
+use App\Models\PaudPetugas;
 use Arr;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -42,9 +45,7 @@ class KelasService
 
     public function update(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): PaudKelas
     {
-        if ($kelas->paud_diklat_id <> $paudDiklat->paud_diklat_id) {
-            throw new FlowException('Kelas tidak ditemukan');
-        }
+        $this->validateKelas($paudDiklat, $kelas);
 
         $kelas->fill($params);
         $kelas->updated_by = akunId();
@@ -57,15 +58,22 @@ class KelasService
 
     public function fetch(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
-        if ($kelas->paud_diklat_id <> $paudDiklat->paud_diklat_id) {
-            throw new FlowException('Kelas tidak ditemukan');
-        }
+        $this->validateKelas($paudDiklat, $kelas);
 
         return $kelas->load(['mVervalPaud', 'paudDiklat', 'paudMapelKelas']);
     }
 
-    public function indexPeserta(PaudKelas $kelas, array $params)
+    public function validateKelas(PaudDiklat $diklat, PaudKelas $kelas)
     {
+        if ($kelas->paud_diklat_id <> $diklat->paud_diklat_id) {
+            throw new FlowException('Kelas tidak ditemukan');
+        }
+    }
+
+    public function indexPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
         $query = PaudKelasPeserta::query()
             ->where('paud_kelas_id', '=', $kelas->paud_kelas_id)
             ->with(['ptk:ptk_id,nama,email']);

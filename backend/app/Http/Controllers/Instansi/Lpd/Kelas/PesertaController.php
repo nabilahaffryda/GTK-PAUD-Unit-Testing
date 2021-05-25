@@ -23,7 +23,7 @@ class PesertaController extends Controller
 
     public function index(PaudDiklat $paudDiklat, PaudKelas $kelas, IndexRequest $request)
     {
-        return BaseCollection::make($this->service->indexPeserta($kelas, $request->validated())->get());
+        return BaseCollection::make($this->service->indexPeserta($paudDiklat, $kelas, $request->validated())->get());
     }
 
     public function download(PaudKelas $kelas)
@@ -33,9 +33,7 @@ class PesertaController extends Controller
 
     public function delete(PaudDiklat $paudDiklat, PaudKelas $kelas, PaudKelasPeserta $peserta)
     {
-        if ($peserta->paud_kelas_id <> $kelas->paud_kelas_id) {
-            throw new FlowException("Peserta tidak ditemukan");
-        }
+        $this->service->validateKelas($paudDiklat, $kelas);
 
         $peserta->delete();
 
