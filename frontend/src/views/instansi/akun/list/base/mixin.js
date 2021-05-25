@@ -274,8 +274,7 @@ export default {
 
     getInstansi(val) {
       let mInstansi = {};
-      const keyword = this.$getDeepObj(this.paramsInstasi, 'filter.keyword');
-      if (this.cacheInstansi && this.cacheInstansi[keyword] && Object.keys(this.cacheInstansi[keyword]).length) {
+      if (this.cacheInstansi && this.cacheInstansi[val] && Object.keys(this.cacheInstansi[val] || {}).length) {
         this.$set(this, 'instansis', this.cacheInstansi);
       } else {
         this.paramsInstasi = Object.assign({}, { page: 1 }, { filter: { keyword: val } });
@@ -287,6 +286,7 @@ export default {
             });
           })
           .then(() => {
+            const keyword = this.$getDeepObj(this.paramsInstasi, 'filter.keyword');
             this.cacheInstansi[keyword] = mInstansi;
             this.$set(this, 'instansis', mInstansi);
           });
