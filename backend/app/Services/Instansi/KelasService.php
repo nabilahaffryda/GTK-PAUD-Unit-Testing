@@ -75,7 +75,7 @@ class KelasService
         $this->validateKelas($paudDiklat, $kelas);
 
         $query = PaudKelasPeserta::query()
-            ->where('paud_kelas_id', '=', $kelas->paud_kelas_id)
+            ->where('paud_kelas_peserta.paud_kelas_id', '=', $kelas->paud_kelas_id)
             ->with(['ptk:ptk_id,nama,email']);
 
         if ($keyword = Arr::get($params, 'keyword')) {
@@ -84,5 +84,46 @@ class KelasService
         }
 
         return $query;
+    }
+
+    public function indexPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        $query = PaudKelasPetugas::query()
+            ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelas->paud_kelas_id)
+            ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+            ->with(['akun:akun_id,nama,email', 'mKonfirmasiPaud']);
+
+        if ($keyword = Arr::get($params, 'keyword')) {
+            $query->join('akun', 'akun.akun_id', '=', 'paud_kelas_petugas.akun_id')
+                ->where('akun.nama', 'like', '%' . $keyword . '%');
+        }
+
+        return $query;
+    }
+
+    public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        $paudPetugas = PaudPetugas::find($params['paud_petugas_id']);
+
+        if (!$paudPetugas) {
+            throw new FlowException("Data Petugas tidak ditemukan");
+        }
+
+        $paudKelasPetugas = new PaudKelasPetugas();
+        $paudKelasPetugas->fill($params);
+        $paudKelasPetugas->paud_kelas_id     = $kelas->paud_kelas_id;
+        $paudKelasPetugas->akun_id           = $paudPetugas->akun_id;
+        $paudKelasPetugas->k_konfirmasi_paud = MKonfirmasiPaud::BELUM_KONFIRMASI;
+        $paudKelasPetugas->created_by        = akunId();
+
+        if (!$paudKelasPetugas->save()) {
+            throw new FlowException("Petugas tidak berhasil disimpan");
+        }
+
+        return $paudKelasPetugas->load('akun');
     }
 }
