@@ -8,6 +8,7 @@ use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Models\PaudDiklat;
 use App\Models\PaudKelas;
+use App\Models\PaudKelasPeserta;
 use Arr;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -16,7 +17,8 @@ class KelasService
     public function index(PaudDiklat $paudDiklat, array $params): Builder
     {
         $query = PaudKelas::query()
-            ->where('paud_kelas.paud_diklat_id', $paudDiklat->paud_diklat_id);
+            ->where('paud_kelas.paud_diklat_id', $paudDiklat->paud_diklat_id)
+            ->with(['mKelurahan', 'mKecamatan']);
 
         if ($keyword = Arr::get($params, 'keyword')) {
             $query->where('paud_kelas.nama', 'like', '%' . $keyword . '%');
@@ -29,6 +31,7 @@ class KelasService
     {
         $kelas                 = new PaudKelas($params);
         $kelas->paud_diklat_id = $paudDiklat->paud_diklat_id;
+        $kelas->created_by     = akunId();
 
         if (!$kelas->save()) {
             throw new SaveException("Proses Tambah Kelas Tidak berhasil");
@@ -44,6 +47,7 @@ class KelasService
         }
 
         $kelas->fill($params);
+        $kelas->updated_by = akunId();
         if (!$kelas->save()) {
             throw new SaveException("Proses simpan data kelas tida berhasil");
         }
@@ -58,5 +62,19 @@ class KelasService
         }
 
         return $kelas->load(['mVervalPaud', 'paudDiklat', 'paudMapelKelas']);
+    }
+
+    public function indexPeserta(PaudKelas $kelas, array $params)
+    {
+        $query = PaudKelasPeserta::query()
+            ->where('paud_kelas_id', '=', $kelas->paud_kelas_id)
+            ->with(['ptk:ptk_id,nama,email']);
+
+        if ($keyword = Arr::get($params, 'keyword')) {
+            $query->join('ptk', 'ptk.ptk_id', '=', 'paud_kelas_peserta.ptk_id')
+                ->where('ptk.nama', 'like', '%' . $keyword . '%');
+        }
+
+        return $query;
     }
 }

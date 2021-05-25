@@ -58,10 +58,15 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudDiklat}/update', [Lpd\DiklatController::class, 'update']);
         Route::post('{paudDiklat}/delete', [Lpd\DiklatController::class, 'delete']);
 
-        Route::get('{paudDiklat}/kelas', [Lpd\KelasController::class, 'index']);
-        Route::post('{paudDiklat}/kelas/create', [Lpd\KelasController::class, 'create']);
-        Route::get('{paudDiklat}/kelas/{kelas}', [Lpd\KelasController::class, 'fetch']);
-        Route::post('{paudDiklat}/kelas/{kelas}/update', [Lpd\KelasController::class, 'update']);
+        Route::group(['prefix' => '{paudDiklat}'], function () {
+            Route::get('kelas', [Lpd\KelasController::class, 'index']);
+            Route::post('kelas/create', [Lpd\KelasController::class, 'create']);
+            Route::get('kelas/{kelas}', [Lpd\KelasController::class, 'fetch']);
+            Route::post('kelas/{kelas}/update', [Lpd\KelasController::class, 'update']);
+
+            Route::get('kelas/{kelas}/peserta', [Lpd\Kelas\PesertaController::class, 'index']);
+            Route::get('kelas/{kelas}/peserta/{peserta}/delete', [Lpd\Kelas\PesertaController::class, 'delete']);
+        });
     });
 
     Route::group(['prefix' => 'akun/admin-program'], function () {
