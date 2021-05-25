@@ -104,7 +104,6 @@
                           single-line
                           outlined
                           dense
-                          :error-messages="errors"
                         ></v-autocomplete>
                       </v-col>
                     </v-row>
