@@ -132,6 +132,52 @@ export default {
       });
     },
 
+    onAjuan(item) {
+      this.$confirm(`Apakan anda ingin melakukan ajuan pada kelas berikut ?`, `Ajuan Diklat`, {
+        tipe: 'info',
+        data: [
+          {
+            icon: 'mdi-teach',
+            iconSize: 30,
+            iconColor: 'secondary',
+            title: `${this.$getDeepObj(item, 'nama')}`,
+            subtitles: [
+              `<span>Jumlah Pembimbing: ${this.$getDeepObj(item, 'jml_pembimbing') || 0}</span>`,
+              `<span>Jumlah Pengajar: ${this.$getDeepObj(item, 'jml_pengajar') || 0}</span>`,
+            ],
+          },
+        ],
+      }).then(() => {
+        this.action({ id: item.id, diklat_id: this.diklatId, type: 'ajuan/create', name: this.attr.tipe }).then(() => {
+          this.$success(`Diklat kelas berhasil di ajukan`);
+          this.onReload();
+        });
+      });
+    },
+
+    onBatalAjuan(item) {
+      this.$confirm(`Apakan anda ingin membatalkan ajuan pada kelas berikut ?`, `Batalkan Ajuan Diklat`, {
+        tipe: 'warning',
+        data: [
+          {
+            icon: 'mdi-teach',
+            iconSize: 30,
+            iconColor: 'secondary',
+            title: `${this.$getDeepObj(item, 'nama')}`,
+            subtitles: [
+              `<span>Jumlah Pembimbing: ${this.$getDeepObj(item, 'jml_pembimbing') || 0}</span>`,
+              `<span>Jumlah Pengajar: ${this.$getDeepObj(item, 'jml_pengajar') || 0}</span>`,
+            ],
+          },
+        ],
+      }).then(() => {
+        this.action({ id: item.id, diklat_id: this.diklatId, type: 'ajuan/delete', name: this.attr.tipe }).then(() => {
+          this.$success(`Ajuan diklat kelas berhasil di batalkan`);
+          this.onReload();
+        });
+      });
+    },
+
     filterStatus(filters) {
       // set filter
       this.filters = filters;

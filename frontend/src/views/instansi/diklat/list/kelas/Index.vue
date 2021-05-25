@@ -93,7 +93,23 @@
                       <v-list-item class="px-0">
                         <v-list-item-content>
                           <div class="label--text">Aksi Selanjutnya</div>
-                          -
+                          <v-btn
+                            v-if="+item.k_verval_paud === 1 && $allow('lpd-kelas-ajuan.create')"
+                            color="primary"
+                            depressed
+                            small
+                            @click="onAjuan(item)"
+                            >Ajukan</v-btn
+                          >
+                          <v-btn
+                            v-if="+item.k_verval_paud > 1 && $allow('lpd-kelas-ajuan.delete')"
+                            color="primary"
+                            outlined
+                            depressed
+                            small
+                            @click="onBatalAjuan(item)"
+                            >Batal Ajuan</v-btn
+                          >
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>

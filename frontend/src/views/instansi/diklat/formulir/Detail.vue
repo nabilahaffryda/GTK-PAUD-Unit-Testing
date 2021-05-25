@@ -21,11 +21,11 @@
             <v-row class="my-5">
               <v-col>
                 <div class="label--text">Tanggal Mulai Kelas</div>
-                <div class="body-1">Rabu 10 November 2021</div>
+                <div class="body-1">-</div>
               </v-col>
               <v-col>
                 <div class="label--text">Tanggal Selesai Kelas</div>
-                <div class="body-1">Rabu 10 November 2021</div>
+                <div class="body-1">-</div>
               </v-col>
             </v-row>
             <div class="my-5">
