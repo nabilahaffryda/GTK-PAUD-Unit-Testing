@@ -190,7 +190,7 @@ export default [
     color: 'success',
     deepColor: 'darken-1',
     dividerTop: true,
-    akses: false,
+    akses: 'lpd-diklat.index',
     link: 'diklat',
     to: { name: 'diklat' },
   },

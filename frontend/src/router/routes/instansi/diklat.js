@@ -9,7 +9,7 @@ export default [
     },
   },
   {
-    path: '/i/:id(\\d+)/diklat-kelas/:kelas_id',
+    path: '/i/:id(\\d+)/diklat-kelas/:diklat_id/:diklat_name',
     name: 'diklat-kelas',
     component: () => lazyLoadView(import('@views/instansi/diklat/list/kelas/Index')),
     meta: {

@@ -7,8 +7,11 @@
           <v-col cols="2">
             <div class="bg-kiri"></div>
           </v-col>
-          <v-col cols="10" class="pa-5">
-            <h1 class="headline secondary--text"> <strong>Daftar</strong> Institusi LPD </h1>
+          <v-col cols="10" class="pa-5 black--text">
+            <base-breadcrumbs :items="breadcrumbs" class="px-0 pb-0" />
+            <div class="my-2" />
+            <div class="body-1"> Selamat Datang di Detail Diklat GTK PAUD </div>
+            <div class="body-1 font-weight-medium">Diklat {{ diklatName }}</div>
           </v-col>
         </v-row>
       </v-card-text>
@@ -18,13 +21,13 @@
         <base-table-header
           @search="onSearch"
           :btnFilter="true"
-          :btnAdd="$allow('akun-admin-program-lpd.create')"
+          :btnAdd="$allow('lpd-kelas.create')"
           @add="onAdd"
           @reload="onReload"
           @filter="onFilter"
         >
           <template v-slot:subtitle>
-            <div class="subtitle-1 black--text"> {{ total }} Institusi LPD</div>
+            <div class="subtitle-1 black--text"> {{ total }} Kelas Diklat</div>
           </template>
         </base-table-header>
       </v-card-title>
@@ -51,55 +54,38 @@
               <v-list-item dense class="px-0">
                 <v-list-item-content>
                   <v-row>
-                    <v-col class="py-0" cols="12" md="4">
+                    <v-col class="py-2" cols="12" md="4">
                       <v-list-item class="px-0">
                         <v-list-item-avatar color="secondary">
-                          <v-icon dark>mdi-office-building-outline</v-icon>
+                          <v-icon dark>mdi-teach</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="py-0 mt-3">
-                          <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</h2>
-                          <p class="caption">
-                            <span>ID Institusi: {{ $getDeepObj(item, 'instansi.data.instansi_id') || '-' }}</span>
-                          </p>
+                          <div class="label--text">Nama Kelas</div>
+                          <span>{{ $getDeepObj(item, 'nama') || '-' }}</span>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                     <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <span class="caption">Penanggung Jawab</span>
-                          <p>
-                            <span>{{ $getDeepObj(item, 'nama_penanggung_jawab') || '-' }}</span
-                            ><br />
-                            <span>{{ $getDeepObj(item, 'telp_penanggung_jawab') || '-' }}</span>
-                          </p>
+                          <div class="label--text">Tanggal Pelaksanaan</div>
+                          <span> - </span>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                     <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <span class="caption">Alamat Email</span>
-                          <p>
-                            <span>{{ $getDeepObj(item, 'instansi.data.email') || '-' }}</span>
-                          </p>
+                          <div class="label--text">Status Sinkron</div>
+                          -
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content>
-                          <span class="caption">Alamat</span>
-                          <div>
-                            {{ $getDeepObj(item, 'instansi.data.alamat') || '-' }}
-                            <br />
-                            {{
-                              [
-                                $getDeepObj(item, 'instansi.data.m_kota.data.keterangan') || '-',
-                                $getDeepObj(item, 'instansi.data.m_propinsi.data.keterangan') || '-',
-                              ].join(' - ')
-                            }}
-                          </div>
+                          <div class="label--text">Aksi Selanjutnya</div>
+                          -
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -125,31 +111,43 @@
       :useSave="formulir.useSave"
       @save="onSave"
     >
-      <detail-kelas ref="formulir"></detail-kelas>
+      <component
+        ref="formulir"
+        :is="formulir.form"
+        :type="formulir.type"
+        :mapels="mapels"
+        :masters="masters"
+        :initValue="formulir.init"
+      ></component>
     </base-modal-full>
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import DetailKelas from '../../formulir/Detail';
+import FormDiklat from '../../formulir/FormDiklat';
+import BaseBreadcrumbs from '@components/base/BaseBreadcrumbs';
 import mixin from '../base/mixin';
 import list from '@mixins/list';
 import actions from './actions';
 export default {
   mixins: [list, mixin],
-  components: { DetailKelas },
+  components: { FormDiklat, DetailKelas, BaseBreadcrumbs },
   data() {
     return {
       formulir: {},
       actions: actions,
-      akun: {},
-      groups: {},
+      mapels: [],
     };
   },
   computed: {
     ...mapState('master', {
       masters: (state) => Object.assign({}, state.masters),
     }),
+
+    breadcrumbs() {
+      return [{ text: 'Daftar Diklat', to: 'diklat' }, { text: this.diklatName }];
+    },
 
     configs() {
       const M_PROPINSI = this.masters.m_propinsi || {};
@@ -183,6 +181,14 @@ export default {
         k_kota: this.masters && this.masters.m_kota,
       };
     },
+
+    diklatId() {
+      return this.$route.params.diklat_id;
+    },
+
+    diklatName() {
+      return this.$route.params.diklat_name;
+    },
   },
   created() {
     this.getMasters({
@@ -196,8 +202,15 @@ export default {
         },
       },
     });
+
+    this.listMapels();
+  },
+  mounted() {
+    Object.assign(this.attr, { diklat_id: this.diklatId });
   },
   methods: {
+    ...mapActions('diklatKelas', ['fetch', 'create', 'update', 'action', 'getDetail', 'getMapels', 'downloadList']),
+
     allow(action, data) {
       let disabled = false;
       switch (action.event) {

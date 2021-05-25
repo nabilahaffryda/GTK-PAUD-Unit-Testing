@@ -2,7 +2,7 @@
   <v-card class="mx-auto" flat>
     <v-card-text>
       <v-container>
-        <div v-for="(schema, s) in schemas['diklat']" :key="s">
+        <div v-for="(schema, s) in schemas[type]" :key="s">
           <div class="body-1 font-weight-medium my-4">{{ $titleCase(s.replace('_', ' ')) }}</div>
           <base-form-generator :schema="schema" v-model="form" />
         </div>
@@ -27,6 +27,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    mapels: {
+      type: Array,
+      default: () => [],
+    },
+    type: {
+      type: String,
+      default: 'diklat',
+    },
   },
   data() {
     return {
@@ -36,6 +44,10 @@ export default {
   computed: {
     mPeriode() {
       return this.$arrToObj(this.periodes, 'paud_periode_id');
+    },
+
+    mMapel() {
+      return this.$arrToObj(this.periodes, 'paud_mapel_kelas_id');
     },
 
     configs() {
@@ -180,10 +192,12 @@ export default {
             },
             {
               type: 'VSelect',
-              name: 'mapel',
+              name: 'paud_mapel_kelas_id',
               label: 'Mata Pelajaran',
               hint: 'wajib dipilih',
-              items: [],
+              items: this.mapels,
+              itemValue: 'paud_mapel_kelas_id',
+              itemText: 'nama',
               required: true,
               hideDetails: false,
               outlined: true,
@@ -229,8 +243,11 @@ export default {
       const formulir = [
         ...(this.schemas.diklat.tambah_diklat || []),
         ...(this.schemas.diklat.pendaftaran_peserta || []),
+        ...(this.schemas.kelas.tambah_kelas || []),
         { name: 'k_propinsi' },
         { name: 'k_kota' },
+        { name: 'k_kecamatan' },
+        { name: 'k_kelurahan' },
       ];
 
       for (const item of formulir) {

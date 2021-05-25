@@ -26,7 +26,7 @@
         <base-table-header
           @search="onSearch"
           :btnFilter="true"
-          :btnAdd="true"
+          :btnAdd="$allow('lpd-diklat.create')"
           @add="onAddDiklat"
           @reload="onReload"
           @filter="onFilter"
@@ -136,6 +136,7 @@
         ref="formulir"
         :is="formulir.form"
         :masters="masters"
+        :type="formulir.type"
         :periodes="periodes"
         :initValue="formulir.init"
       ></component>
@@ -143,7 +144,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import FormDiklat from '../../formulir/FormDiklat';
 import DetilKelas from '../../formulir/Detail';
 import mixin from '../base/mixin';
@@ -215,6 +216,18 @@ export default {
     this.listPeriodes();
   },
   methods: {
+    ...mapActions('diklat', [
+      'fetch',
+      'create',
+      'update',
+      'listGroups',
+      'getPeriode',
+      'action',
+      'lookup',
+      'getDetail',
+      'downloadList',
+    ]),
+
     allow(action, data) {
       let disabled = false;
       switch (action.event) {

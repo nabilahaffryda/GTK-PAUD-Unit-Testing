@@ -2,23 +2,16 @@ import { mapActions } from 'vuex';
 
 export default {
   methods: {
-    ...mapActions('diklat', [
-      'fetch',
-      'create',
-      'update',
-      'listGroups',
-      'getPeriode',
-      'action',
-      'lookup',
-      'getDetail',
-      'downloadList',
-    ]),
-
     ...mapActions('master', ['getMasters']),
 
+    onDetailDiklat(item) {
+      this.$router.push({ name: 'diklat-kelas', params: { diklat_id: item.id, diklat_name: item.nama } });
+    },
+
     onAdd() {
-      this.$set(this.formulir, 'title', 'Tambah Kelas');
+      this.$set(this.formulir, 'title', 'Tambah Kelas Diklat');
       this.$set(this.formulir, 'form', 'form-diklat');
+      this.$set(this.formulir, 'type', 'kelas');
       this.$set(this.formulir, 'isEdit', false);
       this.$set(this.formulir, 'useSave', true);
       this.$refs.modal.open();
@@ -30,6 +23,7 @@ export default {
     onAddDiklat() {
       this.$set(this.formulir, 'title', 'Tambah Diklat');
       this.$set(this.formulir, 'form', 'form-diklat');
+      this.$set(this.formulir, 'type', 'diklat');
       this.$set(this.formulir, 'isEdit', false);
       this.$set(this.formulir, 'useSave', true);
       this.$refs.modal.open();
@@ -38,39 +32,24 @@ export default {
       });
     },
 
-    onDetailDiklat() {
-      this.$set(this.formulir, 'title', 'Info dan Detil Kelas');
-      this.$set(this.formulir, 'form', 'detil-kelas');
-      this.$set(this.formulir, 'isEdit', false);
-      this.$set(this.formulir, 'useSave', false);
-      this.$refs.modal.open();
-      this.$nextTick(() => {
-        this.$refs.formulir.reset();
-      });
-    },
-
     async onEdit(item) {
+      this.$set(this.formulir, 'title', 'Update Data Kelas');
+      this.$set(this.formulir, 'form', 'form-diklat');
+      this.$set(this.formulir, 'type', 'kelas');
       this.$set(this.formulir, 'isEdit', true);
-      this.$set(this.formulir, 'useSave', false);
+      this.$set(this.formulir, 'useSave', true);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
         this.$set(this.formulir, 'title', 'Ubah Data');
-        this.$set(
-          this.formulir,
-          'init',
-          Object.assign({}, item?.instansi?.data ?? {}, {
-            nama_penanggung_jawab: item.nama_penanggung_jawab,
-            telp_penanggung_jawab: item.telp_penanggung_jawab,
-            kodepos: item.kodepos,
-          })
-        );
+        this.$set(this.formulir, 'init', Object.assign({}, item));
       });
     },
 
     async onEditDiklat(item) {
       this.$set(this.formulir, 'title', 'Update Data Diklat');
       this.$set(this.formulir, 'form', 'form-diklat');
+      this.$set(this.formulir, 'type', 'diklat');
       this.$set(this.formulir, 'isEdit', true);
       this.$set(this.formulir, 'useSave', true);
       this.$set(this.formulir, 'id', item.id);
@@ -90,6 +69,7 @@ export default {
       const payload = {
         params: form,
         id: id || null,
+        diklat_id: this.diklatId || null,
       };
 
       this[isEdit ? 'update' : 'create'](payload)
@@ -134,6 +114,12 @@ export default {
     listPeriodes() {
       this.getPeriode().then(({ data }) => {
         this.periodes = data || [];
+      });
+    },
+
+    listMapels() {
+      this.getMapels().then(({ data }) => {
+        this.mapels = data || [];
       });
     },
   },
