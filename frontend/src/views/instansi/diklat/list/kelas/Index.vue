@@ -70,7 +70,14 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Tanggal Pelaksanaan</div>
-                          <span> - </span>
+                          <span>
+                            {{
+                              $durasi(
+                                $getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai'),
+                                $getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')
+                              ) || '-'
+                            }}
+                          </span>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -187,10 +194,6 @@ export default {
 
     diklatId() {
       return this.$route.params.diklat_id;
-    },
-
-    diklatName() {
-      return this.$route.params.diklat_name;
     },
   },
   created() {

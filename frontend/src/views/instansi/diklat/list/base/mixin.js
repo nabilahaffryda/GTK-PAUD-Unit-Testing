@@ -94,6 +94,7 @@ export default {
       const form = formulir && formulir.form;
       const isEdit = this.formulir.isEdit;
       const id = this.formulir.id;
+      const jenis = this.formulir.type;
       const payload = {
         params: form,
         id: id || null,
@@ -102,7 +103,7 @@ export default {
 
       this[isEdit ? 'update' : 'create'](payload)
         .then(() => {
-          this.$success(`Data diklat berhasil di ${isEdit ? 'perbarui' : 'tambahkan'}`);
+          this.$success(`Data ${jenis} berhasil di ${isEdit ? 'perbarui' : 'tambahkan'}`);
           this.onReload();
           this.$refs.modal.close();
         })

@@ -5,18 +5,18 @@
         <div class="body-1 font-weight-medium">Info dan Detil Kelas</div>
         <v-row dense no-gutters class="my-5">
           <v-col cols="12" md="1" sm="1" class="pa-0">
-            <v-avatar color="info" size="60">
+            <v-avatar color="secondary" size="60">
               <v-icon dark>mdi-teach</v-icon>
             </v-avatar>
           </v-col>
           <v-col cols="12" md="9" sm="9" class="px-0">
             <div>
               <div class="label--text">Nama Kelas</div>
-              <div class="body-1 font-weight-medium">{{ $getDeepObj(kelas, 'nama') }}</div>
+              <div class="body-1 font-weight-medium">{{ $getDeepObj(kelas, 'nama') || '-' }}</div>
             </div>
             <div class="my-5">
               <div class="label--text">Deskripsi Kelas</div>
-              <div class="body-1">{{ $getDeepObj(kelas, 'deskripsi') }}</div>
+              <div class="body-1">{{ $getDeepObj(kelas, 'deskripsi') || '-' }}</div>
             </div>
             <v-row class="my-5">
               <v-col>
@@ -49,7 +49,7 @@
               <v-spacer></v-spacer>
               <v-text-field dense placeholder="Pencarian Data" append-icon="mdi-magnify"></v-text-field>
               <v-btn class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
-              <v-btn class="mt-n3" color="primary"><v-icon left>mdi-plus</v-icon>Tambah</v-btn>
+              <v-btn class="mt-n3" color="primary" v-if="tab > 0"><v-icon left>mdi-plus</v-icon>Tambah</v-btn>
             </v-toolbar>
 
             <div class="my-4">
@@ -60,6 +60,7 @@
                 :single-select="false"
                 item-key="nama"
                 show-select
+                :no-data-text="`Daftar ${item.text} tidak ditemukan`"
               >
                 <template v-slot:[`item.aksi`]="{ item }">
                   <v-btn icon @click="onDelete(item)"> <v-icon small>mdi-trash-can</v-icon></v-btn>
@@ -95,7 +96,11 @@ export default {
         { value: 'pengajar', text: 'Pengajar' },
         { value: 'pengajar-tambahan', text: 'Pengajar Tambahan' },
       ],
-      headers: [
+    };
+  },
+  computed: {
+    headers() {
+      let temp = [
         {
           text: 'Nama Lengkap',
           align: 'start',
@@ -103,12 +108,16 @@ export default {
           value: 'nama',
         },
         { text: 'Surel', value: 'email', sortable: false },
-        { text: 'Status', value: 'status', sortable: false },
-        { text: '', value: 'aksi', sortable: false },
-      ],
-    };
-  },
-  computed: {
+      ];
+
+      if (this.tab > 0) {
+        temp.push({ text: 'Status', value: 'status', sortable: false });
+        temp.push({ text: '', value: 'aksi', sortable: false });
+      }
+
+      return temp;
+    },
+
     items() {
       return this.pesertas.map((item) => {
         return {
@@ -127,12 +136,15 @@ export default {
       this.kelas = {};
     },
 
-    fetch(tipe) {
+    fetch(tipe, k_petugas = null) {
       if (!Object.keys(this.kelas).length) return;
       this.getListKelas({
         diklat_id: this.detail.paud_diklat_id,
         id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
         tipe: tipe,
+        params: {
+          k_petugas_paud: k_petugas,
+        },
       }).then(({ data }) => {
         this.pesertas = data || [];
       });
@@ -145,6 +157,18 @@ export default {
       switch (Number(value)) {
         case 0:
           this.fetch('peserta');
+          break;
+        case 1:
+          this.fetch('petugas', 4);
+          break;
+        case 2:
+          this.fetch('petugas', 3);
+          break;
+        case 3:
+          this.fetch('petugas', 1);
+          break;
+        case 4:
+          this.fetch('petugas', 2);
           break;
       }
     },
