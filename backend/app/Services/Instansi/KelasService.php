@@ -7,6 +7,7 @@ namespace App\Services\Instansi;
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Models\MKonfirmasiPaud;
+use App\Models\MVervalPaud;
 use App\Models\PaudDiklat;
 use App\Models\PaudKelas;
 use App\Models\PaudKelasPeserta;
@@ -34,6 +35,7 @@ class KelasService
     {
         $kelas                 = new PaudKelas($params);
         $kelas->paud_diklat_id = $paudDiklat->paud_diklat_id;
+        $kelas->k_verval_paud  = MVervalPaud::KANDIDAT;
         $kelas->created_by     = akunId();
 
         if (!$kelas->save()) {
