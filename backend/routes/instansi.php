@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::group(['prefix' => 'lpd'], function () {
         Route::get('', [LpdController::class, 'index']);
         Route::post('create', [LpdController::class, 'create']);
+        Route::get('download', [LpdController::class, 'download']);
 
         Route::get('profil', [Lpd\ProfilController::class, 'index']);
         Route::post('profil/{paudInstansi}/update', [Lpd\ProfilController::class, 'update']);

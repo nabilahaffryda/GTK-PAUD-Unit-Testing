@@ -15,6 +15,9 @@ use App\Models\PaudInstansi;
 use App\Models\PaudInstansiBerkas;
 use App\Services\InstansiService;
 use Arr;
+use Box\Spout\Common\Entity\Style\CellAlignment;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
@@ -138,7 +141,7 @@ class LpdService
     public function getPaudInstansi(Instansi $instansi, PaudAdmin $paudAdmin)
     {
         if ($paudAdmin->instansi_id != $instansi->instansi_id) {
-            abort(404);;
+            abort(404);
         }
 
         return PaudInstansi::whereInstansiId($instansi->instansi_id)
@@ -308,5 +311,68 @@ class LpdService
         }
 
         return $paudInstansi;
+    }
+
+    public function download($params = [])
+    {
+        $q = $this->query($params)->with(['instansi.mKota', 'instansi.mPropinsi']);
+
+        if (Arr::get($params, 'format') == 'json') {
+            return $q->paginate(100);
+        }
+
+        $header = [
+            'No',
+            'Nama Institusi LPD',
+            'Alamat Surel',
+            'Alamat',
+            'Provinsi',
+            'Kota/Kabupaten',
+            'Kode Pos',
+            'Penanggung Jawab',
+            'Telpon',
+        ];
+
+        $date     = Carbon::now()->format('dmYHi');
+        $filename = "Laporan-Institusi-{$date}.xlsx";
+
+        $defaultStyle = (new StyleBuilder())
+            ->setFontName('Calibri')
+            ->setFontSize(11)
+            ->setShouldWrapText(false)
+            ->build();
+        $headerStyle  = clone $defaultStyle;
+        $headerStyle->setFontBold();
+        $headerStyle->setCellAlignment(CellAlignment::CENTER);
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($filename);
+        $writer->setDefaultRowStyle($defaultStyle);
+
+        $writer->addRow(WriterEntityFactory::createRowFromArray($header, $headerStyle));
+
+        $i = 1;
+        $q->chunk(1000, function ($paudInstansis) use ($writer, &$i) {
+            foreach ($paudInstansis as $paudInstansi) {
+                /** @var PaudInstansi $paudInstansi */
+                $instansi = $paudInstansi->instansi;
+
+                $row = [
+                    $i++,
+                    $instansi->nama,
+                    $instansi->email,
+                    $instansi->alamat,
+                    $instansi->mPropinsi->keterangan ?? null,
+                    $instansi->mKota->keterangan ?? null,
+                    $paudInstansi->kodepos,
+                    $paudInstansi->nama_penanggung_jawab,
+                    $paudInstansi->telp_penanggung_jawab,
+                ];
+
+                $writer->addRow(WriterEntityFactory::createRowFromArray($row));
+            }
+        });
+
+        $writer->close();
     }
 }
