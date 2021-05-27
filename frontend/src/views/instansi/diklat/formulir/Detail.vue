@@ -49,7 +49,12 @@
               <v-spacer></v-spacer>
               <v-text-field dense placeholder="Pencarian Data" append-icon="mdi-magnify"></v-text-field>
               <v-btn class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
-              <v-btn class="mt-n3" color="primary" v-if="tab > 0" @click="onAddPetugas">
+              <v-btn
+                class="mt-n3"
+                color="primary"
+                v-if="tab > 0 && $allow('lpd-kelas-petugas.create')"
+                @click="onAddPetugas"
+              >
                 <v-icon left>mdi-plus</v-icon>Tambah
               </v-btn>
             </v-toolbar>
@@ -65,7 +70,9 @@
                 :no-data-text="`Daftar ${item.text} tidak ditemukan`"
               >
                 <template v-slot:[`item.aksi`]="{ item }">
-                  <v-btn icon @click="onDelete(item)"> <v-icon small>mdi-trash-can</v-icon></v-btn>
+                  <v-btn v-if="$allow('lpd-kelas-petugas.delete')" icon @click="onDelete(item)">
+                    <v-icon small>mdi-trash-can</v-icon>
+                  </v-btn>
                 </template>
               </v-data-table>
             </div>
