@@ -49,7 +49,9 @@
               <v-spacer></v-spacer>
               <v-text-field dense placeholder="Pencarian Data" append-icon="mdi-magnify"></v-text-field>
               <v-btn class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
-              <v-btn class="mt-n3" color="primary" v-if="tab > 0"><v-icon left>mdi-plus</v-icon>Tambah</v-btn>
+              <v-btn class="mt-n3" color="primary" v-if="tab > 0" @click="onAddPetugas">
+                <v-icon left>mdi-plus</v-icon>Tambah
+              </v-btn>
             </v-toolbar>
 
             <div class="my-4">
@@ -71,11 +73,20 @@
         </v-tabs-items>
       </v-container>
     </v-card-text>
+    <base-list-popup
+      ref="popup"
+      :api="`diklatKelas/getListKelas`"
+      :id="$getDeepObj(detail, 'paud_diklat_id')"
+      title="Pilih Petugas Diklat"
+      multiselect
+    />
   </v-card>
 </template>
 <script>
 import { mapActions } from 'vuex';
+import BaseListPopup from '@components/base/BaseListPopup';
 export default {
+  components: { BaseListPopup },
   props: {
     detail: {
       type: Object,
@@ -88,13 +99,14 @@ export default {
       kelas: {},
       pesertas: [],
       peserta: null,
+      petugas: [],
       tab: null,
       tabItems: [
-        { value: 'peserta', text: 'Peserta' },
-        { value: 'admin', text: 'Admin Kelas' },
-        { value: 'pembimbing-praktik', text: 'Pembimbing Praktik' },
-        { value: 'pengajar', text: 'Pengajar' },
-        { value: 'pengajar-tambahan', text: 'Pengajar Tambahan' },
+        { value: 'peserta', kPetugas: 0, text: 'Peserta' },
+        { value: 'admin', kPetugas: 4, text: 'Admin Kelas' },
+        { value: 'pembimbing-praktik', kPetugas: 3, text: 'Pembimbing Praktik' },
+        { value: 'pengajar', kPetugas: 1, text: 'Pengajar' },
+        { value: 'pengajar-tambahan', kPetugas: 2, text: 'Pengajar Tambahan' },
       ],
     };
   },
@@ -151,6 +163,42 @@ export default {
     },
 
     onDelete() {},
+
+    onAddPetugas() {
+      const fields = [
+        {
+          key: 'ptk.data.nama',
+          title: 'Nama',
+          icon: 'mdi-account-circle',
+          grid: { md: 4, sm: 12, cols: 12 },
+        },
+        {
+          key: 'ptk_id',
+          title: 'No UKG',
+          grid: { md: 2, sm: 12, cols: 12 },
+        },
+        {
+          key: 'ptk.data.email',
+          title: 'Alamat Surel',
+          grid: { md: 4, sm: 12, cols: 12 },
+        },
+      ];
+
+      const params = {
+        diklat_id: this.detail.paud_diklat_id,
+        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
+        tipe: 'petugas',
+        params: {
+          k_petugas_paud: this.tabItems[+this.tab]['kPetugas'],
+        },
+      };
+
+      this.$refs.popup.open(fields, params).then((data) => {
+        if (data) {
+          this.petugas = Object.assign({}, data);
+        }
+      });
+    },
   },
   watch: {
     tab: function (value) {
