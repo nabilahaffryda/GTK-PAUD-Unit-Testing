@@ -313,6 +313,17 @@ class LpdService
         return $paudInstansi;
     }
 
+    public function setAktif(PaudInstansi $paudInstansi, array $params)
+    {
+        $paudInstansi->k_verval_paud  = $params['enable'];
+
+        if (!$paudInstansi->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $paudInstansi;
+    }
+
     public function download($params = [])
     {
         $q = $this->query($params)->with(['instansi.mKota', 'instansi.mPropinsi']);
