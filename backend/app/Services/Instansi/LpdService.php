@@ -39,6 +39,9 @@ class LpdService
                 'paud_instansi.tahun'       => $params['tahun'] ?? config('paud.tahun'),
                 'paud_instansi.angkatan'    => $params['angkatan'] ?? config('paud.angkatan'),
             ])
+            ->when(isset($params['is_aktif']), function (Builder $query) use ($params){
+                $query->where('paud_instansi.is_aktif', $params['is_aktif']);
+            })
             ->when(isset($params['k_kota']), function (Builder $query) use ($params){
                 $query->where('instansi.k_kota', $params['k_kota']);
             })
