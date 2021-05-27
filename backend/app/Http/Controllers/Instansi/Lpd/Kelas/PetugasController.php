@@ -27,9 +27,9 @@ class PetugasController extends Controller
 
     public function create(PaudDiklat $paudDiklat, PaudKelas $kelas, CreatePetugasRequest $request)
     {
-        $paudPetugas = $this->service->createPetugas($paudDiklat, $kelas, $request->validated());
+        $paudPetugases = $this->service->createPetugas($paudDiklat, $kelas, $request->validated());
 
-        return BaseResource::make($paudPetugas);
+        return BaseCollection::make($paudPetugases);
     }
 
     public function delete(PaudDiklat $paudDiklat, PaudKelas $kelas, PaudKelasPetugas $petugas)

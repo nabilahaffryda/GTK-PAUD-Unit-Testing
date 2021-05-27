@@ -17,6 +17,7 @@ use Arr;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class KelasService
 {
@@ -130,28 +131,35 @@ class KelasService
         return $query;
     }
 
-    public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): PaudKelasPetugas
+    public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        $paudPetugas = PaudPetugas::find($params['paud_petugas_id']);
+        $paudPetugases = PaudPetugas::whereIn('paud_petugas_id', $params['paud_petugas_id'])
+            ->whereNotExists(function ($query) use ($params) {
+                $query->select(DB::raw(1))
+                    ->from('paud_kelas_petugas')
+                    ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+                    ->whereRaw('paud_petugas.paud_petugas_id = paud_kelas_petugas.paud_petugas_id');
+            })
+            ->get();
 
-        if (!$paudPetugas) {
-            throw new FlowException("Data Petugas tidak ditemukan");
+        /** @var PaudPetugas $petugas */
+        foreach ($paudPetugases as $petugas) {
+            $paudKelasPetugas = new PaudKelasPetugas();
+            $paudKelasPetugas->fill($params);
+            $paudKelasPetugas->paud_petugas_id   = $petugas->paud_petugas_id;
+            $paudKelasPetugas->paud_kelas_id     = $kelas->paud_kelas_id;
+            $paudKelasPetugas->akun_id           = $petugas->akun_id;
+            $paudKelasPetugas->k_konfirmasi_paud = MKonfirmasiPaud::BELUM_KONFIRMASI;
+            $paudKelasPetugas->created_by        = akunId();
+
+            if (!$paudKelasPetugas->save()) {
+                throw new FlowException("Petugas tidak berhasil disimpan");
+            }
         }
 
-        $paudKelasPetugas = new PaudKelasPetugas();
-        $paudKelasPetugas->fill($params);
-        $paudKelasPetugas->paud_kelas_id     = $kelas->paud_kelas_id;
-        $paudKelasPetugas->akun_id           = $paudPetugas->akun_id;
-        $paudKelasPetugas->k_konfirmasi_paud = MKonfirmasiPaud::BELUM_KONFIRMASI;
-        $paudKelasPetugas->created_by        = akunId();
-
-        if (!$paudKelasPetugas->save()) {
-            throw new FlowException("Petugas tidak berhasil disimpan");
-        }
-
-        return $paudKelasPetugas->load('akun');
+        return $paudPetugases->load('akun:akun_id,nama,email');
     }
 
     public function ajuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
