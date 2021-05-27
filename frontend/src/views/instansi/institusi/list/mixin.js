@@ -74,7 +74,7 @@ export default {
         {
           key: 'download',
           label: `Daftar Instansi LPD`,
-          acl: this.$allow(`akun-admin-program-lpd.download`),
+          acl: this.$allow(`lpd.download`),
         },
       ];
 

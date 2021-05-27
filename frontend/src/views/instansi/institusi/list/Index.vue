@@ -19,7 +19,7 @@
           @search="onSearch"
           :btnFilter="true"
           :btnAdd="$allow('akun-admin-program-lpd.create')"
-          :btnDownload="$allow('akun-admin-program-lpd.download')"
+          :btnDownload="$allow('lpd.download')"
           @add="onAdd"
           @reload="onReload"
           @filter="onFilter"
