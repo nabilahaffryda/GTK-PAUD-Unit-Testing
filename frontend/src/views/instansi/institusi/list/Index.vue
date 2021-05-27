@@ -147,6 +147,7 @@ import Akun from '@components/cetak/Akun';
 import mixin from './mixin';
 import list from '@mixins/list';
 import actions from './actions';
+import { M_AKTIF } from '@utils/master';
 export default {
   mixins: [list, mixin],
   components: { FormLpd, Akun },
@@ -186,6 +187,13 @@ export default {
           labelColor: 'secondary',
           grid: { cols: 12, md: 6 },
         },
+        {
+          label: 'Pilih Status',
+          default: true,
+          type: 'checkbox',
+          model: 'is_aktif',
+          master: M_AKTIF,
+        },
       ];
     },
 
@@ -193,6 +201,7 @@ export default {
       return {
         k_propinsi: this.masters && this.masters.m_propinsi,
         k_kota: this.masters && this.masters.m_kota,
+        is_aktif: this.$arrToObj(M_AKTIF, 'value'),
       };
     },
   },
@@ -214,10 +223,10 @@ export default {
       let disabled = false;
       switch (action.event) {
         case 'onAktif':
-          disabled = !Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
+          disabled = !Number(this.$getDeepObj(data, 'is_aktif') || 0);
           break;
         case 'onNonAktif':
-          disabled = Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
+          disabled = Number(this.$getDeepObj(data, 'is_aktif') || 0);
           break;
         default:
           disabled = this.$allow(action.akses, data.policies);
