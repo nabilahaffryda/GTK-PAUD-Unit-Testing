@@ -27,11 +27,11 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::group(['prefix' => 'lpd'], function () {
         Route::get('', [LpdController::class, 'index']);
         Route::post('create', [LpdController::class, 'create']);
-        Route::post('set-aktif', [LpdController::class, 'setAktif']);
         Route::get('download', [LpdController::class, 'download']);
 
         Route::get('profil', [Lpd\ProfilController::class, 'index']);
         Route::post('profil/{paudInstansi}/update', [Lpd\ProfilController::class, 'update']);
+        Route::post('profil/{paudInstansi}/set-aktif', [Lpd\ProfilController::class, 'setAktif']);
         Route::get('profil/{paudInstansi}/berkas', [Lpd\Profil\BerkasController::class, 'index']);
         Route::post('profil/{paudInstansi}/berkas/create', [Lpd\Profil\BerkasController::class, 'create']);
 

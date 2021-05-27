@@ -69,11 +69,6 @@ class LpdController extends Controller
         return BaseResource::make($paudInstansi);
     }
 
-    public function setAktif(PaudInstansi $paudInstansi, Request $request)
-    {
-        return $this->service->setAktif($paudInstansi, $request->all());
-    }
-
     public function download(Request $request)
     {
         return $this->service->download($request->all());
