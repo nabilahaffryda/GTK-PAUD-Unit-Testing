@@ -75,7 +75,7 @@
     </v-card-text>
     <base-list-popup
       ref="popup"
-      :api="`diklatKelas/getListKelas`"
+      :api="`diklatKelas/getListKandidat`"
       :id="$getDeepObj(detail, 'paud_diklat_id')"
       title="Pilih Petugas Diklat"
       multiselect
@@ -133,15 +133,16 @@ export default {
     items() {
       return this.pesertas.map((item) => {
         return {
-          nama: this.$getDeepObj(item, 'ptk.data.nama') || '-',
-          email: this.$getDeepObj(item, 'ptk.data.email') || '-',
-          status: 'Belum Kofirmasi',
+          nama: this.$getDeepObj(item, 'ptk.data.nama') || this.$getDeepObj(item, 'akun.data.nama') || '-',
+          email: this.$getDeepObj(item, 'ptk.data.email') || this.$getDeepObj(item, 'akun.data.email') || '-',
+          status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
+          paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
         };
       });
     },
   },
   methods: {
-    ...mapActions('diklatKelas', ['getListKelas']),
+    ...mapActions('diklatKelas', ['getListKelas', 'action']),
 
     reset() {
       this.tab = 0;
@@ -162,23 +163,52 @@ export default {
       });
     },
 
-    onDelete() {},
+    onDelete(item) {
+      const url = `petugas/${item.paud_kelas_petugas_id}/delete`;
+      this.$confirm(`Apakan anda ingin membatalkan ajuan pada kelas berikut ?`, `Hapus Petugas`, {
+        tipe: 'warning',
+        data: [
+          {
+            icon: 'mdi-teach',
+            iconSize: 30,
+            iconColor: 'secondary',
+            title: `${this.$getDeepObj(item, 'nama')}`,
+            subtitles: [`<span>Status: ${this.$getDeepObj(item, 'status') || '-'}</span>`],
+          },
+        ],
+      }).then(() => {
+        this.action({
+          id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
+          diklat_id: this.detail.paud_diklat_id,
+          type: url,
+          method: 'get',
+        }).then(() => {
+          this.$success('Petugas berhasil dihapus');
+          this.onReload();
+        });
+      });
+    },
+
+    onReload() {
+      this.$emit('reload');
+      this.fetch('petugas', this.tabItems[+this.tab]['kPetugas']);
+    },
 
     onAddPetugas() {
       const fields = [
         {
-          key: 'ptk.data.nama',
+          key: 'akun.data.nama',
           title: 'Nama',
           icon: 'mdi-account-circle',
           grid: { md: 4, sm: 12, cols: 12 },
         },
         {
-          key: 'ptk_id',
+          key: 'akun.data.id',
           title: 'No UKG',
           grid: { md: 2, sm: 12, cols: 12 },
         },
         {
-          key: 'ptk.data.email',
+          key: 'akun.data.email',
           title: 'Alamat Surel',
           grid: { md: 4, sm: 12, cols: 12 },
         },
@@ -196,7 +226,24 @@ export default {
       this.$refs.popup.open(fields, params).then((data) => {
         if (data) {
           this.petugas = Object.assign({}, data);
+          this.onSavePetugas();
         }
+      });
+    },
+
+    onSavePetugas() {
+      const petugas = this.petugas;
+      this.action({
+        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
+        diklat_id: this.detail.paud_diklat_id,
+        type: 'petugas/create',
+        params: {
+          k_petugas_paud: this.tabItems[+this.tab]['kPetugas'],
+          akun_id: petugas,
+        },
+      }).then(() => {
+        this.$success(`Data petugas berhasil ditambahkan`);
+        this.onReload();
       });
     },
   },

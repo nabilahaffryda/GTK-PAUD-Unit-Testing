@@ -24,7 +24,7 @@
                 <v-list-item-content>
                   <v-row>
                     <v-col v-if="multiselect" cols="12" md="1" sm="1" class="px-5">
-                      <v-checkbox v-model="select[item.ptk_id]"></v-checkbox>
+                      <v-checkbox v-model="select[item.akun_id]"></v-checkbox>
                     </v-col>
                     <v-col v-for="(field, f) in fields" :key="f" v-bind="field.grid">
                       <v-list-item class="px-0">

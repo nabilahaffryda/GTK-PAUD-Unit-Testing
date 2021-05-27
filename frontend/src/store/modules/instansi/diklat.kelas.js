@@ -41,13 +41,23 @@ export const actions = {
   action({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     const url = `i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.type}`;
-    return http.post(url, payload.params).then(({ data }) => data);
+    return http[payload.method || 'post'](url, payload.params).then(({ data }) => data);
   },
 
   async getListKelas({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}`,
+    });
+    return await $ajax.get(`/`, { params: payload.params });
+  },
+
+  async getListKandidat({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    $ajax = kitsu({
+      baseURL:
+        process.env.VUE_APP_API_URL +
+        `/i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}/kandidat`,
     });
     return await $ajax.get(`/`, { params: payload.params });
   },
