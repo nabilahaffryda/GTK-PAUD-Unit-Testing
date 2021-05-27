@@ -318,7 +318,7 @@ class LpdService
 
     public function setAktif(PaudInstansi $paudInstansi, array $params)
     {
-        $paudInstansi->k_verval_paud  = $params['enable'];
+        $paudInstansi->is_aktif  = $params['enable'];
 
         if (!$paudInstansi->save()) {
             throw new FlowException('Proses simpan status verval tidak berhasil');
