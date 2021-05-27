@@ -15,6 +15,7 @@ use App\Models\PaudKelasPetugas;
 use App\Models\PaudPetugas;
 use Arr;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Database\Eloquent\Builder;
 
 class KelasService
@@ -97,6 +98,29 @@ class KelasService
             ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelas->paud_kelas_id)
             ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
             ->with(['akun:akun_id,nama,email', 'mKonfirmasiPaud']);
+
+        if ($keyword = Arr::get($params, 'keyword')) {
+            $query->join('akun', 'akun.akun_id', '=', 'paud_kelas_petugas.akun_id')
+                ->where('akun.nama', 'like', '%' . $keyword . '%');
+        }
+
+        return $query;
+    }
+
+    public function indexPetugasKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        $query = PaudPetugas::query()
+            ->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id)
+            ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+            ->whereNotExists(function ($query) use ($params) {
+                $query->select(DB::raw(1))
+                    ->from('paud_kelas_petugas')
+                    ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+                    ->whereRaw('paud_petugas.paud_petugas_id = paud_kelas_petugas.paud_petugas_id');
+            })
+            ->with(['akun:akun_id,nama,email']);
 
         if ($keyword = Arr::get($params, 'keyword')) {
             $query->join('akun', 'akun.akun_id', '=', 'paud_kelas_petugas.akun_id')
