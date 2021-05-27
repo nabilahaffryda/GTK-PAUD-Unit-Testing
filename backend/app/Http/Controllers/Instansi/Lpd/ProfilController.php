@@ -45,10 +45,6 @@ class ProfilController extends Controller
 
     public function setAktif(PaudInstansi $paudInstansi, Request $request)
     {
-        if ($paudInstansi->instansi_id != instansiId()) {
-            abort(404);
-        }
-
         return $this->service->setAktif($paudInstansi, $request->all());
     }
 }
