@@ -14,15 +14,15 @@ class CreatePetugasRequest extends FormRequest
     public function rules()
     {
         return [
-            'k_petugas_paud'  => ['required', 'integer', 'exists:m_petugas_paud,k_petugas_paud'],
-            'paud_petugas_id' => ['required', 'array'],
+            'k_petugas_paud' => ['required', 'integer', 'exists:m_petugas_paud,k_petugas_paud'],
+            'akun_id'        => ['required', 'array'],
         ];
     }
 
     public function messages()
     {
         return [
-            'paud_petugas_id.array' => "Format parameter petugas id salah"
+            'akun_id.array' => "Format parameter akun id salah",
         ];
     }
 }

@@ -135,7 +135,9 @@ class KelasService
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        $paudPetugases = PaudPetugas::whereIn('paud_petugas_id', $params['paud_petugas_id'])
+        $paudPetugases = PaudPetugas::whereIn('akun_id', $params['akun_id'])
+            ->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id)
+            ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
             ->whereNotExists(function ($query) use ($params) {
                 $query->select(DB::raw(1))
                     ->from('paud_kelas_petugas')
