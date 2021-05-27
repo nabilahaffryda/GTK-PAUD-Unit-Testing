@@ -100,7 +100,7 @@ class PaudInstansi extends Eloquent
         'akun_id_verval'        => 'string',
         'alasan'                => 'string',
         'catatan'               => 'string',
-        'is_aktif'              => 'string',
+        'is_aktif'              => 'integer',
         'created_at'            => 'datetime',
         'updated_at'            => 'datetime',
         'akun_id'               => 'string',
