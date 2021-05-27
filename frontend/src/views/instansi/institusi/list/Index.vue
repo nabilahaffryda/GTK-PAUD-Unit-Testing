@@ -66,7 +66,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="3">
+                    <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <span class="caption">Penanggung Jawab</span>
@@ -78,7 +78,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="3">
+                    <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <span class="caption">Alamat Email</span>
@@ -101,6 +101,18 @@
                                 $getDeepObj(item, 'instansi.data.m_propinsi.data.keterangan') || '-',
                               ].join(' - ')
                             }}
+                          </div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col class="py-0" cols="12" md="2">
+                      <v-list-item class="px-0">
+                        <v-list-item-content class="py-0 mt-3">
+                          <span class="caption">Status</span>
+                          <div>
+                            <v-chip :color="+item.is_aktif === 1 ? 'success' : 'red'" dark small>
+                              {{ +item.is_aktif === 1 ? 'Aktif' : 'Tidak Aktif' }}
+                            </v-chip>
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -198,10 +210,15 @@ export default {
     },
 
     filtersMaster() {
+      const mAktif = {};
+      M_AKTIF.forEach((item) => {
+        this.$set(mAktif, item.value, item.text);
+      });
+
       return {
         k_propinsi: this.masters && this.masters.m_propinsi,
         k_kota: this.masters && this.masters.m_kota,
-        is_aktif: this.$arrToObj(M_AKTIF, 'value'),
+        is_aktif: mAktif,
       };
     },
   },
