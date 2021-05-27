@@ -7,7 +7,6 @@ use App\Http\Requests\Instansi\Lpd\CreateRequest;
 use App\Http\Requests\Instansi\Lpd\UpdateRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
-use App\Models\PaudAdmin;
 use App\Models\PaudInstansi;
 use App\Services\Instansi\LpdService;
 use Illuminate\Http\Request;
@@ -69,4 +68,10 @@ class LpdController extends Controller
 
         return BaseResource::make($paudInstansi);
     }
+
+    public function download(Request $request)
+    {
+        return $this->service->download($request->all());
+    }
+
 }
