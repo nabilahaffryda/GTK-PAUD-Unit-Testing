@@ -282,7 +282,13 @@ export default {
           .then(({ data }) => {
             const instansi = data || [];
             instansi.forEach((item) => {
-              this.$set(mInstansi, this.$getDeepObj(item, 'instansi_id'), this.$getDeepObj(item, 'instansi.data.nama'));
+              if (+item.is_aktif === 1) {
+                this.$set(
+                  mInstansi,
+                  this.$getDeepObj(item, 'instansi_id'),
+                  this.$getDeepObj(item, 'instansi.data.nama')
+                );
+              }
             });
           })
           .then(() => {
