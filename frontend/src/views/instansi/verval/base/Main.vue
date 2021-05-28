@@ -17,7 +17,7 @@
     <v-card flat>
       <v-card-text>
         <base-table-header
-          :btnFilter="false"
+          btn-filter
           @download="onDownloadList"
           @filter="onFilter"
           @search="onSearch"
@@ -72,7 +72,11 @@
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             <template>
-                              {{ $getDeepObj(item, `${obj}.data.no_hp`) || '-' }}
+                              {{
+                                $getDeepObj(item, `${obj}.data.no_hp`) ||
+                                $getDeepObj(item, `${obj}.data.no_telpon`) ||
+                                '-'
+                              }}
                             </template>
                           </v-list-item-subtitle>
                         </v-list-item-content>
@@ -250,37 +254,37 @@ export default {
       // delete kandidat
       delete master[1];
       return [
-        {
-          label: 'Pilih Verifikator',
-          model: 'akun_id',
-          type: 'select',
-          props: ['attach'],
-          master: this.$mapForMaster(this.mapTimVerval),
-          labelColor: 'secondary',
-          grid: { cols: 12 },
-        },
+        // {
+        //   label: 'Pilih Verifikator',
+        //   model: 'akun_id',
+        //   type: 'select',
+        //   props: ['attach'],
+        //   master: this.$mapForMaster(this.mapTimVerval),
+        //   labelColor: 'secondary',
+        //   grid: { cols: 12 },
+        // },
         {
           label: 'Pilih Status Verval',
           default: true,
           type: 'checkbox',
           model: 'k_verval_paud',
-          master: this.$mapForMaster(master),
+          master: this.$mapForMaster(this.masters && this.masters.m_verval_paud),
           props: ['attach', 'chips', 'deletable-chips', 'multiple', 'small-chips'],
         },
-        {
-          label: 'Pilih Lokasi',
-          default: true,
-          type: 'cascade',
-          configs: this.configs,
-          labelColor: 'secondary',
-          grid: { cols: 12, md: 6 },
-        },
+        // {
+        //   label: 'Pilih Lokasi',
+        //   default: true,
+        //   type: 'cascade',
+        //   configs: this.configs,
+        //   labelColor: 'secondary',
+        //   grid: { cols: 12, md: 6 },
+        // },
       ];
     },
 
     filtersMaster() {
       return {
-        k_verval_psp: this.masters && this.masters[`m_berkas_${this.keyTipe}_paud`],
+        k_verval_paud: this.masters && this.masters[`m_verval_paud`],
         k_propinsi: this.masters && this.masters['propinsi'],
         k_kota: this.masters && this.masters['kota'],
         akun_id: this.mapTimVerval,
@@ -301,12 +305,24 @@ export default {
   },
   created() {
     this.getMasters({
-      name: ['m_berkas_petugas_paud', 'm_berkas_lpd_paud', 'm_kualifikasi', 'tingkat_diklat_paud'].join(';'),
+      name: [
+        'm_berkas_petugas_paud',
+        'm_berkas_lpd_paud',
+        'm_kualifikasi',
+        'tingkat_diklat_paud',
+        'm_verval_paud',
+      ].join(';'),
       filter: {
         0: {
           k_berkas_petugas_paud: {
             op: '<>',
             val: 2,
+          },
+        },
+        4: {
+          k_verval_paud: {
+            op: '>',
+            val: 3,
           },
         },
       },
