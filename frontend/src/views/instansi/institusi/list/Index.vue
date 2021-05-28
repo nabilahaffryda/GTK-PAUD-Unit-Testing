@@ -66,7 +66,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="3">
+                    <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <span class="caption">Penanggung Jawab</span>
@@ -78,7 +78,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="3">
+                    <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <span class="caption">Alamat Email</span>
@@ -101,6 +101,18 @@
                                 $getDeepObj(item, 'instansi.data.m_propinsi.data.keterangan') || '-',
                               ].join(' - ')
                             }}
+                          </div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col class="py-0" cols="12" md="2">
+                      <v-list-item class="px-0">
+                        <v-list-item-content class="py-0 mt-3">
+                          <span class="caption">Status</span>
+                          <div>
+                            <v-chip :color="+item.is_aktif === 1 ? 'success' : 'red'" dark small>
+                              {{ +item.is_aktif === 1 ? 'Aktif' : 'Tidak Aktif' }}
+                            </v-chip>
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -147,6 +159,7 @@ import Akun from '@components/cetak/Akun';
 import mixin from './mixin';
 import list from '@mixins/list';
 import actions from './actions';
+import { M_AKTIF } from '@utils/master';
 export default {
   mixins: [list, mixin],
   components: { FormLpd, Akun },
@@ -186,13 +199,26 @@ export default {
           labelColor: 'secondary',
           grid: { cols: 12, md: 6 },
         },
+        {
+          label: 'Pilih Status',
+          default: true,
+          type: 'checkbox',
+          model: 'is_aktif',
+          master: M_AKTIF,
+        },
       ];
     },
 
     filtersMaster() {
+      const mAktif = {};
+      M_AKTIF.forEach((item) => {
+        this.$set(mAktif, item.value, item.text);
+      });
+
       return {
         k_propinsi: this.masters && this.masters.m_propinsi,
         k_kota: this.masters && this.masters.m_kota,
+        is_aktif: mAktif,
       };
     },
   },
@@ -214,10 +240,10 @@ export default {
       let disabled = false;
       switch (action.event) {
         case 'onAktif':
-          disabled = !Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
+          disabled = !Number(this.$getDeepObj(data, 'is_aktif') || 0);
           break;
         case 'onNonAktif':
-          disabled = Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
+          disabled = Number(this.$getDeepObj(data, 'is_aktif') || 0);
           break;
         default:
           disabled = this.$allow(action.akses, data.policies);

@@ -12,30 +12,31 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\PaudInstansi
  *
- * @property int $paud_instansi_id
- * @property int $instansi_id
- * @property null|int $tahun
- * @property null|int $angkatan
- * @property int $k_verval_paud
- * @property null|Carbon $wkt_ajuan
- * @property null|Carbon $wkt_verval
- * @property null|string $kodepos
- * @property null|string $nama_penanggung_jawab
- * @property null|string $telp_penanggung_jawab
- * @property null|string $nama_sekretaris
- * @property null|string $telp_sekretaris
- * @property null|string $nama_bendahara
- * @property null|string $telp_bendahara
- * @property null|array $diklat
- * @property null|string $akun_id_verval
- * @property null|string $alasan
- * @property null|string $catatan
- * @property null|Carbon $created_at
- * @property null|Carbon $updated_at
- * @property null|string $akun_id
+ * @property int                                  $paud_instansi_id
+ * @property int                                  $instansi_id
+ * @property null|int                             $tahun
+ * @property null|int                             $angkatan
+ * @property int                                  $k_verval_paud
+ * @property null|Carbon                          $wkt_ajuan
+ * @property null|Carbon                          $wkt_verval
+ * @property null|string                          $kodepos
+ * @property null|string                          $nama_penanggung_jawab
+ * @property null|string                          $telp_penanggung_jawab
+ * @property null|string                          $nama_sekretaris
+ * @property null|string                          $telp_sekretaris
+ * @property null|string                          $nama_bendahara
+ * @property null|string                          $telp_bendahara
+ * @property null|array                           $diklat
+ * @property null|string                          $akun_id_verval
+ * @property null|string                          $alasan
+ * @property null|string                          $catatan
+ * @property string                               $is_aktif
+ * @property null|Carbon                          $created_at
+ * @property null|Carbon                          $updated_at
+ * @property null|string                          $akun_id
  *
- * @property-read Instansi $instansi
- * @property-read MVervalPaud $mVervalPaud
+ * @property-read Instansi                        $instansi
+ * @property-read MVervalPaud                     $mVervalPaud
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
  *
  * @method static Builder|PaudInstansi wherePaudInstansiId($value)
@@ -99,6 +100,7 @@ class PaudInstansi extends Eloquent
         'akun_id_verval'        => 'string',
         'alasan'                => 'string',
         'catatan'               => 'string',
+        'is_aktif'              => 'integer',
         'created_at'            => 'datetime',
         'updated_at'            => 'datetime',
         'akun_id'               => 'string',
@@ -128,6 +130,7 @@ class PaudInstansi extends Eloquent
         'akun_id_verval',
         'alasan',
         'catatan',
+        'is_aktif',
         'akun_id',
     ];
 

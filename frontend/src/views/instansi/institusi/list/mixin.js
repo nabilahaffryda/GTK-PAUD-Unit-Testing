@@ -69,6 +69,28 @@ export default {
       );
     },
 
+    onAktif(item) {
+      this.$confirm('Apakan anda ingin aktifkan intitusi berikut ?', 'Aktifkan Institusi', { tipe: 'info' }).then(
+        () => {
+          this.action({ id: `profil/${item.paud_instansi_id}`, type: 'set-aktif', params: { enable: 1 } }).then(() => {
+            this.$success('Institusi berhasil di aktifkan');
+            this.fetchData();
+          });
+        }
+      );
+    },
+
+    onNonAktif(item) {
+      this.$confirm('Apakan anda ingin non-aktifkan intitusi berikut ?', 'Non-aktifkan Institusi', {
+        tipe: 'warning',
+      }).then(() => {
+        this.action({ id: `profil/${item.paud_instansi_id}`, type: 'set-aktif', params: { enable: 0 } }).then(() => {
+          this.$success('Institusi berhasil di non-aktifkan');
+          this.fetchData();
+        });
+      });
+    },
+
     onDownload() {
       const M_LAPORAN = [
         {

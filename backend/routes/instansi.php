@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
 
         Route::get('profil', [Lpd\ProfilController::class, 'index']);
         Route::post('profil/{paudInstansi}/update', [Lpd\ProfilController::class, 'update']);
+        Route::post('profil/{paudInstansi}/set-aktif', [Lpd\ProfilController::class, 'setAktif']);
         Route::get('profil/{paudInstansi}/berkas', [Lpd\Profil\BerkasController::class, 'index']);
         Route::post('profil/{paudInstansi}/berkas/create', [Lpd\Profil\BerkasController::class, 'create']);
 

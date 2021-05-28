@@ -120,7 +120,6 @@ export default {
           outlined: true,
           dense: true,
           singleLine: true,
-          disabled: this.isEdit || false,
         },
         {
           type: 'VTextarea',
@@ -211,10 +210,14 @@ export default {
 
     getValue() {
       let keys = (this.schema || []).map((item) => {
-        return item.name;
+        if (!item.disabled) {
+          return item.name;
+        }
       });
 
-      keys = [...keys, 'k_propinsi', 'k_kota'];
+      if (!this.isEdit) {
+        keys = [...keys, 'k_propinsi', 'k_kota'];
+      }
 
       let params = {};
       for (const id of keys) {
