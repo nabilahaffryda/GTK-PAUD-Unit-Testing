@@ -13,7 +13,7 @@
                 this.$getDeepObj(detail, 'instansi.data.foto_url') ||
                 ''
               "
-              photodef="default_foto_gp.png"
+              :photodef="jenis === 'lpd' ? 'default_foto_lpd.png' : 'default_foto_gp.png'"
               :useBase64="true"
               :use-trigger="false"
               is-edit

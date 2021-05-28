@@ -293,10 +293,12 @@ class LpdService
 
     public function indexAjuan(array $params)
     {
-        $query = $this->query($params);
+        $query = $this->query($params['filter'] ?? []);
 
-        if ($kVervalPaud = Arr::get($params, 'k_verval_paud')) {
-            $query->where('k_verval_paud', $kVervalPaud);
+        if ($kVervalPaud = Arr::get($params, 'filter.k_verval_paud')) {
+            $query->whereIn('k_verval_paud', $kVervalPaud);
+        } else {
+            $query->where('k_verval_paud', '<>', MVervalPaud::KANDIDAT);
         }
 
         return $query->with(['mVervalPaud']);

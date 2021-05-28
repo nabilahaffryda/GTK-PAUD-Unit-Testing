@@ -22,7 +22,7 @@
       <v-col cols="12" md="2" sm="12">
         <base-photo-profil
           :photo="$getDeepObj(detail, 'akun.data.foto_url') || $getDeepObj(detail, 'instansi.data.foto_url') || ''"
-          photodef="default_foto_gp.png"
+          :photodef="jenis === 'lpd' ? 'default_foto_lpd.png' : 'default_foto_gp.png'"
           :useBase64="true"
         />
       </v-col>
