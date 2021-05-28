@@ -249,6 +249,19 @@ export default {
       return temp;
     },
 
+    mapStatusVerval() {
+      const masters = (this.masters && this.masters.m_verval_paud) || {};
+      let temp = {};
+
+      Object.keys(masters).forEach((item) => {
+        if (![1, 3].includes(Number(item))) {
+          this.$set(temp, item, masters[item]);
+        }
+      });
+
+      return temp;
+    },
+
     formFilter() {
       let master = Object.assign({}, this.masters[`m_berkas_${this.keyTipe}_paud`]);
       // delete kandidat
@@ -268,7 +281,7 @@ export default {
           default: true,
           type: 'checkbox',
           model: 'k_verval_paud',
-          master: this.$mapForMaster(this.masters && this.masters.m_verval_paud),
+          master: this.$mapForMaster(this.mapStatusVerval),
           props: ['attach', 'chips', 'deletable-chips', 'multiple', 'small-chips'],
         },
         // {
@@ -284,7 +297,7 @@ export default {
 
     filtersMaster() {
       return {
-        k_verval_paud: this.masters && this.masters[`m_verval_paud`],
+        k_verval_paud: this.mapStatusVerval,
         k_propinsi: this.masters && this.masters['propinsi'],
         k_kota: this.masters && this.masters['kota'],
         akun_id: this.mapTimVerval,
@@ -317,12 +330,6 @@ export default {
           k_berkas_petugas_paud: {
             op: '<>',
             val: 2,
-          },
-        },
-        4: {
-          k_verval_paud: {
-            op: '>',
-            val: 3,
           },
         },
       },
