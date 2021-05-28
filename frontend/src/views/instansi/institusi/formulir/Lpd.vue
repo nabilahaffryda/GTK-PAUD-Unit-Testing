@@ -89,7 +89,7 @@ export default {
         label: ['Provinsi', 'Kota/Kabupaten'],
         options: [M_PROPINSI, M_KOTA],
         grid: [{ cols: 6 }, { cols: 6 }],
-        // disabled: [this.isEdit || false, this.isEdit || false],
+        disabled: [this.isEdit || false, this.isEdit || false],
       };
     },
     schema() {
@@ -120,7 +120,6 @@ export default {
           outlined: true,
           dense: true,
           singleLine: true,
-          // disabled: this.isEdit || false,
         },
         {
           type: 'VTextarea',
@@ -133,7 +132,7 @@ export default {
           outlined: true,
           dense: true,
           singleLine: true,
-          // disabled: this.isEdit || false,
+          disabled: this.isEdit || false,
         },
         {
           type: 'cascade',
@@ -154,7 +153,7 @@ export default {
           mask: '######',
           grid: { cols: 12, md: 6 },
           labelColor: 'secondary',
-          // disabled: this.isEdit || false,
+          disabled: this.isEdit || false,
         },
         {
           type: 'VTextField',
@@ -168,7 +167,7 @@ export default {
           singleLine: true,
           grid: { cols: 12, md: 6 },
           labelColor: 'secondary',
-          // disabled: this.isEdit || false,
+          disabled: this.isEdit || false,
         },
         {
           type: 'VTextField',
@@ -185,7 +184,7 @@ export default {
           singleLine: true,
           mask: '##############',
           counter: 14,
-          // disabled: this.isEdit || false,
+          disabled: this.isEdit || false,
         },
       ];
     },
@@ -211,10 +210,14 @@ export default {
 
     getValue() {
       let keys = (this.schema || []).map((item) => {
-        return item.name;
+        if (!item.disabled) {
+          return item.name;
+        }
       });
 
-      keys = [...keys, 'k_propinsi', 'k_kota'];
+      if (!this.isEdit) {
+        keys = [...keys, 'k_propinsi', 'k_kota'];
+      }
 
       let params = {};
       for (const id of keys) {
