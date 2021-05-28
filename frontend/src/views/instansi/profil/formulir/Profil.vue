@@ -1,18 +1,23 @@
 <template>
   <div>
-    <v-toolbar flat>
-      <v-toolbar-title class="subtitle-1">
-        <div class="font-weight-bold">Data CV</div>
+    <v-list-item class="px-0">
+      <v-list-item-content>
+        <div class="subtitle-1 font-weight-bold">Data CV</div>
         <span>
           Lengkapi data persyaratan sesuai kebutuhan sistem, Silakan <b>tekan tombol/icon pensil</b> di sebelah kanan
           untuk melakukan edit.
         </span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn v-if="$allow(`${jenis}-profil.update`)" depressed @click="$emit('edit')">
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-    </v-toolbar>
+      </v-list-item-content>
+      <v-list-item-action>
+        <v-btn
+          :disabled="!$allow(`${['lpd', 'admin-kelas'].includes(jenis) ? jenis : 'petugas'}-profil.update`)"
+          depressed
+          @click="$emit('edit')"
+        >
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+      </v-list-item-action>
+    </v-list-item>
     <v-row class="my-5">
       <v-col cols="12" md="2" sm="12">
         <base-photo-profil
@@ -33,7 +38,7 @@
             </v-row>
           </v-col>
           <!-- Sheet Diklat -->
-          <v-col cols="12" md="6" sm="12" v-if="jenis !== 'admin-kelas'">
+          <v-col cols="12" md="6" sm="12" v-if="jenis === 'lpd'">
             <div class="text-h6 my-3 font-weight-bold"> Data Diklat </div>
             <div class="grey--text">Pengalaman Melatih 2 Tahun Terakhir</div>
             <v-list three-line>
@@ -159,14 +164,6 @@ export default {
               value: this.$getDeepObj(item, 'akun.data.kodepos') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },
-            {
-              title: 'Keikutsertaan PCP',
-              value:
-                Number(this.$getDeepObj(item, 'k_pcp_paud')) === 9
-                  ? this.$getDeepObj(item, 'kcp_paud_lain') || '-'
-                  : this.$getDeepObj(item, 'm_pcp_paud.data.keterangan') || '-',
-              grid: { cols: 12, md: 6, sm: 12 },
-            },
           ],
           instansi: [
             {
@@ -261,11 +258,6 @@ export default {
               value: this.$getDeepObj(item, 'akun.data.kodepos') || '-',
               grid: { cols: 12, md: 6, sm: 12 },
             },
-            {
-              title: 'Status Keikutsertaan Diklat Dasar',
-              value: Number(this.$getDeepObj(item, 'is_diklat_dasar')) === 1 ? 'Ya' : 'Tidak',
-              grid: { cols: 12, md: 6, sm: 12 },
-            },
           ],
           instansi: [
             {
@@ -282,6 +274,23 @@ export default {
               title: 'Alamat Instansi',
               value: this.$getDeepObj(item, 'instansi_alamat') || '-',
               grid: { cols: 12, md: 12, sm: 12 },
+            },
+            {
+              title: 'Kota/Kab. dan Provinsi',
+              value: [
+                this.$getDeepObj(item, 'instansi_k_kota')
+                  ? this.masters.m_kota && this.masters.m_kota[this.$getDeepObj(item, 'akun.data.k_kota')]
+                  : '-',
+                this.$getDeepObj(item, 'instansi_k_propinsi')
+                  ? this.masters.m_propinsi && this.masters.m_propinsi[this.$getDeepObj(item, 'instansi_k_propinsi')]
+                  : '-',
+              ].join(' - '),
+              grid: { cols: 12, md: 6, sm: 12 },
+            },
+            {
+              title: 'Kodepos',
+              value: this.$getDeepObj(item, 'instansi_kodepos') || '-',
+              grid: { cols: 12, md: 6, sm: 12 },
             },
           ],
         },

@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Collection|PaudAdmin[] $paudAdmins
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
  * @property-read Collection|PaudInstansi[] $paudInstansis
+ * @property-read Collection|PaudPetugas[] $paudPetugases
  *
  * @method static Builder|Instansi whereInstansiId($value)
  * @method static Builder|Instansi whereKJenisInstansi($value)
@@ -205,6 +206,14 @@ class Instansi extends Eloquent
     public function paudInstansis()
     {
         return $this->hasMany('App\Models\PaudInstansi', 'instansi_id', 'instansi_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPetugases()
+    {
+        return $this->hasMany('App\Models\PaudPetugas', 'instansi_id', 'instansi_id');
     }
 
     public function getFotoUrlAttribute()

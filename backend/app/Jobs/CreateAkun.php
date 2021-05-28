@@ -2,13 +2,17 @@
 
 namespace App\Jobs;
 
+use App\Exceptions\FlowException;
+use App\Exceptions\SaveException;
 use App\Models\Akun;
 use App\Models\Instansi;
 use App\Models\MGroup;
-use App\Models\MVervalPaud;
+use App\Models\MPetugasPaud;
 use App\Services\Instansi\AdminService;
 use App\Services\Instansi\PembimbingService;
 use App\Services\Instansi\PengajarService;
+use App\Services\Instansi\PetugasService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,6 +37,11 @@ class CreateAkun implements ShouldQueue
         $this->kGroup   = $kGroup;
     }
 
+    /**
+     * @throws SaveException
+     * @throws FlowException
+     * @throws GuzzleException
+     */
     public function handle()
     {
         if ($this->batch()->cancelled()) {
@@ -43,23 +52,20 @@ class CreateAkun implements ShouldQueue
 
         switch ($this->kGroup) {
             case MGroup::PENGAJAR_DIKLAT_PAUD:
-                app(PengajarService::class)->create($paudAdmin, [
-                    'k_verval_paud' => MVervalPaud::DISETUJUI,
-                    'is_tambahan'   => 0,
+                app(PetugasService::class)->create($paudAdmin, [
+                    'k_petugas_paud' => MPetugasPaud::PENGAJAR,
                 ]);
                 break;
 
             case MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD:
-                app(PengajarService::class)->create($paudAdmin, [
-                    'k_verval_paud' => MVervalPaud::KANDIDAT,
-                    'is_tambahan'   => 1,
-                    'is_pembimbing' => 0,
+                app(PetugasService::class)->create($paudAdmin, [
+                    'k_petugas_paud' => MPetugasPaud::PENGAJAR_TAMBAHAN,
                 ]);
                 break;
 
             case MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD:
-                app(PembimbingService::class)->create($paudAdmin, [
-                    'k_verval_paud' => MVervalPaud::KANDIDAT,
+                app(PetugasService::class)->create($paudAdmin, [
+                    'k_petugas_paud' => MPetugasPaud::PEMBIMBING_PRAKTIK,
                 ]);
                 break;
         }

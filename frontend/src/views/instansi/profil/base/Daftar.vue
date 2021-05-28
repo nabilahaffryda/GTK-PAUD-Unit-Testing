@@ -14,20 +14,69 @@
                 kanan untuk melakukan edit
               </span>
             </div>
-            <berkas
-              v-for="(item, b) in berkases"
-              :key="b"
-              :berkas="item"
-              :type="item.type"
-              :valid="item.valid"
-              :with-action="item.withAction"
-              :value="item.value || {}"
-              @detil="onDetil"
-              @upload="$emit('upload', item.type)"
-            />
+            <template v-for="(item, b) in berkases">
+              <berkas
+                :key="b"
+                :berkas="item"
+                :type="item.type"
+                :valid="item.valid"
+                :with-action="item.withAction"
+                :value="item.value || {}"
+                @detil="onDetil"
+                @upload="$emit('upload', item.type)"
+              />
+            </template>
+          </template>
+          <template v-else-if="i === 'diklat'">
+            <v-list-item class="px-0">
+              <v-list-item-content>
+                <div class="font-weight-bold">Data Pengalaman Diklat</div>
+                <span>
+                  Lengkapi data persyaratan sesuai kebutuhan sistem, Silakan <b>tekan tombol/icon pensil</b> di sebelah
+                  kanan untuk melakukan edit.
+                </span>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn
+                  :disabled="!$allow(`${jenis === 'lpd' ? `${jenis}-profil` : 'petugas-profil-diklat'}.update`)"
+                  depressed
+                  @click="$emit('edit', i)"
+                >
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+            <v-row>
+              <v-col cols="12" md="6">
+                <h2 class="subtitle-1 font-weight-bold">Data Diklat</h2>
+                <collection
+                  v-for="(item, b) in diklats.filter((value) => value.k_diklat_paud !== 4)"
+                  :key="b"
+                  :nomor="b + 1"
+                  :diklat="item"
+                  @detil="onDetilDiklat"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <h2 class="subtitle-1 font-weight-bold">Data Diklat Lainnya</h2>
+                <collection
+                  v-for="(item, b) in diklats.filter((value) => value.k_diklat_paud === 4)"
+                  :key="b"
+                  :nomor="b + 1"
+                  :diklat="item"
+                  @detil="onDetilDiklat"
+                />
+              </v-col>
+            </v-row>
           </template>
           <template v-else>
-            <component :is="item.component" :detail="detail" :masters="masters" :jenis="jenis" @edit="$emit('edit')" />
+            <component
+              :is="item.component"
+              :detail="detail"
+              :masters="masters"
+              :jenis="jenis"
+              @edit="$emit('edit', i)"
+            />
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -38,6 +87,7 @@
 <script>
 import Berkas from '../formulir/Berkas';
 import Profil from '../formulir/Profil';
+import Collection from '../formulir/Collection';
 import PopupPreviewDetail from '@components/popup/PreviewDetil';
 export default {
   props: {
@@ -46,6 +96,10 @@ export default {
       default: () => {},
     },
     berkases: {
+      type: Array,
+      default: () => [],
+    },
+    diklats: {
       type: Array,
       default: () => [],
     },
@@ -62,7 +116,7 @@ export default {
       default: 'pengajar',
     },
   },
-  components: { Berkas, Profil, PopupPreviewDetail },
+  components: { Berkas, Profil, Collection, PopupPreviewDetail },
   data() {
     return {
       panel: [0, 1],
@@ -74,6 +128,14 @@ export default {
       this.$set(this, 'preview', {});
       this.preview.url = this.$getDeepObj(berkas, 'value.url');
       this.preview.title = this.$getDeepObj(berkas, 'title');
+      this.$nextTick(() => {
+        this.$refs.popup.open();
+      });
+    },
+    onDetilDiklat(data) {
+      this.$set(this, 'preview', {});
+      this.preview.url = this.$getDeepObj(data, 'url');
+      this.preview.title = this.$getDeepObj(data, 'nama');
       this.$nextTick(() => {
         this.$refs.popup.open();
       });

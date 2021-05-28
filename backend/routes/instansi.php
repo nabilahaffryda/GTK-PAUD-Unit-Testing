@@ -6,8 +6,7 @@ use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Controllers\Instansi\IndexController;
 use App\Http\Controllers\Instansi\Lpd;
 use App\Http\Controllers\Instansi\LpdController;
-use App\Http\Controllers\Instansi\Pengajar;
-use App\Http\Controllers\Instansi\Pembimbing;
+use App\Http\Controllers\Instansi\Petugas;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,9 +44,9 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('lpd/{paudInstansi}', [Lpd\VervalController::class, 'fetch']);
         Route::post('lpd/{paudInstansi}', [Lpd\VervalController::class, 'update']);
 
-        Route::get('pengajar', [Pengajar\VervalController::class, 'index']);
-        Route::get('pengajar/{pengajar}', [Pengajar\VervalController::class, 'fetch']);
-        Route::post('pengajar/{pengajar}', [Pengajar\VervalController::class, 'update']);
+        Route::get('petugas', [Petugas\VervalController::class, 'index']);
+        Route::get('petugas/{petugas}', [Petugas\VervalController::class, 'fetch']);
+        Route::post('petugas/{petugas}', [Petugas\VervalController::class, 'update']);
     });
 
     Route::group(['prefix' => 'akun/admin-program'], function () {
@@ -173,29 +172,20 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/reset', [Akun\AdminKelasController::class, 'reset']);
     });
 
-    Route::group(['prefix' => 'pengajar/profil'], function () {
-        Route::get('', [Pengajar\ProfilController::class, 'index']);
-        Route::post('{pengajar}/update', [Pengajar\ProfilController::class, 'update']);
+    Route::group(['prefix' => 'petugas/profil'], function () {
+        Route::get('', [Petugas\ProfilController::class, 'index']);
+        Route::post('{petugas}/update', [Petugas\ProfilController::class, 'update']);
 
-        Route::get('{pengajar}/update-peran', [Pengajar\Profil\PeranController::class, 'update']);
+        Route::post('{petugas}/ajuan/create', [Petugas\Profil\AjuanController::class, 'create']);
+        Route::post('{petugas}/ajuan/delete', [Petugas\Profil\AjuanController::class, 'delete']);
 
-        Route::post('{pengajar}/ajuan/create', [Pengajar\Profil\AjuanController::class, 'create']);
-        Route::post('{pengajar}/ajuan/delete', [Pengajar\Profil\AjuanController::class, 'delete']);
+        Route::get('{petugas}/diklat', [Petugas\Profil\DiklatController::class, 'index']);
+        Route::post('{petugas}/diklat/update', [Petugas\Profil\DiklatController::class, 'update']);
 
-        Route::get('{pengajar}/berkas', [Pengajar\Profil\BerkasController::class, 'index']);
-        Route::post('{pengajar}/berkas/create', [Pengajar\Profil\BerkasController::class, 'create']);
+        Route::get('{petugas}/berkas', [Petugas\Profil\BerkasController::class, 'index']);
+        Route::post('{petugas}/berkas/create', [Petugas\Profil\BerkasController::class, 'create']);
 
-        Route::post('berkas/{berkas}/delete', [Pengajar\Profil\BerkasController::class, 'delete']);
-    });
-
-    Route::group(['prefix' => 'pembimbing/profil'], function () {
-        Route::get('', [Pembimbing\ProfilController::class, 'index']);
-        Route::post('{pembimbing}/update', [Pembimbing\ProfilController::class, 'update']);
-
-        Route::get('{pembimbing}/berkas', [Pembimbing\Profil\BerkasController::class, 'index']);
-        Route::post('{pembimbing}/berkas/create', [Pembimbing\Profil\BerkasController::class, 'create']);
-
-        Route::post('berkas/{berkas}/delete', [Pembimbing\Profil\BerkasController::class, 'delete']);
+        Route::post('berkas/{berkas}/delete', [Petugas\Profil\BerkasController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'admin-kelas/profil'], function () {

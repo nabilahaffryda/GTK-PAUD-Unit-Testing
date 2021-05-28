@@ -163,7 +163,9 @@ export default {
     getColor(value) {
       switch (value) {
         case 1:
-          return 'warning';
+          return 'grey';
+        case 2:
+          return 'black';
         case 3:
           return 'purple';
         case 4:

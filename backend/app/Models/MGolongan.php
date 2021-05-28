@@ -22,26 +22,27 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class MGolongan extends Eloquent
 {
-    public const CPNS = -2;
-    public const PNS = -1;
-    public const IA = 1;
-    public const IB = 2;
-    public const IC = 3;
-    public const ID = 4;
-    public const IIA = 5;
-    public const IIB = 6;
-    public const IIC = 7;
-    public const IID = 8;
-    public const IIIA = 9;
-    public const IIIB = 10;
-    public const IIIC = 11;
-    public const IIID = 12;
-    public const IVA = 13;
-    public const IVB = 14;
-    public const IVC = 15;
-    public const IVD = 16;
-    public const IVE = 17;
+    public const CPNS      = -2;
+    public const PNS       = -1;
+    public const IA        = 1;
+    public const IB        = 2;
+    public const IC        = 3;
+    public const ID        = 4;
+    public const IIA       = 5;
+    public const IIB       = 6;
+    public const IIC       = 7;
+    public const IID       = 8;
+    public const IIIA      = 9;
+    public const IIIB      = 10;
+    public const IIIC      = 11;
+    public const IIID      = 12;
+    public const IVA       = 13;
+    public const IVB       = 14;
+    public const IVC       = 15;
+    public const IVD       = 16;
+    public const IVE       = 17;
     public const TIDAK_ADA = 99;
+
     /**
      * The table associated with the model.
      *

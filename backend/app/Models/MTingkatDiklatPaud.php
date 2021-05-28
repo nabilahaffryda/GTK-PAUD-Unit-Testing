@@ -8,37 +8,37 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\MBerkasPembimbingPaud
+ * App\Models\MTingkatDiklatPaud
  *
- * @property int $k_berkas_pembimbing_paud
+ * @property int $k_tingkat_diklat_paud
  * @property null|string $singkat
  * @property null|string $keterangan
- * @property null|int $maks
- * @property null|string $validasi
  *
- * @property-read Collection|PaudPembimbingBerkas[] $paudPembimbingBerkases
+ * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
  *
- * @method static Builder|MBerkasPembimbingPaud whereKBerkasPembimbingPaud($value)
- * @method static Builder|MBerkasPembimbingPaud whereSingkat($value)
- * @method static Builder|MBerkasPembimbingPaud whereKeterangan($value)
- * @method static Builder|MBerkasPembimbingPaud whereMaks($value)
- * @method static Builder|MBerkasPembimbingPaud whereValidasi($value)
+ * @method static Builder|MTingkatDiklatPaud whereKTingkatDiklatPaud($value)
+ * @method static Builder|MTingkatDiklatPaud whereSingkat($value)
+ * @method static Builder|MTingkatDiklatPaud whereKeterangan($value)
  */
-class MBerkasPembimbingPaud extends Eloquent
+class MTingkatDiklatPaud extends Eloquent
 {
+    public const DASAR  = 1;
+    public const LANJUT = 2;
+    public const MAHIR  = 3;
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'm_berkas_pembimbing_paud';
+    protected $table = 'm_tingkat_diklat_paud';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'k_berkas_pembimbing_paud';
+    protected $primaryKey = 'k_tingkat_diklat_paud';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -55,8 +55,6 @@ class MBerkasPembimbingPaud extends Eloquent
     protected $casts = [
         'singkat'    => 'string',
         'keterangan' => 'string',
-        'maks'       => 'int',
-        'validasi'   => 'string',
     ];
 
     /**
@@ -72,18 +70,16 @@ class MBerkasPembimbingPaud extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'k_berkas_pembimbing_paud',
+        'k_tingkat_diklat_paud',
         'singkat',
         'keterangan',
-        'maks',
-        'validasi',
     ];
 
     /**
      * @return HasMany
      */
-    public function paudPembimbingBerkases()
+    public function paudPetugasDiklats()
     {
-        return $this->hasMany('App\Models\PaudPembimbingBerkas', 'k_berkas_pembimbing_paud', 'k_berkas_pembimbing_paud');
+        return $this->hasMany('App\Models\PaudPetugasDiklat', 'k_tingkat_diklat_paud', 'k_tingkat_diklat_paud');
     }
 }

@@ -8,37 +8,38 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\MBerkasPengajarPaud
+ * App\Models\MBerkasPetugasPaud
  *
- * @property int $k_berkas_pengajar_paud
+ * @property int $k_berkas_petugas_paud
  * @property null|string $singkat
  * @property null|string $keterangan
  * @property null|int $maks
  * @property null|string $validasi
  *
- * @property-read Collection|PaudPengajarBerkas[] $paudPengajarBerkases
+ * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
+ * @property-read Collection|PaudPetugasPeranBerkas[] $paudPetugasPeranBerkases
  *
- * @method static Builder|MBerkasPengajarPaud whereKBerkasPengajarPaud($value)
- * @method static Builder|MBerkasPengajarPaud whereSingkat($value)
- * @method static Builder|MBerkasPengajarPaud whereKeterangan($value)
- * @method static Builder|MBerkasPengajarPaud whereMaks($value)
- * @method static Builder|MBerkasPengajarPaud whereValidasi($value)
+ * @method static Builder|MBerkasPetugasPaud whereKBerkasPetugasPaud($value)
+ * @method static Builder|MBerkasPetugasPaud whereSingkat($value)
+ * @method static Builder|MBerkasPetugasPaud whereKeterangan($value)
+ * @method static Builder|MBerkasPetugasPaud whereMaks($value)
+ * @method static Builder|MBerkasPetugasPaud whereValidasi($value)
  */
-class MBerkasPengajarPaud extends Eloquent
+class MBerkasPetugasPaud extends Eloquent
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'm_berkas_pengajar_paud';
+    protected $table = 'm_berkas_petugas_paud';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'k_berkas_pengajar_paud';
+    protected $primaryKey = 'k_berkas_petugas_paud';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -72,7 +73,7 @@ class MBerkasPengajarPaud extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'k_berkas_pengajar_paud',
+        'k_berkas_petugas_paud',
         'singkat',
         'keterangan',
         'maks',
@@ -82,8 +83,16 @@ class MBerkasPengajarPaud extends Eloquent
     /**
      * @return HasMany
      */
-    public function paudPengajarBerkases()
+    public function paudPetugasBerkases()
     {
-        return $this->hasMany('App\Models\PaudPengajarBerkas', 'k_berkas_pengajar_paud', 'k_berkas_pengajar_paud');
+        return $this->hasMany('App\Models\PaudPetugasBerkas', 'k_berkas_petugas_paud', 'k_berkas_petugas_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPetugasPeranBerkases()
+    {
+        return $this->hasMany('App\Models\PaudPetugasPeranBerkas', 'k_berkas_petugas_paud', 'k_berkas_petugas_paud');
     }
 }

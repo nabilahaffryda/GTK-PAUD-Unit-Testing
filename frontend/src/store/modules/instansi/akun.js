@@ -37,12 +37,12 @@ export const actions = {
     return await $ajax.get('/groups').then(({ data }) => data);
   },
 
-  async listInstansis({ rootState }) {
+  async listInstansis({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}/lpd`,
     });
-    return await $ajax.get('/').then(({ data }) => data);
+    return await $ajax.get('/', { params: payload.params }).then(({ data }) => data);
   },
 
   create({ rootState }, payload) {

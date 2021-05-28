@@ -8,33 +8,38 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\MPcpPaud
+ * App\Models\MPetugasPaud
  *
- * @property int $k_pcp_paud
+ * @property int $k_petugas_paud
  * @property null|string $singkat
  * @property null|string $keterangan
  *
- * @property-read Collection|PaudPengajar[] $paudPengajars
+ * @property-read Collection|PaudPetugas[] $paudPetugases
  *
- * @method static Builder|MPcpPaud whereKPcpPaud($value)
- * @method static Builder|MPcpPaud whereSingkat($value)
- * @method static Builder|MPcpPaud whereKeterangan($value)
+ * @method static Builder|MPetugasPaud whereKPetugasPaud($value)
+ * @method static Builder|MPetugasPaud whereSingkat($value)
+ * @method static Builder|MPetugasPaud whereKeterangan($value)
  */
-class MPcpPaud extends Eloquent
+class MPetugasPaud extends Eloquent
 {
+    public const PENGAJAR           = 1;
+    public const PENGAJAR_TAMBAHAN  = 2;
+    public const PEMBIMBING_PRAKTIK = 3;
+    public const ADMIN_KELAS        = 4;
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'm_pcp_paud';
+    protected $table = 'm_petugas_paud';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'k_pcp_paud';
+    protected $primaryKey = 'k_petugas_paud';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -66,7 +71,7 @@ class MPcpPaud extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'k_pcp_paud',
+        'k_petugas_paud',
         'singkat',
         'keterangan',
     ];
@@ -74,8 +79,8 @@ class MPcpPaud extends Eloquent
     /**
      * @return HasMany
      */
-    public function paudPengajars()
+    public function paudPetugases()
     {
-        return $this->hasMany('App\Models\PaudPengajar', 'k_pcp_paud', 'k_pcp_paud');
+        return $this->hasMany('App\Models\PaudPetugas', 'k_petugas_paud', 'k_petugas_paud');
     }
 }

@@ -482,14 +482,8 @@ class AdminService
             throw new FlowException('Akun tidak terdaftar di instansi terkait');
         }
 
-        $jmlPaudAdmin = $paudAdmin->akun->paudAdmins()->count();
-
         if (!$paudAdmin->delete()) {
             throw new SaveException('Hapus akun admin dari instansi terkait tidak berhasil');
-        }
-
-        if ($jmlPaudAdmin > 1) {
-            return $paudAdmin;
         }
 
         $jmlAkunInstansi = $paudAdmin->akun->akunInstansis()->count();

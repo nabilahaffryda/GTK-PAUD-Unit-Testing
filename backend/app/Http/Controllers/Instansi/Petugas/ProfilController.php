@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Instansi\Pengajar;
+namespace App\Http\Controllers\Instansi\Petugas;
 
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FotoRequest;
-use App\Http\Requests\Instansi\Pengajar\ProfilUpdateRequest;
+use App\Http\Requests\Instansi\Petugas\ProfilUpdateRequest;
 use App\Http\Resources\BaseResource;
-use App\Models\PaudPengajar;
-use App\Services\Instansi\PengajarService;
+use App\Models\PaudPetugas;
+use App\Services\Instansi\PetugasService;
 
 class ProfilController extends Controller
 {
     public function __construct(
-        protected PengajarService $service
+        protected PetugasService $service
     )
     {
     }
@@ -22,7 +22,7 @@ class ProfilController extends Controller
     public function index()
     {
         $akun     = akun();
-        $pengajar = $this->service->getPengajar($akun);
+        $pengajar = $this->service->getPetugas($akun);
         $pengajar = $this->service->fetch($pengajar);
         $status   = $this->service->getStatusLengkap($pengajar);
 
@@ -38,14 +38,14 @@ class ProfilController extends Controller
      * @throws FlowException
      * @throws SaveException
      */
-    public function update(PaudPengajar $pengajar, ProfilUpdateRequest $request, FotoRequest $foto)
+    public function update(PaudPetugas $petugas, ProfilUpdateRequest $request, FotoRequest $foto)
     {
-        if ($pengajar->akun_id != akunId()) {
+        if ($petugas->akun_id != akunId()) {
             abort(404);
         }
 
-        $this->service->update($pengajar, $request->validated(), $foto->data, $foto->ext);
+        $this->service->update($petugas, $request->validated(), $foto->data, $foto->ext);
 
-        return BaseResource::make($pengajar->loadMissing(['akun']));
+        return BaseResource::make($petugas->loadMissing(['akun']));
     }
 }

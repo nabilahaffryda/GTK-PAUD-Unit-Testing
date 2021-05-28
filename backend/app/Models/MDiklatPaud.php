@@ -8,41 +8,38 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\MVervalPaud
+ * App\Models\MDiklatPaud
  *
- * @property int $k_verval_paud
+ * @property int $k_diklat_paud
  * @property null|string $singkat
  * @property null|string $keterangan
  *
- * @property-read Collection|PaudInstansi[] $paudInstansis
- * @property-read Collection|PaudPetugasPeran[] $paudPetugasPerans
+ * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
  *
- * @method static Builder|MVervalPaud whereKVervalPaud($value)
- * @method static Builder|MVervalPaud whereSingkat($value)
- * @method static Builder|MVervalPaud whereKeterangan($value)
+ * @method static Builder|MDiklatPaud whereKDiklatPaud($value)
+ * @method static Builder|MDiklatPaud whereSingkat($value)
+ * @method static Builder|MDiklatPaud whereKeterangan($value)
  */
-class MVervalPaud extends Eloquent
+class MDiklatPaud extends Eloquent
 {
-    public const KANDIDAT  = 1;
-    public const DIAJUKAN  = 2;
-    public const DIPROSES  = 3;
-    public const DITOLAK   = 4;
-    public const REVISI    = 5;
-    public const DISETUJUI = 6;
+    public const DIKLAT_BERJENJANG = 1;
+    public const DIKLAT_PCP        = 2;
+    public const DIKLAT_MOT        = 3;
+    public const DIKLAT_LAINNYA    = 4;
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'm_verval_paud';
+    protected $table = 'm_diklat_paud';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'k_verval_paud';
+    protected $primaryKey = 'k_diklat_paud';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -74,7 +71,7 @@ class MVervalPaud extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'k_verval_paud',
+        'k_diklat_paud',
         'singkat',
         'keterangan',
     ];
@@ -82,16 +79,8 @@ class MVervalPaud extends Eloquent
     /**
      * @return HasMany
      */
-    public function paudInstansis()
+    public function paudPetugasDiklats()
     {
-        return $this->hasMany('App\Models\PaudInstansi', 'k_verval_paud', 'k_verval_paud');
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function paudPetugasPerans()
-    {
-        return $this->hasMany('App\Models\PaudPetugasPeran', 'k_verval_paud', 'k_verval_paud');
+        return $this->hasMany('App\Models\PaudPetugasDiklat', 'k_diklat_paud', 'k_diklat_paud');
     }
 }
