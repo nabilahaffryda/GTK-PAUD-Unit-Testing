@@ -14,9 +14,13 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'keyword' => ['string', 'min:3', 'max:100'],
-            'count'   => ['integer', 'max:50'],
-            'page'    => ['integer', 'min:1'],
+            'filter'                 => ['nullable', 'array'],
+            'filter.keyword'         => ['string'],
+            'filter.k_verval_paud'   => ['array', 'min:1'],
+            'filter.k_verval_paud.*' => ['int', 'exists:m_verval_paud,k_verval_paud'],
+            'keyword'                => ['string', 'min:3', 'max:100'],
+            'count'                  => ['integer', 'max:50'],
+            'page'                   => ['integer', 'min:1'],
         ];
     }
 }
