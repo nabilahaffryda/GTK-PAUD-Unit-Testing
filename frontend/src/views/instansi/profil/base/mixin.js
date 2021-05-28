@@ -371,7 +371,6 @@ export default {
     },
 
     upload(type) {
-      console.log(type);
       if (this.isAjuan) {
         const msg = `<p class="title mb-2">Mohon maaf! Anda sudah mengajukan Berkas untuk diperiksa Tim Verval`;
         this.$info(msg, `Perubahan data tidak diperbolehkan`, {
