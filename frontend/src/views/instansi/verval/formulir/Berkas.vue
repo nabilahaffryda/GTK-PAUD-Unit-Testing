@@ -33,7 +33,7 @@
                   {{ $getDeepObj(detail, `${obj}.data.no_telpon`) || $getDeepObj(detail, `${obj}.data.no_hp`) || '-' }}
                 </div>
                 <div class="mt-5">
-                  <div class="caption grey--text">Alamat</div>
+                  <div class="caption">Alamat</div>
                   {{ $getDeepObj(detail, `${obj}.data.alamat`) || '-' }}
                 </div>
               </div>
@@ -43,7 +43,7 @@
               <div class="my-5" v-if="['pengajar', 'petugas'].includes(jenis)">
                 <v-row>
                   <v-col v-for="(item, index) in profils[jenis]" :key="index" v-bind="item.grid">
-                    <div class="caption grey--text">{{ $getDeepObj(item, 'title') || '-' }}</div>
+                    <div class="caption">{{ $getDeepObj(item, 'title') || '-' }}</div>
                     <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(item, 'value') || '-'" /></h2>
                   </v-col>
                 </v-row>
@@ -53,7 +53,7 @@
               <div class="text-h6 my-3 font-weight-bold"> Data Tambahan </div>
               <v-row no-gutters dense>
                 <v-col v-for="item in tambahans" :key="item.key" cols="12" md="4" sm="12">
-                  <div class="caption grey--text">{{ item.label }}</div>
+                  <div class="caption">{{ item.label }}</div>
                   <div>{{ $getDeepObj(detail, `nama_${item.key}`) || '-' }}</div>
                   <div>{{ $getDeepObj(detail, `telp_${item.key}`) || '-' }}</div>
                 </v-col>

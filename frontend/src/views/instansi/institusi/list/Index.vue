@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline secondary--text"> <strong>Daftar</strong> Institusi LPD </h1>
+            <h1 class="headline black--text"> <strong>Daftar</strong> Institusi LPD </h1>
           </v-col>
         </v-row>
       </v-card-text>
@@ -60,7 +60,7 @@
                         </v-list-item-avatar>
                         <v-list-item-content class="py-0 mt-3">
                           <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</h2>
-                          <p class="caption">
+                          <p class="caption black--text">
                             <span>ID Institusi: {{ $getDeepObj(item, 'instansi.data.instansi_id') || '-' }}</span>
                           </p>
                         </v-list-item-content>
@@ -256,7 +256,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {

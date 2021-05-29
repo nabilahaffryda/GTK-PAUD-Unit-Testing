@@ -14,7 +14,7 @@
                   </strong>
                 </v-col>
                 <v-col cols="12" md="4" sm="4" class="text-right right-aligned">
-                  <v-chip class="caption" color="error" dark>
+                  <v-chip color="error" dark>
                     {{
                       $titleCase(
                         ['pengajar', 'pembimbing'].includes(jenis)
@@ -218,7 +218,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #FFAB91;
   height: 100%;
 }
 .sc-notif {

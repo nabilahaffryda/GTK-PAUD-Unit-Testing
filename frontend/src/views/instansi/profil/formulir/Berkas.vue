@@ -22,9 +22,7 @@
           <v-container class="py-0">
             <v-row>
               <v-col cols="12" md="4" class="pb-0">
-                <div>
-                  <v-label color="caption"><small>Keterangan</small></v-label>
-                </div>
+                <div class="label--text"> Keterangan </div>
                 {{ valid ? 'Sudah Diunggah' : 'Belum Diunggah' }}
               </v-col>
               <v-col cols="12" md="4" class="mt-4">

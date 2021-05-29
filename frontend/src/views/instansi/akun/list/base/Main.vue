@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline secondary--text" v-html="`Daftar ${title}`"></h1>
+            <h1 class="headline black--text" v-html="`Daftar ${title}`"></h1>
             <p v-html="desc"></p>
           </v-col>
         </v-row>
@@ -62,7 +62,7 @@
                           </v-list-item-avatar>
                           <v-list-item-content class="py-0 mt-3">
                             <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'akun.data.nama') || '-' }}</h2>
-                            <p class="caption">
+                            <p class="caption black--text">
                               <span>Email: {{ $getDeepObj(item, 'akun.data.email') || '-' }}</span>
                             </p>
                           </v-list-item-content>
@@ -293,7 +293,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #FFAB91;
   height: 100%;
 }
 .sc-notif {

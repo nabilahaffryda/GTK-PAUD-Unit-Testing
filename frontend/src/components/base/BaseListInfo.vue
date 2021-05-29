@@ -5,7 +5,7 @@
         <v-row no-gutters v-for="(items, i) in info" :key="i">
           <template v-for="(item, j) in items">
             <v-col cols="12" :md="item.size || 6" class="pt-0 pb-2" :key="`${i}_${j}`">
-              <v-list-item-subtitle class="caption grey--text">
+              <v-list-item-subtitle class="caption">
                 {{ item && item.label }}
               </v-list-item-subtitle>
               <v-list-item-title class="black--text">
