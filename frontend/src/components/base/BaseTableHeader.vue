@@ -79,6 +79,8 @@
                       outlined
                       depressed
                       small
+                      width="40px"
+                      height="40px"
                       v-bind="attrs"
                       v-on="on"
                       @click="upload"
@@ -96,6 +98,8 @@
                       outlined
                       depressed
                       small
+                      width="40px"
+                      height="40px"
                       v-bind="attrs"
                       v-on="on"
                       @click="filter"
@@ -113,6 +117,8 @@
                       outlined
                       depressed
                       small
+                      width="40px"
+                      height="40px"
                       v-bind="attrs"
                       v-on="on"
                       @click="download"
@@ -130,6 +136,8 @@
                       outlined
                       depressed
                       small
+                      width="40px"
+                      height="40px"
                       v-bind="attrs"
                       v-on="on"
                       @click="reload"
@@ -142,7 +150,17 @@
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn color="primary" depressed small v-bind="attrs" v-on="on" @click="add" v-if="btnAdd">
+                    <v-btn
+                      color="primary"
+                      depressed
+                      small
+                      width="40px"
+                      height="40px"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="add"
+                      v-if="btnAdd"
+                    >
                       <v-icon color="white">mdi-plus</v-icon>
                     </v-btn>
                   </template>
