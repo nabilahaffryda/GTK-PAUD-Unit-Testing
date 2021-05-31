@@ -59,7 +59,9 @@
                           <v-icon dark>mdi-office-building-outline</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="py-0 mt-3">
-                          <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</h2>
+                          <div class="body-1 black--text">
+                            <strong>{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</strong>
+                          </div>
                           <p class="caption black--text">
                             <span>ID Institusi: {{ $getDeepObj(item, 'instansi.data.instansi_id') || '-' }}</span>
                           </p>

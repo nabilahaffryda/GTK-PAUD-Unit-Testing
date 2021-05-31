@@ -58,10 +58,14 @@
       </template>
       <v-container v-if="!useUpload || isEdit ? true : isPilih === 'manual'">
         <v-stepper v-model="step" class="elevation-0">
-          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
-            <v-stepper-step :complete="step > 1" step="1"> Tambah Akun </v-stepper-step>
+          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12); padding: 0 15%">
+            <v-stepper-step :color="step > 1 ? 'success' : 'primary'" :complete="step > 1" step="1">
+              Tambah Akun
+            </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step :complete="step > 2" step="2"> Data {{ title }} </v-stepper-step>
+            <v-stepper-step :color="step > 1 ? 'success' : 'primary'" :complete="step > 2" step="2">
+              Data {{ title }}
+            </v-stepper-step>
             <v-divider></v-divider>
             <v-stepper-step step="3"> Konfirmasi Akun </v-stepper-step>
           </v-stepper-header>
@@ -126,9 +130,7 @@
                   >
                     Kembali
                   </v-btn>
-                  <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')">
-                    Selanjutnya
-                  </v-btn>
+                  <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')"> Selanjutnya </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
@@ -177,10 +179,14 @@
       </v-container>
       <v-container v-else-if="isPilih === 'excel'">
         <v-stepper v-model="stepUnggah" class="elevation-0">
-          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
-            <v-stepper-step :complete="stepUnggah > 1" step="1"> Isi Data Akun </v-stepper-step>
+          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12); padding: 0 15%">
+            <v-stepper-step :color="stepUnggah > 1 ? 'success' : 'primary'" :complete="stepUnggah > 1" step="1">
+              Isi Data Akun
+            </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step :complete="stepUnggah > 2" step="2"> Konfirmasi Akun </v-stepper-step>
+            <v-stepper-step :color="stepUnggah > 2 ? 'success' : 'primary'" :complete="stepUnggah > 2" step="2">
+              Konfirmasi Akun
+            </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">

@@ -61,7 +61,9 @@
                             <v-icon dark>mdi-account-circle</v-icon>
                           </v-list-item-avatar>
                           <v-list-item-content class="py-0 mt-3">
-                            <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'akun.data.nama') || '-' }}</h2>
+                            <div class="body-1 black--text">
+                              <strong>{{ $getDeepObj(item, 'akun.data.nama') || '-' }}</strong>
+                            </div>
                             <p class="caption black--text">
                               <span>Email: {{ $getDeepObj(item, 'akun.data.email') || '-' }}</span>
                             </p>
@@ -293,7 +295,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #FFAB91;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {
