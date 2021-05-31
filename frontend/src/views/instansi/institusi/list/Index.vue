@@ -55,7 +55,7 @@
                   <v-row>
                     <v-col class="py-0" cols="12" md="4">
                       <v-list-item class="px-0">
-                        <v-list-item-avatar color="secondary">
+                        <v-list-item-avatar color="blue-grey darken-3">
                           <v-icon dark>mdi-office-building-outline</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="py-0 mt-3">

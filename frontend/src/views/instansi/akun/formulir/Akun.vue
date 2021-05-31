@@ -53,17 +53,17 @@
         </v-radio-group>
         <v-divider class="my-2"></v-divider>
         <div class="text-md-right">
-          <v-btn right color="secondary" :disabled="!pilihan" @click="onPilih"> Selanjutnya </v-btn>
+          <v-btn right color="primary" :disabled="!pilihan" @click="onPilih"> Selanjutnya </v-btn>
         </div>
       </template>
       <v-container v-if="!useUpload || isEdit ? true : isPilih === 'manual'">
         <v-stepper v-model="step" class="elevation-0">
           <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
-            <v-stepper-step color="secondary" :complete="step > 1" step="1"> Tambah Akun </v-stepper-step>
+            <v-stepper-step :complete="step > 1" step="1"> Tambah Akun </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step color="secondary" :complete="step > 2" step="2"> Data {{ title }} </v-stepper-step>
+            <v-stepper-step :complete="step > 2" step="2"> Data {{ title }} </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step color="secondary" step="3"> Konfirmasi Akun </v-stepper-step>
+            <v-stepper-step step="3"> Konfirmasi Akun </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">
@@ -81,7 +81,7 @@
                   <v-btn v-if="useUpload || step !== 1" class="text-md-right" right text @click="onResetPilih">
                     Kembali
                   </v-btn>
-                  <v-btn class="text-md-right" right color="secondary" @click="onCheck"> Selanjutnya </v-btn>
+                  <v-btn class="text-md-right" right color="primary" @click="onCheck"> Selanjutnya </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
@@ -126,7 +126,7 @@
                   >
                     Kembali
                   </v-btn>
-                  <v-btn class="text-md-right" right color="secondary" @click="$emit('onValidate')">
+                  <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')">
                     Selanjutnya
                   </v-btn>
                 </v-card-actions>
@@ -141,7 +141,7 @@
                   </span>
                   <v-row class="my-2">
                     <v-col cols="12" md="2" sm="12">
-                      <v-avatar color="secondary" size="100">
+                      <v-avatar color="primary" size="100">
                         <v-icon dark size="80">mdi-account-circle</v-icon>
                       </v-avatar>
                     </v-col>
@@ -178,9 +178,9 @@
       <v-container v-else-if="isPilih === 'excel'">
         <v-stepper v-model="stepUnggah" class="elevation-0">
           <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
-            <v-stepper-step color="secondary" :complete="stepUnggah > 1" step="1"> Isi Data Akun </v-stepper-step>
+            <v-stepper-step :complete="stepUnggah > 1" step="1"> Isi Data Akun </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step color="secondary" :complete="stepUnggah > 2" step="2"> Konfirmasi Akun </v-stepper-step>
+            <v-stepper-step :complete="stepUnggah > 2" step="2"> Konfirmasi Akun </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">
@@ -188,7 +188,7 @@
                 <v-card-text class="pa-0 pt-7">
                   <v-row class="my-2" dense no-gutters>
                     <v-col cols="12" md="2" sm="12" class="px-0">
-                      <v-avatar color="secondary" size="100">
+                      <v-avatar color="primary" size="100">
                         <v-icon dark size="80">mdi-file-upload</v-icon>
                       </v-avatar>
                     </v-col>
@@ -199,7 +199,7 @@
                         pada langkah sebelumnnya. Pastikan data yang Anda masukan bersifat final</span
                       >
                       <div class="mt-2">
-                        <v-btn depressed color="secondary" @click="$emit('upload')">
+                        <v-btn depressed color="primary" @click="$emit('upload')">
                           <v-icon left>mdi-upload</v-icon>Pilih Berkas
                         </v-btn>
                       </div>
@@ -214,7 +214,7 @@
                     class="text-md-right"
                     :disabled="!file"
                     right
-                    color="secondary"
+                    color="primary"
                     @click="
                       () => {
                         $emit('onValidate');
@@ -234,7 +234,7 @@
                   <i>Tambah Data Menggunakan Excel</i>
                   <v-row class="my-2">
                     <v-col cols="12" md="2" sm="2">
-                      <v-avatar color="secondary" size="80">
+                      <v-avatar color="primary" size="80">
                         <v-icon dark size="60">mdi-file</v-icon>
                       </v-avatar>
                     </v-col>

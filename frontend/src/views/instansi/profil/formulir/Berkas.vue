@@ -1,8 +1,8 @@
 <template>
   <v-list-item class="pa-0">
     <v-list-item-icon>
-      <v-avatar color="blue-grey lighten-5">
-        <v-icon>mdi-attachment</v-icon>
+      <v-avatar color="primary">
+        <v-icon color="white">mdi-attachment</v-icon>
       </v-avatar>
     </v-list-item-icon>
     <v-list-item-content class="px-0">

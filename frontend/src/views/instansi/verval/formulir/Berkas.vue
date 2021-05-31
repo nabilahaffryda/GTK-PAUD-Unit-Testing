@@ -18,7 +18,7 @@
                 :src="$getDeepObj(detail, `${obj}.data.foto_url`)"
                 :aspect-ratio="4 / 6"
               ></v-img>
-              <v-avatar v-else color="secondary" size="100" class="mx-auto">
+              <v-avatar v-else color="primary" size="100" class="mx-auto">
                 <v-icon dark size="80">mdi-account-circle</v-icon>
               </v-avatar>
             </v-col>
@@ -66,7 +66,7 @@
                   <template v-for="(item, index) in diklats">
                     <v-list-item :key="index">
                       <v-list-item-avatar tile>
-                        <v-avatar tile color="secondary">
+                        <v-avatar tile color="primary">
                           <span class="white--text">{{ index + 1 }}</span>
                         </v-avatar>
                       </v-list-item-avatar>

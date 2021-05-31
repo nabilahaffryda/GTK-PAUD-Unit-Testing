@@ -12,7 +12,7 @@
             <v-btn
               v-if="useSave"
               class="white--text mr-5"
-              :color="colorBtn || `warning`"
+              :color="colorBtn || `primary`"
               dark
               @click="save()"
               :loading="loading && !(error && error.show)"
@@ -85,7 +85,7 @@ export default {
     },
     colorBtn: {
       type: String,
-      default: 'orange',
+      default: 'primary',
     },
     lblBtn: {
       type: String,

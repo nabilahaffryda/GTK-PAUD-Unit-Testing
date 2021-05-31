@@ -45,7 +45,7 @@
               <template v-for="(item, index) in diklats">
                 <v-list-item :key="index">
                   <v-list-item-avatar tile>
-                    <v-avatar tile color="secondary">
+                    <v-avatar tile color="primary">
                       <span class="white--text">{{ index + 1 }}</span>
                     </v-avatar>
                   </v-list-item-avatar>

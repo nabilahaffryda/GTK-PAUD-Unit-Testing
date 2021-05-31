@@ -77,7 +77,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn v-if="step === 0" text right @click.native="dialog = false"> Batal</v-btn>
-        <v-btn v-if="step === 0" color="info" depressed right @click="submit"> {{ labelOk || 'Upload' }}</v-btn>
+        <v-btn v-if="step === 0" color="primary" depressed right @click="submit"> {{ labelOk || 'Upload' }}</v-btn>
         <template v-if="step === 1">
           <v-btn v-if="!(errorFile && errorFile.length)" color="info" right text @click="tutup"> OK</v-btn>
           <v-btn v-else color="red darken-1" right text @click="back"> Unggah Ulang</v-btn>

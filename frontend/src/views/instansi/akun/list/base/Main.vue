@@ -57,7 +57,7 @@
                     <v-row>
                       <v-col class="py-0" cols="12" md="4">
                         <v-list-item class="px-0" @click="onDetail(item)">
-                          <v-list-item-avatar color="secondary">
+                          <v-list-item-avatar color="primary">
                             <v-icon dark>mdi-account-circle</v-icon>
                           </v-list-item-avatar>
                           <v-list-item-content class="py-0 mt-3">
