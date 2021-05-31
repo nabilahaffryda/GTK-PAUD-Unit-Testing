@@ -12,6 +12,7 @@
         <v-btn
           :disabled="!$allow(`${['lpd', 'admin-kelas'].includes(jenis) ? jenis : 'petugas'}-profil.update`)"
           depressed
+          color="primary"
           @click="$emit('edit')"
         >
           <v-icon>mdi-pencil</v-icon>
