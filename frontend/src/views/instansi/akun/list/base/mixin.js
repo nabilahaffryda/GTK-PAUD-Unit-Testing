@@ -232,7 +232,7 @@ export default {
 
       let url = {};
       this.$confirm('Pilih jenis Berkas yang ingin di Unduh?', 'Unduh Berkas', {
-        tipe: 'warning',
+        tipe: 'secondary',
         form: {
           desc: 'Laporan Berkas',
           render: (h) => {

@@ -1,7 +1,7 @@
 <template>
   <div class="mx-5">
     <v-row>
-      <v-col cols="12" md="8" sm="12">
+      <v-col cols="12" md="8" sm="12" :style="$vuetify.breakpoint.mdAndDown ? 'margin-bottom: 200px' : ''">
         <v-card flat style="margin-bottom: 10%">
           <v-toolbar flat>
             <v-toolbar-title>Verval Ajuan Profil</v-toolbar-title>
@@ -126,7 +126,12 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" md="4" sm="12" style="position: fixed; right: 0; z-index: 1">
+      <v-col
+        cols="12"
+        md="4"
+        sm="12"
+        :style="`position: fixed; right: 0; ${$vuetify.breakpoint.mdAndDown ? 'bottom: 0;' : ''} z-index: 1`"
+      >
         <v-card flat>
           <v-card-text>
             <v-container>
