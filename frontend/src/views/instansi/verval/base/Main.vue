@@ -24,7 +24,9 @@
           @reload="onReload"
         >
           <template v-slot:subtitle>
-            <div class="body-1 black--text"> {{ total }} Daftar Kandidat yang perlu di periksa</div>
+            <div class="body-1 black--text">
+              <b>{{ total }}</b> Daftar Kandidat yang perlu di periksa
+            </div>
           </template>
         </base-table-header>
         <v-divider />
@@ -180,6 +182,7 @@
       :title="formulir['title']"
       :autoClose="formulir['autoClose']"
       :useSave="formulir['is_edit']"
+      fluid
       @close="onClose"
       @save="onSave"
     >

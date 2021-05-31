@@ -26,17 +26,10 @@
                 {{ valid ? 'Sudah Diunggah' : 'Belum Diunggah' }}
               </v-col>
               <v-col cols="12" md="4" class="mt-4">
-                <v-btn depressed :disabled="!valid" small @click="onDetil(berkas)" color="blue-grey lighten-5">
+                <v-btn depressed :disabled="!valid" small @click="onDetil(berkas)" color="info">
                   <v-icon>mdi-eye</v-icon>
                 </v-btn>
-                <v-btn
-                  class="ml-md-1"
-                  :disabled="!valid"
-                  depressed
-                  small
-                  @click="onView(type)"
-                  color="blue-grey lighten-5"
-                >
+                <v-btn class="ml-md-1" :disabled="!valid" depressed small @click="onView(type)" color="success">
                   <v-icon>mdi-download</v-icon>
                 </v-btn>
               </v-col>

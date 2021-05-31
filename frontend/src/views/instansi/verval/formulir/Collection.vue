@@ -1,7 +1,7 @@
 <template>
   <v-list-item class="pa-0">
     <v-list-item-avatar tile>
-      <v-avatar tile color="primary">
+      <v-avatar tile color="secondary">
         <span class="white--text">{{ nomor }}</span>
       </v-avatar>
     </v-list-item-avatar>

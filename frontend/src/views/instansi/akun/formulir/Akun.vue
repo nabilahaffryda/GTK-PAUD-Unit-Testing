@@ -63,7 +63,7 @@
               Tambah Akun
             </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step :color="step > 1 ? 'success' : 'primary'" :complete="step > 2" step="2">
+            <v-stepper-step :color="step > 2 ? 'success' : 'primary'" :complete="step > 2" step="2">
               Data {{ title }}
             </v-stepper-step>
             <v-divider></v-divider>

@@ -47,6 +47,7 @@
               outlined
               hide-details
               class="mt-1 mr-1"
+              append-icon="mdi-magnify"
               @keyup.enter="search"
               @click:append="search"
             >
@@ -64,6 +65,7 @@
                 outlined
                 hide-details
                 class="my-auto mr-1"
+                append-icon="mdi-magnify"
                 @keyup.enter="search"
                 @click:append="search"
               >
@@ -72,43 +74,79 @@
               <div style="min-width: 8%">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn small icon v-bind="attrs" v-on="on" @click="add" v-if="btnAdd">
-                      <v-icon color="secondary">mdi-plus</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Tambah</span>
-                </v-tooltip>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn small icon v-bind="attrs" v-on="on" @click="upload" v-if="btnUpload">
-                      <v-icon color="secondary">mdi-upload</v-icon>
+                    <v-btn
+                      class="button-action"
+                      outlined
+                      depressed
+                      small
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="upload"
+                      v-if="btnUpload"
+                    >
+                      <v-icon color="primary">mdi-upload</v-icon>
                     </v-btn>
                   </template>
                   <span>Unggah</span>
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn small icon v-bind="attrs" v-on="on" @click="filter" v-if="btnFilter">
-                      <v-icon color="secondary">mdi-filter-variant</v-icon>
+                    <v-btn
+                      class="button-action"
+                      outlined
+                      depressed
+                      small
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="filter"
+                      v-if="btnFilter"
+                    >
+                      <v-icon color="primary">mdi-filter-variant</v-icon>
                     </v-btn>
                   </template>
                   <span>Saring</span>
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn small icon v-bind="attrs" v-on="on" @click="download" v-if="btnDownload">
-                      <v-icon color="secondary">mdi-download</v-icon>
+                    <v-btn
+                      class="button-action"
+                      outlined
+                      depressed
+                      small
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="download"
+                      v-if="btnDownload"
+                    >
+                      <v-icon color="primary">mdi-download</v-icon>
                     </v-btn>
                   </template>
                   <span>Unduh</span>
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn small icon v-bind="attrs" v-on="on" @click="reload" v-if="btnReload">
-                      <v-icon color="secondary">mdi-reload</v-icon>
+                    <v-btn
+                      class="button-action"
+                      outlined
+                      depressed
+                      small
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="reload"
+                      v-if="btnReload"
+                    >
+                      <v-icon color="primary">mdi-reload</v-icon>
                     </v-btn>
                   </template>
                   <span>Muat Ulang</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="primary" depressed small v-bind="attrs" v-on="on" @click="add" v-if="btnAdd">
+                      <v-icon color="white">mdi-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Tambah</span>
                 </v-tooltip>
               </div>
             </v-toolbar>
@@ -203,5 +241,9 @@ export default {
 <style scoped>
 .border-bottom {
   border-bottom: 1px solid #a3a3a3;
+}
+.button-action {
+  margin-right: 3px;
+  border: solid 1px grey;
 }
 </style>

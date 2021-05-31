@@ -1,196 +1,198 @@
 <template>
-  <div>
-    <v-card flat style="margin-bottom: 10%">
-      <v-toolbar flat>
-        <v-toolbar-title>Verval Ajuan Profil</v-toolbar-title>
-        <v-spacer />
-        <v-chip dark :color="$getDeepObj(detail, 'status.color')">
-          {{ $getDeepObj(detail, 'status.keterangan') }}
-        </v-chip>
-      </v-toolbar>
-      <v-spacer />
-      <v-card-text>
-        <v-container class="black--text">
-          <v-row>
-            <v-col cols="12" sm="12" md="2">
-              <v-img
-                v-if="$getDeepObj(detail, `${obj}.data.foto_url`)"
-                :src="$getDeepObj(detail, `${obj}.data.foto_url`)"
-                :aspect-ratio="4 / 6"
-              ></v-img>
-              <v-avatar v-else color="primary" size="100" class="mx-auto">
-                <v-icon dark size="80">mdi-account-circle</v-icon>
-              </v-avatar>
-            </v-col>
-            <v-col cols="12" sm="12" md="10" class="px-5">
-              <div>
-                <h3>{{ $getDeepObj(detail, `${obj}.data.nama`) || '' }}</h3>
-                <div class="mt-2">
-                  <v-icon left>mdi-email</v-icon> {{ $getDeepObj(detail, `${obj}.data.email`) || '-' }}
-                </div>
-                <div>
-                  <v-icon left>mdi-phone-classic</v-icon>
-                  {{ $getDeepObj(detail, `${obj}.data.no_telpon`) || $getDeepObj(detail, `${obj}.data.no_hp`) || '-' }}
-                </div>
-                <div class="mt-5">
-                  <div class="caption">Alamat</div>
-                  {{ $getDeepObj(detail, `${obj}.data.alamat`) || '-' }}
-                </div>
-              </div>
+  <div class="mx-5">
+    <v-row>
+      <v-col cols="12" md="8" sm="12">
+        <v-card flat style="margin-bottom: 10%">
+          <v-toolbar flat>
+            <v-toolbar-title>Verval Ajuan Profil</v-toolbar-title>
+            <v-spacer />
+            <v-chip dark :color="$getDeepObj(detail, 'status.color')">
+              {{ $getDeepObj(detail, 'status.keterangan') }}
+            </v-chip>
+          </v-toolbar>
+          <v-spacer />
+          <v-card-text>
+            <v-container class="black--text">
+              <v-row>
+                <v-col cols="12" sm="12" md="2">
+                  <v-img
+                    v-if="$getDeepObj(detail, `${obj}.data.foto_url`)"
+                    :src="$getDeepObj(detail, `${obj}.data.foto_url`)"
+                    :aspect-ratio="4 / 6"
+                  ></v-img>
+                  <v-avatar v-else color="primary" size="100" class="mx-auto">
+                    <v-icon dark size="80">mdi-account-circle</v-icon>
+                  </v-avatar>
+                </v-col>
+                <v-col cols="12" sm="12" md="10" class="px-5">
+                  <div>
+                    <h3>{{ $getDeepObj(detail, `${obj}.data.nama`) || '' }}</h3>
+                    <div class="mt-2">
+                      <v-icon left>mdi-email</v-icon> {{ $getDeepObj(detail, `${obj}.data.email`) || '-' }}
+                    </div>
+                    <div>
+                      <v-icon left>mdi-phone-classic</v-icon>
+                      {{
+                        $getDeepObj(detail, `${obj}.data.no_telpon`) || $getDeepObj(detail, `${obj}.data.no_hp`) || '-'
+                      }}
+                    </div>
+                    <div class="mt-5">
+                      <div class="caption">Alamat</div>
+                      {{ $getDeepObj(detail, `${obj}.data.alamat`) || '-' }}
+                    </div>
+                  </div>
 
-              <v-divider class="my-3" />
+                  <v-divider class="my-3" />
 
-              <div class="my-5" v-if="['pengajar', 'petugas'].includes(jenis)">
-                <v-row>
-                  <v-col v-for="(item, index) in profils[jenis]" :key="index" v-bind="item.grid">
-                    <div class="caption">{{ $getDeepObj(item, 'title') || '-' }}</div>
-                    <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(item, 'value') || '-'" /></h2>
+                  <div class="my-5" v-if="['pengajar', 'petugas'].includes(jenis)">
+                    <v-row>
+                      <v-col v-for="(item, index) in profils[jenis]" :key="index" v-bind="item.grid">
+                        <div class="caption">{{ $getDeepObj(item, 'title') || '-' }}</div>
+                        <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(item, 'value') || '-'" /></h2>
+                      </v-col>
+                    </v-row>
+                  </div>
+                </v-col>
+                <v-col v-if="jenis === 'lpd'" cols="12" md="12" sm="12">
+                  <div class="text-h6 my-3 font-weight-bold"> Data Tambahan </div>
+                  <v-row no-gutters dense>
+                    <v-col v-for="item in tambahans" :key="item.key" cols="12" md="4" sm="12">
+                      <div class="caption">{{ item.label }}</div>
+                      <div>{{ $getDeepObj(detail, `nama_${item.key}`) || '-' }}</div>
+                      <div>{{ $getDeepObj(detail, `telp_${item.key}`) || '-' }}</div>
+                    </v-col>
+                  </v-row>
+                </v-col>
+                <template v-if="jenis === 'lpd'">
+                  <v-col cols="12" md="12">
+                    <h2 class="title">Data Diklat</h2>
+                    <v-list three-line>
+                      <template v-for="(item, index) in diklats">
+                        <v-list-item :key="index">
+                          <v-list-item-avatar tile>
+                            <v-avatar tile color="secondary">
+                              <span class="white--text">{{ index + 1 }}</span>
+                            </v-avatar>
+                          </v-list-item-avatar>
+
+                          <v-list-item-content>
+                            <v-list-item-title v-html="item.nama"></v-list-item-title>
+                            <v-list-item-subtitle v-html="item.tahun"></v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-list>
                   </v-col>
-                </v-row>
-              </div>
-            </v-col>
-            <v-col v-if="jenis === 'lpd'" cols="12" md="12" sm="12">
-              <div class="text-h6 my-3 font-weight-bold"> Data Tambahan </div>
-              <v-row no-gutters dense>
-                <v-col v-for="item in tambahans" :key="item.key" cols="12" md="4" sm="12">
-                  <div class="caption">{{ item.label }}</div>
-                  <div>{{ $getDeepObj(detail, `nama_${item.key}`) || '-' }}</div>
-                  <div>{{ $getDeepObj(detail, `telp_${item.key}`) || '-' }}</div>
+                </template>
+                <template v-else>
+                  <v-col cols="12" md="6">
+                    <h2 class="title">Data Diklat</h2>
+                    <collection
+                      v-for="(item, b) in diklats.filter((value) => value.k_diklat_paud !== 4)"
+                      :key="b"
+                      :nomor="b + 1"
+                      :diklat="item"
+                      :masters="masters"
+                      @detil="onDetilDiklat"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <h2 class="title">Data Diklat Lainnya</h2>
+                    <collection
+                      v-for="(item, b) in diklats.filter((value) => value.k_diklat_paud === 4)"
+                      :key="b"
+                      :nomor="b + 1"
+                      :diklat="item"
+                      :masters="masters"
+                      @detil="onDetilDiklat"
+                    />
+                  </v-col>
+                </template>
+                <v-col cols="12" sm="12" md="12">
+                  <h2 class="title">Data Unggahan</h2>
+                  <berkas-collection
+                    v-for="(berkas, b) in berkases"
+                    :key="b"
+                    :berkas="berkas"
+                    :type="berkas.type"
+                    :valid="berkas.valid"
+                    :with-action="false"
+                    :value="berkas.value || {}"
+                    @detil="onDetil"
+                  />
                 </v-col>
               </v-row>
-            </v-col>
-            <template v-if="jenis === 'lpd'">
-              <v-col cols="12" md="12">
-                <h2 class="title">Data Diklat</h2>
-                <v-list three-line>
-                  <template v-for="(item, index) in diklats">
-                    <v-list-item :key="index">
-                      <v-list-item-avatar tile>
-                        <v-avatar tile color="primary">
-                          <span class="white--text">{{ index + 1 }}</span>
-                        </v-avatar>
-                      </v-list-item-avatar>
-
-                      <v-list-item-content>
-                        <v-list-item-title v-html="item.nama"></v-list-item-title>
-                        <v-list-item-subtitle v-html="item.tahun"></v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </template>
-                </v-list>
-              </v-col>
-            </template>
-            <template v-else>
-              <v-col cols="12" md="6">
-                <h2 class="title">Data Diklat</h2>
-                <collection
-                  v-for="(item, b) in diklats.filter((value) => value.k_diklat_paud !== 4)"
-                  :key="b"
-                  :nomor="b + 1"
-                  :diklat="item"
-                  :masters="masters"
-                  @detil="onDetilDiklat"
-                />
-              </v-col>
-              <v-col cols="12" md="6">
-                <h2 class="title">Data Diklat Lainnya</h2>
-                <collection
-                  v-for="(item, b) in diklats.filter((value) => value.k_diklat_paud === 4)"
-                  :key="b"
-                  :nomor="b + 1"
-                  :diklat="item"
-                  :masters="masters"
-                  @detil="onDetilDiklat"
-                />
-              </v-col>
-            </template>
-            <v-col cols="12" sm="12" md="12">
-              <h2 class="title">Data Unggahan</h2>
-              <berkas-collection
-                v-for="(berkas, b) in berkases"
-                :key="b"
-                :berkas="berkas"
-                :type="berkas.type"
-                :valid="berkas.valid"
-                :with-action="false"
-                :value="berkas.value || {}"
-                @detil="onDetil"
-              />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-    </v-card>
-    <div style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 1">
-      <v-card flat>
-        <v-card-text>
-          <v-container>
-            <v-row no-gutters dense>
-              <v-col cols="12" md="1" sm="12">
-                <v-avatar tile rounded class="ma-5">
-                  <v-icon size="50">mdi-file-document-edit-outline</v-icon>
-                </v-avatar>
-              </v-col>
-              <v-col cols="12" md="11" sm="12">
-                <div class="black--text my-2 ml-1">
-                  <h3>Pemeriksaan Dokumen</h3>
-                  Berikan Penilaian pada kelengkapan dan keabsahan dokumen ini, Apakah semua dokumen sah dan sesuai
-                  dengan data yang di inputkan kandidat ?
-                </div>
-                <v-card flat :disabled="isDisable">
-                  <v-row dense>
-                    <template v-for="item in mBtnPilihan">
-                      <v-col :key="item.value" md="3" sm="12" class="my-auto">
-                        <v-btn
-                          block
-                          dark
-                          :color="item.color"
-                          :outlined="pilihan !== item.value"
-                          @click="onSelected(item.value)"
-                          style="background-color: white"
-                        >
-                          <v-icon small left>{{ item.icon }}</v-icon
-                          >{{ item.label }}
-                        </v-btn>
-                      </v-col>
-                    </template>
-                  </v-row>
-                </v-card>
-              </v-col>
-              <v-col cols="12" :class="[isEdit ? 'mt-3' : '']">
-                <template v-if="pilihan && !isDisable">
-                  <div class="pa-4" v-if="$isObject(schema[pilihan])">
-                    <b class="black--text">{{ schema[pilihan]['label'] }} *</b><br />
-                    <validation-provider
-                      mode="passive"
-                      :name="schema[pilihan]['label']"
-                      rules="required"
-                      v-slot="{ errors }"
-                    >
-                      <v-textarea
-                        required
-                        v-model="form.alasan"
-                        :error-messages="errors"
-                        :disabled="isDisable"
-                        rows="1"
-                        single-line
-                        outlined
-                      />
-                    </validation-provider>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="4" sm="12" style="position: fixed; right: 0; z-index: 1">
+        <v-card flat>
+          <v-card-text>
+            <v-container>
+              <v-row no-gutters dense>
+                <v-col cols="12" md="12" sm="12">
+                  <div class="black--text my-2 ml-1">
+                    <h3>Pemeriksaan Dokumen</h3>
+                    Berikan Penilaian pada kelengkapan dan keabsahan dokumen ini,
+                    <b>Apakah semua dokumen sah dan sesuai</b>
+                    dengan data yang di inputkan kandidat ?
                   </div>
-                </template>
-                <template v-if="!isEdit || isDisable">
-                  <b class="black--text">Catatan Verval*</b><br />
-                  <v-card flat outlined>
-                    <v-card-text v-html="catatan"></v-card-text>
+                  <v-card flat :disabled="isDisable">
+                    <v-row dense>
+                      <template v-for="item in mBtnPilihan">
+                        <v-col :key="item.value" md="12" sm="12" class="my-auto">
+                          <v-btn
+                            block
+                            dark
+                            :color="item.color"
+                            :outlined="pilihan !== item.value"
+                            @click="onSelected(item.value)"
+                            style="background-color: white"
+                          >
+                            <v-icon small left>{{ item.icon }}</v-icon
+                            >{{ item.label }}
+                          </v-btn>
+                        </v-col>
+                      </template>
+                    </v-row>
                   </v-card>
-                </template>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </div>
+                </v-col>
+                <v-col cols="12" :class="[isEdit ? 'mt-3' : '']">
+                  <template v-if="pilihan && !isDisable">
+                    <div class="pa-4" v-if="$isObject(schema[pilihan])">
+                      <b class="black--text">{{ schema[pilihan]['label'] }} *</b><br />
+                      <validation-provider
+                        mode="passive"
+                        :name="schema[pilihan]['label']"
+                        rules="required"
+                        v-slot="{ errors }"
+                      >
+                        <v-textarea
+                          required
+                          v-model="form.alasan"
+                          :error-messages="errors"
+                          :disabled="isDisable"
+                          rows="1"
+                          single-line
+                          outlined
+                        />
+                      </validation-provider>
+                    </div>
+                  </template>
+                  <template v-if="!isEdit || isDisable">
+                    <b class="black--text">Catatan Verval*</b><br />
+                    <v-card flat outlined>
+                      <v-card-text v-html="catatan"></v-card-text>
+                    </v-card>
+                  </template>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
     <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
   </div>
 </template>

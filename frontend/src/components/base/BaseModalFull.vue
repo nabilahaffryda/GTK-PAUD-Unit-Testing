@@ -21,7 +21,7 @@
             >
           </template>
         </v-toolbar>
-        <v-container class="py-12">
+        <v-container :fluid="fluid" class="py-12">
           <v-tabs v-if="tabHeader.length" v-model="tabs" background-color="transparent" grow centered>
             <v-tab v-for="item in tabHeader" :key="item">
               {{ item }}
@@ -94,6 +94,10 @@ export default {
     autoClose: {
       type: Boolean,
       default: true,
+    },
+    fluid: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
