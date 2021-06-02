@@ -7,7 +7,9 @@ use App\Http\Requests\Instansi\Lpd\Profil\BerkasCreateRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\PaudInstansi;
+use App\Models\PaudInstansiBerkas;
 use App\Services\Instansi\LpdService;
+use Exception;
 
 class BerkasController extends Controller
 {
@@ -27,5 +29,18 @@ class BerkasController extends Controller
     public function create(PaudInstansi $paudInstansi, BerkasCreateRequest $request)
     {
         return BaseResource::make($this->service->upload($paudInstansi, $request->k_berkas, $request->file));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function delete(PaudInstansiBerkas $berkas)
+    {
+        if ($berkas->paud_instansi_id != instansiId()) {
+            abort(404);
+        }
+
+        $this->service->berkasDelete($berkas);
+        return BaseResource::make($berkas);
     }
 }

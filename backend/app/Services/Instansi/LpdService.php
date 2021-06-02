@@ -200,6 +200,17 @@ class LpdService
         return $berkas;
     }
 
+    public function berkasDelete(PaudInstansiBerkas $berkas)
+    {
+        $oldFile = $berkas->file;
+
+        $berkas->delete();
+
+        if ($oldFile) {
+            // static::deleteBerkas($oldFile);
+        }
+    }
+
     private function uploadFtp(PaudInstansi $paudInstansi, $label, $file)
     {
         $ftpPath  = config('filesystems.disks.lpd-berkas.path');
