@@ -163,7 +163,22 @@ class LpdService
             $paudInstansi->telp_sekretaris && $paudInstansi->telp_bendahara && $paudInstansi->diklat &&
             is_array($paudInstansi->diklat ) && (count($paudInstansi->diklat) >= 1);
 
-        $isLengkapBerkas = $paudInstansi->paudInstansiBerkases->count() == 7;
+        $kBerkases = [
+            MBerkasLpdPaud::AKTA_LEMBAGA     => true,
+            // MBerkasLpdPaud::PROFIL_LEMBAGA   => true,
+            MBerkasLpdPaud::NPWP             => true,
+            // MBerkasLpdPaud::SK_PELATIHAN     => true,
+            MBerkasLpdPaud::SK_KEPENGURUSAN  => true,
+            MBerkasLpdPaud::PAKTA_INTEGRITAS => true,
+            // MBerkasLpdPaud::BUKU_REKENING    => true,
+        ];
+
+        foreach ($paudInstansi->paudInstansiBerkases as $paudInstansiBerkas) {
+            if (isset($kBerkases[$paudInstansiBerkas->k_berkas_lpd_paud])) {
+                unset($kBerkases[$paudInstansiBerkas->k_berkas_lpd_paud]);
+            }
+        }
+        $isLengkapBerkas = (bool)$kBerkases;
 
         return [
             'profil' => $isLengkapProfil,
