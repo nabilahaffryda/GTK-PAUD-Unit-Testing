@@ -22,6 +22,7 @@
                 :valid="item.valid"
                 :with-action="item.withAction"
                 :value="item.value || {}"
+                :optional="item.optional"
                 @detil="onDetil"
                 @upload="$emit('upload', item.type)"
               />

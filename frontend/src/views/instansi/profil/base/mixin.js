@@ -233,6 +233,7 @@ export default {
             withAction: withAction,
             value: mBerkas['2'] || {},
             kBerkas: 2,
+            optional: true,
           },
           {
             title: 'Foto Kartu NPWP atas nama Lembaga',
@@ -251,6 +252,7 @@ export default {
             withAction: withAction,
             value: mBerkas['4'] || {},
             kBerkas: 4,
+            optional: true,
           },
           {
             title: 'SK Kepengurusan Masih Berlaku',
@@ -278,6 +280,7 @@ export default {
             withAction: withAction,
             value: mBerkas['7'] || {},
             kBerkas: 7,
+            optional: true,
           },
         ],
         pembimbing: [
@@ -328,7 +331,7 @@ export default {
     },
 
     isAjuan() {
-      return ['lpd', 'pengajar'].includes(this.jenis) && ![1, 5].includes(this.kVerval);
+      return ['lpd', 'pengajar'].includes(this.jenis) && ![1, 4, 5].includes(this.kVerval);
     },
 
     catatan() {

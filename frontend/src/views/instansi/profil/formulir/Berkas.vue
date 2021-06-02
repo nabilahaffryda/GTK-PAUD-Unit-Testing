@@ -9,9 +9,10 @@
       <v-row>
         <v-col cols="12" md="6" sm="12">
           <span class="subtitle-1">
-            <b>{{ (berkas && berkas.title) || '-' }}</b>
+            <b> {{ (berkas && berkas.title) || '-' }} </b>
           </span>
-          <p class="body-2 grey--text text--darken-1" v-html="berkas && berkas.pesan" />
+          <div class="body-2 grey--text text--darken-1" v-html="berkas && berkas.pesan" />
+          <div v-if="optional" class="label--text warning--text"><i>* Tidak Wajib</i></div>
           <div v-if="berkas && berkas.url_template">
             <v-btn text small depressed elevation="0" color="info" class="text-capitalize pa-0">
               <v-icon x-small left class="mr-0">mdi-download</v-icon> Unduh template
