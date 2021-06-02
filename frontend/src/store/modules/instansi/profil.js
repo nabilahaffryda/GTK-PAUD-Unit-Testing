@@ -55,6 +55,13 @@ export const actions = {
     }/berkas/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
+  dropBerkas({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const url = `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/berkas/${
+      payload.id
+    }/delete`;
+    return http.post(url, payload.params).then(({ data }) => data);
+  },
   ajuan({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     const url = `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/${

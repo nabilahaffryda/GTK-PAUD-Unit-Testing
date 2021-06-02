@@ -9,9 +9,10 @@
       <v-row>
         <v-col cols="12" md="6" sm="12">
           <span class="subtitle-1">
-            <b>{{ (berkas && berkas.title) || '-' }}</b>
+            <b> {{ (berkas && berkas.title) || '-' }} </b>
           </span>
-          <p class="body-2 grey--text text--darken-1" v-html="berkas && berkas.pesan" />
+          <div class="body-2 grey--text text--darken-1" v-html="berkas && berkas.pesan" />
+          <div v-if="optional" class="label--text warning--text"><i>* Tidak Wajib</i></div>
           <div v-if="berkas && berkas.url_template">
             <v-btn text small depressed elevation="0" color="info" class="text-capitalize pa-0">
               <v-icon x-small left class="mr-0">mdi-download</v-icon> Unduh template
@@ -31,6 +32,17 @@
                 </v-btn>
                 <v-btn class="ml-md-1" :disabled="!valid" depressed small @click="onView(type)" color="success">
                   <v-icon>mdi-download</v-icon>
+                </v-btn>
+                <v-btn
+                  v-if="useDelete"
+                  class="ml-md-1"
+                  :disabled="!valid"
+                  depressed
+                  small
+                  color="error"
+                  @click="onDelete(type)"
+                >
+                  <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </v-col>
               <v-col cols="12" md="4" class="mt-4" v-if="withAction">
@@ -71,6 +83,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    useDelete: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     onUpload(type) {
@@ -81,6 +97,14 @@ export default {
     },
     onDetil(berkas) {
       this.$emit('detil', berkas);
+    },
+    onDelete(type) {
+      this.$confirm('Apakah anda yakin ingin menghapus berkas berikut ?', 'Hapus Berkas', {
+        tipe: 'warning',
+        data: [],
+      }).then(() => {
+        this.$emit('delete', { type: type });
+      });
     },
   },
 };

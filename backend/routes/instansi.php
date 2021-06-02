@@ -38,6 +38,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudInstansi}/update', [LpdController::class, 'update']);
         Route::post('{paudInstansi}/ajuan/create', [Lpd\Profil\AjuanController::class, 'create']);
         Route::post('{paudInstansi}/ajuan/delete', [Lpd\Profil\AjuanController::class, 'delete']);
+
+        Route::post('berkas/{berkas}/delete', [Lpd\Profil\BerkasController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'verval'], function () {
