@@ -39,13 +39,13 @@ class LpdService
                 'paud_instansi.tahun'       => $params['tahun'] ?? config('paud.tahun'),
                 'paud_instansi.angkatan'    => $params['angkatan'] ?? config('paud.angkatan'),
             ])
-            ->when(isset($params['is_aktif']), function (Builder $query) use ($params){
+            ->when(isset($params['is_aktif']), function (Builder $query) use ($params) {
                 $query->where('paud_instansi.is_aktif', $params['is_aktif']);
             })
-            ->when(isset($params['k_kota']), function (Builder $query) use ($params){
+            ->when(isset($params['k_kota']), function (Builder $query) use ($params) {
                 $query->where('instansi.k_kota', $params['k_kota']);
             })
-            ->when(isset($params['k_propinsi']), function (Builder $query) use ($params){
+            ->when(isset($params['k_propinsi']), function (Builder $query) use ($params) {
                 $query->where('instansi.k_propinsi', $params['k_propinsi']);
             })
             ->with([
@@ -161,7 +161,7 @@ class LpdService
             $instansi->k_propinsi && $instansi->k_kota && $paudInstansi->nama_penanggung_jawab &&
             $paudInstansi->nama_sekretaris && $paudInstansi->nama_bendahara && $paudInstansi->telp_penanggung_jawab &&
             $paudInstansi->telp_sekretaris && $paudInstansi->telp_bendahara && $paudInstansi->diklat &&
-            is_array($paudInstansi->diklat ) && (count($paudInstansi->diklat) >= 1);
+            is_array($paudInstansi->diklat) && (count($paudInstansi->diklat) >= 1);
 
         $kBerkases = [
             MBerkasLpdPaud::AKTA_LEMBAGA     => true,
@@ -346,7 +346,7 @@ class LpdService
 
     public function setAktif(PaudInstansi $paudInstansi, array $params)
     {
-        $paudInstansi->is_aktif  = $params['enable'];
+        $paudInstansi->is_aktif = $params['enable'];
 
         if (!$paudInstansi->save()) {
             throw new FlowException('Proses simpan status verval tidak berhasil');
