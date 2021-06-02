@@ -96,7 +96,9 @@
                   <template v-if="jenis === 'program'">
                     <v-row>
                       <v-col cols="12" md="6">
-                        <span class="px-0 body-2 secondary--text" style="height: 24px"> Instansi<span>*</span></span>
+                        <span class="px-0 body-2 secondary--text text--darken-4" style="height: 24px">
+                          Instansi<span>*</span>
+                        </span>
                         <v-autocomplete
                           v-model="form.instansi_id"
                           :items="this.instansis ? this.$mapForMaster(this.instansis) : []"

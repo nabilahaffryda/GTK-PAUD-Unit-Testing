@@ -14,7 +14,7 @@
                 <span v-html="detail.pesan || ''" />
               </v-alert>
               <slot name="extra"></slot>
-              <v-subheader :class="[`px-0 my-3 body-2 ${labelColor}--text`]" style="height: 24px">
+              <v-subheader :class="[`px-0 my-3 body-2 ${labelColor}--text text--darken-4`]" style="height: 24px">
                 {{ title }}*
               </v-subheader>
               <template v-if="form.berkas && form.berkas.length">
