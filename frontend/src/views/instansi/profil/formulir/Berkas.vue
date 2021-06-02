@@ -42,6 +42,17 @@
                 >
                   <v-icon>mdi-download</v-icon>
                 </v-btn>
+                <v-btn
+                  v-if="useDelete"
+                  class="ml-md-1"
+                  :disabled="!valid"
+                  depressed
+                  small
+                  color="error"
+                  @click="onDelete(type)"
+                >
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
               </v-col>
               <v-col cols="12" md="4" class="mt-4" v-if="withAction">
                 <v-btn depressed small color="blue mr-2" dark @click="onUpload"> unggah file </v-btn>
@@ -81,6 +92,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    useDelete: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     onUpload(type) {
@@ -91,6 +106,14 @@ export default {
     },
     onDetil(berkas) {
       this.$emit('detil', berkas);
+    },
+    onDelete(type) {
+      this.$confirm('Apakah anda yakin ingin menghapus berkas berikut ?', 'Hapus Berkas', {
+        tipe: 'warning',
+        data: [],
+      }).then(() => {
+        this.$emit('delete', { type: type });
+      });
     },
   },
 };
