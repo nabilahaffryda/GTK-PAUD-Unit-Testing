@@ -36,7 +36,7 @@ class BerkasController extends Controller
      */
     public function delete(PaudInstansiBerkas $berkas)
     {
-        if ($berkas->paud_instansi_id != instansiId()) {
+        if ($berkas->instansi_id != instansiId()) {
             abort(404);
         }
 
