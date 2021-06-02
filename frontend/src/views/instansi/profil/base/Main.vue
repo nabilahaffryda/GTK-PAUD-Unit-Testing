@@ -169,6 +169,7 @@
         :rules="formulir.rules"
         :detail="detail"
         :jenis="jenis"
+        uimodel="card"
       />
     </base-modal-full>
   </div>

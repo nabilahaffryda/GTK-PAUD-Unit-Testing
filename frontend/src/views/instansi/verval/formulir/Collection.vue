@@ -24,10 +24,10 @@
           </p>
         </v-col>
         <v-col cols="12" md="4" class="mt-4">
-          <v-btn depressed small @click="onDetil(diklat)" color="blue-grey lighten-5">
+          <v-btn depressed small @click="onDetil(diklat)" color="info">
             <v-icon>mdi-eye</v-icon>
           </v-btn>
-          <v-btn class="ml-md-1" depressed small @click="onView(diklat.url)" color="blue-grey lighten-5">
+          <v-btn class="ml-md-1" depressed small @click="onView(diklat.url)" color="success">
             <v-icon>mdi-download</v-icon>
           </v-btn>
         </v-col>
