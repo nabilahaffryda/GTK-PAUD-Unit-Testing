@@ -151,6 +151,7 @@
         :detail="detail"
         :masters="masters"
         :jenis="jenis"
+        :isAjuan="isAjuan"
         @upload="upload"
         @edit="edit"
         @delete="deleteBerkas"

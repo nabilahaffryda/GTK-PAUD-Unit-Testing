@@ -23,7 +23,7 @@
                 :with-action="item.withAction"
                 :value="item.value || {}"
                 :optional="item.optional"
-                :useDelete="$allow(`${jenis}-profil-berkas.delete`) && item.optional"
+                :useDelete="$allow(`${jenis}-profil-berkas.delete`) && item.optional && !isAjuan"
                 @detil="onDetil"
                 @upload="$emit('upload', item.type)"
                 @delete="$emit('delete', item.type)"
@@ -117,6 +117,10 @@ export default {
     jenis: {
       type: String,
       default: 'pengajar',
+    },
+    isAjuan: {
+      type: Boolean,
+      default: false,
     },
   },
   components: { Berkas, Profil, Collection, PopupPreviewDetail },
