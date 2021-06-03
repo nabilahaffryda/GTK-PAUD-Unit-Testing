@@ -172,7 +172,7 @@ export default {
     }),
 
     breadcrumbs() {
-      return [{ text: 'Daftar Diklat', to: 'diklat' }, { text: this.$getDeepObj(this, 'detail.nama') }];
+      return [{ text: 'Daftar Diklat', to: 'kelola-diklat' }, { text: this.$getDeepObj(this, 'detail.nama') }];
     },
 
     configs() {

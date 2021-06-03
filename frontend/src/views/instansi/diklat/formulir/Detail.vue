@@ -21,11 +21,15 @@
             <v-row class="my-5">
               <v-col>
                 <div class="label--text">Tanggal Mulai Kelas</div>
-                <div class="body-1">-</div>
+                <div class="body-1">
+                  {{ $localDate($getDeepObj(kelas, 'paud_periode.data.tgl_diklat_mulai')) || '-' }}
+                </div>
               </v-col>
               <v-col>
                 <div class="label--text">Tanggal Selesai Kelas</div>
-                <div class="body-1">-</div>
+                <div class="body-1">
+                  {{ $localDate($getDeepObj(kelas, 'paud_periode.data.tgl_diklat_selesai')) || '-' }}
+                </div>
               </v-col>
             </v-row>
             <div class="my-5">
@@ -33,7 +37,7 @@
             </div>
           </v-col>
           <v-col cols="12" md="2" sm="12">
-            <v-chip color="success">TERSINKRON</v-chip>
+            <v-chip v-if="false" color="success">TERSINKRON</v-chip>
           </v-col>
         </v-row>
 

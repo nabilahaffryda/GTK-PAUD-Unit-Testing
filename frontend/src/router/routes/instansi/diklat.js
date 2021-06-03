@@ -2,7 +2,7 @@ import { lazyLoadView } from '@router/helpers';
 export default [
   {
     path: '/i/:id(\\d+)/diklat',
-    name: 'diklat',
+    name: 'kelola-diklat',
     component: () => lazyLoadView(import('@views/instansi/diklat/list/base/Main')),
     meta: {
       title: 'Diklatku',
