@@ -26,6 +26,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class MBerkasLpdPaud extends Eloquent
 {
+    public const AKTA_LEMBAGA     = 1;
+    public const PROFIL_LEMBAGA   = 2;
+    public const NPWP             = 3;
+    public const SK_PELATIHAN     = 4;
+    public const SK_KEPENGURUSAN  = 5;
+    public const PAKTA_INTEGRITAS = 6;
+    public const BUKU_REKENING    = 7;
+
     /**
      * The table associated with the model.
      *

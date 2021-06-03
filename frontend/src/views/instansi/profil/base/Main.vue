@@ -151,8 +151,10 @@
         :detail="detail"
         :masters="masters"
         :jenis="jenis"
+        :isAjuan="isAjuan"
         @upload="upload"
         @edit="edit"
+        @delete="deleteBerkas"
       />
     </div>
     <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title" @save="onSave">

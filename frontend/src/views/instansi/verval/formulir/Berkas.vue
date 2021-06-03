@@ -114,6 +114,7 @@
                 :valid="berkas.valid"
                 :with-action="false"
                 :value="berkas.value || {}"
+                :optional="berkas.optional"
                 @detil="onDetil"
               />
             </v-col>
@@ -362,6 +363,7 @@ export default {
           withAction: false,
           kBerkas: key.value,
           value: mBerkas[key.value],
+          optional: [2, 4, 7].includes(Number(key.value)) && this.jenis === 'lpd',
         });
       });
       return temp;
