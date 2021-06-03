@@ -392,19 +392,21 @@ export default {
         return;
       }
 
+      const defRules = 'PDF/JPEG/JPG/PNG';
+
       const rules = {
-        integritas: { format: 'PDF', required: true },
-        fungsi: { format: 'PDF', required: true },
-        pelatihan: { format: 'PDF', required: true },
-        ktp: { format: 'PDF', required: true },
-        npwp: { format: 'JPEG/JPG/PNG', required: true },
-        ijasah: { format: 'PDF', required: true },
-        sertifikat: { format: 'PDF', required: true },
-        pendirian: { format: 'PDF', required: true },
-        profillembaga: { format: 'JPEG/JPG/PNG', required: true },
-        skpelatihan: { format: 'PDF', required: true },
-        skpengurusan: { format: 'PDF', required: true },
-        bukurekening: { format: 'JPEG/JPG/PNG', required: true },
+        integritas: { format: defRules, required: true },
+        fungsi: { format: defRules, required: true },
+        pelatihan: { format: defRules, required: true },
+        ktp: { format: defRules, required: true },
+        npwp: { format: defRules, required: true },
+        ijasah: { format: defRules, required: true },
+        sertifikat: { format: defRules, required: true },
+        pendirian: { format: defRules, required: true },
+        profillembaga: { format: defRules, required: true },
+        skpelatihan: { format: defRules, required: true },
+        skpengurusan: { format: defRules, required: true },
+        bukurekening: { format: defRules, required: true },
       };
 
       this.action = 'upload';
