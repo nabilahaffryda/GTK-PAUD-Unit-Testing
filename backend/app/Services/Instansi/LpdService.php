@@ -178,7 +178,7 @@ class LpdService
                 unset($kBerkases[$paudInstansiBerkas->k_berkas_lpd_paud]);
             }
         }
-        $isLengkapBerkas = (bool)$kBerkases;
+        $isLengkapBerkas = !$kBerkases;
 
         return [
             'profil' => $isLengkapProfil,
