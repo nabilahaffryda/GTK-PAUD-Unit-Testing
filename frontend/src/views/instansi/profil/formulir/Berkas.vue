@@ -100,7 +100,7 @@ export default {
     },
     onDelete(type) {
       this.$confirm('Apakah anda yakin ingin menghapus berkas berikut ?', 'Hapus Berkas', {
-        tipe: 'warning',
+        tipe: 'error',
         data: [],
       }).then(() => {
         this.$emit('delete', { type: type });
