@@ -63,6 +63,7 @@
                               {{ $getDeepObj(item, `${obj}.data.nama`) || '-' }}
                             </strong>
                           </span>
+                          <div>{{ $getDeepObj(item, `${obj}.data.email`) }}</div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -80,18 +81,6 @@
                                 '-'
                               }}
                             </template>
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-col>
-                    <v-col cols="12" md="2">
-                      <v-list-item class="px-0">
-                        <v-list-item-content class="py-0">
-                          <v-list-item-title>
-                            <div class="label--text">Alamat Email</div>
-                          </v-list-item-title>
-                          <v-list-item-subtitle class="link black--text body-2">
-                            {{ $getDeepObj(item, `${obj}.data.email`) }}
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -141,6 +130,21 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
+                            <div class="label--text">Akun Pengunci</div>
+                          </v-list-item-title>
+                          <v-list-item-subtitle class="link black--text body-2">
+                            <div>
+                              <v-icon left color="secondary">mdi-account-arrow-left</v-icon>
+                              {{ $getDeepObj(akun, 'nama') || '' }}
+                            </div>
+                          </v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col cols="12" md="2">
+                      <v-list-item class="px-0">
+                        <v-list-item-content class="py-0">
+                          <v-list-item-title>
                             <div class="label--text">Aksi Selanjutnya</div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
@@ -157,6 +161,9 @@
                                   ? 'Verval Ajuan'
                                   : 'LIHAT DETAIL'
                               }}
+                            </v-btn>
+                            <v-btn v-if="false" color="secondary" small block @click="onKunci(item)">
+                              <v-icon left>mdi-account-arrow-left</v-icon> Kunci Verval
                             </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
@@ -316,6 +323,7 @@ export default {
     },
 
     jenis() {
+      console.log(this.akun);
       return this.$route.meta.tipe;
     },
   },
@@ -460,7 +468,7 @@ export default {
     },
 
     onKunci(data) {
-      this.id = data.psp_profil_id;
+      this.id = data.id;
       this.$confirm(`Anda yakin ingin mengunci Ajuan di atas agar bisa diverifikasi?`, `Kunci Ajuan`, {
         tipe: 'warning',
         data: this.confirmHtml(data),
@@ -500,10 +508,10 @@ export default {
       return [
         {
           icon: 'mdi-account-circle',
-          iconSize: 60,
-          iconColor: 'secondary',
-          title: this.$getDeepObj(data, 'ptk.data.nama') || '',
-          subtitles: [`<span class="text--primary">${this.$getDeepObj(data, 'ptk.data.no_ukg')}</span>`],
+          iconSize: 50,
+          iconColor: 'primary',
+          title: `<b class='primary--text'>${this.$getDeepObj(data, 'instansi.data.nama') || ''}</b>`,
+          subtitles: [`<span class="text--primary">${this.$getDeepObj(data, 'instansi.data.email')}</span>`],
         },
       ];
     },
