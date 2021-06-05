@@ -26,7 +26,7 @@
                 <div class="label--text"> Keterangan </div>
                 {{ valid ? 'Sudah Diunggah' : 'Belum Diunggah' }}
               </v-col>
-              <v-col cols="12" md="4" class="mt-4">
+              <v-col cols="12" :md="withAction ? 4 : 8" class="mt-4">
                 <v-btn depressed :disabled="!valid" small @click="onDetil(berkas)" color="info">
                   <v-icon>mdi-eye</v-icon>
                 </v-btn>
