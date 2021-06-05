@@ -43,6 +43,7 @@
                 <v-btn
                   :disabled="!$allow(`${jenis === 'lpd' ? `${jenis}-profil` : 'petugas-profil-diklat'}.update`)"
                   depressed
+                  color="primary"
                   @click="$emit('edit', i)"
                 >
                   <v-icon>mdi-pencil</v-icon>

@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline secondary--text" v-html="`Daftar ${title}`"></h1>
+            <h1 class="headline black--text" v-html="`Daftar ${title}`"></h1>
             <p v-html="desc"></p>
           </v-col>
         </v-row>
@@ -27,7 +27,9 @@
           @download="onDownload"
         >
           <template v-slot:subtitle>
-            <div class="subtitle-1 black--text"> {{ total }} {{ title }}</div>
+            <div class="subtitle-1 black--text">
+              <b>{{ total }} </b> {{ title }}
+            </div>
           </template>
         </base-table-header>
       </v-card-title>
@@ -57,12 +59,14 @@
                     <v-row>
                       <v-col class="py-0" cols="12" md="4">
                         <v-list-item class="px-0" @click="onDetail(item)">
-                          <v-list-item-avatar color="secondary">
+                          <v-list-item-avatar color="primary">
                             <v-icon dark>mdi-account-circle</v-icon>
                           </v-list-item-avatar>
                           <v-list-item-content class="py-0 mt-3">
-                            <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'akun.data.nama') || '-' }}</h2>
-                            <p class="caption">
+                            <div class="body-1 black--text">
+                              <strong>{{ $getDeepObj(item, 'akun.data.nama') || '-' }}</strong>
+                            </div>
+                            <p class="caption black--text">
                               <span>Email: {{ $getDeepObj(item, 'akun.data.email') || '-' }}</span>
                             </p>
                           </v-list-item-content>
@@ -293,7 +297,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {

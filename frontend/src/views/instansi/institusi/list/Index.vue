@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline secondary--text"> <strong>Daftar</strong> Institusi LPD </h1>
+            <h1 class="headline black--text"> <strong>Daftar</strong> Institusi LPD </h1>
           </v-col>
         </v-row>
       </v-card-text>
@@ -26,7 +26,7 @@
           @download="onDownload"
         >
           <template v-slot:subtitle>
-            <div class="subtitle-1 black--text"> {{ total }} Institusi LPD</div>
+            <div class="subtitle-1 black--text"> <b>{{ total }}</b> Institusi LPD</div>
           </template>
         </base-table-header>
       </v-card-title>
@@ -55,12 +55,14 @@
                   <v-row>
                     <v-col class="py-0" cols="12" md="4">
                       <v-list-item class="px-0">
-                        <v-list-item-avatar color="secondary">
+                        <v-list-item-avatar color="blue-grey darken-3">
                           <v-icon dark>mdi-office-building-outline</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="py-0 mt-3">
-                          <h2 class="subtitle-1 black--text">{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</h2>
-                          <p class="caption">
+                          <div class="body-1 black--text">
+                            <strong>{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</strong>
+                          </div>
+                          <p class="caption black--text">
                             <span>ID Institusi: {{ $getDeepObj(item, 'instansi.data.instansi_id') || '-' }}</span>
                           </p>
                         </v-list-item-content>
@@ -256,7 +258,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {

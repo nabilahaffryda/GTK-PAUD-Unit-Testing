@@ -229,4 +229,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.secondary--text {
+  color: #bf360c !important;
+}
+</style>

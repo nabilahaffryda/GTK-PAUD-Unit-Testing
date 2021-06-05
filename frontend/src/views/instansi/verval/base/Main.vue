@@ -7,7 +7,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline secondary--text"> <strong>Verval</strong> Profil</h1>
+            <h1 class="headline black--text"> <strong>Verval</strong> Profil</h1>
             <div> Modul ini digunakan untuk melakukan {{ $route.meta.title }} </div>
           </v-col>
         </v-row>
@@ -24,7 +24,9 @@
           @reload="onReload"
         >
           <template v-slot:subtitle>
-            <div class="body-1 black--text"> {{ total }} Daftar Kandidat yang perlu di periksa</div>
+            <div class="body-1 black--text">
+              <b>{{ total }}</b> Daftar Kandidat yang perlu di periksa
+            </div>
           </template>
         </base-table-header>
         <v-divider />
@@ -52,10 +54,10 @@
                     <v-col cols="12" md="4">
                       <v-list-item class="px-0" @click="onVerval(item)">
                         <v-list-item-icon class="mr-1 my-auto">
-                          <v-icon color="secondary" size="60">mdi-account-circle</v-icon>
+                          <v-icon color="primary" size="60">mdi-account-circle</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="py-0 px-1">
-                          <p class="caption grey--text"> Nama {{ $titleCase(obj) }} </p>
+                          <p class="caption"> Nama {{ $titleCase(obj) }} </p>
                           <span class="body-1">
                             <strong>
                               {{ $getDeepObj(item, `${obj}.data.nama`) || '-' }}
@@ -68,7 +70,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <v-label color="caption"><small>Nomor HP </small></v-label>
+                            <div class="label--text">Nomor HP </div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             <template>
@@ -86,7 +88,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <v-label color="caption"><small>Alamat Email</small></v-label>
+                            <div class="label--text">Alamat Email</div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             {{ $getDeepObj(item, `${obj}.data.email`) }}
@@ -98,7 +100,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <v-label color="caption"><small>Status</small></v-label>
+                            <div class="label--text">Status</div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             <v-chip
@@ -139,7 +141,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <v-label color="caption"><small>Aksi Selanjutnya</small></v-label>
+                            <div class="label--text">Aksi Selanjutnya</div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             <v-btn color="primary" small block @click="onVerval(item)">
@@ -176,10 +178,11 @@
     </v-card>
     <base-modal-full
       ref="modal"
+      colorBtn="primary"
       :title="formulir['title']"
       :autoClose="formulir['autoClose']"
       :useSave="formulir['is_edit']"
-      color-btn="blue"
+      fluid
       @close="onClose"
       @save="onSave"
     >
@@ -568,7 +571,7 @@ export default {
 
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {

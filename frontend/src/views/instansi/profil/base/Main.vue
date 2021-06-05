@@ -5,7 +5,7 @@
         <v-row class="bg-kiri" no-gutters>
           <v-col cols="2" class="mt-5"> </v-col>
           <v-col cols="10" class="pa-5" style="background-color: white">
-            <h1 class="headline info--text">
+            <h1 class="headline primary--text">
               <v-row dense>
                 <v-col cols="12" md="8" sm="8">
                   Selamat Datang,
@@ -14,7 +14,7 @@
                   </strong>
                 </v-col>
                 <v-col cols="12" md="4" sm="4" class="text-right right-aligned">
-                  <v-chip class="caption" color="error" dark>
+                  <v-chip color="error" dark>
                     {{
                       $titleCase(
                         ['pengajar', 'pembimbing'].includes(jenis)
@@ -171,6 +171,7 @@
         :rules="formulir.rules"
         :detail="detail"
         :jenis="jenis"
+        uimodel="card"
       />
     </base-modal-full>
   </div>
@@ -220,7 +221,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {

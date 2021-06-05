@@ -12,6 +12,7 @@
         <v-btn
           :disabled="!$allow(`${['lpd', 'admin-kelas'].includes(jenis) ? jenis : 'petugas'}-profil.update`)"
           depressed
+          color="primary"
           @click="$emit('edit')"
         >
           <v-icon>mdi-pencil</v-icon>
@@ -32,7 +33,7 @@
             <div v-if="p !== 'dasar'" class="text-h6 my-3 font-weight-bold"> Data {{ $titleCase(p) }} </div>
             <v-row>
               <v-col v-for="(sub, s) in profil" :key="s" v-bind="sub.grid">
-                <div class="caption grey--text">{{ $getDeepObj(sub, 'title') || '-' }}</div>
+                <div class="caption">{{ $getDeepObj(sub, 'title') || '-' }}</div>
                 <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(sub, 'value') || '-'" /></h2>
               </v-col>
             </v-row>
@@ -45,7 +46,7 @@
               <template v-for="(item, index) in diklats">
                 <v-list-item :key="index">
                   <v-list-item-avatar tile>
-                    <v-avatar tile color="secondary">
+                    <v-avatar tile color="primary">
                       <span class="white--text">{{ index + 1 }}</span>
                     </v-avatar>
                   </v-list-item-avatar>

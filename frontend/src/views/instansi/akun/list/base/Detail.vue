@@ -6,10 +6,10 @@
           <div class="bg-kiri"></div>
         </v-col>
         <v-col cols="10" class="pa-5">
-          <h1 class="headline secondary--text" v-html="`Detail ${title}`"></h1>
+          <h1 class="headline black--text" v-html="`Detail ${title}`"></h1>
           <v-row class="my-2">
             <v-col cols="12" md="2" sm="12">
-              <v-avatar color="secondary" size="100">
+              <v-avatar color="primary" size="100">
                 <v-icon dark size="80">mdi-account-circle</v-icon>
               </v-avatar>
             </v-col>
@@ -153,7 +153,7 @@ export default {
 
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #FFAB91;
   height: 100%;
 }
 </style>
