@@ -132,7 +132,7 @@ export default {
     programs() {
       return {
         url: {
-          pkb: 'https//app.simpkb.id',
+          pkb: 'https://paud.simpkb.id/',
           ppg: 'https://pendaftaran.ppg.kemdikbud.go.id',
           gurupenggerak: 'https://app-gurupenggerak.simpkb.id',
         },

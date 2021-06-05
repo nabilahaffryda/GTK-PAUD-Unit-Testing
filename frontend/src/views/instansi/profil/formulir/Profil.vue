@@ -9,7 +9,12 @@
         </span>
       </v-list-item-content>
       <v-list-item-action>
-        <v-btn :disabled="!$allow(`petugas-profil.update`)" depressed @click="$emit('edit')">
+        <v-btn
+          :disabled="!$allow(`${['lpd', 'admin-kelas'].includes(jenis) ? jenis : 'petugas'}-profil.update`)"
+          depressed
+          color="primary"
+          @click="$emit('edit')"
+        >
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </v-list-item-action>
@@ -18,7 +23,7 @@
       <v-col cols="12" md="2" sm="12">
         <base-photo-profil
           :photo="$getDeepObj(detail, 'akun.data.foto_url') || $getDeepObj(detail, 'instansi.data.foto_url') || ''"
-          photodef="default_foto_gp.png"
+          :photodef="jenis === 'lpd' ? 'default_foto_lpd.png' : 'default_foto_gp.png'"
           :useBase64="true"
         />
       </v-col>
@@ -28,10 +33,31 @@
             <div v-if="p !== 'dasar'" class="text-h6 my-3 font-weight-bold"> Data {{ $titleCase(p) }} </div>
             <v-row>
               <v-col v-for="(sub, s) in profil" :key="s" v-bind="sub.grid">
-                <div class="caption grey--text">{{ $getDeepObj(sub, 'title') || '-' }}</div>
+                <div class="caption">{{ $getDeepObj(sub, 'title') || '-' }}</div>
                 <h2 class="subtitle-1 black--text"><span v-html="$getDeepObj(sub, 'value') || '-'" /></h2>
               </v-col>
             </v-row>
+          </v-col>
+          <!-- Sheet Diklat -->
+          <v-col cols="12" md="6" sm="12" v-if="jenis === 'lpd'">
+            <div class="text-h6 my-3 font-weight-bold"> Data Diklat </div>
+            <div class="grey--text">Pengalaman Melatih 2 Tahun Terakhir</div>
+            <v-list three-line>
+              <template v-for="(item, index) in diklats">
+                <v-list-item :key="index">
+                  <v-list-item-avatar tile>
+                    <v-avatar tile color="primary">
+                      <span class="white--text">{{ index + 1 }}</span>
+                    </v-avatar>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <v-list-item-title v-html="item.nama"></v-list-item-title>
+                    <v-list-item-subtitle v-html="item.tahun"></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list>
           </v-col>
         </v-row>
       </v-col>

@@ -1,13 +1,18 @@
 import { mapActions } from 'vuex';
 
 export default {
+  data() {
+    return {
+      paramsInstasi: {},
+      cacheInstansi: {},
+    };
+  },
   methods: {
     ...mapActions('akun', [
       'fetch',
       'create',
       'update',
       'listGroups',
-      'listInstansis',
       'action',
       'lookup',
       'getDetail',
@@ -15,6 +20,8 @@ export default {
       'templateUpload',
       'upload',
     ]),
+
+    ...mapActions('institusi', { listInstansis: 'fetch' }),
 
     ...mapActions('master', ['getMasters']),
 
@@ -61,6 +68,7 @@ export default {
             paud_admin_id: item.paud_admin_id,
             k_group: this.$getDeepObj(item, 'akun.data.k_golongan'),
             instansi_id: item.instansi_id,
+            instansi: item.instansi,
           })
         );
       });
@@ -224,7 +232,7 @@ export default {
 
       let url = {};
       this.$confirm('Pilih jenis Berkas yang ingin di Unduh?', 'Unduh Berkas', {
-        tipe: 'warning',
+        tipe: 'secondary',
         form: {
           desc: 'Laporan Berkas',
           render: (h) => {
@@ -264,17 +272,28 @@ export default {
       });
     },
 
-    getInstansi() {
+    getInstansi(val) {
       let mInstansi = {};
-      if ([171].includes(Number(this.kGroup)) && !Object.keys(this.instansis).length) {
-        this.listInstansis()
-          .then((resp) => {
-            const instansi = resp || [];
+      if (this.cacheInstansi && this.cacheInstansi[val] && Object.keys(this.cacheInstansi[val] || {}).length) {
+        this.$set(this, 'instansis', this.cacheInstansi[val]);
+      } else {
+        this.paramsInstasi = Object.assign({}, { page: 1 }, { filter: { keyword: val } });
+        this.listInstansis({ params: this.paramsInstasi })
+          .then(({ data }) => {
+            const instansi = data || [];
             instansi.forEach((item) => {
-              this.$set(mInstansi, this.$getDeepObj(item, 'instansi_id'), this.$getDeepObj(item, 'instansi.data.nama'));
+              if (+item.is_aktif === 1) {
+                this.$set(
+                  mInstansi,
+                  this.$getDeepObj(item, 'instansi_id'),
+                  this.$getDeepObj(item, 'instansi.data.nama')
+                );
+              }
             });
           })
           .then(() => {
+            const keyword = this.$getDeepObj(this.paramsInstasi, 'filter.keyword');
+            this.cacheInstansi[keyword] = mInstansi;
             this.$set(this, 'instansis', mInstansi);
           });
       }

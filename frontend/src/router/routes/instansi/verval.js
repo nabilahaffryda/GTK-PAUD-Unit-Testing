@@ -7,7 +7,7 @@ export default [
     meta: {
       title: 'Verval Pengajar',
       tipe: 'petugas',
-      paudkey: 'pengajar',
+      paudkey: 'petugas',
       atribut: 'akun',
     },
   },

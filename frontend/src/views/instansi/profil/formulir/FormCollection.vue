@@ -43,7 +43,7 @@
               <input type="hidden" v-model="form[item.k_tipe][id]['paud_petugas_diklat_id']" />
               <v-row class="mt-9">
                 <v-col cols="12" md="6" class="py-0">
-                  <v-subheader :class="[`px-0 body-2 secondary--text`]" style="height: 24px">
+                  <v-subheader :class="[`px-0 body-2 secondary--text text--darken-4`]" style="height: 24px">
                     Unggah Berkas*
                   </v-subheader>
                   <template v-if="form[item.k_tipe][id]['url']">

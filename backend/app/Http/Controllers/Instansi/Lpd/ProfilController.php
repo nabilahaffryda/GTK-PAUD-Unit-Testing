@@ -8,6 +8,7 @@ use App\Http\Requests\Instansi\Lpd\Profil\UpdateRequest;
 use App\Http\Resources\BaseResource;
 use App\Models\PaudInstansi;
 use App\Services\Instansi\LpdService;
+use Illuminate\Http\Request;
 
 class ProfilController extends Controller
 {
@@ -40,5 +41,10 @@ class ProfilController extends Controller
         $this->service->updateProfil($paudInstansi, $request->validated(), $foto->data, $foto->ext);
 
         return BaseResource::make($paudInstansi->loadMissing('instansi'));
+    }
+
+    public function setAktif(PaudInstansi $paudInstansi, Request $request)
+    {
+        return $this->service->setAktif($paudInstansi, $request->all());
     }
 }

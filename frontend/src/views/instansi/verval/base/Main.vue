@@ -7,7 +7,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline secondary--text"> <strong>Verval</strong> Profil</h1>
+            <h1 class="headline black--text"> <strong>Verval</strong> Profil</h1>
             <div> Modul ini digunakan untuk melakukan {{ $route.meta.title }} </div>
           </v-col>
         </v-row>
@@ -17,14 +17,16 @@
     <v-card flat>
       <v-card-text>
         <base-table-header
-          :btnFilter="false"
+          btn-filter
           @download="onDownloadList"
           @filter="onFilter"
           @search="onSearch"
           @reload="onReload"
         >
           <template v-slot:subtitle>
-            <div class="body-1 black--text"> Daftar Kandididat yang perlu di periksa</div>
+            <div class="body-1 black--text">
+              <b>{{ total }}</b> Daftar Kandidat yang perlu di periksa
+            </div>
           </template>
         </base-table-header>
         <v-divider />
@@ -52,10 +54,10 @@
                     <v-col cols="12" md="4">
                       <v-list-item class="px-0" @click="onVerval(item)">
                         <v-list-item-icon class="mr-1 my-auto">
-                          <v-icon color="secondary" size="60">mdi-account-circle</v-icon>
+                          <v-icon color="primary" size="60">mdi-account-circle</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="py-0 px-1">
-                          <p class="caption grey--text"> Nama {{ $titleCase(obj) }} </p>
+                          <p class="caption"> Nama {{ $titleCase(obj) }} </p>
                           <span class="body-1">
                             <strong>
                               {{ $getDeepObj(item, `${obj}.data.nama`) || '-' }}
@@ -68,11 +70,15 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <v-label color="caption"><small>Nomor HP </small></v-label>
+                            <div class="label--text">Nomor HP </div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             <template>
-                              {{ $getDeepObj(item, `${obj}.data.no_hp`) || '-' }}
+                              {{
+                                $getDeepObj(item, `${obj}.data.no_hp`) ||
+                                $getDeepObj(item, `${obj}.data.no_telpon`) ||
+                                '-'
+                              }}
                             </template>
                           </v-list-item-subtitle>
                         </v-list-item-content>
@@ -82,7 +88,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <v-label color="caption"><small>Alamat Email</small></v-label>
+                            <div class="label--text">Alamat Email</div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             {{ $getDeepObj(item, `${obj}.data.email`) }}
@@ -94,11 +100,25 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <v-label color="caption"><small>Status</small></v-label>
+                            <div class="label--text">Status</div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
-                            <v-chip :color="getColor(item.k_verval_paud)" dark small>
-                              {{ $getDeepObj(item, 'm_verval_paud.data.keterangan') || '-' }}
+                            <v-chip
+                              :color="
+                                getColor(
+                                  jenis === 'petugas'
+                                    ? $getDeepObj(item, 'paud_petugas_perans.data.0.k_verval_paud')
+                                    : item.k_verval_paud
+                                )
+                              "
+                              dark
+                              small
+                            >
+                              {{
+                                jenis === 'petugas'
+                                  ? $getDeepObj(item, 'paud_petugas_perans.data.0.m_verval_paud.data.keterangan') || '-'
+                                  : $getDeepObj(item, 'm_verval_paud.data.keterangan') || '-'
+                              }}
                             </v-chip>
                             <span
                               style="cursor: pointer"
@@ -121,19 +141,23 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <v-label color="caption"><small>Aksi Selanjutnya</small></v-label>
+                            <div class="label--text">Aksi Selanjutnya</div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
-                            <v-btn
-                              v-if="$allow(`${jenis}-verval.update`) && Number(item.k_verval_paud) <= 3"
-                              color="primary"
-                              small
-                              block
-                              @click="onVerval(item)"
-                            >
-                              Verval Ajuan
+                            <v-btn color="primary" small block @click="onVerval(item)">
+                              {{
+                                $allow(`${jenis}-verval.update`) &&
+                                [2, 3].includes(
+                                  Number(
+                                    jenis === 'petugas'
+                                      ? $getDeepObj(item, 'paud_petugas_perans.data.0.k_verval_paud')
+                                      : item.k_verval_paud
+                                  )
+                                )
+                                  ? 'Verval Ajuan'
+                                  : 'LIHAT DETAIL'
+                              }}
                             </v-btn>
-                            <v-btn v-else color="primary" small block @click="onVerval(item)"> LIHAT DETAIL </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -154,10 +178,11 @@
     </v-card>
     <base-modal-full
       ref="modal"
+      colorBtn="primary"
       :title="formulir['title']"
       :autoClose="formulir['autoClose']"
       :useSave="formulir['is_edit']"
-      color-btn="blue"
+      fluid
       @close="onClose"
       @save="onSave"
     >
@@ -227,42 +252,55 @@ export default {
       return temp;
     },
 
+    mapStatusVerval() {
+      const masters = (this.masters && this.masters.m_verval_paud) || {};
+      let temp = {};
+
+      Object.keys(masters).forEach((item) => {
+        if (![1, 3].includes(Number(item))) {
+          this.$set(temp, item, masters[item]);
+        }
+      });
+
+      return temp;
+    },
+
     formFilter() {
       let master = Object.assign({}, this.masters[`m_berkas_${this.keyTipe}_paud`]);
       // delete kandidat
       delete master[1];
       return [
-        {
-          label: 'Pilih Verifikator',
-          model: 'akun_id',
-          type: 'select',
-          props: ['attach'],
-          master: this.$mapForMaster(this.mapTimVerval),
-          labelColor: 'secondary',
-          grid: { cols: 12 },
-        },
+        // {
+        //   label: 'Pilih Verifikator',
+        //   model: 'akun_id',
+        //   type: 'select',
+        //   props: ['attach'],
+        //   master: this.$mapForMaster(this.mapTimVerval),
+        //   labelColor: 'secondary',
+        //   grid: { cols: 12 },
+        // },
         {
           label: 'Pilih Status Verval',
           default: true,
           type: 'checkbox',
           model: 'k_verval_paud',
-          master: this.$mapForMaster(master),
+          master: this.$mapForMaster(this.mapStatusVerval),
           props: ['attach', 'chips', 'deletable-chips', 'multiple', 'small-chips'],
         },
-        {
-          label: 'Pilih Lokasi',
-          default: true,
-          type: 'cascade',
-          configs: this.configs,
-          labelColor: 'secondary',
-          grid: { cols: 12, md: 6 },
-        },
+        // {
+        //   label: 'Pilih Lokasi',
+        //   default: true,
+        //   type: 'cascade',
+        //   configs: this.configs,
+        //   labelColor: 'secondary',
+        //   grid: { cols: 12, md: 6 },
+        // },
       ];
     },
 
     filtersMaster() {
       return {
-        k_verval_psp: this.masters && this.masters[`m_berkas_${this.keyTipe}_paud`],
+        k_verval_paud: this.mapStatusVerval,
         k_propinsi: this.masters && this.masters['propinsi'],
         k_kota: this.masters && this.masters['kota'],
         akun_id: this.mapTimVerval,
@@ -283,10 +321,16 @@ export default {
   },
   created() {
     this.getMasters({
-      name: ['m_berkas_pengajar_paud', 'm_berkas_lpd_paud', 'm_kualifikasi'].join(';'),
+      name: [
+        'm_berkas_petugas_paud',
+        'm_berkas_lpd_paud',
+        'm_kualifikasi',
+        'tingkat_diklat_paud',
+        'm_verval_paud',
+      ].join(';'),
       filter: {
         0: {
-          k_berkas_pengajar_paud: {
+          k_berkas_petugas_paud: {
             op: '<>',
             val: 2,
           },
@@ -340,10 +384,17 @@ export default {
     },
 
     async onVerval(item) {
-      const kVerval = Number(item.k_verval_paud);
+      const kVerval = Number(
+        this.jenis === 'petugas'
+          ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.k_verval_paud')
+          : item.k_verval_paud
+      );
       const status = {
         color: this.getColor(kVerval),
-        keterangan: this.$getDeepObj(item, 'm_verval_paud.data.keterangan') || '-',
+        keterangan:
+          this.jenis === 'petugas'
+            ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.m_verval_paud.data.keterangan') || '-'
+            : this.$getDeepObj(item, 'm_verval_paud.data.keterangan') || '-',
       };
 
       let init = {};
@@ -520,7 +571,7 @@ export default {
 
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {

@@ -9,7 +9,7 @@
         <router-view :key="$route.fullPath" />
       </v-container>
       <v-fab-transition v-if="!exceptFab.includes($route.name) && useFab">
-        <v-btn color="pink" style="bottom: 2rem" dark fixed bottom right fab @click="toLink">
+        <v-btn color="deep-orange darken-4" style="bottom: 2rem" dark fixed bottom right fab @click="toLink">
           <v-icon>mdi-home</v-icon>
         </v-btn>
       </v-fab-transition>

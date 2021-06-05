@@ -95,12 +95,14 @@ export default {
         error: 'mdi-close-circle',
         info: 'mdi-information',
         success: 'mdi-check-circle',
+        secondary: 'mdi-alert',
       },
       myClass: {
         warning: '',
         error: 'white--text',
         info: ' white--text',
         success: ' white--text',
+        secondary: 'white--text',
       },
     };
   },

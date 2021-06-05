@@ -15,7 +15,9 @@
             <span>{{
               diklat.k_diklat_paud === 4
                 ? diklat.tingkatan
-                : $getDeepObj(diklat, 'm_tingkat_diklat_paud.data.keterangan')
+                : masters &&
+                  masters['tingkat_diklat_paud'] &&
+                  masters['tingkat_diklat_paud'][$getDeepObj(diklat, 'k_tingkat_diklat_paud')]
             }}</span
             ><br />
             <span>Penyelenggara: {{ diklat.penyelenggara }}</span>
@@ -42,6 +44,10 @@ export default {
       type: Number,
     },
     diklat: {
+      type: Object,
+      default: () => {},
+    },
+    masters: {
       type: Object,
       default: () => {},
     },

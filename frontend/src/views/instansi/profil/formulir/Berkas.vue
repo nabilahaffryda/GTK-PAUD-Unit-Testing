@@ -1,17 +1,18 @@
 <template>
   <v-list-item class="pa-0">
     <v-list-item-icon>
-      <v-avatar color="blue-grey lighten-5">
-        <v-icon>mdi-attachment</v-icon>
+      <v-avatar color="primary">
+        <v-icon color="white">mdi-attachment</v-icon>
       </v-avatar>
     </v-list-item-icon>
     <v-list-item-content class="px-0">
       <v-row>
         <v-col cols="12" md="6" sm="12">
           <span class="subtitle-1">
-            <b>{{ (berkas && berkas.title) || '-' }}</b>
+            <b> {{ (berkas && berkas.title) || '-' }} </b>
           </span>
-          <p class="body-2 grey--text text--darken-1" v-html="berkas && berkas.pesan" />
+          <div class="body-2 grey--text text--darken-1" v-html="berkas && berkas.pesan" />
+          <div v-if="optional" class="label--text warning--text"><i>* Tidak Wajib</i></div>
           <div v-if="berkas && berkas.url_template">
             <v-btn text small depressed elevation="0" color="info" class="text-capitalize pa-0">
               <v-icon x-small left class="mr-0">mdi-download</v-icon> Unduh template
@@ -22,24 +23,26 @@
           <v-container class="py-0">
             <v-row>
               <v-col cols="12" md="4" class="pb-0">
-                <div>
-                  <v-label color="caption"><small>Keterangan</small></v-label>
-                </div>
+                <div class="label--text"> Keterangan </div>
                 {{ valid ? 'Sudah Diunggah' : 'Belum Diunggah' }}
               </v-col>
               <v-col cols="12" md="4" class="mt-4">
-                <v-btn depressed :disabled="!valid" small @click="onDetil(berkas)" color="blue-grey lighten-5">
+                <v-btn depressed :disabled="!valid" small @click="onDetil(berkas)" color="info">
                   <v-icon>mdi-eye</v-icon>
                 </v-btn>
+                <v-btn class="ml-md-1" :disabled="!valid" depressed small @click="onView(type)" color="success">
+                  <v-icon>mdi-download</v-icon>
+                </v-btn>
                 <v-btn
+                  v-if="useDelete"
                   class="ml-md-1"
                   :disabled="!valid"
                   depressed
                   small
-                  @click="onView(type)"
-                  color="blue-grey lighten-5"
+                  color="error"
+                  @click="onDelete(type)"
                 >
-                  <v-icon>mdi-download</v-icon>
+                  <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </v-col>
               <v-col cols="12" md="4" class="mt-4" v-if="withAction">
@@ -80,6 +83,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    useDelete: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     onUpload(type) {
@@ -90,6 +97,14 @@ export default {
     },
     onDetil(berkas) {
       this.$emit('detil', berkas);
+    },
+    onDelete(type) {
+      this.$confirm('Apakah anda yakin ingin menghapus berkas berikut ?', 'Hapus Berkas', {
+        tipe: 'error',
+        data: [],
+      }).then(() => {
+        this.$emit('delete', { type: type });
+      });
     },
   },
 };

@@ -211,6 +211,12 @@ return [
             ],
         ],
 
+        'm_berkas_lpd_paud' => [
+            'model' => [
+                'const' => ['k_berkas_lpd_paud', 'singkat'],
+            ],
+        ],
+
         'm_golongan' => [
             'model' => [
                 'const' => ['k_golongan', 'singkat'],

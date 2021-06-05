@@ -53,17 +53,21 @@
         </v-radio-group>
         <v-divider class="my-2"></v-divider>
         <div class="text-md-right">
-          <v-btn right color="secondary" :disabled="!pilihan" @click="onPilih"> Selanjutnya </v-btn>
+          <v-btn right color="primary" :disabled="!pilihan" @click="onPilih"> Selanjutnya </v-btn>
         </div>
       </template>
       <v-container v-if="!useUpload || isEdit ? true : isPilih === 'manual'">
         <v-stepper v-model="step" class="elevation-0">
-          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
-            <v-stepper-step color="secondary" :complete="step > 1" step="1"> Tambah Akun </v-stepper-step>
+          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12); padding: 0 15%">
+            <v-stepper-step :color="step > 1 ? 'success' : 'primary'" :complete="step > 1" step="1">
+              Tambah Akun
+            </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step color="secondary" :complete="step > 2" step="2"> Data {{ title }} </v-stepper-step>
+            <v-stepper-step :color="step > 2 ? 'success' : 'primary'" :complete="step > 2" step="2">
+              Data {{ title }}
+            </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step color="secondary" step="3"> Konfirmasi Akun </v-stepper-step>
+            <v-stepper-step step="3"> Konfirmasi Akun </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">
@@ -81,7 +85,7 @@
                   <v-btn v-if="useUpload || step !== 1" class="text-md-right" right text @click="onResetPilih">
                     Kembali
                   </v-btn>
-                  <v-btn class="text-md-right" right color="secondary" @click="onCheck"> Selanjutnya </v-btn>
+                  <v-btn class="text-md-right" right color="primary" @click="onCheck"> Selanjutnya </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
@@ -89,6 +93,27 @@
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
                   <base-form-generator :schema="schema.biodata[jenis]" v-model="form" />
+                  <template v-if="jenis === 'program'">
+                    <v-row>
+                      <v-col cols="12" md="6">
+                        <span class="px-0 body-2 secondary--text text--darken-4" style="height: 24px">
+                          Instansi<span>*</span>
+                        </span>
+                        <v-autocomplete
+                          v-model="form.instansi_id"
+                          :items="this.instansis ? this.$mapForMaster(this.instansis) : []"
+                          :search-input.sync="search"
+                          item-text="text"
+                          item-value="value"
+                          label="Cari Instansi"
+                          placeholder="Cari Instansi"
+                          single-line
+                          outlined
+                          dense
+                        ></v-autocomplete>
+                      </v-col>
+                    </v-row>
+                  </template>
                   <v-divider class="my-4" />
                 </v-card-text>
                 <v-card-actions class="pa-0">
@@ -107,9 +132,7 @@
                   >
                     Kembali
                   </v-btn>
-                  <v-btn class="text-md-right" right color="secondary" @click="$emit('onValidate')">
-                    Selanjutnya
-                  </v-btn>
+                  <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')"> Selanjutnya </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
@@ -122,7 +145,7 @@
                   </span>
                   <v-row class="my-2">
                     <v-col cols="12" md="2" sm="12">
-                      <v-avatar color="secondary" size="100">
+                      <v-avatar color="primary" size="100">
                         <v-icon dark size="80">mdi-account-circle</v-icon>
                       </v-avatar>
                     </v-col>
@@ -158,10 +181,14 @@
       </v-container>
       <v-container v-else-if="isPilih === 'excel'">
         <v-stepper v-model="stepUnggah" class="elevation-0">
-          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
-            <v-stepper-step color="secondary" :complete="stepUnggah > 1" step="1"> Isi Data Akun </v-stepper-step>
+          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12); padding: 0 15%">
+            <v-stepper-step :color="stepUnggah > 1 ? 'success' : 'primary'" :complete="stepUnggah > 1" step="1">
+              Isi Data Akun
+            </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step color="secondary" :complete="stepUnggah > 2" step="2"> Konfirmasi Akun </v-stepper-step>
+            <v-stepper-step :color="stepUnggah > 2 ? 'success' : 'primary'" :complete="stepUnggah > 2" step="2">
+              Konfirmasi Akun
+            </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">
@@ -169,7 +196,7 @@
                 <v-card-text class="pa-0 pt-7">
                   <v-row class="my-2" dense no-gutters>
                     <v-col cols="12" md="2" sm="12" class="px-0">
-                      <v-avatar color="secondary" size="100">
+                      <v-avatar color="primary" size="100">
                         <v-icon dark size="80">mdi-file-upload</v-icon>
                       </v-avatar>
                     </v-col>
@@ -180,7 +207,7 @@
                         pada langkah sebelumnnya. Pastikan data yang Anda masukan bersifat final</span
                       >
                       <div class="mt-2">
-                        <v-btn depressed color="secondary" @click="$emit('upload')">
+                        <v-btn depressed color="primary" @click="$emit('upload')">
                           <v-icon left>mdi-upload</v-icon>Pilih Berkas
                         </v-btn>
                       </div>
@@ -195,7 +222,7 @@
                     class="text-md-right"
                     :disabled="!file"
                     right
-                    color="secondary"
+                    color="primary"
                     @click="
                       () => {
                         $emit('onValidate');
@@ -215,7 +242,7 @@
                   <i>Tambah Data Menggunakan Excel</i>
                   <v-row class="my-2">
                     <v-col cols="12" md="2" sm="2">
-                      <v-avatar color="secondary" size="80">
+                      <v-avatar color="primary" size="80">
                         <v-icon dark size="60">mdi-file</v-icon>
                       </v-avatar>
                     </v-col>
@@ -258,6 +285,7 @@
 <script>
 import BaseFormGenerator from '@components/base/BaseFormGenerator';
 import BaseListInfo from '@components/base/BaseListInfo';
+import debounce from 'lodash.debounce';
 export default {
   components: { BaseListInfo, BaseFormGenerator },
   props: {
@@ -307,6 +335,8 @@ export default {
       isPilih: '',
       stepUnggah: 1,
       file: null,
+      search: '',
+      keyword: '',
     };
   },
   computed: {
@@ -475,23 +505,6 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
-              grid: { cols: 12, md: 6 },
-              labelColor: 'secondary',
-            },
-            {
-              type: 'VSelect',
-              name: 'instansi_id',
-              label: 'Instansi',
-              hint: 'wajib diisi',
-              items: this.$mapForMaster(this.instansis),
-              value: 'value',
-              text: 'text',
-              required: true,
-              hideDetails: false,
-              outlined: true,
-              dense: true,
-              singleLine: true,
-              disabled: this.isEdit,
               grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
             },
@@ -858,16 +871,29 @@ export default {
         { name: 'k_propinsi' },
         { name: 'k_kota' },
       ];
+      if (this.jenis === 'program') {
+        formulir.push({ name: 'instansi_id' });
+      }
+
       for (const item of formulir) {
         if (item.name) {
           this.$set(this.form, item.name, this.$getDeepObj(value, item.name) || '');
         }
       }
       this.id = (value && value.paud_admin_id) || '';
+
+      // if (this.$getDeepObj(value, 'instansi.data.nama')) {
+      //   this.$emit('getInstansi', this.$getDeepObj(value, 'instansi.data.nama') || '');
+      this.keyword = this.$getDeepObj(value, 'instansi.data.nama') || '';
+      // }
     },
 
     getValue() {
       let keys = ['email', 'k_propinsi', 'k_kota'];
+      if (this.jenis === 'program') {
+        keys.push('instansi_id');
+      }
+
       keys = keys.concat(
         (this.schema.biodata[this.jenis] || []).map((item) => {
           return item.name;
@@ -1005,9 +1031,14 @@ export default {
     setFile(file) {
       this.file = file;
     },
+
+    searchInstansi: debounce(function (e) {
+      this.$emit('getInstansi', e || this.keyword || '');
+    }, 500),
   },
   watch: {
     initValue: 'initForm',
+    search: 'searchInstansi',
   },
 };
 </script>

@@ -84,7 +84,7 @@ class PetugasService
 
         $isLengkap2 = $petugas->paudPetugasDiklats()->count() > 0;
 
-        $isLengkap3 = $petugas->paudPetugasBerkases()->count() == 4;
+        $isLengkap3 = $petugas->paudPetugasBerkases()->count() >= 4;
 
         return [
             'profil' => $isLengkap1,
@@ -147,7 +147,8 @@ class PetugasService
             throw new FlowException("Perubahan data petugas bisa dilakukan mandiri dari akun petugas.");
         }
 
-        $petugas->created_by = akunId();
+        $petugas->instansi_id = $admin->instansi_id;
+        $petugas->created_by  = akunId();
         if (!$petugas->save()) {
             throw new SaveException("Penyimpanan Data Petugas tidak berhasil");
         }
@@ -375,7 +376,7 @@ class PetugasService
             'angkatan'        => $petugas->angkatan,
         ])->first();
 
-        if (!$peran || !($peran->isVervalKandidat() || $peran->isVervalRevisi())) {
+        if (!$peran || !$peran->isVervalDiajukan()) {
             throw new FlowException("Ajuan data petugas tidak ditemukan");
         }
 

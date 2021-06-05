@@ -26,9 +26,11 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::group(['prefix' => 'lpd'], function () {
         Route::get('', [LpdController::class, 'index']);
         Route::post('create', [LpdController::class, 'create']);
+        Route::get('download', [LpdController::class, 'download']);
 
         Route::get('profil', [Lpd\ProfilController::class, 'index']);
         Route::post('profil/{paudInstansi}/update', [Lpd\ProfilController::class, 'update']);
+        Route::post('profil/{paudInstansi}/set-aktif', [Lpd\ProfilController::class, 'setAktif']);
         Route::get('profil/{paudInstansi}/berkas', [Lpd\Profil\BerkasController::class, 'index']);
         Route::post('profil/{paudInstansi}/berkas/create', [Lpd\Profil\BerkasController::class, 'create']);
 
@@ -36,6 +38,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudInstansi}/update', [LpdController::class, 'update']);
         Route::post('{paudInstansi}/ajuan/create', [Lpd\Profil\AjuanController::class, 'create']);
         Route::post('{paudInstansi}/ajuan/delete', [Lpd\Profil\AjuanController::class, 'delete']);
+
+        Route::post('berkas/{berkas}/delete', [Lpd\Profil\BerkasController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'verval'], function () {

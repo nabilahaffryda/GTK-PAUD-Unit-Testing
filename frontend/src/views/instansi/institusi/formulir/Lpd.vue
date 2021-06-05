@@ -3,8 +3,10 @@
     <v-card-text>
       <v-container>
         <v-stepper v-model="step" class="elevation-0">
-          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12)">
-            <v-stepper-step :complete="step > 1" step="1"> Data Institusi LPD</v-stepper-step>
+          <v-stepper-header class="elevation-0" style="border: 1px solid rgba(0, 0, 0, 0.12); padding: 0 15%">
+            <v-stepper-step :color="step > 1 ? 'success' : 'primary'" :complete="step > 1" step="1">
+              Data Institusi LPD
+            </v-stepper-step>
             <v-divider></v-divider>
             <v-stepper-step step="2"> Konfirmasi Data </v-stepper-step>
           </v-stepper-header>
@@ -120,7 +122,6 @@ export default {
           outlined: true,
           dense: true,
           singleLine: true,
-          disabled: this.isEdit || false,
         },
         {
           type: 'VTextarea',
@@ -211,10 +212,14 @@ export default {
 
     getValue() {
       let keys = (this.schema || []).map((item) => {
-        return item.name;
+        if (!item.disabled) {
+          return item.name;
+        }
       });
 
-      keys = [...keys, 'k_propinsi', 'k_kota'];
+      if (!this.isEdit) {
+        keys = [...keys, 'k_propinsi', 'k_kota'];
+      }
 
       let params = {};
       for (const id of keys) {

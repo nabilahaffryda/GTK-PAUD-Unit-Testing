@@ -22,8 +22,11 @@
                 :valid="item.valid"
                 :with-action="item.withAction"
                 :value="item.value || {}"
+                :optional="item.optional"
+                :useDelete="$allow(`${jenis}-profil-berkas.delete`) && item.optional && !isAjuan"
                 @detil="onDetil"
                 @upload="$emit('upload', item.type)"
+                @delete="$emit('delete', item.type)"
               />
             </template>
           </template>
@@ -37,7 +40,12 @@
                 </span>
               </v-list-item-content>
               <v-list-item-action>
-                <v-btn :disabled="!$allow('petugas-profil-diklat.update')" depressed @click="$emit('edit', i)">
+                <v-btn
+                  :disabled="!$allow(`${jenis === 'lpd' ? `${jenis}-profil` : 'petugas-profil-diklat'}.update`)"
+                  depressed
+                  color="primary"
+                  @click="$emit('edit', i)"
+                >
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
               </v-list-item-action>
@@ -110,6 +118,10 @@ export default {
     jenis: {
       type: String,
       default: 'pengajar',
+    },
+    isAjuan: {
+      type: Boolean,
+      default: false,
     },
   },
   components: { Berkas, Profil, Collection, PopupPreviewDetail },

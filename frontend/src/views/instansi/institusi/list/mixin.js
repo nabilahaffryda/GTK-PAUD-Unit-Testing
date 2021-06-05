@@ -69,6 +69,79 @@ export default {
       );
     },
 
+    onAktif(item) {
+      this.$confirm('Apakan anda ingin aktifkan intitusi berikut ?', 'Aktifkan Institusi', { tipe: 'info' }).then(
+        () => {
+          this.action({ id: `profil/${item.paud_instansi_id}`, type: 'set-aktif', params: { enable: 1 } }).then(() => {
+            this.$success('Institusi berhasil di aktifkan');
+            this.fetchData();
+          });
+        }
+      );
+    },
+
+    onNonAktif(item) {
+      this.$confirm('Apakan anda ingin non-aktifkan intitusi berikut ?', 'Non-aktifkan Institusi', {
+        tipe: 'warning',
+      }).then(() => {
+        this.action({ id: `profil/${item.paud_instansi_id}`, type: 'set-aktif', params: { enable: 0 } }).then(() => {
+          this.$success('Institusi berhasil di non-aktifkan');
+          this.fetchData();
+        });
+      });
+    },
+
+    onDownload() {
+      const M_LAPORAN = [
+        {
+          key: 'download',
+          label: `Daftar Instansi LPD`,
+          acl: this.$allow(`lpd.download`),
+        },
+      ];
+
+      let url = {};
+      this.$confirm('Pilih jenis Berkas yang ingin di Unduh?', 'Unduh Berkas', {
+        tipe: 'secondary',
+        form: {
+          desc: 'Laporan Berkas',
+          render: (h) => {
+            return h(
+              'select',
+              {
+                class: 'custom-select',
+                domProps: {
+                  value: '',
+                },
+                on: {
+                  input: function (event) {
+                    url.dokumen = event.target.value;
+                  },
+                },
+              },
+              [
+                h('option', { attrs: { value: '' } }, '-- Pilih Laporan Berkas --'),
+                M_LAPORAN.filter((laporan) => this.$allow(laporan.acl)).map((item) =>
+                  h('option', { attrs: { value: item.key } }, item.label)
+                ),
+              ]
+            );
+          },
+        },
+        lblConfirmButton: 'Unduh',
+      }).then(() => {
+        if (!url.dokumen) {
+          this.$error('Silakan pilih laporan yang ingin diunduh!');
+          return;
+        }
+
+        const params = Object.assign(this.params, this.$isObject(this.filters) ? this.filters : {});
+        this.downloadList({ params, url: url.dokumen, tipe: this.akses }).then((url) => {
+          this.$downloadFile(url);
+        });
+      });
+    },
+
     onSave() {
       const isEdit = this.formulir.isEdit;
       const id = this.id;

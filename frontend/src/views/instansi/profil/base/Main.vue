@@ -5,7 +5,7 @@
         <v-row class="bg-kiri" no-gutters>
           <v-col cols="2" class="mt-5"> </v-col>
           <v-col cols="10" class="pa-5" style="background-color: white">
-            <h1 class="headline info--text">
+            <h1 class="headline primary--text">
               <v-row dense>
                 <v-col cols="12" md="8" sm="8">
                   Selamat Datang,
@@ -14,7 +14,7 @@
                   </strong>
                 </v-col>
                 <v-col cols="12" md="4" sm="4" class="text-right right-aligned">
-                  <v-chip class="caption" color="error" dark>
+                  <v-chip color="error" dark>
                     {{
                       $titleCase(
                         ['pengajar', 'pembimbing'].includes(jenis)
@@ -124,14 +124,14 @@
                   <template v-if="kVerval === 5">
                     Mohon melakukan perbaikan sesuai informasi tim Verifikasi sebagai berikut:<br />
                     <p class="pa-2 my-2 mr-5 white darken-2 subtitle-2">
-                      <strong v-html="(detail && detail.alasan) || '-'"></strong>
+                      <strong v-html="catatan || '-'"></strong>
                     </p>
                   </template>
                   <template v-else>
                     <br />
                     Mohon maaf pendaftaran Anda ditolak dengan alasan sebagai berikut:<br />
                     <p class="pa-2 my-2 mr-5 white darken-2 subtitle-2">
-                      <strong v-html="(detail && detail.alasan) || '-'"></strong>
+                      <strong v-html="catatan || '-'"></strong>
                     </p>
                   </template>
                 </v-alert>
@@ -151,8 +151,10 @@
         :detail="detail"
         :masters="masters"
         :jenis="jenis"
+        :isAjuan="isAjuan"
         @upload="upload"
         @edit="edit"
+        @delete="deleteBerkas"
       />
     </div>
     <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title" @save="onSave">
@@ -169,6 +171,7 @@
         :rules="formulir.rules"
         :detail="detail"
         :jenis="jenis"
+        uimodel="card"
       />
     </base-modal-full>
   </div>
@@ -218,7 +221,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {

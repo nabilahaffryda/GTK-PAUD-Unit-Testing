@@ -12,7 +12,7 @@
             <v-btn
               v-if="useSave"
               class="white--text mr-5"
-              :color="colorBtn || `warning`"
+              :color="colorBtn || `primary`"
               dark
               @click="save()"
               :loading="loading && !(error && error.show)"
@@ -21,7 +21,7 @@
             >
           </template>
         </v-toolbar>
-        <v-container class="py-12">
+        <v-container :fluid="fluid" class="py-12">
           <v-tabs v-if="tabHeader.length" v-model="tabs" background-color="transparent" grow centered>
             <v-tab v-for="item in tabHeader" :key="item">
               {{ item }}
@@ -85,7 +85,7 @@ export default {
     },
     colorBtn: {
       type: String,
-      default: 'orange',
+      default: 'primary',
     },
     lblBtn: {
       type: String,
@@ -94,6 +94,10 @@ export default {
     autoClose: {
       type: Boolean,
       default: true,
+    },
+    fluid: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

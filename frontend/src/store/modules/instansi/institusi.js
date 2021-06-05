@@ -1,6 +1,7 @@
 /* eslint-disable no-empty-pattern */
 import http from '@plugins/axios';
 import kitsu from '@plugins/kitsu';
+import { queryString } from '@utils/format';
 let $ajax;
 
 export const actions = {
@@ -34,5 +35,11 @@ export const actions = {
     const id = rootState.auth.instansi_id;
     const url = `i/${id}/lpd/${payload.id}/${payload.type}`;
     return http.post(url, payload.params).then(({ data }) => data);
+  },
+
+  downloadList({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const url = `${process.env.VUE_APP_API_URL}/i/${id}/lpd/${payload.url}?${queryString(payload.params)}`;
+    return Promise.resolve(url);
   },
 };
