@@ -505,16 +505,16 @@ export default {
             return;
           } else {
             for (let i = 0; i < diklats.length; i++) {
-              // if (
-              //   !diklats[i]['nama'] ||
-              //   diklats[i]['nama'].trim() === '' ||
-              //   !diklats[i]['tahun'] ||
-              //   diklats[i]['tahun'].trim() === ''
-              // ) {
-              //   this.$error('Mohon lengkapi data Diklat Anda');
-              //   this.$refs.modal.loading = false;
-              //   return;
-              // }
+              if (
+                !diklats[i]['nama'] ||
+                diklats[i]['nama'].trim() === '' ||
+                !diklats[i]['tahun'] ||
+                diklats[i]['tahun'].trim() === ''
+              ) {
+                this.$error('Mohon lengkapi data Diklat Anda');
+                this.$refs.modal.loading = false;
+                return;
+              }
               formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][nama]`, diklats[i]['nama']);
               formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][tahun]`, diklats[i]['tahun']);
             }
@@ -533,6 +533,27 @@ export default {
           this.$refs.modal.loading = false;
           return;
         } else {
+          const dasar = hasData.findIndex((item) => Number(item.k_diklat_paud) === 1) > -1;
+          const pcp = hasData.findIndex((item) => Number(item.k_diklat_paud) === 2) > -1;
+          const mot = hasData.findIndex((item) => Number(item.k_diklat_paud) === 3) > -1;
+
+          if (!dasar) {
+            this.$error('Mohon isikan data diklat dasar');
+            this.$refs.modal.loading = false;
+            return;
+          }
+          if (this.jenis === 'pengajar') {
+            let status = false;
+            if (pcp || mot) {
+              status = true;
+            } else {
+              this.$error('Mohon isikan data diklat PCP atau MOT');
+              this.$refs.modal.loading = false;
+            }
+
+            if (!status) return false;
+          }
+
           for (let i = 0; i < hasData.length; i++) {
             if (!hasData[i]['penyelenggara'] || !hasData[i]['tahun_diklat'] || !hasData[i]['file']) {
               this.$error('Mohon lengkapi data Diklat Anda');
