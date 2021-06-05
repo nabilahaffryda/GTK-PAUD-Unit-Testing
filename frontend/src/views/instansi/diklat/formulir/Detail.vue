@@ -52,9 +52,10 @@
               <v-toolbar-title class="body-2">Daftar {{ item.text }}</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-text-field dense placeholder="Pencarian Data" append-icon="mdi-magnify"></v-text-field>
-              <v-btn class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
+              <v-btn v-if="false" class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
               <v-btn
-                class="mt-n3"
+                class="mt-n4 ml-2"
+                small
                 color="primary"
                 v-if="tab > 0 && $allow('lpd-kelas-petugas.create')"
                 @click="onAddPetugas"

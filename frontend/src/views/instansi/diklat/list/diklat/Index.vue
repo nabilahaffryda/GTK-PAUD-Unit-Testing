@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline secondary--text"> <strong>Diklatku</strong> </h1>
+            <h1 class="headline black--text--text"> Diklatku </h1>
             <div> </div>
           </v-col>
         </v-row>
@@ -25,7 +25,9 @@
           @filter="onFilter"
         >
           <template v-slot:subtitle>
-            <div class="subtitle-1 black--text"> {{ total }} Institusi LPD</div>
+            <div class="subtitle-1 black--text">
+              <b>{{ total }}</b> Diklat
+            </div>
           </template>
         </base-table-header>
       </v-card-title>
@@ -54,12 +56,14 @@
                   <v-row>
                     <v-col class="py-0" cols="12" md="4">
                       <v-list-item class="px-0">
-                        <v-list-item-avatar color="secondary">
+                        <v-list-item-avatar color="primary">
                           <v-icon dark>mdi-account</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Nama Diklat</div>
-                          <div class="body-2">{{ $getDeepObj(item, 'nama') || '-' }}</div>
+                          <div class="body-1 black--text">
+                            <strong>{{ $getDeepObj(item, 'nama') || '-' }}</strong>
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -241,7 +245,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {

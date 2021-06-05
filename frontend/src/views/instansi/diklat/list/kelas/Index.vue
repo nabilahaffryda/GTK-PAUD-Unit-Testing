@@ -28,7 +28,9 @@
           @filter="onFilter"
         >
           <template v-slot:subtitle>
-            <div class="subtitle-1 black--text"> {{ total }} Kelas Diklat</div>
+            <div class="subtitle-1 black--text">
+              <b>{{ total }}</b> Kelas Diklat
+            </div>
           </template>
         </base-table-header>
       </v-card-title>
@@ -57,12 +59,14 @@
                   <v-row>
                     <v-col class="py-2" cols="12" md="4">
                       <v-list-item class="px-0">
-                        <v-list-item-avatar color="secondary">
+                        <v-list-item-avatar color="primary">
                           <v-icon dark>mdi-teach</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Nama Kelas</div>
-                          <span>{{ $getDeepObj(item, 'nama') || '-' }}</span>
+                          <div class="body-1 black--text">
+                            <strong>{{ $getDeepObj(item, 'nama') || '-' }}</strong>
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -95,7 +99,7 @@
                           <div class="label--text">Aksi Selanjutnya</div>
                           <v-btn
                             v-if="+item.k_verval_paud === 1 && $allow('lpd-kelas-ajuan.create')"
-                            color="primary"
+                            color="secondary"
                             depressed
                             small
                             @click="onAjuan(item)"
@@ -103,7 +107,7 @@
                           >
                           <v-btn
                             v-if="+item.k_verval_paud > 1 && $allow('lpd-kelas-ajuan.delete')"
-                            color="primary"
+                            color="secondary"
                             outlined
                             depressed
                             small
@@ -257,7 +261,7 @@ export default {
 </script>
 <style scoped>
 .bg-kiri {
-  background: #f0e987;
+  background: #ffab91;
   height: 100%;
 }
 .sc-notif {
