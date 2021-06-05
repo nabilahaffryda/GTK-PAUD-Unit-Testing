@@ -118,6 +118,9 @@ export default {
       if (this.$refs.observer) this.$refs.observer.reset();
       if (title) this.altTitle = title;
     },
+    reset() {
+      this.$refs.observer.reset();
+    },
     close() {
       if (this.autoClose) {
         this.dialog = false;

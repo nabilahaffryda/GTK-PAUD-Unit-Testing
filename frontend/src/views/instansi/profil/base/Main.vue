@@ -64,7 +64,7 @@
             <div class="mt-5 grey lighten-4 black--text pa-2" style="font-size: 0.8rem; border-radius: 5px">
               <b>Catatan :</b> <br />
               <i class="v-icon notranslate mdi mdi-check-circle theme--light success--text" style="font-size: 1rem" />
-              &nbsp;Status syarat sudah dilengkapi / dissi<br />
+              &nbsp;Status syarat sudah dilengkapi / diisi<br />
               <i
                 class="v-icon notranslate mdi mdi-alert-circle theme--light grey--text grey-lighten-2"
                 style="font-size: 1rem"
@@ -172,6 +172,7 @@
         :detail="detail"
         :jenis="jenis"
         uimodel="card"
+        @reset="onResetForm"
       />
     </base-modal-full>
   </div>

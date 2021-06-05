@@ -505,16 +505,16 @@ export default {
             return;
           } else {
             for (let i = 0; i < diklats.length; i++) {
-              if (
-                !diklats[i]['nama'] ||
-                diklats[i]['nama'].trim() === '' ||
-                !diklats[i]['tahun'] ||
-                diklats[i]['tahun'].trim() === ''
-              ) {
-                this.$error('Mohon lengkapi data Diklat Anda');
-                this.$refs.modal.loading = false;
-                return;
-              }
+              // if (
+              //   !diklats[i]['nama'] ||
+              //   diklats[i]['nama'].trim() === '' ||
+              //   !diklats[i]['tahun'] ||
+              //   diklats[i]['tahun'].trim() === ''
+              // ) {
+              //   this.$error('Mohon lengkapi data Diklat Anda');
+              //   this.$refs.modal.loading = false;
+              //   return;
+              // }
               formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][nama]`, diklats[i]['nama']);
               formData.append((this.jenis === 'lpd' ? 'diklat' : 'pengalaman') + `[${i}][tahun]`, diklats[i]['tahun']);
             }
@@ -644,6 +644,10 @@ export default {
           this.fetchProfil();
         });
       });
+    },
+
+    onResetForm() {
+      this.$refs.modal.reset();
     },
   },
 };
