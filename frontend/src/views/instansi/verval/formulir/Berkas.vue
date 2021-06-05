@@ -131,7 +131,7 @@
         cols="12"
         md="4"
         sm="12"
-        :style="`position: fixed; right: 0; ${$vuetify.breakpoint.mdAndDown ? 'bottom: 0;' : ''} z-index: 1`"
+        :style="`position: fixed; right: 10px; ${$vuetify.breakpoint.mdAndDown ? 'bottom: 0;' : ''} z-index: 1`"
       >
         <v-card flat>
           <v-card-text>
