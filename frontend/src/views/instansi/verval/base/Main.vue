@@ -135,7 +135,7 @@
                           <v-list-item-subtitle class="link black--text body-2">
                             <div>
                               <v-icon left color="secondary">mdi-account-arrow-left</v-icon>
-                              -
+                              {{ $getDeepObj(item, 'akun_verval.data.nama') || '-' }}
                             </div>
                           </v-list-item-subtitle>
                         </v-list-item-content>
