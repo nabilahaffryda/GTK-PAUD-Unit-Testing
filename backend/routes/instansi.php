@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('lpd', [Lpd\VervalController::class, 'index']);
         Route::get('lpd/{paudInstansi}', [Lpd\VervalController::class, 'fetch']);
         Route::post('lpd/{paudInstansi}', [Lpd\VervalController::class, 'update']);
+        Route::post('lpd/{paudInstansi}/batal', [Lpd\Verval\BatalController::class, 'update']);
 
         Route::get('petugas', [Petugas\VervalController::class, 'index']);
         Route::get('petugas/{petugas}', [Petugas\VervalController::class, 'fetch']);
