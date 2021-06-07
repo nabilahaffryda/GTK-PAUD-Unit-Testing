@@ -344,9 +344,53 @@ class LpdService
         return $paudInstansi;
     }
 
+    public function batalVerval(Akun $akun, PaudInstansi $paudInstansi)
+    {
+        $paudInstansi->k_verval_paud  = MVervalPaud::DIPROSES;
+        $paudInstansi->wkt_verval     = Carbon::now();
+        $paudInstansi->akun_id_verval = $akun->akun_id;
+        $paudInstansi->alasan         = null;
+
+        if (!$paudInstansi->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $paudInstansi;
+    }
+
     public function setAktif(PaudInstansi $paudInstansi, array $params)
     {
         $paudInstansi->is_aktif = $params['enable'];
+
+        if (!$paudInstansi->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $paudInstansi;
+    }
+
+    public function kunci(Akun $akun, PaudInstansi $paudInstansi)
+    {
+        $paudInstansi->k_verval_paud  = MVervalPaud::DIPROSES;
+        $paudInstansi->wkt_verval     = Carbon::now();
+        $paudInstansi->akun_id_verval = $akun->akun_id;
+
+        if (!$paudInstansi->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $paudInstansi;
+    }
+
+    public function batalKunci(Akun $akun, PaudInstansi $paudInstansi)
+    {
+        if ($akun->akun_id <> $paudInstansi->akun_id_verval) {
+            throw new FlowException('Proses gagal dilakukan');
+        }
+
+        $paudInstansi->k_verval_paud  = MVervalPaud::DIAJUKAN;
+        $paudInstansi->wkt_verval     = null;
+        $paudInstansi->akun_id_verval = null;
 
         if (!$paudInstansi->save()) {
             throw new FlowException('Proses simpan status verval tidak berhasil');
