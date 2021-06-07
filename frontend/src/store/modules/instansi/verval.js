@@ -22,7 +22,7 @@ export const actions = {
 
   action({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/verval/${payload.jenis}/${payload.id}`;
-    return http.post(url, payload.params).then(({ data }) => data);
+    const url = `/i/${id}/verval/${payload.jenis}/${payload.id}${payload && payload.type ? '/' + payload.type : ''}`;
+    return http[payload.method || 'post'](url, payload.params).then(({ data }) => data);
   },
 };
