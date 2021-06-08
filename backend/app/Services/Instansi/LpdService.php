@@ -346,6 +346,10 @@ class LpdService
 
     public function batalVerval(Akun $akun, PaudInstansi $paudInstansi)
     {
+        if ($akun->akun_id <> $paudInstansi->akun_id_verval) {
+            throw new FlowException("Anda tidak berhak membatalkan hasil verval");
+        }
+
         $paudInstansi->k_verval_paud  = MVervalPaud::DIPROSES;
         $paudInstansi->wkt_verval     = Carbon::now();
         $paudInstansi->akun_id_verval = $akun->akun_id;

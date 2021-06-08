@@ -53,6 +53,9 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('petugas', [Petugas\VervalController::class, 'index']);
         Route::get('petugas/{petugas}', [Petugas\VervalController::class, 'fetch']);
         Route::post('petugas/{petugas}', [Petugas\VervalController::class, 'update']);
+        Route::get('petugas/{petugas}/batal', [Petugas\Verval\BatalController::class, 'update']);
+        Route::get('petugas/{petugas}/kunci', [Petugas\Verval\KunciController::class, 'update']);
+        Route::get('petugas/{petugas}/batal-kunci', [Petugas\Verval\KunciController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'akun/admin-program'], function () {
