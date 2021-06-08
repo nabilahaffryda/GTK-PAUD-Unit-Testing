@@ -223,7 +223,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import list from '@mixins/list';
-import listActions from './actions';
+import { lpdActions, petugasAction } from './actions';
 import FormBerkas from '../formulir/Berkas';
 export default {
   name: 'Index',
@@ -246,12 +246,7 @@ export default {
     }),
 
     actions() {
-      let action = listActions;
-      action.map((item) => {
-        item.akses = `${this.jenis}-${item.akses}`;
-        return item;
-      });
-      return action;
+      return this.jenis === 'lpd' ? lpdActions : petugasAction;
     },
 
     configs() {

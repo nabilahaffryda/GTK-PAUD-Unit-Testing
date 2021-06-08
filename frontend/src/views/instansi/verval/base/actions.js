@@ -1,20 +1,41 @@
-export default [
+export const lpdActions = [
   {
     icon: 'mdi-account-lock',
     title: 'Kunci Berkas',
     event: 'onKunci',
-    akses: 'verval-kunci.update',
+    akses: 'lpd-verval-kunci.update',
   },
   {
     icon: 'mdi-account-key',
     title: 'Batal Kunci Berkas',
     event: 'onBatalKunci',
-    akses: 'verval-kunci.delete',
+    akses: 'lpd-verval-kunci.delete',
   },
   {
     icon: 'mdi-close',
     title: 'Batal Verval',
     event: 'onBatalVerval',
-    akses: 'verval-batal.update',
+    akses: 'lpd-verval-batal.update',
+  },
+];
+
+export const petugasAction = [
+  {
+    icon: 'mdi-account-lock',
+    title: 'Kunci Berkas',
+    event: 'onKunci',
+    akses: 'petugas-verval-kunci.update',
+  },
+  {
+    icon: 'mdi-account-key',
+    title: 'Batal Kunci Berkas',
+    event: 'onBatalKunci',
+    akses: 'petugas-verval-kunci.delete',
+  },
+  {
+    icon: 'mdi-close',
+    title: 'Batal Verval',
+    event: 'onBatalVerval',
+    akses: 'petugas-verval-batal.update',
   },
 ];
