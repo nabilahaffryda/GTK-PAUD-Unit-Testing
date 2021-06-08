@@ -406,7 +406,7 @@ class PetugasService
             throw new FlowException("Ajuan data petugas tidak ditemukan");
         }
 
-        if (!in_array($peran->k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::DISETUJUI])) {
+        if (!in_array($peran->k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
             throw new FlowException("Berkas ajuan belum diverval");
         }
 

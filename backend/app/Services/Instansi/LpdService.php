@@ -350,6 +350,10 @@ class LpdService
             throw new FlowException("Anda tidak berhak membatalkan hasil verval");
         }
 
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
+            throw new FlowException("Berkas ajuan belum diverval");
+        }
+
         $paudInstansi->k_verval_paud  = MVervalPaud::DIPROSES;
         $paudInstansi->wkt_verval     = Carbon::now();
         $paudInstansi->akun_id_verval = $akun->akun_id;
