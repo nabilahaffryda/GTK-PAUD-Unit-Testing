@@ -23,6 +23,7 @@ use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Writer\Exception\WriterNotOpenedException;
 use Carbon\Carbon;
+use DateTime;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -31,6 +32,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Str;
+use Validator;
 
 class AdminService
 {
@@ -142,27 +144,14 @@ class AdminService
         $header = [
             'No',
             'Nama Lengkap',
-            'NIK',
+            'Tempat Lahir',
+            'Tanggal Lahir(dd/mm/yyyy)',
+            'Jenis Kelamin',
+            'Alamat Surel',
+            'Nomor HP',
             'NIP',
-            'Pangkat/Golongan',
-            'Alamat Rumah',
-            'Kota/Kabupaten',
-            'Provinsi',
-            'Kode Pos',
-            'Instansi Asal',
-            'Alamat Instansi Asal',
-            'Kota/Kabupaten Instansi Asal',
-            'Provinsi Instansi Asal',
-            'Kode Pos Instansi Asal',
-            'Nomor HP/ WA',
-            'Akun SIMPKB',
-            'Peran',
-            'Instansi Tugas',
-            'NPWP',
-            'Nama Sesuai Rekening',
-            'Nama Bank',
-            'Bank Cabang',
-            'Nomor Rekening',
+            'Golongan',
+            'Instansi',
         ];
 
         $date     = Carbon::now()->format('dmYHi');
@@ -175,6 +164,7 @@ class AdminService
             ->build();
         $headerStyle  = clone $defaultStyle;
         $headerStyle->setFontBold();
+        $headerStyle->setCellAlignment('center');
 
         $writer = WriterEntityFactory::createXLSXWriter();
         $writer->openToBrowser($filename);
@@ -191,28 +181,14 @@ class AdminService
                 $row = [
                     $i++,
                     $akun->nama,
-                    $akun->nik,
+                    $akun->tmp_lahir,
+                    $akun->tgl_lahir->format('d/m/Y'),
+                    $akun->kelamin,
+                    $akun->email,
+                    $akun->no_hp,
                     $akun->nip,
                     $akun->mGolongan->keterangan ?? null,
-                    $akun->jabatan,
-                    $akun->alamat,
-                    $akun->mKota->keterangan ?? null,
-                    $akun->mKota->mPropinsi->keterangan ?? null,
-                    $akun->kodepos,
-                    $akun->instansi_asal,
-                    $akun->instansi_alamat,
-                    $akun->mKotaInstansi->keterangan ?? null,
-                    $akun->mKotaInstansi->mPropinsi->keterangan ?? null,
-                    $akun->instansi_kodepos,
-                    $akun->no_hp,
-                    $akun->email,
-                    $paudAdmin->mGroup->keterangan,
                     $paudAdmin->instansi->nama,
-                    $akun->npwp,
-                    $akun->rekening_nama,
-                    $akun->rekening_bank,
-                    $akun->rekening_cabang,
-                    $akun->rekening_nomor,
                 ];
 
                 $writer->addRow(WriterEntityFactory::createRowFromArray($row));
@@ -575,7 +551,7 @@ class AdminService
                 $cells = $row->toArray();
 
                 $tglLahir = $cells[4];
-                if ($tglLahir instanceof \DateTime) {
+                if ($tglLahir instanceof DateTime) {
                     $tglLahir = $tglLahir->format('Y-m-d');
                 }
 
@@ -587,7 +563,7 @@ class AdminService
                     'k_group'   => $kGroup,
                 ];
 
-                $validator = \Validator::make($params, $rules);
+                $validator = Validator::make($params, $rules);
                 if ($validator->fails()) {
                     $errors[$index] = "Baris $index: " . implode("; ", $validator->getMessageBag()->all());
                 } else {
