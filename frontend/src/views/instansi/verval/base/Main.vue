@@ -135,7 +135,7 @@
                           <v-list-item-subtitle class="link black--text body-2">
                             <div>
                               <v-icon left color="secondary">mdi-account-arrow-left</v-icon>
-                              {{ $getDeepObj(item, 'akun_verval.data.nama') || '-' }}
+                              {{ $getDeepObj(getAkunVerval(item), 'data.nama') || '-' }}
                             </div>
                           </v-list-item-subtitle>
                         </v-list-item-content>
@@ -151,8 +151,8 @@
                             <v-btn
                               v-if="
                                 $allow(`${jenis}-verval.update`) &&
-                                akun.akun_id === item.akun_id_verval &&
-                                [3].includes(Number(item.k_verval_paud))
+                                Number(akun.akun_id) === getAkunIdVerval(item) &&
+                                [3].includes(getKVerval(item))
                               "
                               color="primary"
                               small
@@ -162,9 +162,7 @@
                               Verval Ajuan
                             </v-btn>
                             <v-btn
-                              v-else-if="
-                                $allow(`${jenis}-verval-kunci.update`) && [2].includes(Number(item.k_verval_paud))
-                              "
+                              v-else-if="$allow(`${jenis}-verval-kunci.update`) && [2].includes(getKVerval(item))"
                               color="secondary"
                               small
                               block
@@ -372,21 +370,40 @@ export default {
 
     allow(action, data) {
       let allow = false;
+      const kVerval = this.getKVerval(data);
       switch (action.event) {
         case 'onKunci':
-          allow = this.$allow(action.akses) && [2].includes(Number(data.k_verval_paud));
+          allow = this.$allow(action.akses) && [2].includes(kVerval);
           break;
         case 'onBatalKunci':
-          allow = this.$allow(action.akses) && [3].includes(Number(data.k_verval_paud));
+          allow = this.$allow(action.akses) && [3].includes(kVerval);
           break;
         case 'onBatalVerval':
-          allow = this.$allow(action.akses) && Number(data.k_verval_paud) > 3;
+          allow = this.$allow(action.akses) && Number(kVerval) > 3;
           break;
         default:
           allow = this.$allow(action.akses);
           break;
       }
       return allow;
+    },
+
+    getKVerval(item) {
+      return this.jenis === 'petugas'
+        ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.m_verval_paud.data.k_verval_paud')
+        : Number(item.k_verval_paud);
+    },
+
+    getAkunVerval(item) {
+      return this.jenis === 'petugas'
+        ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.akun_verval')
+        : this.$getDeepObj(item, 'akun_verval');
+    },
+
+    getAkunIdVerval(item) {
+      return this.jenis === 'petugas'
+        ? Number(this.$getDeepObj(item, 'paud_petugas_perans.data.0.akun_id_verval'))
+        : Number(this.$getDeepObj(item, 'akun_id_verval'));
     },
 
     onClose() {
@@ -539,8 +556,8 @@ export default {
           icon: 'mdi-account-circle',
           iconSize: 50,
           iconColor: 'primary',
-          title: `<b class='primary--text'>${this.$getDeepObj(data, 'instansi.data.nama') || ''}</b>`,
-          subtitles: [`<span class="text--primary">${this.$getDeepObj(data, 'instansi.data.email')}</span>`],
+          title: `<b class='primary--text'>${this.$getDeepObj(data, `${this.obj}.data.nama`) || ''}</b>`,
+          subtitles: [`<span class="text--primary">${this.$getDeepObj(data, `${this.obj}.data.email`)}</span>`],
         },
       ];
     },
