@@ -114,7 +114,8 @@ class PetugasService
                         ['k_verval_paud', '<>', MVervalPaud::KANDIDAT],
                     ]);
             })
-            ->with(['akun', 'paudPetugasPerans.mVervalPaud']);
+            ->with(['akun', 'paudPetugasPerans.mVervalPaud',
+                    'paudPetugasPerans.akunVerval:akun_id,nama,email,no_telpon,no_hp']);
     }
 
     public function fetch(PaudPetugas $petugas)
