@@ -178,7 +178,16 @@
                   </v-row>
                 </v-list-item-content>
                 <v-list-item-action-text>
-                  <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
+                  <base-list-action
+                    v-if="allowMenu(item)"
+                    :data="item"
+                    :actions="actions"
+                    :allow="allow"
+                    @action="onAction"
+                  />
+                  <template v-else>
+                    <v-icon class="mr-3" color="white">mdi-dots-vertical</v-icon>
+                  </template>
                 </v-list-item-action-text>
               </v-list-item>
             </td>
@@ -368,6 +377,19 @@ export default {
     ...mapActions('verval', ['fetch', 'getDetail', 'action', 'downloadList', 'getKinerja', 'getTimVerval']),
     ...mapActions('master', ['getMasters']),
 
+    allowMenu(data) {
+      const akses = this.actions;
+      let status = false;
+
+      akses.forEach((item) => {
+        if (this.allow(item, data)) {
+          status = true;
+          return;
+        }
+      });
+      return status;
+    },
+
     allow(action, data) {
       let allow = false;
       const kVerval = this.getKVerval(data);
@@ -376,10 +398,16 @@ export default {
           allow = this.$allow(action.akses) && [2].includes(kVerval);
           break;
         case 'onBatalKunci':
-          allow = this.$allow(action.akses) && [3].includes(kVerval);
+          allow =
+            this.$allow(action.akses) &&
+            [3].includes(kVerval) &&
+            Number(this.akun.akun_id) === this.getAkunIdVerval(data);
           break;
         case 'onBatalVerval':
-          allow = this.$allow(action.akses) && Number(kVerval) > 3;
+          allow =
+            this.$allow(action.akses) &&
+            Number(kVerval) > 3 &&
+            Number(this.akun.akun_id) === this.getAkunIdVerval(data);
           break;
         default:
           allow = this.$allow(action.akses);
