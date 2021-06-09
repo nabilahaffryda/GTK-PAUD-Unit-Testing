@@ -1,11 +1,5 @@
 <template>
-  <list-admin
-    jenis="pengajar"
-    akses="admin-gtk"
-    title="Akun Admin GTK"
-    desc="Lorem Ipsum"
-    :actions="actions"
-  ></list-admin>
+  <list-admin jenis="pengajar" akses="admin-gtk" title="Akun Admin GTK" desc="" :actions="actions"></list-admin>
 </template>
 
 <script>

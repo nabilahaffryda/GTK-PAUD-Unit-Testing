@@ -3,7 +3,7 @@
     jenis="kelas"
     akses="pembimbing-praktik"
     title="Akun Pembimbing Praktik"
-    desc="Lorem Ipsum"
+    desc=""
     :actions="actions"
   ></list-admin>
 </template>

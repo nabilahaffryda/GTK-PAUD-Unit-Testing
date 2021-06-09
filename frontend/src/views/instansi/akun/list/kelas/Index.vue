@@ -1,5 +1,5 @@
 <template>
-  <list-admin jenis="kelas" akses="admin-kelas" title="Admin Kelas" desc="Lorem Ipsum" :actions="actions"></list-admin>
+  <list-admin jenis="kelas" akses="admin-kelas" title="Admin Kelas" desc="" :actions="actions"></list-admin>
 </template>
 
 <script>
