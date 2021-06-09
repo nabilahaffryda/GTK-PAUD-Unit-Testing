@@ -416,6 +416,15 @@ export default {
       return allow;
     },
 
+    allowVerval(item) {
+      const kVerval = this.getKVerval(item);
+      return (
+        this.$allow(`${this.jenis}-verval.update`) &&
+        kVerval <= 3 &&
+        Number(this.akun.akun_id) === this.getAkunIdVerval(item)
+      );
+    },
+
     getKVerval(item) {
       return this.jenis === 'petugas'
         ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.m_verval_paud.data.k_verval_paud')
@@ -493,9 +502,9 @@ export default {
       this.$set(this.formulir, 'init', null);
 
       this.getDetail({ id: item.id, tipe: this.$route.meta.tipe }).then(({ data }) => {
-        this.$set(this.formulir, 'is_disable', kVerval > 3);
-        this.$set(this.formulir, 'is_edit', this.$allow(`${this.jenis}-verval.update`) && kVerval <= 3);
-        this.$set(this.formulir, 'autoClose', kVerval > 3);
+        this.$set(this.formulir, 'is_disable', !this.allowVerval(item));
+        this.$set(this.formulir, 'is_edit', this.allowVerval(item));
+        this.$set(this.formulir, 'autoClose', !this.allowVerval(item));
 
         this.$refs.modal.open();
         this.$nextTick(() => {
