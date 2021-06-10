@@ -59,6 +59,7 @@ export default {
       formData: {},
       options: {},
       items: {},
+      lastparams: {},
     };
   },
   mounted() {
@@ -163,6 +164,18 @@ export default {
           } else {
             params = `${key}|${options.parent_key || options.parent}:${selected}`;
           }
+
+          let duplicate = { key: options.parent, value: selected };
+          let isduplicate = false;
+          if (!Object.keys(this.lastparams).length) {
+            this.lastparams = { ...duplicate };
+          } else {
+            if (this.lastparams.key === duplicate.key && this.lastparams.value === duplicate.value) {
+              isduplicate = true;
+            }
+          }
+
+          if (isduplicate) return;
 
           // request
           this.fetchMasters(params).then((resp) => {
