@@ -3,7 +3,7 @@
     jenis="kelas"
     akses="pengajar-tambahan"
     title="Akun Pengajar Tambahan"
-    desc="Lorem Ipsum"
+    desc=""
     :actions="actions"
   ></list-admin>
 </template>

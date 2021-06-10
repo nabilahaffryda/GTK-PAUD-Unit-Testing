@@ -37,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read Instansi                        $instansi
  * @property-read MVervalPaud                     $mVervalPaud
+ * @property-read Akun                            $akunVerval
  * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
  *
@@ -134,6 +135,14 @@ class PaudInstansi extends Eloquent
         'is_aktif',
         'akun_id',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function akunVerval()
+    {
+        return $this->belongsTo('App\Models\Akun', 'akun_id_verval', 'akun_id');
+    }
 
     /**
      * @return BelongsTo

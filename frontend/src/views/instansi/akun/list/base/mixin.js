@@ -220,12 +220,12 @@ export default {
       const M_LAPORAN = [
         {
           key: 'download',
-          label: `Daftar Admin`,
+          label: `Daftar ${this.$titleCase(this.jenis)}`,
           acl: this.$allow(`akun-${this.akses}.download`),
         },
         {
           key: 'download-aktivasi',
-          label: `Daftar Aktivasi Admin`,
+          label: `Daftar Aktivasi ${this.$titleCase(this.jenis)}`,
           acl: this.$allow(`akun-${this.akses}.download-aktivasi`),
         },
       ];

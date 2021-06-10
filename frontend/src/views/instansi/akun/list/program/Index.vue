@@ -3,7 +3,7 @@
     jenis="program"
     akses="admin-program-lpd"
     title="Akun Admin Program LPD"
-    desc="Lorem Ipsum"
+    desc=""
     :actions="actions"
   ></list-admin>
 </template>

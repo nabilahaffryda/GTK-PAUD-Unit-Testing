@@ -63,6 +63,7 @@
                               {{ $getDeepObj(item, `${obj}.data.nama`) || '-' }}
                             </strong>
                           </span>
+                          <div>{{ $getDeepObj(item, `${obj}.data.email`) }}</div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -80,18 +81,6 @@
                                 '-'
                               }}
                             </template>
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-col>
-                    <v-col cols="12" md="2">
-                      <v-list-item class="px-0">
-                        <v-list-item-content class="py-0">
-                          <v-list-item-title>
-                            <div class="label--text">Alamat Email</div>
-                          </v-list-item-title>
-                          <v-list-item-subtitle class="link black--text body-2">
-                            {{ $getDeepObj(item, `${obj}.data.email`) }}
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -141,23 +130,47 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
+                            <div class="label--text">Akun Pengunci</div>
+                          </v-list-item-title>
+                          <v-list-item-subtitle class="link black--text body-2">
+                            <div>
+                              <v-icon left color="secondary">mdi-account-arrow-left</v-icon>
+                              {{ $getDeepObj(getAkunVerval(item), 'data.nama') || '-' }}
+                            </div>
+                          </v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col cols="12" md="2">
+                      <v-list-item class="px-0">
+                        <v-list-item-content class="py-0">
+                          <v-list-item-title>
                             <div class="label--text">Aksi Selanjutnya</div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
-                            <v-btn color="primary" small block @click="onVerval(item)">
-                              {{
+                            <v-btn
+                              v-if="
                                 $allow(`${jenis}-verval.update`) &&
-                                [2, 3].includes(
-                                  Number(
-                                    jenis === 'petugas'
-                                      ? $getDeepObj(item, 'paud_petugas_perans.data.0.k_verval_paud')
-                                      : item.k_verval_paud
-                                  )
-                                )
-                                  ? 'Verval Ajuan'
-                                  : 'LIHAT DETAIL'
-                              }}
+                                Number(akun.akun_id) === getAkunIdVerval(item) &&
+                                [3].includes(getKVerval(item))
+                              "
+                              color="primary"
+                              small
+                              block
+                              @click="onVerval(item)"
+                            >
+                              Verval Ajuan
                             </v-btn>
+                            <v-btn
+                              v-else-if="$allow(`${jenis}-verval-kunci.update`) && [2].includes(getKVerval(item))"
+                              color="secondary"
+                              small
+                              block
+                              @click="onKunci(item)"
+                            >
+                              <v-icon left>mdi-account-arrow-left</v-icon> Kunci Verval
+                            </v-btn>
+                            <v-btn v-else small block color="primary" @click="onVerval(item)"> Detail </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -165,7 +178,16 @@
                   </v-row>
                 </v-list-item-content>
                 <v-list-item-action-text>
-                  <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
+                  <base-list-action
+                    v-if="allowMenu(item)"
+                    :data="item"
+                    :actions="actions"
+                    :allow="allow"
+                    @action="onAction"
+                  />
+                  <template v-else>
+                    <v-icon class="mr-3" color="white">mdi-dots-vertical</v-icon>
+                  </template>
                 </v-list-item-action-text>
               </v-list-item>
             </td>
@@ -208,14 +230,13 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import list from '@mixins/list';
-import actions from './actions';
+import { lpdActions, petugasAction } from './actions';
 import FormBerkas from '../formulir/Berkas';
 export default {
   name: 'Index',
   mixins: [list],
   data() {
     return {
-      actions: actions,
       formulir: {},
       listTimVerval: [],
       listLaporan: [],
@@ -230,6 +251,10 @@ export default {
     ...mapState('preferensi', {
       akun: (state) => (state.data && state.data.akun) || {},
     }),
+
+    actions() {
+      return this.jenis === 'lpd' ? lpdActions : petugasAction;
+    },
 
     configs() {
       const M_PROPINSI = (this.masters && this.masters['propinsi']) || {};
@@ -352,6 +377,72 @@ export default {
     ...mapActions('verval', ['fetch', 'getDetail', 'action', 'downloadList', 'getKinerja', 'getTimVerval']),
     ...mapActions('master', ['getMasters']),
 
+    allowMenu(data) {
+      const akses = this.actions;
+      let status = false;
+
+      akses.forEach((item) => {
+        if (this.allow(item, data)) {
+          status = true;
+          return;
+        }
+      });
+      return status;
+    },
+
+    allow(action, data) {
+      let allow = false;
+      const kVerval = this.getKVerval(data);
+      switch (action.event) {
+        case 'onKunci':
+          allow = this.$allow(action.akses) && [2].includes(kVerval);
+          break;
+        case 'onBatalKunci':
+          allow =
+            this.$allow(action.akses) &&
+            [3].includes(kVerval) &&
+            Number(this.akun.akun_id) === this.getAkunIdVerval(data);
+          break;
+        case 'onBatalVerval':
+          allow =
+            this.$allow(action.akses) &&
+            Number(kVerval) > 3 &&
+            Number(this.akun.akun_id) === this.getAkunIdVerval(data);
+          break;
+        default:
+          allow = this.$allow(action.akses);
+          break;
+      }
+      return allow;
+    },
+
+    allowVerval(item) {
+      const kVerval = this.getKVerval(item);
+      return (
+        this.$allow(`${this.jenis}-verval.update`) &&
+        kVerval <= 3 &&
+        Number(this.akun.akun_id) === this.getAkunIdVerval(item)
+      );
+    },
+
+    getKVerval(item) {
+      return this.jenis === 'petugas'
+        ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.m_verval_paud.data.k_verval_paud')
+        : Number(item.k_verval_paud);
+    },
+
+    getAkunVerval(item) {
+      return this.jenis === 'petugas'
+        ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.akun_verval')
+        : this.$getDeepObj(item, 'akun_verval');
+    },
+
+    getAkunIdVerval(item) {
+      return this.jenis === 'petugas'
+        ? Number(this.$getDeepObj(item, 'paud_petugas_perans.data.0.akun_id_verval'))
+        : Number(this.$getDeepObj(item, 'akun_id_verval'));
+    },
+
     onClose() {
       if (!this.formulir['autoClose']) {
         const msg = [
@@ -411,9 +502,9 @@ export default {
       this.$set(this.formulir, 'init', null);
 
       this.getDetail({ id: item.id, tipe: this.$route.meta.tipe }).then(({ data }) => {
-        this.$set(this.formulir, 'is_disable', kVerval > 3);
-        this.$set(this.formulir, 'is_edit', this.$allow(`${this.jenis}-verval.update`) && kVerval <= 3);
-        this.$set(this.formulir, 'autoClose', kVerval > 3);
+        this.$set(this.formulir, 'is_disable', !this.allowVerval(item));
+        this.$set(this.formulir, 'is_edit', this.allowVerval(item));
+        this.$set(this.formulir, 'autoClose', !this.allowVerval(item));
 
         this.$refs.modal.open();
         this.$nextTick(() => {
@@ -460,12 +551,12 @@ export default {
     },
 
     onKunci(data) {
-      this.id = data.psp_profil_id;
+      this.id = data.id;
       this.$confirm(`Anda yakin ingin mengunci Ajuan di atas agar bisa diverifikasi?`, `Kunci Ajuan`, {
         tipe: 'warning',
         data: this.confirmHtml(data),
       }).then(() => {
-        this.action({ id: this.id, type: 'kunci' }).then(() => {
+        this.action({ id: this.id, jenis: this.jenis, type: 'kunci', method: 'get' }).then(() => {
           this.$success(`Ajuan Peserta berhasil dikunci`);
           this.onReload();
         });
@@ -477,7 +568,7 @@ export default {
         tipe: 'error',
         data: this.confirmHtml(data),
       }).then(() => {
-        this.action({ id: data.psp_profil_id, type: 'batal-kunci' }).then(() => {
+        this.action({ id: data.id, jenis: this.jenis, type: 'batal-kunci', method: 'get' }).then(() => {
           this.$success(`Batal kunci Ajuan Peserta berhasil`);
           this.onReload();
         });
@@ -489,7 +580,7 @@ export default {
         tipe: 'error',
         data: this.confirmHtml(data),
       }).then(() => {
-        this.action({ id: data.psp_profil_id, type: 'batal-verval' }).then(() => {
+        this.action({ id: data.id, jenis: this.jenis, type: 'batal', method: 'get' }).then(() => {
           this.$success(`Batal Verval Ajuan Peserta berhasil`);
           this.onReload();
         });
@@ -500,10 +591,10 @@ export default {
       return [
         {
           icon: 'mdi-account-circle',
-          iconSize: 60,
-          iconColor: 'secondary',
-          title: this.$getDeepObj(data, 'ptk.data.nama') || '',
-          subtitles: [`<span class="text--primary">${this.$getDeepObj(data, 'ptk.data.no_ukg')}</span>`],
+          iconSize: 50,
+          iconColor: 'primary',
+          title: `<b class='primary--text'>${this.$getDeepObj(data, `${this.obj}.data.nama`) || ''}</b>`,
+          subtitles: [`<span class="text--primary">${this.$getDeepObj(data, `${this.obj}.data.email`)}</span>`],
         },
       ];
     },

@@ -38,47 +38,49 @@
                   </div>
                 </v-col>
               </v-row>
-              <base-form-generator :schema="schema(item.type)" v-model="form[item.k_tipe][id]" />
-              <input type="hidden" v-model="form[item.k_tipe][id]['k_diklat_paud']" />
-              <input type="hidden" v-model="form[item.k_tipe][id]['paud_petugas_diklat_id']" />
-              <v-row class="mt-9">
-                <v-col cols="12" md="6" class="py-0">
-                  <v-subheader :class="[`px-0 body-2 secondary--text text--darken-4`]" style="height: 24px">
-                    Unggah Berkas*
-                  </v-subheader>
-                  <template v-if="form[item.k_tipe][id]['url']">
-                    <v-chip
-                      color="secondary"
-                      dark
-                      label
-                      close
-                      :href="form[item.k_tipe][id]['url']"
-                      target="_blank"
-                      @click:close="onRemoveFile(item.k_tipe, id)"
-                    >
-                      {{ form[item.k_tipe][id]['nama_file'] }}
-                    </v-chip>
-                  </template>
-                  <template v-else>
-                    <validation-provider name="Pindaian Berkas" rules="required" v-slot="{ errors }">
-                      <v-file-input
-                        v-model="form[item.k_tipe][id]['file']"
-                        :error-messages="errors"
-                        label="Pindaian Berkas Ijazah (20 KB - 1,5 MB)"
-                        append-icon="mdi-paperclip"
-                        prepend-icon=""
-                        accept="image/*,.pdf"
-                        hint="jenis file unggahan JPG/JPEG/PNG/GIF/PDF (20 KB - 1,5 MB). Untuk berkas multi halaman gunakan format PDF"
-                        persistent-hint
-                        show-size
-                        outlined
-                        dense
-                        single-line
-                      ></v-file-input>
-                    </validation-provider>
-                  </template>
-                </v-col>
-              </v-row>
+              <template v-if="tab === i">
+                <base-form-generator :schema="schema(item.type)" v-model="form[item.k_tipe][id]" />
+                <input type="hidden" v-model="form[item.k_tipe][id]['k_diklat_paud']" />
+                <input type="hidden" v-model="form[item.k_tipe][id]['paud_petugas_diklat_id']" />
+                <v-row class="mt-9">
+                  <v-col cols="12" md="6" class="py-0">
+                    <v-subheader :class="[`px-0 body-2 secondary--text text--darken-4`]" style="height: 24px">
+                      Unggah Berkas*
+                    </v-subheader>
+                    <template v-if="form[item.k_tipe][id]['url']">
+                      <v-chip
+                        color="secondary"
+                        dark
+                        label
+                        close
+                        :href="form[item.k_tipe][id]['url']"
+                        target="_blank"
+                        @click:close="onRemoveFile(item.k_tipe, id)"
+                      >
+                        {{ form[item.k_tipe][id]['nama_file'] }}
+                      </v-chip>
+                    </template>
+                    <template v-else>
+                      <validation-provider name="Pindaian Berkas" rules="required" v-slot="{ errors }">
+                        <v-file-input
+                          v-model="form[item.k_tipe][id]['file']"
+                          :error-messages="errors"
+                          label="Pindaian Berkas Ijazah (20 KB - 1,5 MB)"
+                          append-icon="mdi-paperclip"
+                          prepend-icon=""
+                          accept="image/*,.pdf"
+                          hint="jenis file unggahan JPG/JPEG/PNG/GIF/PDF (20 KB - 1,5 MB). Untuk berkas multi halaman gunakan format PDF"
+                          persistent-hint
+                          show-size
+                          outlined
+                          dense
+                          single-line
+                        ></v-file-input>
+                      </validation-provider>
+                    </template>
+                  </v-col>
+                </v-row>
+              </template>
             </div>
           </template>
           <v-divider></v-divider>
@@ -320,9 +322,13 @@ export default {
         this.$set(this.forms, `${item.k_tipe}`, data);
       }
     },
+    resetValidation() {
+      this.$emit('reset');
+    },
   },
   watch: {
     initValue: 'initForm',
+    tab: 'resetValidation',
   },
 };
 </script>

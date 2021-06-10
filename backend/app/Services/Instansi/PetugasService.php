@@ -114,7 +114,8 @@ class PetugasService
                         ['k_verval_paud', '<>', MVervalPaud::KANDIDAT],
                     ]);
             })
-            ->with(['akun', 'paudPetugasPerans.mVervalPaud']);
+            ->with(['akun', 'paudPetugasPerans.mVervalPaud',
+                    'paudPetugasPerans.akunVerval:akun_id,nama,email,no_telpon,no_hp']);
     }
 
     public function fetch(PaudPetugas $petugas)
@@ -365,16 +366,21 @@ class PetugasService
         }
     }
 
+    private function getPeranPetugas(PaudPetugas $petugas)
+    {
+        return PaudPetugasPeran::where([
+            'paud_petugas_id' => $petugas->paud_petugas_id,
+            'tahun'           => $petugas->tahun,
+            'angkatan'        => $petugas->angkatan,
+        ])->first();
+    }
+
     /**
      * @throws FlowException
      */
     public function ajuanVerval(Akun $akun, PaudPetugas $petugas, array $params)
     {
-        $peran = PaudPetugasPeran::where([
-            'paud_petugas_id' => $petugas->paud_petugas_id,
-            'tahun'           => $petugas->tahun,
-            'angkatan'        => $petugas->angkatan,
-        ])->first();
+        $peran = $this->getPeranPetugas($petugas);
 
         if (!$peran || !$peran->isVervalDiajukan()) {
             throw new FlowException("Ajuan data petugas tidak ditemukan");
@@ -384,6 +390,79 @@ class PetugasService
         $peran->wkt_verval     = Carbon::now();
         $peran->akun_id_verval = $akun->akun_id;
         $peran->alasan         = $params['alasan'] ?? null;
+
+        if (!$peran->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $petugas;
+    }
+
+    public function batalVerval(Akun $akun, PaudPetugas $petugas)
+    {
+        $peran = $this->getPeranPetugas($petugas);
+
+        if (!$peran) {
+            throw new FlowException("Ajuan data petugas tidak ditemukan");
+        }
+
+        if (!in_array($peran->k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
+            throw new FlowException("Berkas ajuan belum diverval");
+        }
+
+        if ($peran->akun_id_verval <> $akun->akun_id) {
+            throw new FlowException("Anda tidak dberhak membatalkan hasil verval");
+        }
+
+        $peran->k_verval_paud  = MVervalPaud::DIPROSES;
+        $peran->wkt_verval     = Carbon::now();
+        $peran->akun_id_verval = $akun->akun_id;
+        $peran->alasan         = null;
+
+        if (!$peran->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $petugas;
+    }
+
+
+    public function kunci(Akun $akun, PaudPetugas $petugas)
+    {
+        $peran = $this->getPeranPetugas($petugas);
+
+        if (!$peran || !$peran->k_verval_paud == MVervalPaud::DIPROSES) {
+            throw new FlowException("Ajuan data petugas tidak ditemukan");
+        }
+
+        $peran->k_verval_paud  = MVervalPaud::DIPROSES;
+        $peran->wkt_verval     = Carbon::now();
+        $peran->akun_id_verval = $akun->akun_id;
+        $peran->alasan         = null;
+
+        if (!$peran->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $petugas;
+    }
+
+    public function batalKunci(Akun $akun, PaudPetugas $petugas)
+    {
+        $peran = $this->getPeranPetugas($petugas);
+
+        if (!$peran) {
+            throw new FlowException("Ajuan data petugas tidak ditemukan");
+        }
+
+        if ($peran->k_verval_paud != MVervalPaud::DIPROSES) {
+            throw new FlowException("Ajuan berkas tidak dalam kondisi diproses");
+        }
+
+        $peran->k_verval_paud  = MVervalPaud::DIAJUKAN;
+        $peran->wkt_verval     = null;
+        $peran->akun_id_verval = null;
+        $peran->alasan         = null;
 
         if (!$peran->save()) {
             throw new FlowException('Proses simpan status verval tidak berhasil');

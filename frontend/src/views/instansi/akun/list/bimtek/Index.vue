@@ -3,7 +3,7 @@
     jenis="pengajar"
     akses="pengajar-bimtek"
     title="Akun Pengajar BIMTEK"
-    desc="Lorem Ipsum"
+    desc=""
     :actions="actions"
   ></list-admin>
 </template>
