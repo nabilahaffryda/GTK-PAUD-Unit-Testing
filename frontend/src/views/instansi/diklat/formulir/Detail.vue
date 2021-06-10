@@ -4,12 +4,12 @@
       <v-container class="black--text">
         <div class="body-1 font-weight-medium">Info dan Detil Kelas</div>
         <v-row dense no-gutters class="my-5">
-          <v-col cols="12" md="1" sm="1" class="pa-0">
+          <v-col cols="12" md="1" sm="2" class="pa-0">
             <v-avatar color="secondary" size="60">
               <v-icon dark>mdi-teach</v-icon>
             </v-avatar>
           </v-col>
-          <v-col cols="12" md="9" sm="9" class="px-0">
+          <v-col cols="12" md="11" sm="10" class="px-0">
             <div>
               <div class="label--text">Nama Kelas</div>
               <div class="body-1 font-weight-medium">{{ $getDeepObj(kelas, 'nama') || '-' }}</div>
@@ -70,9 +70,8 @@
                 :headers="headers"
                 :items="items"
                 :single-select="false"
-                item-key="nama"
                 show-select
-                :no-data-text="`Daftar ${item.text} tidak ditemukan`"
+                :no-data-text="`Daftar ${item.text} belum ditemukan`"
               >
                 <template v-slot:[`item.aksi`]="{ item }">
                   <v-btn v-if="$allow('lpd-kelas-petugas.delete')" icon @click="onDelete(item)">
@@ -143,7 +142,7 @@ export default {
     },
 
     items() {
-      return this.pesertas.map((item) => {
+      return (this.pesertas || []).map((item) => {
         return {
           nama: this.$getDeepObj(item, 'ptk.data.nama') || this.$getDeepObj(item, 'akun.data.nama') || '-',
           email: this.$getDeepObj(item, 'ptk.data.email') || this.$getDeepObj(item, 'akun.data.email') || '-',
@@ -159,6 +158,9 @@ export default {
     reset() {
       this.tab = 0;
       this.kelas = {};
+      this.pesertas = []
+      this.peserta = []
+      this.petugas = []
     },
 
     fetch(tipe, k_petugas = null) {
@@ -261,6 +263,7 @@ export default {
   },
   watch: {
     tab: function (value) {
+      this.pesertas = []
       switch (Number(value)) {
         case 0:
           this.fetch('peserta');

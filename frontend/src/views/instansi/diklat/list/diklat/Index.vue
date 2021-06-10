@@ -18,7 +18,7 @@
       <v-card-title class="pa-0">
         <base-table-header
           @search="onSearch"
-          :btnFilter="true"
+          :btnFilter="false"
           :btnAdd="$allow('lpd-diklat.create')"
           @add="onAddDiklat"
           @reload="onReload"
