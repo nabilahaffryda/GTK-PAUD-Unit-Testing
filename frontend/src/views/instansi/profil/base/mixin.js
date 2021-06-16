@@ -493,9 +493,7 @@ export default {
         const { form, diklats, photo } = data;
 
         Object.keys(form).forEach((key) => {
-          if (form[key]) {
-            formData.append(key, form[key]);
-          }
+          formData.append(key, form[key] || '');
         });
 
         if (this.jenis === 'lpd') {
