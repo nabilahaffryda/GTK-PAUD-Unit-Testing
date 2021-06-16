@@ -469,4 +469,79 @@ class LpdService
 
         $writer->close();
     }
+
+    public function downloadVerval($params = [])
+    {
+        $query = $this->query($params['filter'] ?? []);
+
+        if ($kVervalPaud = Arr::get($params, 'filter.k_verval_paud')) {
+            $query->whereIn('k_verval_paud', $kVervalPaud);
+        } else {
+            $query->where('k_verval_paud', '<>', MVervalPaud::KANDIDAT);
+        }
+
+        $query->with(['mVervalPaud', 'akunVerval:akun_id,nama,email,no_telpon,no_hp']);
+
+        if (Arr::get($params, 'format') == 'json') {
+            return $query->paginate(100);
+        }
+
+        $header = [
+            'No',
+            'Nama Institusi LPD',
+            'Alamat Surel',
+            'Alamat',
+            'Provinsi',
+            'Kota/Kabupaten',
+            'Kode Pos',
+            'Penanggung Jawab',
+            'Telpon',
+            'Akun Pengunci',
+            'Status'
+        ];
+
+        $date     = Carbon::now()->format('dmYHi');
+        $filename = "Laporan-Verval-LPD-{$date}.xlsx";
+
+        $defaultStyle = (new StyleBuilder())
+            ->setFontName('Calibri')
+            ->setFontSize(11)
+            ->setShouldWrapText(false)
+            ->build();
+        $headerStyle  = clone $defaultStyle;
+        $headerStyle->setFontBold();
+        $headerStyle->setCellAlignment(CellAlignment::CENTER);
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($filename);
+        $writer->setDefaultRowStyle($defaultStyle);
+
+        $writer->addRow(WriterEntityFactory::createRowFromArray($header, $headerStyle));
+
+        $i = 1;
+        $query->chunk(1000, function ($paudInstansis) use ($writer, &$i) {
+            foreach ($paudInstansis as $paudInstansi) {
+                /** @var PaudInstansi $paudInstansi */
+                $instansi = $paudInstansi->instansi;
+
+                $row = [
+                    $i++,
+                    $instansi->nama,
+                    $instansi->email,
+                    $instansi->alamat,
+                    $instansi->mPropinsi->keterangan ?? null,
+                    $instansi->mKota->keterangan ?? null,
+                    $paudInstansi->kodepos,
+                    $paudInstansi->nama_penanggung_jawab,
+                    $paudInstansi->telp_penanggung_jawab,
+                    $paudInstansi->akunVerval->nama ?? null,
+                    $paudInstansi->mVervalPaud->keterangan ?? null,
+                ];
+
+                $writer->addRow(WriterEntityFactory::createRowFromArray($row));
+            }
+        });
+
+        $writer->close();
+    }
 }
