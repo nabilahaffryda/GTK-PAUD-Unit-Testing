@@ -9,6 +9,8 @@ use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\PaudInstansi;
 use App\Services\Instansi\LpdService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 
 class VervalController extends Controller
 {
@@ -31,5 +33,14 @@ class VervalController extends Controller
     {
         return BaseResource::make($this->service->fetch($paudInstansi)
             ->loadMissing(['mVervalPaud', 'paudInstansiBerkases']));
+    }
+
+    /**
+     * @param Request $request
+     * @return LengthAwarePaginator|null
+     */
+    public function download(Request $request)
+    {
+        return $this->service->downloadVerval($request->all());
     }
 }

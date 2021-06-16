@@ -18,7 +18,8 @@
       <v-card-text>
         <base-table-header
           btn-filter
-          @download="onDownloadList"
+          :btnDownload="$allow(`${jenis}-verval.download`)"
+          @download="onDownload"
           @filter="onFilter"
           @search="onSearch"
           @reload="onReload"
@@ -647,6 +648,57 @@ export default {
         this.$refs.formkinerja.kinerja = (resp && resp.kinerja) || null;
         this.$refs.formkinerja.statistik = statistik;
         this.$refs.formkinerja.limit = limit;
+      });
+    },
+
+    onDownload() {
+      const M_LAPORAN = [
+        {
+          key: 'download',
+          label: `Daftar Verval`,
+          acl: `${this.jenis}-verval.download`,
+        },
+      ];
+
+      let url = {};
+      this.$confirm('Pilih jenis Berkas yang ingin di Unduh?', 'Unduh Berkas', {
+        tipe: 'secondary',
+        form: {
+          desc: 'Laporan Berkas',
+          render: (h) => {
+            return h(
+              'select',
+              {
+                class: 'custom-select',
+                domProps: {
+                  value: '',
+                },
+                on: {
+                  input: function (event) {
+                    url.dokumen = event.target.value;
+                  },
+                },
+              },
+              [
+                h('option', { attrs: { value: '' } }, '-- Pilih Jenis Unduhan --'),
+                M_LAPORAN.filter((laporan) => this.$allow(laporan.acl)).map((item) =>
+                  h('option', { attrs: { value: item.key } }, item.label)
+                ),
+              ]
+            );
+          },
+        },
+        lblConfirmButton: 'Unduh',
+      }).then(() => {
+        if (!url.dokumen) {
+          this.$error('Silakan pilih laporan yang ingin diunduh!');
+          return;
+        }
+
+        const params = Object.assign(this.params, this.$isObject(this.filters) ? this.filters : {});
+        this.downloadList({ params, url: url.dokumen, jenis: this.jenis, tipe: this.akses }).then((url) => {
+          this.$downloadFile(url);
+        });
       });
     },
 
