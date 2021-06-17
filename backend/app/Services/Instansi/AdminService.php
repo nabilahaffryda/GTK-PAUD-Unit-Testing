@@ -98,7 +98,6 @@ class AdminService
 
         if (isset($params['is_aktif'])) {
             $query->where([
-                'akun.is_aktif'          => $params['is_aktif'],
                 'akun_instansi.is_aktif' => $params['is_aktif'],
                 'paud_admin.is_aktif'    => $params['is_aktif'],
             ]);
