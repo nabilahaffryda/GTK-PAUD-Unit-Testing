@@ -26,7 +26,9 @@
           @download="onDownload"
         >
           <template v-slot:subtitle>
-            <div class="subtitle-1 black--text"> <b>{{ total }}</b> Institusi LPD</div>
+            <div class="subtitle-1 black--text">
+              <b>{{ total }}</b> Institusi LPD
+            </div>
           </template>
         </base-table-header>
       </v-card-title>
@@ -75,7 +77,7 @@
                           <p>
                             <span>{{ $getDeepObj(item, 'nama_penanggung_jawab') || '-' }}</span
                             ><br />
-                            <span>{{ $getDeepObj(item, 'telp_penanggung_jawab') || '-' }}</span>
+                            <span class="grey--text">{{ $getDeepObj(item, 'telp_penanggung_jawab') || '-' }}</span>
                           </p>
                         </v-list-item-content>
                       </v-list-item>
@@ -93,16 +95,13 @@
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content>
-                          <span class="caption">Alamat</span>
+                          <span class="caption">Jumlah Admin</span>
                           <div>
-                            {{ $getDeepObj(item, 'instansi.data.alamat') || '-' }}
-                            <br />
-                            {{
-                              [
-                                $getDeepObj(item, 'instansi.data.m_kota.data.keterangan') || '-',
-                                $getDeepObj(item, 'instansi.data.m_propinsi.data.keterangan') || '-',
-                              ].join(' - ')
-                            }}
+                            Admin Program :
+                            <span class="text-bold">{{ $getDeepObj(item, 'jml_admin_program') || 0 }}</span>
+                          </div>
+                          <div>
+                            Operator : <span class="text-bold">{{ $getDeepObj(item, 'jml_operator') || 0 }}</span>
                           </div>
                         </v-list-item-content>
                       </v-list-item>
