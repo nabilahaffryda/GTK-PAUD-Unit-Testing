@@ -531,25 +531,16 @@ export default {
           this.$refs.modal.loading = false;
           return;
         } else {
-          const dasar = hasData.findIndex((item) => Number(item.k_diklat_paud) === 1) > -1;
-          const pcp = hasData.findIndex((item) => Number(item.k_diklat_paud) === 2) > -1;
-          const mot = hasData.findIndex((item) => Number(item.k_diklat_paud) === 3) > -1;
+          // const dasar = hasData.findIndex((item) => Number(item.k_diklat_paud) === 1) > -1;
+          // const pcp = hasData.findIndex((item) => Number(item.k_diklat_paud) === 2) > -1;
+          // const mot = hasData.findIndex((item) => Number(item.k_diklat_paud) === 3) > -1;
+          const lainnya = hasData.findIndex((item) => Number(item.k_diklat_paud) === 4) > -1;
+          const tambahan = Number(this.detail && this.detail.k_petugas_paud) === 2;
 
-          if (!dasar) {
-            this.$error('Mohon isikan data diklat dasar');
+          if (tambahan && !lainnya) {
+            this.$error('Mohon isikan data diklat lainnya');
             this.$refs.modal.loading = false;
             return;
-          }
-          if (this.jenis === 'pengajar') {
-            let status = false;
-            if (pcp || mot) {
-              status = true;
-            } else {
-              this.$error('Mohon isikan data diklat PCP atau MOT');
-              this.$refs.modal.loading = false;
-            }
-
-            if (!status) return false;
           }
 
           for (let i = 0; i < hasData.length; i++) {

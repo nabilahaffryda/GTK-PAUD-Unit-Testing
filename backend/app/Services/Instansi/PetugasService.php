@@ -82,7 +82,17 @@ class PetugasService
             && $akun->alamat && $akun->k_propinsi && $akun->k_kota
             && $akun->nik && $petugas->prodi && $petugas->lulusan && $petugas->k_kualifikasi;
 
-        $isLengkap2 = $petugas->paudPetugasDiklats()->count() > 0;
+        $diklats = $petugas->paudPetugasDiklats->keyBy('k_diklat_paud');
+        if (in_array($petugas->k_petugas_paud, [MPetugasPaud::PENGAJAR, MPetugasPaud::PEMBIMBING_PRAKTIK])) {
+            $isLengkap2 = $diklats->has(MDiklatPaud::DIKLAT_BERJENJANG)
+                || $diklats->has(MDiklatPaud::DIKLAT_PCP)
+                || $diklats->has(MDiklatPaud::DIKLAT_MOT);
+        } else {
+            $isLengkap2 = $diklats->has(MDiklatPaud::DIKLAT_LAINNYA)
+                && ($diklats->has(MDiklatPaud::DIKLAT_BERJENJANG)
+                    || $diklats->has(MDiklatPaud::DIKLAT_PCP)
+                    || $diklats->has(MDiklatPaud::DIKLAT_MOT));
+        }
 
         $isLengkap3 = $petugas->paudPetugasBerkases()->count() >= 4;
 

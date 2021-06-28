@@ -194,6 +194,7 @@ export default {
             outlined: true,
             dense: true,
             singleLine: true,
+            clearable: true,
             grid: { cols: 12, md: 6 },
           },
           {
@@ -211,6 +212,7 @@ export default {
             outlined: true,
             dense: true,
             singleLine: true,
+            clearable: true,
             grid: { cols: 12, md: 6 },
           },
         ],
@@ -269,6 +271,7 @@ export default {
             outlined: true,
             dense: true,
             singleLine: true,
+            clearable: true,
             grid: { cols: 12, md: 6 },
           },
         ],
