@@ -139,7 +139,7 @@
             <v-stepper-content step="3" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
-                  <h2 class="secondary--text">Admin {{ title }}</h2>
+                  <h2 class="secondary--text">{{ title }}</h2>
                   <span>
                     <i>{{ instansis[form.instansi_id] }}</i>
                   </span>
@@ -513,7 +513,7 @@ export default {
             {
               type: 'VTextField',
               name: 'nama',
-              label: 'Nama Admin',
+              label: 'Nama Operator',
               dense: true,
               hint: 'wajib diisi',
               required: true,
