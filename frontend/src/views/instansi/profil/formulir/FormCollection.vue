@@ -61,11 +61,11 @@
                       </v-chip>
                     </template>
                     <template v-else>
-                      <validation-provider name="Pindaian Berkas" rules="required" v-slot="{ errors }">
+                      <validation-provider name="Sertifikat Diklat" rules="required" v-slot="{ errors }">
                         <v-file-input
                           v-model="form[item.k_tipe][id]['file']"
                           :error-messages="errors"
-                          label="Pindaian Berkas Ijazah (20 KB - 1,5 MB)"
+                          label="Pindaian Berkas Sertifikat (20 KB - 1,5 MB)"
                           append-icon="mdi-paperclip"
                           prepend-icon=""
                           accept="image/*,.pdf"
