@@ -94,7 +94,7 @@ class PetugasService
                     || $diklats->has(MDiklatPaud::DIKLAT_MOT));
         }
 
-        $isLengkap3 = $petugas->paudPetugasBerkases()->count() >= 4;
+        $isLengkap3 = $petugas->paudPetugasBerkases()->count() >= 3;
 
         return [
             'profil' => $isLengkap1,
