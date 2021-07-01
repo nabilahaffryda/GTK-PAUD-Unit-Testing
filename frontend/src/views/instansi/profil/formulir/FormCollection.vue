@@ -70,6 +70,11 @@
                           prepend-icon=""
                           accept="image/*,.pdf"
                           hint="jenis file unggahan JPG/JPEG/PNG/GIF/PDF (20 KB - 1,5 MB). Untuk berkas multi halaman gunakan format PDF"
+                          :rules="[
+                            (value) =>
+                              (value && value.size < roundDecimal(1500 * 1000)) ||
+                              'Berkas yang Anda upload melebihi kapasitas maksimum!',
+                          ]"
                           persistent-hint
                           show-size
                           outlined
@@ -102,7 +107,7 @@
 <script>
 import BaseFormGenerator from '@/components/base/BaseFormGenerator';
 import { ValidationProvider } from 'vee-validate';
-import { range } from '@/utils/format';
+import { range, roundDecimal } from '@/utils/format';
 export default {
   name: 'FormCollection',
   components: { BaseFormGenerator, ValidationProvider },
@@ -327,6 +332,10 @@ export default {
     },
     resetValidation() {
       this.$emit('reset');
+    },
+
+    roundDecimal(value) {
+      return roundDecimal(value);
     },
   },
   watch: {

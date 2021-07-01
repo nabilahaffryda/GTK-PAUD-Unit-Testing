@@ -1,4 +1,5 @@
 import { mapActions, mapState } from 'vuex';
+import { roundDecimal } from '@/utils/format';
 
 export default {
   data() {
@@ -560,7 +561,16 @@ export default {
             if (hasData[i]['paud_petugas_diklat_id'])
               formData.append(`data[${i}][paud_petugas_diklat_id]`, hasData[i]['paud_petugas_diklat_id']);
 
-            if (typeof hasData[i]['file'] !== 'string') formData.append(`data[${i}][file]`, hasData[i]['file']);
+            if (typeof hasData[i]['file'] !== 'string') {
+              const size = hasData[i]['file']['size'] || 0;
+
+              if (size > roundDecimal(1500 * 1000)) {
+                this.$error('Berkas yang Anda upload melebihi kapasitas maksimum!');
+                this.$refs.modal.loading = false;
+                return;
+              }
+              formData.append(`data[${i}][file]`, hasData[i]['file']);
+            }
           }
         }
       }
