@@ -483,7 +483,11 @@ class AdminService
         try {
             $paudAdmin->akun->delete();
         } catch (Exception) {
-            throw new SaveException('Hapus akun admin tidak berhasil karena masih terikat data lain');
+            // https://lapor.siap.id/issues/4923
+            // karena di devel ptk nya kecantol dengan `gpodb`.`psp_pemantau_asesor` padahal akun_instansinya
+            // sudah kosong.
+            // jadi disilent aja,
+            // throw new SaveException('Hapus akun admin tidak berhasil karena masih terikat data lain');
         }
 
         return $paudAdmin;
