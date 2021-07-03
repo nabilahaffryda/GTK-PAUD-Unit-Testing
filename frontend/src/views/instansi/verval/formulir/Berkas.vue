@@ -357,8 +357,12 @@ export default {
 
     berkases() {
       const berkas = this.berkas || [];
-      const masters = this.$mapForMaster(this.$getDeepObj(this, `masters.m_berkas_${this.jenis}_paud`));
+      let masters = this.$mapForMaster(this.$getDeepObj(this, `masters.m_berkas_${this.jenis}_paud`)) || [];
       const mBerkas = this.$arrToObj(berkas, `k_berkas_${this.jenis}_paud`);
+
+      if (this.jenis === 'petugas') {
+        masters = masters.filter((item) => item.value < 5);
+      }
 
       let temp = [];
       masters.forEach((key) => {

@@ -160,15 +160,6 @@ export default {
             kBerkas: 4,
             value: mBerkas['4'] || {},
           },
-          {
-            title: 'Sertifikat Pelatihan Calon Pelatih (PCP)',
-            pesan: ``,
-            valid: !!mBerkas['5'],
-            type: 'pelatihan',
-            withAction: withAction,
-            kBerkas: 5,
-            value: mBerkas['5'] || {},
-          },
         ],
         bimtek: [
           {
