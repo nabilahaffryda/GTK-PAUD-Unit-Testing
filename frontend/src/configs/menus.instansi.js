@@ -173,8 +173,8 @@ export default [
       },
       {
         icon: 'mdi-account-check',
-        title: 'Verval Pengajar',
-        desc: 'Evaluasi dan Verifikasi Dokumen Penting Pengajar',
+        title: 'Verval Pengajar Tambahan',
+        desc: 'Evaluasi dan Verifikasi Dokumen Penting Pengajar Tambahan',
         color: 'red',
         deepColor: 'darken-1',
         akses: 'petugas-verval.index',
