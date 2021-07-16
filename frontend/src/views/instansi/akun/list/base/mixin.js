@@ -335,8 +335,16 @@ export default {
         .then(({ data }) => {
           if (data && data.errors) {
             const error = Object.values(data.errors) || [];
-            this.$refs.uploader.step = 1;
-            this.$refs.uploader.errorFile.push(...error);
+            // this.$refs.uploader.step = 1;
+            // this.$refs.uploader.errorFile.push(...error);
+            if (error.length) {
+              this.$error(error.join('<br/>'));
+            } else {
+              this.$error(
+                'Terdapat kesalahan pada Data pada berkas yang diunggah, silakan periksa berkas Anda dan pastikan tidak ada Data yang sama kemudian coba kembali!'
+              );
+            }
+            this.$refs.modal.loading = false;
             return;
           }
 
