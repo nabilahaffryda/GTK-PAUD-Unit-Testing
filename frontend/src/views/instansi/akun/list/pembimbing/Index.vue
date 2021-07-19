@@ -15,14 +15,13 @@
       </v-card-text>
     </v-card>
     <list-admin
-        jenis="kelas"
-        akses="pembimbing-praktik"
-        title="Akun Pembimbing Praktik"
-        desc=""
-        :actions="actions"
+      jenis="kelas"
+      akses="pembimbing-praktik"
+      title="Akun Pembimbing Praktik"
+      desc=""
+      :actions="actions"
     ></list-admin>
   </div>
-
 </template>
 
 <script>
@@ -34,7 +33,7 @@ export default {
   data() {
     return {
       actions: Actions,
-      desc: ''
+      desc: '',
     };
   },
 };

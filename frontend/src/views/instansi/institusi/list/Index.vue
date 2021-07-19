@@ -26,7 +26,9 @@
           @download="onDownload"
         >
           <template v-slot:subtitle>
-            <div class="subtitle-1 black--text"> <b>{{ total }}</b> Institusi LPD</div>
+            <div class="subtitle-1 black--text">
+              <b>{{ total }}</b> Institusi LPD</div
+            >
           </template>
         </base-table-header>
       </v-card-title>

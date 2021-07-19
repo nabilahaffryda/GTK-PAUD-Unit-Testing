@@ -13,30 +13,15 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <v-tabs
-        v-model="tab"
-        color="secondary"
-    >
-      <v-tab
-          v-for="item in items"
-          :key="item.tab"
-      >
+    <v-tabs v-model="tab" color="secondary">
+      <v-tab v-for="item in items" :key="item.tab">
         {{ item.tab }}
       </v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
-      <v-tab-item
-          v-for="item in items"
-          :key="item.tab"
-      >
-        <list-admin
-            jenis="kelas"
-            akses="pengajar-tambahan"
-            :title="item.tab"
-            desc=""
-            :actions="actions"
-        ></list-admin>
+      <v-tab-item v-for="item in items" :key="item.tab">
+        <list-admin jenis="kelas" akses="pengajar-tambahan" :title="item.tab" desc="" :actions="actions"></list-admin>
       </v-tab-item>
     </v-tabs-items>
   </div>

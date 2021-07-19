@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       actions: Actions,
-      desc: ''
+      desc: '',
     };
   },
 };

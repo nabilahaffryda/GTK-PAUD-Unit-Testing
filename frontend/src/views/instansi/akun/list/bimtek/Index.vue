@@ -14,13 +14,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <list-admin
-        jenis="pengajar"
-        akses="pengajar-bimtek"
-        title=""
-        desc=""
-        :actions="actions"
-    ></list-admin>
+    <list-admin jenis="pengajar" akses="pengajar-bimtek" title="" desc="" :actions="actions"></list-admin>
   </div>
 </template>
 
@@ -33,7 +27,7 @@ export default {
   data() {
     return {
       actions: Actions,
-      desc: ''
+      desc: '',
     };
   },
 };
