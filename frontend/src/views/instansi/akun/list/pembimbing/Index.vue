@@ -1,11 +1,28 @@
 <template>
-  <list-admin
-    jenis="kelas"
-    akses="pembimbing-praktik"
-    title="Akun Pembimbing Praktik"
-    desc=""
-    :actions="actions"
-  ></list-admin>
+  <div>
+    <!--notif jadwal-->
+    <v-card tile flat class="my-5">
+      <v-card-text class="pa-0">
+        <v-row no-gutters>
+          <v-col cols="2">
+            <div class="bg-kiri"></div>
+          </v-col>
+          <v-col cols="10" class="pa-5">
+            <h1 class="headline black--text" v-html="`Daftar Akun Pembimbing Praktik`"></h1>
+            <p v-html="desc"></p>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+    <list-admin
+        jenis="kelas"
+        akses="pembimbing-praktik"
+        title="Akun Pembimbing Praktik"
+        desc=""
+        :actions="actions"
+    ></list-admin>
+  </div>
+
 </template>
 
 <script>
@@ -17,6 +34,7 @@ export default {
   data() {
     return {
       actions: Actions,
+      desc: ''
     };
   },
 };
