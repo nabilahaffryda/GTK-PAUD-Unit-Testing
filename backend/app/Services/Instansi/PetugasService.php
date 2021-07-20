@@ -124,6 +124,7 @@ class PetugasService
                         ['k_verval_paud', '<>', MVervalPaud::KANDIDAT],
                     ]);
             })
+            ->where('k_unsur_pengajar_paud', $params['k_unsur_pengajar_paud'])
             ->with(['akun', 'paudPetugasPerans.mVervalPaud',
                     'paudPetugasPerans.akunVerval:akun_id,nama,email,no_telpon,no_hp']);
     }

@@ -14,9 +14,10 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'keyword' => ['string', 'min:3', 'max:100'],
-            'count'   => ['integer', 'max:50'],
-            'page'    => ['integer', 'min:1'],
+            'k_unsur_pengajar_paud' => ['required', 'exists:m_unsur_pengajar_paud,k_unsur_pengajar_paud'],
+            'keyword'               => ['string', 'min:3', 'max:100'],
+            'count'                 => ['integer', 'max:50'],
+            'page'                  => ['integer', 'min:1'],
         ];
     }
 }
