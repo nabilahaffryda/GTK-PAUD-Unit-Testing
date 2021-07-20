@@ -8,6 +8,7 @@ use App\Models\Akun;
 use App\Models\MBerkasPetugasPaud;
 use App\Models\MDiklatPaud;
 use App\Models\MPetugasPaud;
+use App\Models\MUnsurPengajarPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudAdmin;
 use App\Models\PaudPetugas;
@@ -87,6 +88,15 @@ class PetugasService
             $isLengkap2 = $diklats->has(MDiklatPaud::DIKLAT_BERJENJANG)
                 || $diklats->has(MDiklatPaud::DIKLAT_PCP)
                 || $diklats->has(MDiklatPaud::DIKLAT_MOT);
+
+        } elseif ($petugas->k_petugas_paud == MPetugasPaud::PENGAJAR_TAMBAHAN && $petugas->k_unsur_pengajar_paud == MUnsurPengajarPaud::UNSUR_GURU) {
+            $isLengkap2 = $diklats->has(MDiklatPaud::DIKLAT_BERJENJANG)
+                || $diklats->has(MDiklatPaud::DIKLAT_PCP)
+                || $diklats->has(MDiklatPaud::DIKLAT_MOT);
+
+        } elseif ($petugas->k_petugas_paud == MPetugasPaud::PENGAJAR_TAMBAHAN && $petugas->k_unsur_pengajar_paud == MUnsurPengajarPaud::UNSUR_DOSEN) {
+            $isLengkap2 = $diklats->has(MDiklatPaud::DIKLAT_LAINNYA);
+
         } else {
             $isLengkap2 = $diklats->has(MDiklatPaud::DIKLAT_LAINNYA)
                 && ($diklats->has(MDiklatPaud::DIKLAT_BERJENJANG)
