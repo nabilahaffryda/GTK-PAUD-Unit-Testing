@@ -159,9 +159,12 @@ return [
     | <singular> = <plural> : Custom mapping (default use Str::singular and Str::singular)
     */
     'plural'  => [
-        'kota'   => 'kotas',
-        'akses'  => 'akseses',
-        'berkas' => 'berkases',
+        'akses'   => 'akseses',
+        'berkas'  => 'berkases',
+        'kelas'   => 'kelases',
+        'kota'    => 'kotas',
+        'petugas' => 'petugases',
+        'peserta' => 'pesertas',
     ],
 
     /*
@@ -196,15 +199,15 @@ return [
             ],
         ],
 
-        'm_group' => [
-            'model' => [
-                'const' => ['k_group', 'singkat'],
-            ],
-        ],
-
         'm_berkas_lpd_paud' => [
             'model' => [
                 'const' => ['k_berkas_lpd_paud', 'singkat'],
+            ],
+        ],
+
+        'm_diklat_paud' => [
+            'model' => [
+                'const' => ['k_diklat_paud', 'keterangan'],
             ],
         ],
 
@@ -214,21 +217,51 @@ return [
             ],
         ],
 
+        'm_group' => [
+            'model' => [
+                'const' => ['k_group', 'singkat'],
+            ],
+        ],
+
         'm_jenis_instansi' => [
             'model' => [
                 'const' => ['k_jenis_instansi', 'singkat'],
             ],
         ],
 
-        'm_verval_paud' => [
+        'm_konfirmasi_paud' => [
             'model' => [
-                'const' => ['k_verval_paud', 'singkat'],
+                'const' => ['k_konfirmasi_paud', 'singkat'],
+            ],
+        ],
+
+        'm_petugas_paud' => [
+            'model' => [
+                'const' => ['k_petugas_paud', 'keterangan'],
             ],
         ],
 
         'm_status_email' => [
             'model' => [
                 'const' => ['k_status_email', 'singkat'],
+            ],
+        ],
+
+        'm_tingkat_diklat_paud' => [
+            'model' => [
+                'const' => ['k_tingkat_diklat_paud', 'singkat'],
+            ],
+        ],
+
+        'm_unsur_pengajar_paud' => [
+            'model' => [
+                'const' => ['k_unsur_pengajar_paud', 'keterangan'],
+            ],
+        ],
+
+        'm_verval_paud' => [
+            'model' => [
+                'const' => ['k_verval_paud', 'singkat'],
             ],
         ],
 
