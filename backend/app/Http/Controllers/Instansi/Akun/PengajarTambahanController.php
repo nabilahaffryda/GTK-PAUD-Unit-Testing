@@ -6,24 +6,63 @@ use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Requests\Instansi\Admin\CreateRequest;
+use App\Http\Requests\Instansi\Admin\PengajarTambahanRequest;
 use App\Http\Requests\Instansi\Admin\UpdateRequest;
+use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\MGroup;
 use App\Models\MPetugasPaud;
 use App\Models\PaudAdmin;
 use App\Services\Instansi\PetugasService;
+use DB;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Http\Request;
 
 class PengajarTambahanController extends AkunController
 {
     protected $kGroup = MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD;
 
     /**
+     * @return BaseCollection
+     */
+    public function index(Request $request)
+    {
+        $params = array_merge($request->input('filter', []), [
+            'k_group' => $this->kGroup,
+        ]);
+
+        return BaseCollection::make($this
+            ->service
+            ->query(instansi(), $params)
+            ->select(['paud_admin.*', 'akun_instansi.token'])
+            ->when($request->input('k_unsur_pengajar_paud'), function ($value, Builder $query) {
+                $query
+                    ->whereExists(function (Builder $query) use ($value) {
+                        $query
+                            ->select(DB::raw(1))
+                            ->from('paud_petugas')
+                            ->whereColumn('paud_petugas.akun_id', 'paud_admin.akun_id')
+                            ->whereColumn('paud_petugas.tahun', 'paud_admin.tahun')
+                            ->whereColumn('paud_petugas.angkatan', 'paud_admin.angkatan')
+                            ->where('paud_petugas.k_petugas_paud', MPetugasPaud::PENGAJAR_TAMBAHAN)
+                            ->where('paud_petugas.k_unsur_pengajar_paud', $value);
+                    });
+            })
+            ->paginate((int)$request->get('count', 10))
+            ->format(function (PaudAdmin $item) {
+                return $item
+                    ->akun
+                    ->makeVisible(['passwd']);
+            }));
+    }
+
+    /**
      * @throws SaveException
      * @throws FlowException
      * @throws GuzzleException
      */
-    public function create(CreateRequest $request)
+    public function createPengajar(CreateRequest $request, PengajarTambahanRequest $pengajarTambahanRequest)
     {
         $this->validateGroup();
 
@@ -33,7 +72,8 @@ class PengajarTambahanController extends AkunController
 
         $paudAdmin = $this->service->create(instansi(), $params);
         app(PetugasService::class)->create($paudAdmin, [
-            'k_petugas_paud' => MPetugasPaud::PENGAJAR_TAMBAHAN,
+            'k_petugas_paud'        => MPetugasPaud::PENGAJAR_TAMBAHAN,
+            'k_unsur_pengajar_paud' => $pengajarTambahanRequest->k_unsur_pengajar_paud,
         ]);
         return BaseResource::make($paudAdmin);
     }
