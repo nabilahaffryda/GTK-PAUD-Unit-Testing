@@ -41,7 +41,7 @@ export default [
     },
   },
   {
-    path: '/i/:id(\\d+)/akun/pengajar-tambahan',
+    path: '/i/:id(\\d+)/akun/pengajar-tambahan/:unsur(\\d+)?',
     name: 'akun-pengajar-tambahan',
     component: () => lazyLoadView(import('@views/instansi/akun/list/pengajarTambahan/Index')),
     meta: {

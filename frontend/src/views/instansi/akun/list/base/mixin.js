@@ -115,9 +115,14 @@ export default {
       const isEdit = this.formulir.isEdit;
       const id = this.$refs.formulir.id;
       const params = Object.assign({}, this.$refs.formulir.getValue(), { k_group: +this.kGroup });
-      const name = this.$getDeepObj(this, 'attr.tipe');
+      const name = this.$getDeepObj(this.attr, 'tipe');
       const tipe = this.$refs.formulir.isPilih || '';
       const file = this.$refs.formulir.file || {};
+
+      if (name === 'pengajar-tambahan') {
+        Object.assign(params, { k_unsur_pengajar_paud: this.params['k_unsur_pengajar_paud'] });
+        Object.assign(file, { k_unsur_pengajar_paud: this.params['k_unsur_pengajar_paud'] });
+      }
 
       if (tipe === 'excel') {
         this.uploadSave(file);

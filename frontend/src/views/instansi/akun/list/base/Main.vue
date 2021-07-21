@@ -194,6 +194,10 @@ export default {
       type: Array,
       required: true,
     },
+    paramsTipe: {
+      type: Object,
+      required: () => {},
+    },
   },
   mixins: [list, mixin],
   components: { DetailView, FormAkun, Akun, PopupUpload },
@@ -214,6 +218,8 @@ export default {
     Object.assign(this.attr, {
       tipe: this.$route.meta && this.$route.meta.tipe,
     });
+
+    Object.assign(this.params, this.paramsTipe);
   },
   computed: {
     ...mapState('master', ['masters']),

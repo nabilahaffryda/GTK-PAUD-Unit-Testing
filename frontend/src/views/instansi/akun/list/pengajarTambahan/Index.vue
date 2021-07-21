@@ -21,7 +21,14 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="item in items" :key="item.tab">
-        <list-admin jenis="kelas" akses="pengajar-tambahan" :title="item.tab" desc="" :actions="actions"></list-admin>
+        <list-admin
+          jenis="kelas"
+          akses="pengajar-tambahan"
+          :paramsTipe="item.params"
+          :title="item.tab"
+          desc=""
+          :actions="actions"
+        ></list-admin>
       </v-tab-item>
     </v-tabs-items>
   </div>
@@ -39,8 +46,8 @@ export default {
       desc: '',
       tab: null,
       items: [
-        { tab: 'Pengajar Tambahan (Guru)', content: 'Tab 1 Content' },
-        { tab: 'Pengajar Tambahan (Dosen)', content: 'Tab 2 Content' },
+        { tab: 'Pengajar Tambahan (Guru)', params: { k_unsur_pengajar_paud: 1 } },
+        { tab: 'Pengajar Tambahan (Dosen)', params: { k_unsur_pengajar_paud: 2 } },
       ],
     };
   },
