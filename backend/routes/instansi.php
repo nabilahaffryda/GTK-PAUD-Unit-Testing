@@ -143,7 +143,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('download-aktivasi', [Akun\PengajarTambahanController::class, 'downloadAktivasi']);
         Route::get('template', [Akun\PengajarTambahanController::class, 'template']);
         Route::post('create', [Akun\PengajarTambahanController::class, 'createPengajar']);
-        Route::post('upload', [Akun\PengajarTambahanController::class, 'upload']);
+        Route::post('upload', [Akun\PengajarTambahanController::class, 'uploadPengajarTambahan']);
         Route::get('{paudAdmin}', [Akun\PengajarTambahanController::class, 'fetch']);
         Route::post('{paudAdmin}/update', [Akun\PengajarTambahanController::class, 'update']);
         Route::post('{paudAdmin}/aktif', [Akun\PengajarTambahanController::class, 'aktif']);

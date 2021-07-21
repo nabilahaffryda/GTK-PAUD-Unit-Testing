@@ -88,4 +88,9 @@ class PengajarTambahanController extends AkunController
         app(PetugasService::class)->delete($paudAdmin);
         parent::delete($paudAdmin);
     }
+
+    public function uploadPengajarTambahan(PengajarTambahanRequest $pengajarTambahanRequest, Request $request)
+    {
+        return $this->service->uploadPengajarTambahan(akun(), instansi(), $request->file('file'), $this->kGroup, $pengajarTambahanRequest->k_unsur_pengajar_paud);
+    }
 }
