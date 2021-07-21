@@ -55,6 +55,7 @@ export default {
     async onEdit(item) {
       this.$set(this.formulir, 'isEdit', true);
       this.$set(this.formulir, 'isValid', false);
+
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
