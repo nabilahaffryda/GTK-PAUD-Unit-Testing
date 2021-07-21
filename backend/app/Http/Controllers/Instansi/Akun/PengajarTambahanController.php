@@ -16,7 +16,8 @@ use App\Models\PaudAdmin;
 use App\Services\Instansi\PetugasService;
 use DB;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent;
+use Illuminate\Database\Query;
 use Illuminate\Http\Request;
 
 class PengajarTambahanController extends AkunController
@@ -36,9 +37,9 @@ class PengajarTambahanController extends AkunController
             ->service
             ->query(instansi(), $params)
             ->select(['paud_admin.*', 'akun_instansi.token'])
-            ->when($request->input('k_unsur_pengajar_paud'), function (Builder $query, $value) {
+            ->when($request->input('k_unsur_pengajar_paud'), function (Eloquent\Builder $query, $value) {
                 $query
-                    ->whereExists(function (Builder $query) use ($value) {
+                    ->whereExists(function (Query\Builder $query) use ($value) {
                         $query
                             ->select(DB::raw(1))
                             ->from('paud_petugas')
