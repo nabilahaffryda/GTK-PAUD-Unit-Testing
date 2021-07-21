@@ -36,7 +36,7 @@ class PengajarTambahanController extends AkunController
             ->service
             ->query(instansi(), $params)
             ->select(['paud_admin.*', 'akun_instansi.token'])
-            ->when($request->input('k_unsur_pengajar_paud'), function ($value, Builder $query) {
+            ->when($request->input('k_unsur_pengajar_paud'), function (Builder $query, $value) {
                 $query
                     ->whereExists(function (Builder $query) use ($value) {
                         $query
