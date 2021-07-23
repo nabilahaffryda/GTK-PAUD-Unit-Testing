@@ -365,5 +365,7 @@ export default {
         this.$downloadFile(url);
       });
     },
+
+    setPembimbing() {},
   },
 };

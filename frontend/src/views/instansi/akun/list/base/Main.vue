@@ -26,6 +26,9 @@
           @filter="onFilter"
           @download="onDownload"
         >
+          <template v-slot:toolbar v-if="this.akses === 'pembimbing-praktik'">
+            <v-btn small color="info" class="py-5" @click="setPembimbing"> Set Pembimbing Praktik </v-btn>
+          </template>
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text">
               <b>{{ total }} </b> {{ title }}

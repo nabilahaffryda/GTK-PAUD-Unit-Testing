@@ -70,7 +70,6 @@
                 @click:append="search"
               >
               </v-text-field>
-              <slot name="toolbar" style="width: 89%" />
               <div style="min-width: 8%">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -167,6 +166,7 @@
                   <span>Tambah</span>
                 </v-tooltip>
               </div>
+              <slot name="toolbar" style="width: 89%" />
             </v-toolbar>
           </div>
         </v-col>
