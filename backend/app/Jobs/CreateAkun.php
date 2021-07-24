@@ -10,6 +10,7 @@ use App\Models\MGroup;
 use App\Models\MPetugasPaud;
 use App\Services\Instansi\AdminService;
 use App\Services\Instansi\PetugasService;
+use Auth;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -49,6 +50,7 @@ class CreateAkun implements ShouldQueue
         if ($this->batch()->cancelled()) {
             return;
         }
+        Auth::guard('akun')->login($this->admin);
 
         $paudAdmin = app(AdminService::class)->create($this->instansi, $this->data);
 
