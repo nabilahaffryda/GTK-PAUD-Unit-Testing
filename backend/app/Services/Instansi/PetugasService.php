@@ -403,7 +403,7 @@ class PetugasService
     {
         $peran = $this->getPeranPetugas($petugas);
 
-        if (!$peran || !$peran->isVervalDiajukan()) {
+        if (!$peran || $peran->k_verval_paud != MVervalPaud::DIPROSES) {
             throw new FlowException("Ajuan data petugas tidak ditemukan");
         }
 
@@ -452,7 +452,7 @@ class PetugasService
     {
         $peran = $this->getPeranPetugas($petugas);
 
-        if (!$peran || !$peran->k_verval_paud == MVervalPaud::DIPROSES) {
+        if (!$peran || $peran->k_verval_paud != MVervalPaud::DIAJUKAN) {
             throw new FlowException("Ajuan data petugas tidak ditemukan");
         }
 
