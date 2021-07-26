@@ -90,7 +90,7 @@ class PembimbingPraktikController extends AkunController
      */
     public function setInti(SetIntiRequest $request)
     {
-        return app(PetugasService::class)->setInti(MPetugasPaud::PEMBIMBING_PRAKTIK, $request->akun_ids);
+        return app(PetugasService::class)->setStatusAkun([MPetugasPaud::PEMBIMBING_PRAKTIK], $request->akun_ids, ['is_inti' => 1]);
     }
 
     /**
@@ -103,6 +103,6 @@ class PembimbingPraktikController extends AkunController
             throw new FlowException('Data akun bukan merupakan pembimbing praktik');
         }
 
-        return app(PetugasService::class)->resetInti($petugas);
+        return app(PetugasService::class)->resetStatus($petugas, ['is_inti']);
     }
 }

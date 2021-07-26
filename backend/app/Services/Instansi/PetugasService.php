@@ -579,7 +579,7 @@ class PetugasService
     /**
      * @throws FlowException
      */
-    public function setInti(int $kPetugasPaud, array $akunIds)
+    public function setStatusAkun(array $kPetugasPauds, array $akunIds, array $statuses)
     {
         /** @var PaudPetugas[]|Collection $petugases */
         $petugases = PaudPetugas::query()
@@ -594,24 +594,26 @@ class PetugasService
             throw new FlowException('Tidak semua akun dikenali');
         }
 
-        $kPetugasPauds = $petugases->pluck('k_petugas_paud')->unique()->all();
-        if (count($kPetugasPauds) != 1 || $kPetugasPauds[0] != $kPetugasPaud) {
-            $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
-
-            throw new FlowException('Ada akun yang bukan merupakan ' . $mPetugasPaud->keterangan);
+        $petugasPauds = $petugases->pluck('k_petugas_paud')->unique()->all();
+        if ($petugasPauds != $kPetugasPauds) {
+            throw new FlowException('Ada akun yang tidak dikenali');
         }
 
         foreach ($petugases as $petugas) {
-            $petugas->is_inti = 1;
+            foreach ($statuses as $key => $value) {
+                $petugas->$key = $value;
+            }
             $petugas->save();
         }
 
         return $petugases;
     }
 
-    public function resetInti(PaudPetugas $petugas)
+    public function resetStatus(PaudPetugas $petugas, array $statuses)
     {
-        $petugas->is_inti = 0;
+        foreach ($statuses as $status) {
+            $petugas->$status = 0;
+        }
         $petugas->save();
 
         return $petugas;
