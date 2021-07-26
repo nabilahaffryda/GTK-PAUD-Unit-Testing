@@ -4,6 +4,7 @@ use App\Http\Controllers\Instansi\AdminKelas;
 use App\Http\Controllers\Instansi\Akun;
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Controllers\Instansi\IndexController;
+use App\Http\Controllers\Instansi\Diklat;
 use App\Http\Controllers\Instansi\Lpd;
 use App\Http\Controllers\Instansi\LpdController;
 use App\Http\Controllers\Instansi\Petugas;
@@ -57,6 +58,13 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('petugas/{petugas}/batal', [Petugas\Verval\BatalController::class, 'update']);
         Route::get('petugas/{petugas}/kunci', [Petugas\Verval\KunciController::class, 'update']);
         Route::get('petugas/{petugas}/batal-kunci', [Petugas\Verval\KunciController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'periode'], function () {
+        Route::get('', [Diklat\PeriodeController::class, 'index']);
+        Route::post('create', [Diklat\PeriodeController::class, 'create']);
+        Route::get('{periode}', [Diklat\PeriodeController::class, 'fetch']);
+        Route::post('{periode}/update', [Diklat\PeriodeController::class, 'update']);
     });
 
     Route::group(['prefix' => 'diklat'], function () {
