@@ -8,10 +8,10 @@ use App\Models\Akun;
 use App\Models\Instansi;
 use App\Models\MGroup;
 use App\Models\MPetugasPaud;
+use App\Models\MUnsurPengajarPaud;
 use App\Services\Instansi\AdminService;
-use App\Services\Instansi\PembimbingService;
-use App\Services\Instansi\PengajarService;
 use App\Services\Instansi\PetugasService;
+use Auth;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -22,7 +22,11 @@ use Illuminate\Queue\SerializesModels;
 
 class CreateAkun implements ShouldQueue
 {
-    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Batchable;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     protected array $data;
     protected Instansi $instansi;
@@ -47,6 +51,7 @@ class CreateAkun implements ShouldQueue
         if ($this->batch()->cancelled()) {
             return;
         }
+        Auth::guard('akun')->login($this->admin);
 
         $paudAdmin = app(AdminService::class)->create($this->instansi, $this->data);
 
@@ -59,7 +64,8 @@ class CreateAkun implements ShouldQueue
 
             case MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD:
                 app(PetugasService::class)->create($paudAdmin, [
-                    'k_petugas_paud' => MPetugasPaud::PENGAJAR_TAMBAHAN,
+                    'k_petugas_paud'        => MPetugasPaud::PENGAJAR_TAMBAHAN,
+                    'k_unsur_pengajar_paud' => $this->data['k_unsur_pengajar_paud'] ?? MUnsurPengajarPaud::UNSUR_GURU,
                 ]);
                 break;
 

@@ -3,7 +3,7 @@ export default [
   {
     path: '/i/:id(\\d+)/verval/pengajar',
     name: 'verval-pengajar',
-    component: () => lazyLoadView(import('@views/instansi/verval/base/Main')),
+    component: () => lazyLoadView(import('@views/instansi/verval/pengajarTambahan/Index.vue')),
     meta: {
       title: 'Verval Pengajar Tambahan',
       tipe: 'petugas',
@@ -14,7 +14,7 @@ export default [
   {
     path: '/i/:id(\\d+)/verval/lembaga',
     name: 'verval-lembaga',
-    component: () => lazyLoadView(import('@views/instansi/verval/base/Main')),
+    component: () => lazyLoadView(import('@views/instansi/verval/lembaga/Index.vue')),
     meta: {
       title: 'Verval Lembaga LPD',
       tipe: 'lpd',

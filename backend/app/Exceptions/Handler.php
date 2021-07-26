@@ -23,6 +23,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         FlowException::class,
+        SaveException::class,
         JsonApiException::class,
     ];
 
