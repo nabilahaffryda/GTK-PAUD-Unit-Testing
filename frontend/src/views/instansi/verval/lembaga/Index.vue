@@ -8,28 +8,22 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline black--text" v-html="`Daftar Akun Pembimbing Praktik`"></h1>
-            <p v-html="desc"></p>
+            <h1 class="headline black--text"> <strong>Verval</strong> Profil</h1>
+            <div> Modul ini digunakan untuk melakukan {{ $route.meta.title }} </div>
           </v-col>
         </v-row>
       </v-card-text>
     </v-card>
-    <list-admin
-      jenis="kelas"
-      akses="pembimbing-praktik"
-      title="Akun Pembimbing Praktik"
-      desc=""
-      :actions="actions"
-    ></list-admin>
+    <list-verval :actions="actions"></list-verval>
   </div>
 </template>
 
 <script>
-import ListAdmin from '../base/Main';
+import ListVerval from '../base/Main';
 import Actions from './actions';
 export default {
   name: 'Program',
-  components: { ListAdmin },
+  components: { ListVerval },
   data() {
     return {
       actions: Actions,

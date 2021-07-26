@@ -34,12 +34,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $updated_at
  * @property null|string $created_by
  * @property null|string $updated_by
+ * @property null|int $is_inti
+ * @property null|int $is_refreshment
+ * @property null|int $is_pengimbasan
+ * @property null|int $k_unsur_pengajar_paud
  *
  * @property-read Akun $akun
  * @property-read Instansi $instansi
  * @property-read MKota $instansiKota
  * @property-read MPropinsi $instansiPropinsi
  * @property-read MPetugasPaud $mPetugasPaud
+ * @property-read MUnsurPengajarPaud $mUnsurPengajarPaud
  * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
  * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
  * @property-read Collection|PaudPetugasPeran[] $paudPetugasPerans
@@ -67,6 +72,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudPetugas whereUpdatedAt($value)
  * @method static Builder|PaudPetugas whereCreatedBy($value)
  * @method static Builder|PaudPetugas whereUpdatedBy($value)
+ * @method static Builder|PaudPetugas whereIsInti($value)
+ * @method static Builder|PaudPetugas whereIsRefreshment($value)
+ * @method static Builder|PaudPetugas whereIsPengimbasan($value)
+ * @method static Builder|PaudPetugas whereKUnsurPengajarPaud($value)
  */
 class PaudPetugas extends Eloquent
 {
@@ -90,27 +99,31 @@ class PaudPetugas extends Eloquent
      * @var array
      */
     protected $casts = [
-        'akun_id'             => 'string',
-        'instansi_id'         => 'int',
-        'tahun'               => 'int',
-        'angkatan'            => 'int',
-        'k_petugas_paud'      => 'int',
-        'lulusan'             => 'string',
-        'prodi'               => 'string',
-        'k_kualifikasi'       => 'int',
-        'k_kecamatan'         => 'int',
-        'k_kelurahan'         => 'int',
-        'instansi_nama'       => 'string',
-        'instansi_jabatan'    => 'string',
-        'instansi_alamat'     => 'string',
-        'instansi_k_propinsi' => 'int',
-        'instansi_k_kota'     => 'int',
-        'instansi_kodepos'    => 'string',
-        'data_akun'           => 'array',
-        'created_at'          => 'datetime',
-        'updated_at'          => 'datetime',
-        'created_by'          => 'string',
-        'updated_by'          => 'string',
+        'akun_id'               => 'string',
+        'instansi_id'           => 'int',
+        'tahun'                 => 'int',
+        'angkatan'              => 'int',
+        'k_petugas_paud'        => 'int',
+        'lulusan'               => 'string',
+        'prodi'                 => 'string',
+        'k_kualifikasi'         => 'int',
+        'k_kecamatan'           => 'int',
+        'k_kelurahan'           => 'int',
+        'instansi_nama'         => 'string',
+        'instansi_jabatan'      => 'string',
+        'instansi_alamat'       => 'string',
+        'instansi_k_propinsi'   => 'int',
+        'instansi_k_kota'       => 'int',
+        'instansi_kodepos'      => 'string',
+        'data_akun'             => 'array',
+        'created_at'            => 'datetime',
+        'updated_at'            => 'datetime',
+        'created_by'            => 'string',
+        'updated_by'            => 'string',
+        'is_inti'               => 'int',
+        'is_refreshment'        => 'int',
+        'is_pengimbasan'        => 'int',
+        'k_unsur_pengajar_paud' => 'int',
     ];
 
     /**
@@ -139,6 +152,10 @@ class PaudPetugas extends Eloquent
         'data_akun',
         'created_by',
         'updated_by',
+        'is_inti',
+        'is_refreshment',
+        'is_pengimbasan',
+        'k_unsur_pengajar_paud',
     ];
 
     /**
@@ -179,6 +196,14 @@ class PaudPetugas extends Eloquent
     public function mPetugasPaud()
     {
         return $this->belongsTo('App\Models\MPetugasPaud', 'k_petugas_paud', 'k_petugas_paud');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mUnsurPengajarPaud()
+    {
+        return $this->belongsTo('App\Models\MUnsurPengajarPaud', 'k_unsur_pengajar_paud', 'k_unsur_pengajar_paud');
     }
 
     /**

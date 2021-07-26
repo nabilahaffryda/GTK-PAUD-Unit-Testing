@@ -7,8 +7,8 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline black--text" v-html="`Daftar Pengajar Tambahan`"></h1>
-            <p v-html="desc"></p>
+            <h1 class="headline black--text"> <strong>Verval</strong> Profil</h1>
+            <div> Modul ini digunakan untuk melakukan {{ $route.meta.title }} </div>
           </v-col>
         </v-row>
       </v-card-text>
@@ -21,25 +21,18 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="item in items" :key="item.tab">
-        <list-admin
-          jenis="kelas"
-          akses="pengajar-tambahan"
-          :paramsTipe="item.params"
-          :title="item.tab"
-          desc=""
-          :actions="actions"
-        ></list-admin>
+        <list-verval :paramsTipe="item.params" :actions="actions"></list-verval>
       </v-tab-item>
     </v-tabs-items>
   </div>
 </template>
 
 <script>
-import ListAdmin from '../base/Main';
+import ListVerval from '../base/Main';
 import Actions from './actions';
 export default {
   name: 'Program',
-  components: { ListAdmin },
+  components: { ListVerval },
   data() {
     return {
       actions: Actions,

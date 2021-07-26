@@ -1,10 +1,16 @@
 <?php
 
-namespace App\Http\Requests\Instansi\Petugas\Verval;
+namespace App\Http\Requests\Instansi\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexRequest extends FormRequest
+/**
+ * Class PengajarTambahanRequest
+ * @package App\Http\Requests\Instansi\Admin
+ *
+ * @property-read int $k_unsur_pengajar_paud
+ */
+class PengajarTambahanRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,9 +21,6 @@ class IndexRequest extends FormRequest
     {
         return [
             'k_unsur_pengajar_paud' => ['required', 'exists:m_unsur_pengajar_paud,k_unsur_pengajar_paud'],
-            'keyword'               => ['string', 'min:3', 'max:100'],
-            'count'                 => ['integer', 'max:50'],
-            'page'                  => ['integer', 'min:1'],
         ];
     }
 }

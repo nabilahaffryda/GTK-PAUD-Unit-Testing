@@ -1,18 +1,5 @@
 <template>
   <div class="verval">
-    <v-card tile flat class="my-5">
-      <v-card-text class="pa-0">
-        <v-row no-gutters>
-          <v-col cols="2">
-            <div class="bg-kiri"></div>
-          </v-col>
-          <v-col cols="10" class="pa-5">
-            <h1 class="headline black--text"> <strong>Verval</strong> Profil</h1>
-            <div> Modul ini digunakan untuk melakukan {{ $route.meta.title }} </div>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-card>
     <!--daftar-->
     <v-card flat>
       <v-card-text>
@@ -231,11 +218,20 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import list from '@mixins/list';
-import { lpdActions, petugasAction } from './actions';
 import FormBerkas from '../formulir/Berkas';
 export default {
   name: 'Index',
   mixins: [list],
+  props: {
+    actions: {
+      type: Array,
+      required: true,
+    },
+    paramsTipe: {
+      type: Object,
+      required: () => {},
+    },
+  },
   data() {
     return {
       formulir: {},
@@ -252,10 +248,6 @@ export default {
     ...mapState('preferensi', {
       akun: (state) => (state.data && state.data.akun) || {},
     }),
-
-    actions() {
-      return this.jenis === 'lpd' ? lpdActions : petugasAction;
-    },
 
     configs() {
       const M_PROPINSI = (this.masters && this.masters['propinsi']) || {};
@@ -373,6 +365,10 @@ export default {
     Object.assign(this.params, {
       angkatan: 1,
     });
+
+    console.log(this.paramsTipe);
+
+    Object.assign(this.params, this.paramsTipe);
   },
   methods: {
     ...mapActions('verval', ['fetch', 'getDetail', 'action', 'downloadList', 'getKinerja', 'getTimVerval']),

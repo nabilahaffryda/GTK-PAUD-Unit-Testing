@@ -8,6 +8,7 @@ use App\Models\Akun;
 use App\Models\Instansi;
 use App\Models\MGroup;
 use App\Models\MPetugasPaud;
+use App\Models\MUnsurPengajarPaud;
 use App\Services\Instansi\AdminService;
 use App\Services\Instansi\PetugasService;
 use Auth;
@@ -63,7 +64,8 @@ class CreateAkun implements ShouldQueue
 
             case MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD:
                 app(PetugasService::class)->create($paudAdmin, [
-                    'k_petugas_paud' => MPetugasPaud::PENGAJAR_TAMBAHAN,
+                    'k_petugas_paud'        => MPetugasPaud::PENGAJAR_TAMBAHAN,
+                    'k_unsur_pengajar_paud' => $this->data['k_unsur_pengajar_paud'] ?? MUnsurPengajarPaud::UNSUR_GURU,
                 ]);
                 break;
 

@@ -607,6 +607,95 @@ class AdminService
         ];
     }
 
+    public function uploadPengajarTambahan(Akun $admin, Instansi $instansi, UploadedFile $file, $kGroup, $kUnsurPengajarPaud)
+    {
+        $reader = ReaderEntityFactory::createXLSXReader();
+        $reader->open($file->getRealPath());
+
+        $rules = [
+            'nama'      => ['required', 'string', 'max:50'],
+            'email'     => ['required', 'email:dns,rfc'],
+            'tmp_lahir' => ['nullable', 'string'],
+            'tgl_lahir' => ['nullable', 'date_format:Y-m-d'],
+        ];
+
+        $data    = [];
+        $batches = [];
+        $errors  = [];
+        $uniques = [];
+
+        foreach ($reader->getSheetIterator() as $sheet) {
+            if ($sheet->getName() !== 'Data') {
+                break;
+            }
+
+            foreach ($sheet->getRowIterator() as $index => $row) {
+                /** @var Row $row */
+                if ($index < 2) {
+                    continue;
+                }
+
+                if ($index > 1000) {
+                    break;
+                }
+
+                $cells = $row->toArray();
+
+                $tglLahir = $cells[4];
+                if ($tglLahir instanceof DateTime) {
+                    $tglLahir = $tglLahir->format('Y-m-d');
+                }
+
+                $params = [
+                    'email'                 => trim($cells[1]),
+                    'nama'                  => trim($cells[2]),
+                    'tmp_lahir'             => trim($cells[3]),
+                    'tgl_lahir'             => $tglLahir,
+                    'k_group'               => $kGroup,
+                    'k_unsur_pengajar_paud' => $kUnsurPengajarPaud,
+                ];
+
+                $validator = Validator::make($params, $rules);
+                if ($validator->fails()) {
+                    $errors[$index] = "Baris $index: " . implode("; ", $validator->getMessageBag()->all());
+                } else {
+                    $batches[] = new CreateAkun($admin, $instansi, array_filter($params), $kGroup);
+                    $data[]    = $params;
+
+                    $unique = $params['email'];
+                    if (isset($uniques[$unique])) {
+                        $duplikat       = $uniques[$unique];
+                        $errors[$index] = "Baris $index: {$unique} sudah ada di Baris {$duplikat}";
+                    } else {
+                        $uniques[$unique] = $index;
+                    }
+                }
+            }
+        }
+
+        $reader->close();
+
+
+        if (!$batches) {
+            throw new FlowException("Berkas tidak memuat data akun, silakan cek kesesuaian dengan template");
+        }
+
+
+        if ($errors) {
+            return [
+                'errors' => $errors,
+            ];
+        }
+
+        $batch = Bus::batch($batches)->dispatch();
+
+
+        return [
+            'batch' => $batch,
+            'data'  => $data,
+        ];
+    }
+
     public function setAktif(PaudAdmin $paudAdmin, $isAktif)
     {
         /** @var AkunInstansi $akunInstansi */
