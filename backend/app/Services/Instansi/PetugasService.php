@@ -60,7 +60,7 @@ class PetugasService
     /**
      * @return PaudPetugas|null
      */
-    public function getPetugas(Akun $akun, int $kPetugasPaud = null)
+    public function getPetugas(Akun $akun, array|int $kPetugasPaud = null)
     {
         /** @var PaudPetugas $petugas */
         $petugas = PaudPetugas::query()
@@ -70,7 +70,7 @@ class PetugasService
                 'angkatan' => config('paud.angkatan'),
             ])
             ->when($kPetugasPaud, function ($query, $value) {
-                $query->where('k_petugas_paud', $value);
+                $query->whereIn('k_petugas_paud', (array)$value);
             })
             ->with(['akun'])
             ->first();
