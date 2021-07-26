@@ -23,17 +23,23 @@ class PeriodeService
         return $query;
     }
 
-    public function create(array $validated): PaudPeriode
+    public function create(array $validated): array
     {
-        return PaudPeriode::create([
-            'tahun'              => config('paud.tahun'),
-            'angkatan'           => config('paud.angkatan'),
-            'nama'               => $validated['nama'],
-            'tgl_daftar_mulai'   => $validated['tgl_mulai'],
-            'tgl_daftar_selesai' => $validated['tgl_selesai'],
-            'tgl_diklat_mulai'   => $validated['tgl_mulai'],
-            'tgl_diklat_selesai' => $validated['tgl_selesai'],
-        ]);
+        $result = [];
+
+        foreach ($validated as $item) {
+            $result[] = PaudPeriode::create([
+                'tahun'              => config('paud.tahun'),
+                'angkatan'           => config('paud.angkatan'),
+                'nama'               => $item['nama'],
+                'tgl_daftar_mulai'   => $item['tgl_mulai'],
+                'tgl_daftar_selesai' => $item['tgl_selesai'],
+                'tgl_diklat_mulai'   => $item['tgl_mulai'],
+                'tgl_diklat_selesai' => $item['tgl_selesai'],
+            ]);
+        }
+
+        return $result;
     }
 
     public function update(PaudPeriode $periode, array $validated): PaudPeriode

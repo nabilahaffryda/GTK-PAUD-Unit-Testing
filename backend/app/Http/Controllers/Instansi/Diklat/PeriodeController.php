@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Instansi\Diklat;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Instansi\Diklat\Periode\CreateRequest;
+use App\Http\Requests\Instansi\Diklat\Periode\UpdateRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\PaudPeriode;
@@ -24,9 +25,9 @@ class PeriodeController extends Controller
 
     public function create(CreateRequest $request)
     {
-        $paudPeriode = $this->service->create($request->validated());
+        $paudPeriodes = $this->service->create($request->input('data'));
 
-        return BaseResource::make($paudPeriode);
+        return BaseCollection::make($paudPeriodes);
     }
 
     public function fetch(PaudPeriode $periode)
@@ -34,9 +35,12 @@ class PeriodeController extends Controller
         return BaseResource::make($periode);
     }
 
-    public function update(PaudPeriode $periode, CreateRequest $request)
+    public function update(PaudPeriode $periode, UpdateRequest $request)
     {
         $paudPeriode = $this->service->update($periode, $request->validated());
+
+        return BaseResource::make($paudPeriode);
+    }
 
         return BaseResource::make($paudPeriode);
     }

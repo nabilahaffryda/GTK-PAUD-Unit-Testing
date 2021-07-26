@@ -2,15 +2,18 @@
 
 namespace App\Http\Requests\Instansi\Diklat\Periode;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class CreateRequest
  * @package App\Http\Requests\Instansi\Diklat\Periode
  *
- * @property-read array $data
+ * @property-read string $nama
+ * @property-read Carbon $tgl_mulai
+ * @property-read Carbon $tgl_selesai
  */
-class CreateRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,10 +23,9 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'data'               => ['required', 'array', 'min:1'],
-            'data.*.nama'        => ['required', 'string'],
-            'data.*.tgl_mulai'   => ['required', 'date_format:Y-m-d'],
-            'data.*.tgl_selesai' => ['required', 'date_format:Y-m-d'],
+            'nama'        => ['required', 'string'],
+            'tgl_mulai'   => ['required', 'date_format:Y-m-d'],
+            'tgl_selesai' => ['required', 'date_format:Y-m-d'],
         ];
     }
 }
