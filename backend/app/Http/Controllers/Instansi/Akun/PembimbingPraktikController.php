@@ -45,7 +45,6 @@ class PembimbingPraktikController extends AkunController
             ->when($request->input('is_inti') !== null, function (Eloquent\Builder $query) use ($request) {
                 $query->where('paud_petugas.is_inti', $request->input('is_inti'));
             })
-            ->with('instansi')
             ->paginate((int)$request->get('count', 10))
             ->format(function (PaudAdmin $item) {
                 return $item
