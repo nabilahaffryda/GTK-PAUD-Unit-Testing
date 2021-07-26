@@ -58,7 +58,12 @@ class AdminService
             'paud_admin.angkatan' => $params['angkatan'] ?? config('paud.angkatan'),
         ];
 
-        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD || !in_array($params['k_group'] ?? 0, [MGroup::AP_LPD_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD])) {
+        $kGroups = $params['k_group'] ?? [];
+        if (!is_array($kGroups)) {
+            $kGroups = [$kGroups];
+        }
+
+        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD || !array_intersect($kGroups, [MGroup::AP_LPD_DIKLAT_PAUD, MGroup::PENGAJAR_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD])) {
             $condition['paud_admin.instansi_id'] = $instansi->instansi_id;
         }
 
@@ -82,13 +87,12 @@ class AdminService
                 'akun.mGolongan',
             ]);
 
-        if (($params['k_group'] ?? 0) == MGroup::AP_LPD_DIKLAT_PAUD) {
+        if (array_intersect($kGroups, [MGroup::AP_LPD_DIKLAT_PAUD, MGroup::PENGAJAR_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD])) {
             $query->with(['instansi']);
         }
 
-        if (isset($params['k_group'])) {
-            $query->where('paud_admin.k_group', '=', $params['k_group']);
-
+        if ($kGroups) {
+            $query->whereIn('paud_admin.k_group', $kGroups);
         } else {
             // pastikan hanya mengembalikan data yang sesuai dengan childgroup
             $kGroups = AkunService::childGroups(akun(), $instansi)
