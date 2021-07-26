@@ -195,7 +195,7 @@ export default [
         desc: 'Kelola diklat kelas dan peserta diklat',
         color: 'red',
         deepColor: 'darken-1',
-        akses: false,
+        akses: 'diklat-periode.index',
         link: 'kelola-jadwal',
         to: { name: 'kelola-jadwal' },
       },
