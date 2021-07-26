@@ -9,7 +9,6 @@ use App\Http\Requests\Instansi\Admin\CreateRequest;
 use App\Http\Requests\Instansi\Admin\UpdateRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
-use App\Models\Akun;
 use App\Models\MGroup;
 use App\Models\MJenisInstansi;
 use App\Models\PaudAdmin;
@@ -32,9 +31,9 @@ class AkunController extends Controller
     }
 
     /**
-     * @throws SaveException
+     * @throws FlowException
      */
-    protected function validateGroup()
+    protected function validateGroup(PaudAdmin $paudAdmin = null)
     {
         if (instansi()->k_jenis_instansi == MJenisInstansi::PAUD && $this->kGroup == MGroup::AP_LPD_DIKLAT_PAUD) {
             return;
@@ -45,7 +44,11 @@ class AkunController extends Controller
             ->all();
 
         if (!in_array($this->kGroup, $kGroups)) {
-            throw new SaveException("Grup tidak dikenali");
+            throw new FlowException("Grup tidak dikenali");
+        }
+
+        if ($paudAdmin && $paudAdmin->k_group != $this->kGroup) {
+            throw new FlowException("Grup tidak dikenali");
         }
     }
 
@@ -101,6 +104,7 @@ class AkunController extends Controller
      * @return BaseResource
      * @throws SaveException
      * @throws GuzzleException
+     * @throws FlowException
      */
     public function create(CreateRequest $request)
     {
@@ -127,15 +131,11 @@ class AkunController extends Controller
     /**
      * @param PaudAdmin $paudAdmin
      * @return BaseResource
-     * @throws SaveException
+     * @throws FlowException
      */
     public function fetch(PaudAdmin $paudAdmin)
     {
-        if ($paudAdmin->k_group != $this->kGroup) {
-            abort(404);
-        }
-
-        $this->validateGroup();
+        $this->validateGroup($paudAdmin);
 
         return BaseResource::make($this->service->fetch(instansi(), $paudAdmin));
     }
@@ -149,11 +149,7 @@ class AkunController extends Controller
      */
     public function update(UpdateRequest $request, PaudAdmin $paudAdmin)
     {
-        if ($paudAdmin->k_group != $this->kGroup) {
-            abort(404);
-        }
-
-        $this->validateGroup();
+        $this->validateGroup($paudAdmin);
 
         return BaseResource::make($this->service->update(instansi(), $paudAdmin, $request->validated()));
     }
@@ -161,15 +157,11 @@ class AkunController extends Controller
     /**
      * @param PaudAdmin $paudAdmin
      * @return BaseResource
-     * @throws SaveException
+     * @throws FlowException
      */
     public function aktif(PaudAdmin $paudAdmin)
     {
-        if ($paudAdmin->k_group != $this->kGroup) {
-            abort(404);
-        }
-
-        $this->validateGroup();
+        $this->validateGroup($paudAdmin);
 
         return BaseResource::make($this->service->setAktif($paudAdmin, true));
     }
@@ -177,15 +169,11 @@ class AkunController extends Controller
     /**
      * @param PaudAdmin $paudAdmin
      * @return BaseResource
-     * @throws SaveException
+     * @throws FlowException
      */
     public function nonAktif(PaudAdmin $paudAdmin)
     {
-        if ($paudAdmin->k_group != $this->kGroup) {
-            abort(404);
-        }
-
-        $this->validateGroup();
+        $this->validateGroup($paudAdmin);
 
         return BaseResource::make($this->service->setAktif($paudAdmin, false));
     }
@@ -198,11 +186,7 @@ class AkunController extends Controller
      */
     public function delete(PaudAdmin $paudAdmin)
     {
-        if ($paudAdmin->k_group != $this->kGroup) {
-            abort(404);
-        }
-
-        $this->validateGroup();
+        $this->validateGroup($paudAdmin);
 
         return BaseResource::make($this->service->delete(instansi(), $paudAdmin));
     }
@@ -216,11 +200,7 @@ class AkunController extends Controller
      */
     public function reset(PaudAdmin $paudAdmin)
     {
-        if ($paudAdmin->k_group != $this->kGroup) {
-            abort(404);
-        }
-
-        $this->validateGroup();
+        $this->validateGroup($paudAdmin);
 
         return BaseResource::make($this->service->resetPasword(instansi(), $paudAdmin));
     }
