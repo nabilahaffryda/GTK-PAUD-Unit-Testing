@@ -16,4 +16,12 @@ export default [
       title: 'Kelola Diklat',
     },
   },
+  {
+    path: '/i/:id(\\d+)/jadwal',
+    name: 'kelola-jadwal',
+    component: () => lazyLoadView(import('@views/instansi/diklat/list/jadwal/Index')),
+    meta: {
+      title: 'Kelola Jadwal Diklat',
+    },
+  },
 ];

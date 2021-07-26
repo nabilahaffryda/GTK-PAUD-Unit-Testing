@@ -191,7 +191,17 @@ export default [
     menu: [
       {
         icon: 'mdi-account-cog',
-        title: 'Diklatku',
+        title: 'Kelola Jadwal',
+        desc: 'Kelola diklat kelas dan peserta diklat',
+        color: 'red',
+        deepColor: 'darken-1',
+        akses: false,
+        link: 'kelola-jadwal',
+        to: { name: 'kelola-jadwal' },
+      },
+      {
+        icon: 'mdi-account-cog',
+        title: 'Kelola Diklat',
         desc: 'Kelola diklat kelas dan peserta diklat',
         color: 'success',
         deepColor: 'darken-1',
