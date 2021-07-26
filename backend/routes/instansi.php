@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('create', [Diklat\PeriodeController::class, 'create']);
         Route::get('{periode}', [Diklat\PeriodeController::class, 'fetch']);
         Route::post('{periode}/update', [Diklat\PeriodeController::class, 'update']);
+        Route::post('{periode}/delete', [Diklat\PeriodeController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'diklat'], function () {

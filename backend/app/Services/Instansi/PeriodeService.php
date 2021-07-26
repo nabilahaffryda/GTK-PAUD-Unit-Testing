@@ -54,4 +54,10 @@ class PeriodeService
 
         return $periode;
     }
+
+    public function delete(PaudPeriode $periode)
+    {
+        $periode->delete();
+        return $periode;
+    }
 }

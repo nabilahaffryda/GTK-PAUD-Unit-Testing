@@ -42,6 +42,10 @@ class PeriodeController extends Controller
         return BaseResource::make($paudPeriode);
     }
 
+    public function delete(PaudPeriode $periode)
+    {
+        $paudPeriode = $this->service->delete($periode);
+
         return BaseResource::make($paudPeriode);
     }
 }
