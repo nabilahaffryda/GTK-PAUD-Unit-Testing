@@ -58,7 +58,7 @@ class AdminService
             'paud_admin.angkatan' => $params['angkatan'] ?? config('paud.angkatan'),
         ];
 
-        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD || ($params['k_group'] ?? 0) != MGroup::AP_LPD_DIKLAT_PAUD) {
+        if ($instansi->k_jenis_instansi != MJenisInstansi::PAUD || !in_array($params['k_group'] ?? 0, [MGroup::AP_LPD_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD])) {
             $condition['paud_admin.instansi_id'] = $instansi->instansi_id;
         }
 
