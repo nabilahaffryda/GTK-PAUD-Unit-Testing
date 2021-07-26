@@ -245,7 +245,7 @@ export default {
         {
           label: 'Pilih Status',
           default: true,
-          type: 'checkbox',
+          type: 'radio',
           model: 'is_aktif',
           master: M_AKTIF,
         },

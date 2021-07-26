@@ -98,7 +98,6 @@ class AdminService
 
         if (isset($params['is_aktif'])) {
             $query->where([
-                'akun.is_aktif'          => $params['is_aktif'],
                 'akun_instansi.is_aktif' => $params['is_aktif'],
                 'paud_admin.is_aktif'    => $params['is_aktif'],
             ]);
@@ -484,7 +483,11 @@ class AdminService
         try {
             $paudAdmin->akun->delete();
         } catch (Exception) {
-            throw new SaveException('Hapus akun admin tidak berhasil karena masih terikat data lain');
+            // https://lapor.siap.id/issues/4923
+            // karena di devel ptk nya kecantol dengan `gpodb`.`psp_pemantau_asesor` padahal akun_instansinya
+            // sudah kosong.
+            // jadi disilent aja,
+            // throw new SaveException('Hapus akun admin tidak berhasil karena masih terikat data lain');
         }
 
         return $paudAdmin;

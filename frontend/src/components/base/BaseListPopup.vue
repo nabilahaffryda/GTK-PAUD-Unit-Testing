@@ -14,7 +14,9 @@
         </v-alert>
         <base-table-header @search="onSearch" @reload="onReload">
           <template v-slot:subtitle>
-            <div class="mt-4 subtitle-1 black--text"> <b>{{ total }}</b> {{ title.split(' ')[1] || '-' }} </div>
+            <div class="mt-4 subtitle-1 black--text">
+              <b>{{ total }}</b> {{ title.split(' ')[1] || '-' }}
+            </div>
           </template>
         </base-table-header>
         <base-list-table :hideHeader="true" :loading="loading" :item="data" :total="total" :usePaging="false">

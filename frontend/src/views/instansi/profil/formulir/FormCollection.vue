@@ -61,15 +61,20 @@
                       </v-chip>
                     </template>
                     <template v-else>
-                      <validation-provider name="Pindaian Berkas" rules="required" v-slot="{ errors }">
+                      <validation-provider name="Sertifikat Diklat" rules="required" v-slot="{ errors }">
                         <v-file-input
                           v-model="form[item.k_tipe][id]['file']"
                           :error-messages="errors"
-                          label="Pindaian Berkas Ijazah (20 KB - 1,5 MB)"
+                          label="Pindaian Berkas Sertifikat (20 KB - 1,5 MB)"
                           append-icon="mdi-paperclip"
                           prepend-icon=""
                           accept="image/*,.pdf"
                           hint="jenis file unggahan JPG/JPEG/PNG/GIF/PDF (20 KB - 1,5 MB). Untuk berkas multi halaman gunakan format PDF"
+                          :rules="[
+                            (value) =>
+                              (value && value.size < roundDecimal(1500 * 1000)) ||
+                              'Berkas yang Anda upload melebihi kapasitas maksimum!',
+                          ]"
                           persistent-hint
                           show-size
                           outlined
@@ -102,7 +107,7 @@
 <script>
 import BaseFormGenerator from '@/components/base/BaseFormGenerator';
 import { ValidationProvider } from 'vee-validate';
-import { range } from '@/utils/format';
+import { range, roundDecimal } from '@/utils/format';
 export default {
   name: 'FormCollection',
   components: { BaseFormGenerator, ValidationProvider },
@@ -194,6 +199,7 @@ export default {
             outlined: true,
             dense: true,
             singleLine: true,
+            clearable: true,
             grid: { cols: 12, md: 6 },
           },
           {
@@ -203,7 +209,7 @@ export default {
             labelColor: 'secondary',
             placeholder: 'Pilih Tahun Diklat',
             hint: 'wajib diisi',
-            items: this.$mapForMaster(range(this.currTahun, this.currTahun - 5, 1)),
+            items: this.$mapForMaster(range(this.currTahun, 2010, 1)),
             itemText: 'text',
             itemValue: 'value',
             required: true,
@@ -211,6 +217,7 @@ export default {
             outlined: true,
             dense: true,
             singleLine: true,
+            clearable: true,
             grid: { cols: 12, md: 6 },
           },
         ],
@@ -261,7 +268,7 @@ export default {
             labelColor: 'secondary',
             placeholder: 'Pilih Tahun Diklat',
             hint: 'wajib diisi',
-            items: this.$mapForMaster(range(this.currTahun, this.currTahun - 3, 1)),
+            items: this.$mapForMaster(range(this.currTahun, 2010, 1)),
             itemText: 'text',
             itemValue: 'value',
             required: true,
@@ -269,6 +276,7 @@ export default {
             outlined: true,
             dense: true,
             singleLine: true,
+            clearable: true,
             grid: { cols: 12, md: 6 },
           },
         ],
@@ -324,6 +332,10 @@ export default {
     },
     resetValidation() {
       this.$emit('reset');
+    },
+
+    roundDecimal(value) {
+      return roundDecimal(value);
     },
   },
   watch: {

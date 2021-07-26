@@ -9,9 +9,8 @@ use App\Models\Instansi;
 use App\Models\MGroup;
 use App\Models\MPetugasPaud;
 use App\Services\Instansi\AdminService;
-use App\Services\Instansi\PembimbingService;
-use App\Services\Instansi\PengajarService;
 use App\Services\Instansi\PetugasService;
+use Auth;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -22,7 +21,11 @@ use Illuminate\Queue\SerializesModels;
 
 class CreateAkun implements ShouldQueue
 {
-    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Batchable;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     protected array $data;
     protected Instansi $instansi;
@@ -47,6 +50,7 @@ class CreateAkun implements ShouldQueue
         if ($this->batch()->cancelled()) {
             return;
         }
+        Auth::guard('akun')->login($this->admin);
 
         $paudAdmin = app(AdminService::class)->create($this->instansi, $this->data);
 

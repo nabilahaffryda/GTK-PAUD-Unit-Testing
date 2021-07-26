@@ -153,7 +153,7 @@ export default {
 
 <style scoped>
 .bg-kiri {
-  background: #FFAB91;
+  background: #ffab91;
   height: 100%;
 }
 </style>

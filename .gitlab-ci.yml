@@ -81,19 +81,6 @@ build-backend:
     - find backend/storage/ -type d \! -perm 777 -print -execdir chmod a+rwx \{\} \;
     - find backend/bootstrap/ -type d \! -perm 777 -print -execdir chmod a+rwx \{\} \;
 
-    - |
-      REMOTE=`git remote`
-      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
-
-      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
-      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
-        --user `id -u`:`id -g` \
-        --volume $HOME/.runner-home:/home \
-        build bash -c \
-        "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG new --project=$SENTRY_PROJECT $SOURCE_SHA \
-          && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG set-commits --auto $SOURCE_SHA \
-          && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG finalize $SOURCE_SHA"
-
 build-frontend:
   stage: build
   tags:

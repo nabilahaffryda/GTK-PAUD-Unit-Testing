@@ -5,7 +5,7 @@ export default [
     name: 'verval-pengajar',
     component: () => lazyLoadView(import('@views/instansi/verval/base/Main')),
     meta: {
-      title: 'Verval Pengajar',
+      title: 'Verval Pengajar Tambahan',
       tipe: 'petugas',
       paudkey: 'petugas',
       atribut: 'akun',

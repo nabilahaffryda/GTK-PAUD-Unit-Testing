@@ -199,27 +199,27 @@ return [
             ],
         ],
 
-        'm_diklat_paud' => [
-            'model' => [
-                'const' => ['k_diklat_paud', 'keterangan'],
-            ],
-        ],
-
-        'm_group' => [
-            'model' => [
-                'const' => ['k_group', 'singkat'],
-            ],
-        ],
-
         'm_berkas_lpd_paud' => [
             'model' => [
                 'const' => ['k_berkas_lpd_paud', 'singkat'],
             ],
         ],
 
+        'm_diklat_paud' => [
+            'model' => [
+                'const' => ['k_diklat_paud', 'keterangan'],
+            ],
+        ],
+
         'm_golongan' => [
             'model' => [
                 'const' => ['k_golongan', 'singkat'],
+            ],
+        ],
+
+        'm_group' => [
+            'model' => [
+                'const' => ['k_group', 'singkat'],
             ],
         ],
 
@@ -250,6 +250,12 @@ return [
         'm_tingkat_diklat_paud' => [
             'model' => [
                 'const' => ['k_tingkat_diklat_paud', 'singkat'],
+            ],
+        ],
+
+        'm_unsur_pengajar_paud' => [
+            'model' => [
+                'const' => ['k_unsur_pengajar_paud', 'keterangan'],
             ],
         ],
 

@@ -77,7 +77,7 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="popup('password')">
+          <v-list-item @click="toAkun">
             <v-list-item-icon>
               <v-icon>mdi-lock</v-icon>
             </v-list-item-icon>
@@ -106,7 +106,6 @@
       <!-- popup -->
       <popup-instansi ref="instansi"></popup-instansi>
       <popup-peran ref="role"></popup-peran>
-      <password ref="password"></password>
       <popup-reset-pendaftaran :tahap="tahap" ref="reset" @reset="onSaveReset"></popup-reset-pendaftaran>
     </v-card>
   </v-navigation-drawer>
@@ -119,7 +118,6 @@ export default {
   props: ['value'],
   components: {
     PopupPeran: () => import('../popup/Perans'),
-    Password: () => import('../popup/Password'),
     PopupInstansi: () => import('../popup/Switch'),
     PopupResetPendaftaran: () => import('../popup/ResetPendaftaran'),
   },
@@ -234,6 +232,10 @@ export default {
 
     onProfil() {
       this.$router.push({ name: 'profil-asesor' });
+    },
+
+    toAkun() {
+      window.open(`${process.env.VUE_APP_AKUN_URL}/profil`);
     },
   },
   watch: {

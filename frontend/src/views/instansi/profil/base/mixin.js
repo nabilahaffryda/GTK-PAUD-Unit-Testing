@@ -1,4 +1,5 @@
 import { mapActions, mapState } from 'vuex';
+import { roundDecimal } from '@/utils/format';
 
 export default {
   data() {
@@ -158,15 +159,6 @@ export default {
             withAction: withAction,
             kBerkas: 4,
             value: mBerkas['4'] || {},
-          },
-          {
-            title: 'Sertifikat Pelatihan Calon Pelatih (PCP)',
-            pesan: ``,
-            valid: !!mBerkas['5'],
-            type: 'pelatihan',
-            withAction: withAction,
-            kBerkas: 5,
-            value: mBerkas['5'] || {},
           },
         ],
         bimtek: [
@@ -493,9 +485,7 @@ export default {
         const { form, diklats, photo } = data;
 
         Object.keys(form).forEach((key) => {
-          if (form[key]) {
-            formData.append(key, form[key]);
-          }
+          formData.append(key, form[key] || '');
         });
 
         if (this.jenis === 'lpd') {
@@ -533,25 +523,16 @@ export default {
           this.$refs.modal.loading = false;
           return;
         } else {
-          const dasar = hasData.findIndex((item) => Number(item.k_diklat_paud) === 1) > -1;
-          const pcp = hasData.findIndex((item) => Number(item.k_diklat_paud) === 2) > -1;
-          const mot = hasData.findIndex((item) => Number(item.k_diklat_paud) === 3) > -1;
+          // const dasar = hasData.findIndex((item) => Number(item.k_diklat_paud) === 1) > -1;
+          // const pcp = hasData.findIndex((item) => Number(item.k_diklat_paud) === 2) > -1;
+          // const mot = hasData.findIndex((item) => Number(item.k_diklat_paud) === 3) > -1;
+          const lainnya = hasData.findIndex((item) => Number(item.k_diklat_paud) === 4) > -1;
+          const tambahan = Number(this.detail && this.detail.k_petugas_paud) === 2;
 
-          if (!dasar) {
-            this.$error('Mohon isikan data diklat dasar');
+          if (tambahan && !lainnya) {
+            this.$error('Mohon isikan data diklat lainnya');
             this.$refs.modal.loading = false;
             return;
-          }
-          if (this.jenis === 'pengajar') {
-            let status = false;
-            if (pcp || mot) {
-              status = true;
-            } else {
-              this.$error('Mohon isikan data diklat PCP atau MOT');
-              this.$refs.modal.loading = false;
-            }
-
-            if (!status) return false;
           }
 
           for (let i = 0; i < hasData.length; i++) {
@@ -571,7 +552,16 @@ export default {
             if (hasData[i]['paud_petugas_diklat_id'])
               formData.append(`data[${i}][paud_petugas_diklat_id]`, hasData[i]['paud_petugas_diklat_id']);
 
-            if (typeof hasData[i]['file'] !== 'string') formData.append(`data[${i}][file]`, hasData[i]['file']);
+            if (typeof hasData[i]['file'] !== 'string') {
+              const size = hasData[i]['file']['size'] || 0;
+
+              if (size > roundDecimal(1500 * 1000)) {
+                this.$error('Berkas yang Anda upload melebihi kapasitas maksimum!');
+                this.$refs.modal.loading = false;
+                return;
+              }
+              formData.append(`data[${i}][file]`, hasData[i]['file']);
+            }
           }
         }
       }
