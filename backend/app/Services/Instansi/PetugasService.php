@@ -21,6 +21,7 @@ use Arr;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -570,5 +571,46 @@ class PetugasService
             // Disable hapus berkas, untuk backup plan
             // static::deleteBerkas($oldFile);
         }
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function setInti(int $kPetugasPaud, array $akunIds)
+    {
+        /** @var PaudPetugas[]|Collection $petugases */
+        $petugases = PaudPetugas::query()
+            ->whereIn('akun_id', $akunIds)
+            ->where([
+                'tahun'    => config('paud.tahun'),
+                'angkatan' => config('paud.angkatan'),
+            ])
+            ->get();
+
+        if ($akunIds != $petugases->pluck('akun_id')->unique()->all()) {
+            throw new FlowException('Tidak semua akun dikenali');
+        }
+
+        $kPetugasPauds = $petugases->pluck('k_petugas_paud')->unique()->all();
+        if (count($kPetugasPauds) != 1 || $kPetugasPauds[0] != $kPetugasPaud) {
+            $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
+
+            throw new FlowException('Ada akun yang bukan merupakan ' . $mPetugasPaud->keterangan);
+        }
+
+        foreach ($petugases as $petugas) {
+            $petugas->is_inti = 1;
+            $petugas->save();
+        }
+
+        return $petugases;
+    }
+
+    public function resetInti(PaudPetugas $petugas)
+    {
+        $petugas->is_inti = 0;
+        $petugas->save();
+
+        return $petugas;
     }
 }

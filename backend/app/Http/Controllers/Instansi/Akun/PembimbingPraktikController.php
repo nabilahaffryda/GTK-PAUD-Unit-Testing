@@ -6,6 +6,7 @@ use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Requests\Instansi\Admin\CreateRequest;
+use App\Http\Requests\Instansi\Admin\PembimbingPraktik\SetIntiRequest;
 use App\Http\Requests\Instansi\Admin\UpdateRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
@@ -82,5 +83,19 @@ class PembimbingPraktikController extends AkunController
     {
         app(PetugasService::class)->delete($paudAdmin);
         parent::delete($paudAdmin);
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function setInti(SetIntiRequest $request)
+    {
+        return app(PetugasService::class)->setInti(MPetugasPaud::PEMBIMBING_PRAKTIK, $request->akun_ids);
+    }
+
+    public function resetInti(PaudAdmin $paudAdmin)
+    {
+        $petugas = app(PetugasService::class)->getPetugas($paudAdmin->akun);
+        return app(PetugasService::class)->resetInti($petugas);
     }
 }

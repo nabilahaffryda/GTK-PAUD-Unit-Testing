@@ -165,6 +165,9 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/non-aktif', [Akun\PembimbingPraktikController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\PembimbingPraktikController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\PembimbingPraktikController::class, 'reset']);
+
+        Route::post('set-inti', [Akun\PembimbingPraktikController::class, 'setInti']);
+        Route::post('{paudAdmin}/reset-inti', [Akun\PembimbingPraktikController::class, 'resetInti']);
     });
 
     Route::group(['prefix' => 'akun/admin-kelas'], function () {
