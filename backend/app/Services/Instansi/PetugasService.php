@@ -60,7 +60,7 @@ class PetugasService
     /**
      * @return PaudPetugas|null
      */
-    public function getPetugas(Akun $akun)
+    public function getPetugas(Akun $akun, int $kPetugasPaud = null)
     {
         /** @var PaudPetugas $petugas */
         $petugas = PaudPetugas::query()
@@ -69,6 +69,9 @@ class PetugasService
                 'tahun'    => config('paud.tahun'),
                 'angkatan' => config('paud.angkatan'),
             ])
+            ->when($kPetugasPaud, function ($query, $value) {
+                $query->where('k_petugas_paud', $value);
+            })
             ->with(['akun'])
             ->first();
 
