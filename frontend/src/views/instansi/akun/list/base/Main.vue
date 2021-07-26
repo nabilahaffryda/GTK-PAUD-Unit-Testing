@@ -5,15 +5,15 @@
         <base-table-header
           @search="onSearch"
           :btnFilter="true"
-          :btnAdd="$allow(`akun-${this.akses}.create`)"
-          :btnDownload="$allow(`akun-${this.akses}.download`)"
+          :btnAdd="$allow(`akun-${akses}.create`)"
+          :btnDownload="$allow(`akun-${akses}.download`)"
           @add="onAdd"
           @reload="onReload"
           @filter="onFilter"
           @download="onDownload"
         >
-          <template v-slot:toolbar v-if="this.akses === 'pembimbing-praktik'">
-            <v-btn small color="info" class="py-5" @click="setPembimbing"> Set Pembimbing Praktik </v-btn>
+          <template v-slot:toolbar v-if="akses === 'pembimbing-praktik'">
+            <v-btn small color="info" class="ml-2 py-5" @click="setPembimbing"> Set Pembimbing Praktik </v-btn>
           </template>
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text">
@@ -77,7 +77,7 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col class="py-0" cols="12" md="3">
+                      <v-col class="py-0" cols="12" md="2">
                         <v-list-item class="px-0">
                           <v-list-item-content class="py-0 mt-3">
                             <span class="caption">No HP/WA</span>
@@ -87,7 +87,7 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col class="py-0" cols="12" md="2">
+                      <v-col class="py-0" cols="12" md="1">
                         <v-list-item class="px-0">
                           <v-list-item-content>
                             <span class="caption">Status</span>
@@ -103,6 +103,24 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
+                      <template v-if="akses === 'pembimbing-praktik'">
+                        <v-col class="py-0" cols="12" md="2">
+                          <v-list-item class="px-0">
+                            <v-list-item-content>
+                              <span class="caption">Peran</span>
+                              <div>
+                                <v-chip
+                                    small
+                                    dark
+                                    :color="Number($getDeepObj(item, 'is_aktif')) === 1 ? 'success' : 'red'"
+                                >
+                                  {{ Number($getDeepObj(item, 'is_aktif')) === 1 ? 'Pembimbing Inti' : '' }}
+                                </v-chip>
+                              </div>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-col>
+                      </template>
                     </v-row>
                   </v-list-item-content>
                   <v-list-item-action-text>
@@ -199,7 +217,7 @@ export default {
     },
     paramsTipe: {
       type: Object,
-      required: () => {},
+      default: () => {},
     },
   },
   mixins: [list, mixin],
