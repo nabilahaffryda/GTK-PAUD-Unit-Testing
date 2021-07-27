@@ -595,7 +595,7 @@ class PetugasService
         }
 
         $petugasPauds = $petugases->pluck('k_petugas_paud')->unique()->all();
-        if ($petugasPauds != $kPetugasPauds) {
+        if (array_diff($petugasPauds, $kPetugasPauds)) {
             throw new FlowException('Ada akun yang tidak dikenali');
         }
 
