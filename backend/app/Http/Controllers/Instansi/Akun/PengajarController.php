@@ -110,7 +110,10 @@ class PengajarController extends AkunController
      */
     public function setStatus(SetPengajarRequest $request)
     {
-        return BaseCollection::make(app(PetugasService::class)->setStatusAkun([[$this->kGroup, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD]], $request->akun_ids, [
+        return BaseCollection::make(app(PetugasService::class)->setStatusAkun([
+            MPetugasPaud::PENGAJAR,
+            MPetugasPaud::PENGAJAR_TAMBAHAN,
+        ], $request->akun_ids, [
             'is_inti'        => $request->is_inti,
             'is_refreshment' => $request->is_bimtek,
         ]));
@@ -121,7 +124,7 @@ class PengajarController extends AkunController
      */
     public function resetStatus(PaudAdmin $paudAdmin)
     {
-        $petugas = app(PetugasService::class)->getPetugas($paudAdmin->akun, [$this->kGroup, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD]);
+        $petugas = app(PetugasService::class)->getPetugas($paudAdmin->akun, [MPetugasPaud::PENGAJAR, MPetugasPaud::PENGAJAR_TAMBAHAN]);
         if (!$petugas) {
             throw new FlowException('Data akun bukan merupakan pengajar');
         }
