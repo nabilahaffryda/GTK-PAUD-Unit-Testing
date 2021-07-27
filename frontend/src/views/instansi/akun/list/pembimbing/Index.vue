@@ -17,7 +17,7 @@
     <list-admin
       jenis="kelas"
       akses="pembimbing-praktik"
-      title="Akun Pembimbing Praktik"
+      title="Pembimbing Praktik"
       desc=""
       :actions="actions"
     ></list-admin>

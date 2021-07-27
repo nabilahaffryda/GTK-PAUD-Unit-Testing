@@ -55,9 +55,9 @@ export const actions = {
     return dispatch('action', Object.assign({}, payload, { type: 'update' }));
   },
 
-  setInti({ rootState }, payload) {
+  setStatus({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `/i/${id}/akun/${payload.name}/set-inti`;
+    const url = `/i/${id}/akun/${payload.name}/${payload.type}`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 

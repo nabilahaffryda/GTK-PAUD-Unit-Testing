@@ -11,7 +11,7 @@ export default [
   { icon: 'mdi-check', title: 'Aktifkan Akun', event: 'onAktif', akses: 'akun-pembimbing-praktik.aktif' },
   {
     icon: 'mdi-close',
-    title: 'Reset Pembimbing Inti',
+    title: 'Batalkan Pembimbing Inti',
     event: 'onResetInti',
     akses: 'akun-pembimbing-praktik.reset-inti',
   },

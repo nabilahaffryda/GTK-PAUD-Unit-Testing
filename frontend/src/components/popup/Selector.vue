@@ -1,12 +1,12 @@
 <template>
-  <v-dialog v-model="dialog" scrollable max-width="750px">
+  <v-dialog v-model="dialog" scrollable max-width="850px">
     <v-card>
-      <v-card-title class="headline">
+      <v-card-title class="headline secondary white--text">
         <span class="text-capitalize" v-html="title"></span>
       </v-card-title>
       <v-divider />
       <v-card-text>
-        <v-row no-gutters class="mt-2">
+        <v-row no-gutters class="mx-4 mt-2">
           <v-col cols="12" md="4" class="my-auto">
             <v-checkbox v-model="allSelected" @click="selectAll" />
           </v-col>

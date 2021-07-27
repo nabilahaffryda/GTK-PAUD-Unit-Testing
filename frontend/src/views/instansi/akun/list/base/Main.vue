@@ -12,8 +12,13 @@
           @filter="onFilter"
           @download="onDownload"
         >
-          <template v-slot:toolbar v-if="akses === 'pembimbing-praktik'">
-            <v-btn small color="info" class="ml-2 py-5" @click="setMultiInti"> Set Pembimbing Praktik </v-btn>
+          <template v-slot:toolbar>
+            <template v-if="akses === 'pembimbing-praktik'">
+              <v-btn small color="info" class="ml-2 py-5" @click="setMultiInti"> Set Pembimbing Praktik </v-btn>
+            </template>
+            <template v-if="akses === 'pengajar'">
+              <v-btn small color="info" class="ml-2 py-5" @click="setMultiInti"> Set Pengajar </v-btn>
+            </template>
           </template>
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text">
@@ -104,14 +109,17 @@
                         </v-list-item>
                       </v-col>
                       <template
-                        v-if="akses === 'pembimbing-praktik' && Number($getDeepObj(item, 'is_inti') || 0) === 1"
+                        v-if="
+                          ['pembimbing-praktik', 'pengajar'].includes(akses) &&
+                          Number($getDeepObj(item, 'is_inti') || 0) === 1
+                        "
                       >
                         <v-col class="py-0" cols="12" md="2">
                           <v-list-item class="px-0">
                             <v-list-item-content>
                               <span class="caption">Peran</span>
                               <div>
-                                <v-chip small dark color="pink"> Pembimbing Inti </v-chip>
+                                <v-chip small dark color="pink"> {{ title }} Inti </v-chip>
                               </div>
                             </v-list-item-content>
                           </v-list-item>
