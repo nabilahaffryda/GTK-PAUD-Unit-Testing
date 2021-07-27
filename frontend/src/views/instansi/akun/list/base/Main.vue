@@ -13,7 +13,7 @@
           @download="onDownload"
         >
           <template v-slot:toolbar v-if="akses === 'pembimbing-praktik'">
-            <v-btn small color="info" class="ml-2 py-5" @click="setPembimbing"> Set Pembimbing Praktik </v-btn>
+            <v-btn small color="info" class="ml-2 py-5" @click="setMultiInti"> Set Pembimbing Praktik </v-btn>
           </template>
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text">
@@ -103,19 +103,15 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <template v-if="akses === 'pembimbing-praktik'">
+                      <template
+                        v-if="akses === 'pembimbing-praktik' && Number($getDeepObj(item, 'is_inti') || 0) === 1"
+                      >
                         <v-col class="py-0" cols="12" md="2">
                           <v-list-item class="px-0">
                             <v-list-item-content>
                               <span class="caption">Peran</span>
                               <div>
-                                <v-chip
-                                    small
-                                    dark
-                                    :color="Number($getDeepObj(item, 'is_aktif')) === 1 ? 'success' : 'red'"
-                                >
-                                  {{ Number($getDeepObj(item, 'is_aktif')) === 1 ? 'Pembimbing Inti' : '' }}
-                                </v-chip>
+                                <v-chip small dark color="pink"> Pembimbing Inti </v-chip>
                               </div>
                             </v-list-item-content>
                           </v-list-item>
@@ -298,6 +294,12 @@ export default {
           break;
         case 'onNonAktif':
           disabled = Number(this.$getDeepObj(data, 'is_aktif') || 0);
+          break;
+        case 'setAkunInti':
+          disabled = !Number(this.$getDeepObj(data, 'is_inti') || 0);
+          break;
+        case 'onResetInti':
+          disabled = Number(this.$getDeepObj(data, 'is_inti') || 0);
           break;
         default:
           disabled = this.$allow(action.akses, data.policies || false);

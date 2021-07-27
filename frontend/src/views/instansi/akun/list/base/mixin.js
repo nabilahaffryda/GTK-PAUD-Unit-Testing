@@ -19,6 +19,7 @@ export default {
       'downloadList',
       'templateUpload',
       'upload',
+      'setInti',
     ]),
 
     ...mapActions('institusi', { listInstansis: 'fetch' }),
@@ -372,6 +373,46 @@ export default {
       });
     },
 
-    setPembimbing() {},
+    setAkunInti(item) {
+      const id = item.akun_id;
+      const params = {
+        akun_ids: [id],
+      };
+
+      this.$confirm(
+        `Anda yakin ingin menjadikan Pembimbing Praktik Inti atas nama <strong>${
+          item.akun?.data?.nama ?? ''
+        }</strong> ?`,
+        'Set Pembimbing Praktik Inti',
+        {
+          tipe: 'warning',
+        }
+      ).then(() => {
+        this.setInti({ name: this.attr.tipe, params }).then(() => {
+          this.$success(`${this.title} berhasil`);
+          this.fetchData();
+        });
+      });
+    },
+
+    setMultiInti() {},
+
+    onResetInti(item) {
+      const id = item.paud_admin_id;
+      this.$confirm(
+        `Anda yakin ingin membatalkan Pembimbing Praktik Inti atas nama <strong>${
+          item.akun?.data?.nama ?? ''
+        }</strong> ?`,
+        'Reset Pembimbing Praktik Inti',
+        {
+          tipe: 'error',
+        }
+      ).then(() => {
+        this.action({ id, type: 'reset-inti', name: this.attr.tipe }).then(() => {
+          this.$success(`${this.title} berhasil`);
+          this.fetchData();
+        });
+      });
+    },
   },
 };
