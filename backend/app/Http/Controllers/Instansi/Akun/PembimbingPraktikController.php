@@ -42,8 +42,8 @@ class PembimbingPraktikController extends AkunController
                     ->where('paud_petugas.k_petugas_paud', MPetugasPaud::PEMBIMBING_PRAKTIK);
             })
             ->select(['paud_admin.*', 'akun_instansi.token', 'paud_petugas.is_inti'])
-            ->when($request->input('is_inti') !== null, function (Eloquent\Builder $query) use ($request) {
-                $query->where('paud_petugas.is_inti', $request->input('is_inti'));
+            ->when(isset($params['is_inti']), function (Eloquent\Builder $query) use ($params) {
+                $query->where('paud_petugas.is_inti', $params['is_inti']);
             })
             ->paginate((int)$request->get('count', 10))
             ->format(function (PaudAdmin $item) {

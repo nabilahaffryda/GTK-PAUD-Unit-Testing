@@ -45,11 +45,11 @@ class PengajarController extends AkunController
                     ]);
             })
             ->select(['paud_admin.*', 'akun_instansi.token', 'paud_petugas.is_inti'])
-            ->when($request->has('is_inti'), function (Eloquent\Builder $query) use ($request) {
-                $query->where('paud_petugas.is_inti', $request->input('is_inti'));
+            ->when(isset($params['is_inti']), function (Eloquent\Builder $query) use ($params) {
+                $query->where('paud_petugas.is_inti', $params['is_inti']);
             })
-            ->when($request->has('is_refreshment'), function (Eloquent\Builder $query) use ($request) {
-                $query->where('paud_petugas.is_refreshment', $request->input('is_refreshment'));
+            ->when(isset($params['is_bimtek']), function (Eloquent\Builder $query) use ($params) {
+                $query->where('paud_petugas.is_refreshment', $params['is_bimtek']);
             })
             ->orderBy('akun.nama')
             ->paginate((int)$request->get('count', 10))
