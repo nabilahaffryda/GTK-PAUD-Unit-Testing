@@ -177,6 +177,60 @@
       @save="setFile"
       @unduhTemplate="unduhTemplate"
     ></popup-upload>
+    <popup-selector
+      v-if="selector && selector.fetch"
+      ref="selector"
+      :title="selector && selector.title"
+      :valueId="selector && selector.valueId"
+      :fetch="selector && selector.fetch"
+      :filterSelect="selector && selector.filters"
+      :attr="selector && selector.attr"
+      @save="onSaveInti"
+    >
+      <template slot-scope="{ item }">
+        <v-list-item dense class="px-0">
+          <v-list-item-content>
+            <v-row>
+              <v-col class="py-0" cols="12" md="5">
+                <v-list-item class="px-0" @click="onDetail(item)">
+                  <v-list-item-avatar color="primary">
+                    <v-icon dark>mdi-account-circle</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content class="py-0 mt-3">
+                    <div class="body-1 black--text">
+                      <strong>{{ $getDeepObj(item, 'akun.data.nama') || '-' }}</strong>
+                    </div>
+                    <p class="caption black--text">
+                      <span>Email: {{ $getDeepObj(item, 'akun.data.email') || '-' }}</span>
+                    </p>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-col>
+              <v-col class="py-0" cols="12" md="3">
+                <v-list-item class="px-0">
+                  <v-list-item-content class="py-0 mt-3">
+                    <span class="caption">Grup</span>
+                    <p>
+                      <span>{{ $getDeepObj(item, 'm_group.data.keterangan') || '-' }}</span>
+                    </p>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-col>
+              <v-col class="py-0" cols="12" md="4">
+                <v-list-item class="px-0">
+                  <v-list-item-content class="py-0 mt-3">
+                    <span class="caption">Instansi</span>
+                    <p>
+                      <span>{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</span>
+                    </p>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-col>
+            </v-row>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+    </popup-selector>
   </div>
 </template>
 <script>
@@ -188,6 +242,7 @@ import PopupUpload from '@components/popup/Upload';
 import mixin from './mixin';
 import list from '@mixins/list';
 import { M_AKTIF } from '@utils/master';
+import PopupSelector from '@components/popup/Selector';
 export default {
   name: 'ListAdmin',
   props: {
@@ -217,10 +272,12 @@ export default {
     },
   },
   mixins: [list, mixin],
-  components: { DetailView, FormAkun, Akun, PopupUpload },
+  components: { PopupSelector, DetailView, FormAkun, Akun, PopupUpload },
   data() {
     return {
       formulir: {},
+      selector: {},
+      selected: [],
       akun: {},
       groups: {},
       instansis: {},

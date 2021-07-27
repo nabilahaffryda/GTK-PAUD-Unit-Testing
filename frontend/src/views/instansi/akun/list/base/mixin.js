@@ -395,7 +395,35 @@ export default {
       });
     },
 
-    setMultiInti() {},
+    setMultiInti() {
+      this.$set(this.selector, 'title', 'Set Peran Pembimbing Praktik');
+      this.$set(this.selector, 'valueId', 'akun_id');
+      this.$set(this.selector, 'fetch', this.fetch);
+      this.$set(this.selector, 'filters', {
+        is_inti: 0,
+        is_aktif: 1,
+      });
+      this.$set(this.selector, 'attr', this.attr);
+
+      this.$nextTick(() => {
+        this.$refs.selector.open();
+      });
+    },
+
+    onSaveInti(akunIds) {
+      const params = {
+        akun_ids: akunIds,
+      };
+      this.$confirm(`Anda yakin ingin menjadikan Pembimbing Praktik Inti?`, 'Set Pembimbing Praktik Inti', {
+        tipe: 'warning',
+      }).then(() => {
+        this.setInti({ name: this.attr.tipe, params }).then(() => {
+          this.$refs.selector.close();
+          this.$success(`${this.title} berhasil`);
+          this.fetchData();
+        });
+      });
+    },
 
     onResetInti(item) {
       const id = item.paud_admin_id;
