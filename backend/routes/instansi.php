@@ -136,8 +136,8 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/delete', [Akun\PengajarController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\PengajarController::class, 'reset']);
 
-        Route::post('set-inti', [Akun\PengajarController::class, 'setStatus']);
-        Route::post('{paudAdmin}/reset-inti', [Akun\PengajarController::class, 'resetStatus']);
+        Route::post('set-status', [Akun\PengajarController::class, 'setStatus']);
+        Route::post('{paudAdmin}/reset-status', [Akun\PengajarController::class, 'resetStatus']);
     });
 
     Route::group(['prefix' => 'akun/pengajar-tambahan'], function () {
