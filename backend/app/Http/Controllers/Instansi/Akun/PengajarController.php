@@ -44,7 +44,7 @@ class PengajarController extends AkunController
                         MPetugasPaud::PENGAJAR_TAMBAHAN,
                     ]);
             })
-            ->select(['paud_admin.*', 'akun_instansi.token', 'paud_petugas.is_inti'])
+            ->select(['paud_admin.*', 'akun_instansi.token', 'paud_petugas.is_inti', 'paud_petugas.is_refreshment'])
             ->when(isset($params['is_inti']), function (Eloquent\Builder $query) use ($params) {
                 $query->where('paud_petugas.is_inti', $params['is_inti']);
             })
