@@ -46,8 +46,8 @@ export default {
       desc: '',
       tab: null,
       items: [
-        { tab: 'Pengajar Tambahan (Guru)', params: { k_unsur_pengajar_paud: 1 } },
-        { tab: 'Pengajar Tambahan (Dosen)', params: { k_unsur_pengajar_paud: 2 } },
+        { tab: 'Pengajar Tambahan (GTK PAUD)', params: { k_unsur_pengajar_paud: 1 } },
+        { tab: 'Pengajar Tambahan (Dosen/Akademisi PAUD)', params: { k_unsur_pengajar_paud: 2 } },
       ],
     };
   },
