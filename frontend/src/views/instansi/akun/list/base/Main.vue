@@ -63,6 +63,12 @@
                             <p class="caption black--text">
                               <span>Email: {{ $getDeepObj(item, 'akun.data.email') || '-' }}</span>
                             </p>
+                            <p
+                              class="caption purple--text"
+                              v-if="akses === 'pengajar' && Number(item.is_refreshment) === 1"
+                            >
+                              <v-icon small color="purple">mdi-check-circle</v-icon> Lulus Bimtek
+                            </p>
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
@@ -195,6 +201,27 @@
       :attr="selector && selector.attr"
       @save="onSaveInti"
     >
+      <template v-slot:header v-if="akses === 'pengajar'">
+        <div class="my-2">
+          <h2 class="title">Silakan pilih status di bawah ini untuk set {{ title }}</h2>
+          <v-chip
+            class="ma-2"
+            color="success"
+            :outlined="!selector.is_inti"
+            @click="selector.is_inti = !selector.is_inti"
+          >
+            Pengajar Inti
+          </v-chip>
+          <v-chip
+            class="ma-2"
+            color="success"
+            :outlined="!selector.is_bimtek"
+            @click="selector.is_bimtek = !selector.is_bimtek"
+          >
+            Lulus Bimtek
+          </v-chip>
+        </div>
+      </template>
       <template slot-scope="{ item }">
         <v-list-item dense class="px-0">
           <v-list-item-content>

@@ -6,6 +6,7 @@
       </v-card-title>
       <v-divider />
       <v-card-text>
+        <slot name="header" />
         <v-row no-gutters class="mx-4 mt-2">
           <v-col cols="12" md="4" class="my-auto">
             <v-checkbox v-model="allSelected" @click="selectAll" />
@@ -105,6 +106,7 @@ export default {
   },
   methods: {
     open() {
+      this.onReload();
       this.dialog = true;
     },
 
