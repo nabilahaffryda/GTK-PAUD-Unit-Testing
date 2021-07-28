@@ -31,7 +31,7 @@
         </base-table-header>
       </v-card-title>
       <v-divider />
-      <v-card-text>
+      <v-card-text style="margin-bottom: 80px">
         <v-row v-for="(item, i) in data" :key="i">
           <v-col cols="12" md="12" sm="12">
             <v-list-item dense class="px-0">
@@ -73,7 +73,7 @@
             </v-list-item>
           </v-col>
           <v-col cols="12" md="12" sm="12">
-            <v-divider />
+            <v-divider v-if="data.length !== Number(i + 1)" />
           </v-col>
         </v-row>
       </v-card-text>
