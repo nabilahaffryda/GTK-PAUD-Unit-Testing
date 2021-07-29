@@ -397,21 +397,25 @@ export default {
       });
     },
 
-    setMultiInti() {
+    setMultiInti(tipe) {
+      this.$set(this.selector, 'tipe', tipe || 'inti');
       this.$set(this.selector, 'title', `Set Peran ${this.title}`);
       this.$set(this.selector, 'valueId', 'akun_id');
-      this.$set(this.selector, 'fetch', this.fetch);
-      this.$set(this.selector, 'filters', {
-        is_aktif: 1,
-        is_inti: 0,
-      });
       this.$set(this.selector, 'attr', this.attr);
-
-      if (this.akses === 'pengajar') {
-        this.$set(this.selector, 'is_inti', false);
-        this.$set(this.selector, 'is_bimtek', false);
-      }
-
+      this.$set(this.selector, 'fetch', this.fetch);
+      this.$set(
+        this.selector,
+        'filters',
+        tipe !== 'inti'
+          ? {
+              is_aktif: 1,
+              is_bimtek: 0,
+            }
+          : {
+              is_aktif: 1,
+              is_inti: 0,
+            }
+      );
       this.$nextTick(() => {
         this.$refs.selector.open();
       });
@@ -422,16 +426,15 @@ export default {
         akun_ids: akunIds,
       };
 
-      if (this.akses === 'pengajar') {
+      if (this.akses === 'pengajar' && this.selector.tipe === 'inti') {
         Object.assign(params, {
-          is_inti: Number(this.selector.is_inti),
-          is_bimtek: Number(this.selector.is_bimtek),
+          is_inti: 1,
         });
       }
-
-      if (this.akses === 'pengajar' && params.is_inti === 0 && params.is_bimtek === 0) {
-        this.$error(`Silakan pilih Status ${this.title} terlebih dahulu!`);
-        return;
+      if (this.akses === 'pengajar' && this.selector.tipe !== 'inti') {
+        Object.assign(params, {
+          is_bimtek: 1,
+        });
       }
 
       if (akunIds && !akunIds.length) {
@@ -449,7 +452,7 @@ export default {
           params,
         }).then(() => {
           this.$refs.selector.close();
-          this.$success(`${this.title} berhasil`);
+          this.$success(`Set ${this.selector.tipe === 'inti' ? 'Inti' : 'Lulus Bimtek'} ${this.title} berhasil`);
           this.fetchData();
         });
       });
@@ -457,6 +460,9 @@ export default {
 
     onResetInti(item) {
       const id = item.paud_admin_id;
+      const params = {
+        is_inti: true,
+      };
       this.$confirm(
         `Anda yakin ingin membatalkan ${this.title} Inti atas nama <strong>${item.akun?.data?.nama ?? ''}</strong> ?`,
         `Reset ${this.title} Inti`,
@@ -464,12 +470,36 @@ export default {
           tipe: 'error',
         }
       ).then(() => {
-        this.action({ id, type: this.akses === 'pengajar' ? 'reset-status' : 'reset-inti', name: this.attr.tipe }).then(
-          () => {
-            this.$success(`${this.title} berhasil`);
-            this.fetchData();
-          }
-        );
+        this.action({
+          id,
+          type: this.akses === 'pengajar' ? 'reset-status' : 'reset-inti',
+          name: this.attr.tipe,
+          params,
+        }).then(() => {
+          this.$success(`Batal Set Inti ${this.title} berhasil`);
+          this.fetchData();
+        });
+      });
+    },
+
+    onResetBimtek(item) {
+      const id = item.paud_admin_id;
+      const params = {
+        is_bimtek: true,
+      };
+      this.$confirm(
+        `Anda yakin ingin membatalkan Lulus Bimtek ${this.title} atas nama <strong>${
+          item.akun?.data?.nama ?? ''
+        }</strong> ?`,
+        `Batal Lulus Bimtek ${this.title} `,
+        {
+          tipe: 'error',
+        }
+      ).then(() => {
+        this.action({ id, type: 'reset-status', name: this.attr.tipe, params }).then(() => {
+          this.$success(`Batal Lulus Bimtek ${this.title} berhasil`);
+          this.fetchData();
+        });
       });
     },
   },

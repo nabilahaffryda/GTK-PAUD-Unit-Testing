@@ -5,8 +5,14 @@ export default [
   { icon: 'mdi-check', title: 'Aktifkan Akun', event: 'onAktif', akses: 'akun-pengajar.aktif' },
   {
     icon: 'mdi-close',
-    title: 'Batalkan Pengajar',
+    title: 'Batalkan Pengajar Inti',
     event: 'onResetInti',
+    akses: 'akun-pengajar.reset-status',
+  },
+  {
+    icon: 'mdi-close',
+    title: 'Batalkan Lulus Bimtek',
+    event: 'onResetBimtek',
     akses: 'akun-pengajar.reset-status',
   },
   { icon: 'mdi-delete', title: 'Hapus', event: 'onDelete', akses: 'akun-pengajar.delete' },

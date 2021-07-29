@@ -14,10 +14,24 @@
         >
           <template v-slot:toolbar>
             <template v-if="akses === 'pembimbing-praktik'">
-              <v-btn small color="info" class="ml-2 py-5" @click="setMultiInti"> Set Pembimbing Praktik </v-btn>
+              <v-btn small color="info" class="ml-2 py-5" @click="setMultiInti('inti')"> Set Pembimbing Praktik </v-btn>
             </template>
             <template v-if="akses === 'pengajar'">
-              <v-btn small color="info" class="ml-2 py-5" @click="setMultiInti"> Set Pengajar </v-btn>
+              <v-menu :close-on-content-click="false" :nudge-width="200" offset-x offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn v-bind="attrs" v-on="on" small color="info" class="ml-2 py-5"> Set Pengajar </v-btn>
+                </template>
+                <v-card>
+                  <v-list>
+                    <v-list-item @click="setMultiInti('inti')">
+                      <v-list-item-title>Pengajar Inti </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="setMultiInti('bimtek')">
+                      <v-list-item-title>Lulus Bimtek</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-menu>
             </template>
           </template>
           <template v-slot:subtitle>
@@ -201,27 +215,6 @@
       :attr="selector && selector.attr"
       @save="onSaveInti"
     >
-      <template v-slot:header v-if="akses === 'pengajar'">
-        <div class="my-2">
-          <h2 class="title">Silakan pilih status di bawah ini untuk set {{ title }}</h2>
-          <v-chip
-            class="ma-2"
-            color="success"
-            :outlined="!selector.is_inti"
-            @click="selector.is_inti = !selector.is_inti"
-          >
-            Pengajar Inti
-          </v-chip>
-          <v-chip
-            class="ma-2"
-            color="success"
-            :outlined="!selector.is_bimtek"
-            @click="selector.is_bimtek = !selector.is_bimtek"
-          >
-            Lulus Bimtek
-          </v-chip>
-        </div>
-      </template>
       <template slot-scope="{ item }">
         <v-list-item dense class="px-0">
           <v-list-item-content>
@@ -316,6 +309,7 @@ export default {
       akun: {},
       groups: {},
       instansis: {},
+      menu: false,
     };
   },
   mounted() {
@@ -391,10 +385,10 @@ export default {
           disabled = !Number(this.$getDeepObj(data, 'is_inti') || 0);
           break;
         case 'onResetInti':
-          disabled =
-            this.akses === 'pengajar'
-              ? Number(this.$getDeepObj(data, 'is_inti') || 0) && Number(this.$getDeepObj(data, 'is_refreshment') || 0)
-              : Number(this.$getDeepObj(data, 'is_inti') || 0);
+          disabled = Number(this.$getDeepObj(data, 'is_inti') || 0);
+          break;
+        case 'onResetBimtek':
+          disabled = Number(this.$getDeepObj(data, 'is_refreshment') || 0);
           break;
         default:
           disabled = this.$allow(action.akses, data.policies || false);

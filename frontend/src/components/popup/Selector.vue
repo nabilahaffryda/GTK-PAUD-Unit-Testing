@@ -9,7 +9,11 @@
         <slot name="header" />
         <v-row no-gutters class="mx-4 mt-2">
           <v-col cols="12" md="4" class="my-auto">
-            <v-checkbox v-model="allSelected" @click="selectAll" />
+            <v-checkbox
+              v-model="allSelected[params.page]"
+              @click="selectAll"
+              :label="`Pilih Semua di halaman ${params.page}`"
+            />
           </v-col>
           <v-col cols="12" md="8" class="my-auto">
             <v-text-field
@@ -32,7 +36,7 @@
           <template slot-scope="{ item }">
             <template v-if="showSelect">
               <td>
-                <v-checkbox v-model="selected" @click="select" :value="Number(item[valueId])" />
+                <v-checkbox multiple v-model="selected[params.page]" @click="select" :value="Number(item[valueId])" />
               </td>
             </template>
             <td>
@@ -82,16 +86,12 @@ export default {
       type: Object,
       default: () => {},
     },
-    value: {
-      type: Array,
-      default: () => [],
-    },
   },
   data() {
     return {
       dialog: false,
-      allSelected: false,
-      selected: this.value || [],
+      allSelected: {},
+      selected: {},
       data: [],
       params: {
         page: Number(this.$route.query.page) || 1,
@@ -108,6 +108,8 @@ export default {
     open() {
       this.onReload();
       this.dialog = true;
+      this.selected = {};
+      this.allSelected = {};
     },
 
     close() {
@@ -115,19 +117,22 @@ export default {
     },
 
     selectAll() {
-      this.selected = [];
-      if (this.allSelected) {
+      this.selected[this.params.page] = [];
+      if (this.allSelected[this.params.page]) {
         for (const item of this.data) {
-          this.selected.push(Number(item[this.valueId]));
+          this.selected[this.params.page].push(Number(item[this.valueId]));
         }
       }
     },
 
     select() {
-      this.allSelected = false;
+      this.allSelected[this.params.page] = false;
     },
 
     fetchData() {
+      this.$set(this.selected, this.params.page, []);
+      this.$set(this.allSelected, this.params.page, false);
+
       return new Promise((resolve) => {
         const params = Object.assign({}, this.params, this.$isObject(this.filters) ? { filter: this.filters } : {});
         const attr = Object.assign({}, this.attr);
@@ -156,17 +161,7 @@ export default {
     },
 
     onSave() {
-      this.$emit('save', this.selected);
-    },
-
-    mutate(value) {
-      this.$emit('input', value);
-    },
-  },
-  watch: {
-    selected: 'mutate',
-    value: function (value) {
-      this.selected = value;
+      this.$emit('save', [].concat(...Object.values(this.selected)));
     },
   },
 };
