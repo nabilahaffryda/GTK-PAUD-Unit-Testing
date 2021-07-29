@@ -366,8 +366,6 @@ export default {
       angkatan: 1,
     });
 
-    console.log(this.paramsTipe);
-
     Object.assign(this.params, this.paramsTipe);
   },
   methods: {
