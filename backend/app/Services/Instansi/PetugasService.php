@@ -601,7 +601,9 @@ class PetugasService
 
         foreach ($petugases as $petugas) {
             foreach ($statuses as $key => $value) {
-                $petugas->$key = $value;
+                if ($value) {
+                    $petugas->$key = $value;
+                }
             }
             $petugas->save();
         }
