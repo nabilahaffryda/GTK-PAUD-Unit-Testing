@@ -391,7 +391,10 @@ export default {
           disabled = !Number(this.$getDeepObj(data, 'is_inti') || 0);
           break;
         case 'onResetInti':
-          disabled = Number(this.$getDeepObj(data, 'is_inti') || 0);
+          disabled =
+            this.akses === 'pengajar'
+              ? Number(this.$getDeepObj(data, 'is_inti') || 0) && Number(this.$getDeepObj(data, 'is_refreshment') || 0)
+              : Number(this.$getDeepObj(data, 'is_inti') || 0);
           break;
         default:
           disabled = this.$allow(action.akses, data.policies || false);
