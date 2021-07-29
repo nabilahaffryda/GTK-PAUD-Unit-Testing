@@ -51,6 +51,13 @@ class PengajarController extends AkunController
             ->when(isset($params['is_bimtek']), function (Eloquent\Builder $query) use ($params) {
                 $query->where('paud_petugas.is_refreshment', $params['is_bimtek']);
             })
+            ->when($params['is_notset'] ?? 0, function (Eloquent\Builder $query) use ($params) {
+                $query
+                    ->orWhere([
+                        'paud_petugas.is_inti'        => 0,
+                        'paud_petugas.is_refreshment' => 0,
+                    ]);
+            })
             ->orderBy('akun.nama')
             ->paginate((int)$request->get('count', 10))
             ->format(function (PaudAdmin $item) {
