@@ -21,8 +21,8 @@ class ResetPengajarRequest extends FormRequest
     public function rules()
     {
         return [
-            'is_inti'    => ['required', 'boolean'],
-            'is_bimtek'  => ['required', 'boolean'],
+            'is_inti'    => ['sometimes', 'boolean'],
+            'is_bimtek'  => ['sometimes', 'boolean'],
         ];
     }
 }

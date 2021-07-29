@@ -22,8 +22,8 @@ class SetPengajarRequest extends FormRequest
     public function rules()
     {
         return [
-            'is_inti'    => ['required', 'boolean'],
-            'is_bimtek'  => ['required', 'boolean'],
+            'is_inti'    => ['sometimes', 'boolean'],
+            'is_bimtek'  => ['sometimes', 'boolean'],
             'akun_ids'   => ['required', 'array', 'min:1'],
             'akun_ids.*' => ['required', 'integer'],
         ];
