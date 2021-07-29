@@ -613,8 +613,10 @@ class PetugasService
 
     public function resetStatus(PaudPetugas $petugas, array $statuses)
     {
-        foreach ($statuses as $status) {
-            $petugas->$status = 0;
+        foreach ($statuses as $key => $value) {
+            if ($value) {
+                $petugas->$key = 0;
+            }
         }
         $petugas->save();
 

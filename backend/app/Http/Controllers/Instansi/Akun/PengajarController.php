@@ -6,6 +6,7 @@ use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Requests\Instansi\Admin\CreateRequest;
+use App\Http\Requests\Instansi\Admin\Pengajar\ResetPengajarRequest;
 use App\Http\Requests\Instansi\Admin\Pengajar\SetPengajarRequest;
 use App\Http\Requests\Instansi\Admin\UpdateRequest;
 use App\Http\Resources\BaseCollection;
@@ -129,13 +130,16 @@ class PengajarController extends AkunController
     /**
      * @throws FlowException
      */
-    public function resetStatus(PaudAdmin $paudAdmin)
+    public function resetStatus(PaudAdmin $paudAdmin, ResetPengajarRequest $request)
     {
         $petugas = app(PetugasService::class)->getPetugas($paudAdmin->akun, [MPetugasPaud::PENGAJAR, MPetugasPaud::PENGAJAR_TAMBAHAN]);
         if (!$petugas) {
             throw new FlowException('Data akun bukan merupakan pengajar');
         }
 
-        return BaseResource::make(app(PetugasService::class)->resetStatus($petugas, ['is_inti', 'is_refreshment']));
+        return BaseResource::make(app(PetugasService::class)->resetStatus($petugas, [
+            'is_inti'        => $request->is_inti,
+            'is_refreshment' => $request->is_bimtek,
+        ]));
     }
 }
