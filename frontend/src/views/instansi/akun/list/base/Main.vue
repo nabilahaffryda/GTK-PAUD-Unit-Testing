@@ -65,7 +65,7 @@
                 <v-list-item dense class="px-0">
                   <v-list-item-content>
                     <v-row>
-                      <v-col class="py-0" cols="12" md="4">
+                      <v-col class="py-0" cols="12" :md="['pembimbing-praktik', 'pengajar'].includes(akses) ? 3 : 4">
                         <v-list-item class="px-0" @click="onDetail(item)">
                           <v-list-item-avatar color="primary">
                             <v-icon dark>mdi-account-circle</v-icon>
@@ -86,7 +86,7 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col class="py-0" cols="12" md="3">
+                      <v-col class="py-0" cols="12" :md="['pembimbing-praktik', 'pengajar'].includes(akses) ? 3 : 4">
                         <v-list-item class="px-0">
                           <v-list-item-content class="py-0 mt-3">
                             <span class="caption">Grup</span>
@@ -102,7 +102,7 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col class="py-0" cols="12" md="2">
+                      <v-col class="py-0" cols="12" :md="['pembimbing-praktik', 'pengajar'].includes(akses) ? 2 : 2">
                         <v-list-item class="px-0">
                           <v-list-item-content class="py-0 mt-3">
                             <span class="caption">No HP/WA</span>
@@ -112,7 +112,7 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col class="py-0" cols="12" md="1">
+                      <v-col class="py-0" cols="12" :md="['pembimbing-praktik', 'pengajar'].includes(akses) ? 2 : 2">
                         <v-list-item class="px-0">
                           <v-list-item-content>
                             <span class="caption">Status</span>
