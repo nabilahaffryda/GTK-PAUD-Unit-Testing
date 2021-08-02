@@ -36,7 +36,7 @@
           <template slot-scope="{ item }">
             <template v-if="showSelect">
               <td>
-                <v-checkbox multiple v-model="selected[params.page]" @click="select" :value="Number(item[valueId])" />
+                <v-checkbox multiple v-model="selected[params.page]" @click="select" :value="item[valueId]" />
               </td>
             </template>
             <td>
@@ -120,7 +120,7 @@ export default {
       this.selected[this.params.page] = [];
       if (this.allSelected[this.params.page]) {
         for (const item of this.data) {
-          this.selected[this.params.page].push(Number(item[this.valueId]));
+          this.selected[this.params.page].push(item[this.valueId]);
         }
       }
     },
@@ -130,8 +130,10 @@ export default {
     },
 
     fetchData() {
-      this.$set(this.selected, this.params.page, []);
-      this.$set(this.allSelected, this.params.page, false);
+      if (!this.selected[this.params.page]) {
+        this.$set(this.selected, this.params.page, []);
+        this.$set(this.allSelected, this.params.page, false);
+      }
 
       return new Promise((resolve) => {
         const params = Object.assign({}, this.params, this.$isObject(this.filters) ? { filter: this.filters } : {});

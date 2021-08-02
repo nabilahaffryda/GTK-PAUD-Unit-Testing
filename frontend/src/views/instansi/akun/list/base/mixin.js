@@ -470,12 +470,16 @@ export default {
           tipe: 'error',
         }
       ).then(() => {
-        this.action({
-          id,
-          type: this.akses === 'pengajar' ? 'reset-status' : 'reset-inti',
-          name: this.attr.tipe,
-          params,
-        }).then(() => {
+        this.action(
+          Object.assign(
+            {
+              id,
+              type: this.akses === 'pengajar' ? 'reset-status' : 'reset-inti',
+              name: this.attr.tipe,
+            },
+            this.akses === 'pengajar' ? { params } : {}
+          )
+        ).then(() => {
           this.$success(`Batal Set Inti ${this.title} berhasil`);
           this.fetchData();
         });
