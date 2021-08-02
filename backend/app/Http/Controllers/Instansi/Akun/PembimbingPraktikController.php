@@ -102,6 +102,6 @@ class PembimbingPraktikController extends AkunController
             throw new FlowException('Data akun bukan merupakan pembimbing praktik');
         }
 
-        return BaseResource::make(app(PetugasService::class)->resetStatus($petugas, ['is_inti']));
+        return BaseResource::make(app(PetugasService::class)->resetStatus($petugas, ['is_inti' => true]));
     }
 }
