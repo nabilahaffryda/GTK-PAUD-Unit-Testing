@@ -857,6 +857,7 @@ export default {
       this.$set(this, 'id', null);
       this.$set(this, 'form', {});
       this.step = 1;
+      this.stepUnggah = 1;
       this.info = [];
       this.id = null;
       this.pilihan = null;
