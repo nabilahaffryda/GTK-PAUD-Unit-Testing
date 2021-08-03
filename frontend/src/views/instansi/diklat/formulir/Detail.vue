@@ -5,7 +5,7 @@
         <div class="body-1 font-weight-medium">Info dan Detil Kelas</div>
         <v-row dense no-gutters class="my-5">
           <v-col cols="12" md="1" sm="2" class="pa-0">
-            <v-avatar color="secondary" size="60">
+            <v-avatar color="primary" size="60">
               <v-icon dark>mdi-teach</v-icon>
             </v-avatar>
           </v-col>
@@ -22,17 +22,17 @@
               <v-col>
                 <div class="label--text">Tanggal Mulai Kelas</div>
                 <div class="body-1">
-                  {{ $localDate($getDeepObj(kelas, 'paud_periode.data.tgl_diklat_mulai')) || '-' }}
+                  {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) || '-' }}
                 </div>
               </v-col>
               <v-col>
                 <div class="label--text">Tanggal Selesai Kelas</div>
                 <div class="body-1">
-                  {{ $localDate($getDeepObj(kelas, 'paud_periode.data.tgl_diklat_selesai')) || '-' }}
+                  {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) || '-' }}
                 </div>
               </v-col>
             </v-row>
-            <div class="my-5">
+            <div class="my-5" v-if="false">
               <v-btn depressed link><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn>
             </div>
           </v-col>
@@ -56,7 +56,8 @@
               <v-btn
                 class="mt-n4 ml-2"
                 small
-                color="primary"
+                color="secondary"
+                depressed
                 v-if="tab > 0 && $allow('lpd-kelas-petugas.create')"
                 @click="onAddPetugas"
               >
@@ -158,9 +159,9 @@ export default {
     reset() {
       this.tab = 0;
       this.kelas = {};
-      this.pesertas = []
-      this.peserta = []
-      this.petugas = []
+      this.pesertas = [];
+      this.peserta = [];
+      this.petugas = [];
     },
 
     fetch(tipe, k_petugas = null) {
@@ -263,7 +264,7 @@ export default {
   },
   watch: {
     tab: function (value) {
-      this.pesertas = []
+      this.pesertas = [];
       switch (Number(value)) {
         case 0:
           this.fetch('peserta');
