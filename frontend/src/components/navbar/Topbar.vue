@@ -52,6 +52,10 @@
 import { mapState } from 'vuex';
 
 export default {
+  data: () => ({
+    menu: false,
+    layanans: [],
+  }),
   computed: {
     ...mapState('auth', {
       role: (state) => state?.role ?? 'gtk',
