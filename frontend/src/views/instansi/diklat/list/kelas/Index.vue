@@ -10,9 +10,12 @@
           <v-col cols="10" class="pa-5 black--text">
             <base-breadcrumbs :items="breadcrumbs" class="px-0 pb-0" />
             <div class="my-2" />
-            <div class="body-1"> Selamat Datang di Detail Diklat GTK PAUD </div>
-            <div class="body-1 font-weight-medium">{{ $getDeepObj(detail, 'nama') || '' }}</div>
-            <div class="body-1">{{ $getDeepObj(detail, 'singkatan') || '' }}</div>
+            <div class="headline">{{ $getDeepObj(detail, 'nama') || '' }}</div>
+            <div class="body-1">
+              <v-icon small left>mdi-clock</v-icon>
+              {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) }} s/d
+              {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) }}
+            </div>
           </v-col>
         </v-row>
       </v-card-text>
@@ -73,23 +76,21 @@
                     <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <div class="label--text">Tanggal Pelaksanaan</div>
+                          <div class="label--text">Mata Pelajaran</div>
                           <span>
                             {{
-                              $durasi(
-                                $getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai'),
-                                $getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')
-                              ) || '-'
+                              (objMapel[$getDeepObj(item, 'paud_mapel_kelas_id')] &&
+                                objMapel[$getDeepObj(item, 'paud_mapel_kelas_id')]['nama']) ||
+                              '-'
                             }}
                           </span>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="3">
+                    <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <div class="label--text">Status Sinkron</div>
-                          -
+                          <div class="label--text">Status</div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -98,6 +99,7 @@
                         <v-list-item-content>
                           <div class="label--text">Aksi Selanjutnya</div>
                           <v-btn
+                            disabled
                             v-if="+item.k_verval_paud === 1 && $allow('lpd-kelas-ajuan.create')"
                             color="secondary"
                             depressed
@@ -107,6 +109,7 @@
                           >
                           <v-btn
                             v-if="+item.k_verval_paud > 1 && $allow('lpd-kelas-ajuan.delete')"
+                            disabled
                             color="secondary"
                             outlined
                             depressed
@@ -214,6 +217,10 @@ export default {
 
     diklatId() {
       return this.$route.params.diklat_id;
+    },
+
+    objMapel() {
+      return this.$arrToObj(this.$getDeepObj(this, 'mapels') || [], 'id');
     },
   },
   created() {

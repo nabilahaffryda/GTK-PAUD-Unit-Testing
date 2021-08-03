@@ -71,7 +71,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Tahapan Diklat</div>
-                          <div class="body-2">Periode {{ $getDeepObj(item, 'paud_periode.data.angkatan') || '1' }}</div>
+                          <div class="body-2">{{ $getDeepObj(item, 'paud_periode.data.nama') || '-' }}</div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
