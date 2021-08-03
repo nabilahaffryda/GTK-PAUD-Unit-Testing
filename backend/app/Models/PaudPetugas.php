@@ -45,6 +45,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read MPropinsi $instansiPropinsi
  * @property-read MPetugasPaud $mPetugasPaud
  * @property-read MUnsurPengajarPaud $mUnsurPengajarPaud
+ * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
  * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
  * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
  * @property-read Collection|PaudPetugasPeran[] $paudPetugasPerans
@@ -204,6 +205,14 @@ class PaudPetugas extends Eloquent
     public function mUnsurPengajarPaud()
     {
         return $this->belongsTo('App\Models\MUnsurPengajarPaud', 'k_unsur_pengajar_paud', 'k_unsur_pengajar_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasPetugases()
+    {
+        return $this->hasMany('App\Models\PaudKelasPetugas', 'paud_petugas_id', 'paud_petugas_id');
     }
 
     /**

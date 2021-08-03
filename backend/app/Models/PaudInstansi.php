@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Instansi                        $instansi
  * @property-read MVervalPaud                     $mVervalPaud
  * @property-read Akun                            $akunVerval
+ * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
  *
  * @method static Builder|PaudInstansi wherePaudInstansiId($value)
@@ -157,6 +158,14 @@ class PaudInstansi extends Eloquent
     public function mVervalPaud()
     {
         return $this->belongsTo('App\Models\MVervalPaud', 'k_verval_paud', 'k_verval_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudDiklats()
+    {
+        return $this->hasMany('App\Models\PaudDiklat', 'paud_instansi_id', 'paud_instansi_id');
     }
 
     /**

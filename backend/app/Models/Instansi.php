@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|AkunInstansi[] $akunInstansis
  * @property-read Collection|PaudAdmin[] $paudAdmins
+ * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
  * @property-read Collection|PaudInstansi[] $paudInstansis
  * @property-read Collection|PaudPetugas[] $paudPetugases
@@ -190,6 +191,14 @@ class Instansi extends Eloquent
     public function paudAdmins()
     {
         return $this->hasMany('App\Models\PaudAdmin', 'instansi_id', 'instansi_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudDiklats()
+    {
+        return $this->hasMany('App\Models\PaudDiklat', 'instansi_id', 'instansi_id');
     }
 
     /**

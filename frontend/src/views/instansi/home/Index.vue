@@ -16,6 +16,22 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <v-alert v-if="false" class="my-4" prominent color="orange" text icon="mdi-information">
+      <v-row>
+        <v-col class="grow black--text">
+          <div class="font-weight-bold">KONFIRMASI KETERSEDIAAN</div>
+          <span>
+            Anda telah ditambahkan di kelas sebagai (<b>Pengajar, Pengajar Tambahan, Pembimbing Praktik</b>)<br />
+            Silakan untuk melakukan konfirmasi ketersediaan
+          </span>
+        </v-col>
+        <v-col class="shrink">
+          <v-btn class="mt-4" color="orange" depressed dark @click="onKonfirmasi">konfirmasi</v-btn>
+        </v-col>
+      </v-row>
+    </v-alert>
+
     <v-row>
       <template v-for="(menu, i) in menus">
         <template v-if="menu.program">
@@ -40,15 +56,21 @@
         </template>
       </template>
     </v-row>
+
+    <base-modal-full ref="modal" title="Konfirmasi Ketersediaan" :useSave="false">
+      <form-ketersediaan ref="ketersediaan" />
+    </base-modal-full>
   </div>
 </template>
 
 <script>
 import BaseCardMenus from '@/components/base/BaseCardMenus';
+import FormKetersediaan from './components/Ketersediaan';
 export default {
   name: 'home',
   components: {
     BaseCardMenus,
+    FormKetersediaan,
   },
   computed: {
     menus() {
@@ -61,6 +83,10 @@ export default {
         default:
           break;
       }
+    },
+
+    onKonfirmasi() {
+      this.$refs.modal.open();
     },
   },
 };

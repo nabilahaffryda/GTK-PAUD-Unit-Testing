@@ -8,39 +8,39 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\MPetugasPaud
+ * App\Models\MKonfirmasiPaud
  *
- * @property int $k_petugas_paud
+ * @property int $k_konfirmasi_paud
  * @property null|string $singkat
  * @property null|string $keterangan
  *
  * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
- * @property-read Collection|PaudPetugas[] $paudPetugases
  *
- * @method static Builder|MPetugasPaud whereKPetugasPaud($value)
- * @method static Builder|MPetugasPaud whereSingkat($value)
- * @method static Builder|MPetugasPaud whereKeterangan($value)
+ * @method static Builder|MKonfirmasiPaud whereKKonfirmasiPaud($value)
+ * @method static Builder|MKonfirmasiPaud whereSingkat($value)
+ * @method static Builder|MKonfirmasiPaud whereKeterangan($value)
  */
-class MPetugasPaud extends Eloquent
+class MKonfirmasiPaud extends Eloquent
 {
-    public const PENGAJAR           = 1;
-    public const PENGAJAR_TAMBAHAN  = 2;
-    public const PEMBIMBING_PRAKTIK = 3;
-    public const ADMIN_KELAS        = 4;
+    public const KANDIDAT         = 1;
+    public const BELUM_KONFIRMASI = 2;
+    public const BERSEDIA         = 3;
+    public const TIDAK_BERSEDIA   = 4;
+    public const DIHAPUS          = 5;
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'm_petugas_paud';
+    protected $table = 'm_konfirmasi_paud';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'k_petugas_paud';
+    protected $primaryKey = 'k_konfirmasi_paud';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -72,7 +72,7 @@ class MPetugasPaud extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'k_petugas_paud',
+        'k_konfirmasi_paud',
         'singkat',
         'keterangan',
     ];
@@ -82,14 +82,6 @@ class MPetugasPaud extends Eloquent
      */
     public function paudKelasPetugases()
     {
-        return $this->hasMany('App\Models\PaudKelasPetugas', 'k_petugas_paud', 'k_petugas_paud');
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function paudPetugases()
-    {
-        return $this->hasMany('App\Models\PaudPetugas', 'k_petugas_paud', 'k_petugas_paud');
+        return $this->hasMany('App\Models\PaudKelasPetugas', 'k_konfirmasi_paud', 'k_konfirmasi_paud');
     }
 }

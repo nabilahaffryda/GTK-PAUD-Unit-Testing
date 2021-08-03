@@ -33,7 +33,7 @@ return [
         'failed_jobs',
         'migrations',
         'password_resets',
-        'clockwork',
+        'clockwork*',
     ],
 
     /*
@@ -51,7 +51,7 @@ return [
             | null  = load from App/Models
             | other path = load from there
             */
-            'reference' => null,
+            'reference' => false,
 
             /*
             |--------------------------------------------------------------------------
@@ -163,8 +163,8 @@ return [
         'berkas'  => 'berkases',
         'kelas'   => 'kelases',
         'kota'    => 'kotas',
-        'petugas' => 'petugases',
         'peserta' => 'pesertas',
+        'petugas' => 'petugases',
     ],
 
     /*
@@ -231,7 +231,7 @@ return [
 
         'm_konfirmasi_paud' => [
             'model' => [
-                'const' => ['k_konfirmasi_paud', 'singkat'],
+                'const' => ['k_konfirmasi_paud', 'keterangan'],
             ],
         ],
 
@@ -273,20 +273,10 @@ return [
             ],
         ],
 
-        'paud_pengajar' => [
+        'paud_petugas' => [
             'model' => [
                 'cast' => [
-                    'data_akun'  => 'array',
-                    'pengalaman' => 'array',
-                ],
-            ],
-        ],
-
-        'paud_pembimbing' => [
-            'model' => [
-                'cast' => [
-                    'data_akun'  => 'array',
-                    'pengalaman' => 'array',
+                    'data_akun' => 'array',
                 ],
             ],
         ],

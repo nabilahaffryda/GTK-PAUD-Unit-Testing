@@ -4,6 +4,7 @@ use App\Http\Controllers\Instansi\AdminKelas;
 use App\Http\Controllers\Instansi\Akun;
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Controllers\Instansi\IndexController;
+use App\Http\Controllers\Instansi\Diklat;
 use App\Http\Controllers\Instansi\Lpd;
 use App\Http\Controllers\Instansi\LpdController;
 use App\Http\Controllers\Instansi\Petugas;
@@ -57,6 +58,43 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('petugas/{petugas}/batal', [Petugas\Verval\BatalController::class, 'update']);
         Route::get('petugas/{petugas}/kunci', [Petugas\Verval\KunciController::class, 'update']);
         Route::get('petugas/{petugas}/batal-kunci', [Petugas\Verval\KunciController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'periode'], function () {
+        Route::get('', [Diklat\PeriodeController::class, 'index']);
+        Route::post('create', [Diklat\PeriodeController::class, 'create']);
+        Route::get('{periode}', [Diklat\PeriodeController::class, 'fetch']);
+        Route::post('{periode}/update', [Diklat\PeriodeController::class, 'update']);
+        Route::post('{periode}/delete', [Diklat\PeriodeController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'diklat'], function () {
+        Route::get('periode', [Lpd\Diklat\PeriodeController::class, 'index']);
+        Route::get('mapel-kelas', [Lpd\Diklat\MapelKelasController::class, 'index']);
+
+        Route::get('', [Lpd\DiklatController::class, 'index']);
+        Route::post('create', [Lpd\DiklatController::class, 'create']);
+        Route::get('{paudDiklat}', [Lpd\DiklatController::class, 'fetch']);
+        Route::post('{paudDiklat}/update', [Lpd\DiklatController::class, 'update']);
+        Route::post('{paudDiklat}/delete', [Lpd\DiklatController::class, 'delete']);
+
+        Route::group(['prefix' => '{paudDiklat}'], function () {
+            Route::get('kelas', [Lpd\KelasController::class, 'index']);
+            Route::post('kelas/create', [Lpd\KelasController::class, 'create']);
+            Route::get('kelas/{kelas}', [Lpd\KelasController::class, 'fetch']);
+            Route::post('kelas/{kelas}/update', [Lpd\KelasController::class, 'update']);
+
+            Route::post('kelas/{kelas}/ajuan/create', [Lpd\Kelas\AjuanController::class, 'create']);
+            Route::post('kelas/{kelas}/ajuan/delete', [Lpd\Kelas\AjuanController::class, 'delete']);
+
+            Route::get('kelas/{kelas}/peserta', [Lpd\Kelas\PesertaController::class, 'index']);
+            Route::get('kelas/{kelas}/peserta/{peserta}/delete', [Lpd\Kelas\PesertaController::class, 'delete']);
+
+            Route::get('kelas/{kelas}/petugas', [Lpd\Kelas\PetugasController::class, 'index']);
+            Route::get('kelas/{kelas}/petugas/kandidat', [Lpd\Kelas\PetugasKandidatController::class, 'index']);
+            Route::post('kelas/{kelas}/petugas/create', [Lpd\Kelas\PetugasController::class, 'create']);
+            Route::get('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Kelas\PetugasController::class, 'delete']);
+        });
     });
 
     Route::group(['prefix' => 'akun/admin-program'], function () {

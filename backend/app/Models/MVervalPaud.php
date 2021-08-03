@@ -14,7 +14,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $singkat
  * @property null|string $keterangan
  *
+ * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|PaudInstansi[] $paudInstansis
+ * @property-read Collection|PaudKelas[] $paudKelases
  * @property-read Collection|PaudPetugasPeran[] $paudPetugasPerans
  *
  * @method static Builder|MVervalPaud whereKVervalPaud($value)
@@ -82,9 +84,25 @@ class MVervalPaud extends Eloquent
     /**
      * @return HasMany
      */
+    public function paudDiklats()
+    {
+        return $this->hasMany('App\Models\PaudDiklat', 'k_verval_paud', 'k_verval_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function paudInstansis()
     {
         return $this->hasMany('App\Models\PaudInstansi', 'k_verval_paud', 'k_verval_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelases()
+    {
+        return $this->hasMany('App\Models\PaudKelas', 'k_verval_paud', 'k_verval_paud');
     }
 
     /**
