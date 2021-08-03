@@ -6,7 +6,9 @@
           @search="onSearch"
           :btnFilter="true"
           :btnAdd="$allow(`akun-${akses}.create`)"
-          :btnDownload="$allow(`akun-${akses}.download`)"
+          :btnDownload="
+            akses === 'kelas' ? $allow(`akun-${akses}.download`) : $allow(`akun-${akses}.download-aktivasi`)
+          "
           @add="onAdd"
           @reload="onReload"
           @filter="onFilter"

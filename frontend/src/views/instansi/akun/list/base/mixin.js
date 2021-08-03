@@ -224,18 +224,27 @@ export default {
     },
 
     onDownload() {
-      const M_LAPORAN = [
-        {
-          key: 'download',
-          label: `Daftar ${this.$titleCase(this.jenis)}`,
-          acl: this.$allow(`akun-${this.akses}.download`),
-        },
-        {
-          key: 'download-aktivasi',
-          label: `Daftar Aktivasi ${this.$titleCase(this.jenis)}`,
-          acl: this.$allow(`akun-${this.akses}.download-aktivasi`),
-        },
-      ];
+      const M_LAPORAN =
+        this.akses === 'kelas'
+          ? [
+              {
+                key: 'download',
+                label: `Daftar ${this.$titleCase(this.jenis)}`,
+                acl: this.$allow(`akun-${this.akses}.download`),
+              },
+              {
+                key: 'download-aktivasi',
+                label: `Daftar Aktivasi ${this.$titleCase(this.jenis)}`,
+                acl: this.$allow(`akun-${this.akses}.download-aktivasi`),
+              },
+            ]
+          : [
+              {
+                key: 'download-aktivasi',
+                label: `Daftar Aktivasi ${this.$titleCase(this.title)}`,
+                acl: this.$allow(`akun-${this.akses}.download-aktivasi`),
+              },
+            ];
 
       let url = {};
       this.$confirm('Pilih jenis Berkas yang ingin di Unduh?', 'Unduh Berkas', {
