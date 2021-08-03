@@ -590,7 +590,7 @@ class PetugasService
             ])
             ->get();
 
-        if ($akunIds != $petugases->pluck('akun_id')->unique()->all()) {
+        if (array_diff($akunIds, $petugases->pluck('akun_id')->unique()->all())) {
             throw new FlowException('Tidak semua akun dikenali');
         }
 
