@@ -37,6 +37,8 @@ class KelasService
     public function create(PaudDiklat $paudDiklat, array $params): PaudKelas
     {
         $kelas                 = new PaudKelas($params);
+        $kelas->tahun          = $paudDiklat->tahun;
+        $kelas->angkatan       = $paudDiklat->angkatan;
         $kelas->paud_diklat_id = $paudDiklat->paud_diklat_id;
         $kelas->k_verval_paud  = MVervalPaud::KANDIDAT;
         $kelas->created_by     = akunId();
@@ -152,6 +154,8 @@ class KelasService
             $paudKelasPetugas->fill($params);
             $paudKelasPetugas->paud_petugas_id   = $petugas->paud_petugas_id;
             $paudKelasPetugas->paud_kelas_id     = $kelas->paud_kelas_id;
+            $paudKelasPetugas->tahun             = $kelas->tahun;
+            $paudKelasPetugas->angkatan          = $kelas->angkatan;
             $paudKelasPetugas->akun_id           = $petugas->akun_id;
             $paudKelasPetugas->k_konfirmasi_paud = MKonfirmasiPaud::BELUM_KONFIRMASI;
             $paudKelasPetugas->created_by        = akunId();

@@ -32,6 +32,8 @@ class DiklatService
     public function create(Instansi $instansi, array $params)
     {
         $paudDiklat              = new PaudDiklat($params);
+        $paudDiklat->tahun       = config('paud.tahun');
+        $paudDiklat->angkatan    = config('paud.angkatan');
         $paudDiklat->instansi_id = $instansi->instansi_id;
 
         $paudDiklat->save();
