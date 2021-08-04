@@ -121,7 +121,7 @@
                       <v-col
                         class="py-0"
                         cols="12"
-                        :md="['pembimbing-praktik'].includes(akses) ? 2 : ['pengajar'].includes(akses) ? 1 : 2"
+                        :md="['pembimbing-praktik'].includes(akses) ? 2 : ['pengajar'].includes(akses) ? 2 : 2"
                       >
                         <v-list-item class="px-0">
                           <v-list-item-content>
