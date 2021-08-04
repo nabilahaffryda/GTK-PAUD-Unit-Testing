@@ -49,7 +49,7 @@
   </v-app-bar>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   data: () => ({
@@ -78,12 +78,25 @@ export default {
       return this.role === 'instansi' ? this.akun?.foto_url ?? 'avatar.png' : this.ptk?.foto ?? 'avatar.png';
     },
   },
+  created() {
+    this.changeLayanan();
+  },
   methods: {
+    ...mapActions('preferensi', ['getLayanan']),
+
     toggleL() {
       this.$emit('toggleL');
     },
     toggleR() {
       this.$emit('toggleR');
+    },
+
+    changeLayanan() {
+      if (!this.layanans.length) {
+        this.getLayanan().then(({ data }) => {
+          this.layanans = (data && data.layanan) || [];
+        });
+      }
     },
   },
 };

@@ -196,7 +196,7 @@ export default {
     },
     paramsTipe: {
       type: Object,
-      required: () => {},
+      default: () => {},
     },
   },
   mixins: [list, mixin],
