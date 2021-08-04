@@ -345,7 +345,7 @@ export default {
       const M_KOTA = this.masters.m_kota || {};
       return {
         selector: ['k_propinsi', 'k_kota'],
-        required: ['k_propinsi', 'k_kota'],
+        required: this.jenis === 'kelas' ? [] : ['k_propinsi', 'k_kota'],
         label: ['Provinsi', 'Kota/Kabupaten'],
         options: [M_PROPINSI, M_KOTA],
         grid: [{ cols: 6 }, { cols: 6 }],
@@ -742,7 +742,6 @@ export default {
               name: 'nik',
               label: 'NIK',
               hint: 'wajib diisi',
-              required: true,
               hideDetails: false,
               outlined: true,
               dense: true,
@@ -805,7 +804,6 @@ export default {
               placeholder: 'Alamat Surel',
               hint: 'wajib diisi',
               grid: { cols: 12, md: 6 },
-              required: true,
               outlined: true,
               dense: true,
               disabled: true,
@@ -832,7 +830,6 @@ export default {
               name: 'alamat',
               label: 'Alamat Sesuai KTP',
               hint: 'wajib diisi',
-              required: true,
               grid: { cols: 12 },
               outlined: true,
               dense: true,

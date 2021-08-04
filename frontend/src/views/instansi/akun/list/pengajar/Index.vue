@@ -14,7 +14,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <list-admin jenis="pengajar" akses="pengajar" title="Akun Pengajar" desc="" :actions="actions"></list-admin>
+    <list-admin jenis="pengajar" akses="pengajar" title="Pengajar" desc="" :actions="actions"></list-admin>
   </div>
 </template>
 
