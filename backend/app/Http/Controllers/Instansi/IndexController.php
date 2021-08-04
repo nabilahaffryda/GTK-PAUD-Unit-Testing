@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Instansi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MasterRequest;
 use App\Http\Resources\BaseCollection;
+use App\Remotes\SimpkbAkun;
 use App\Services\AksesService;
 use App\Services\AkunService;
 use App\Services\MasterService;
@@ -47,5 +48,10 @@ class IndexController extends Controller
     public function instansi(Request $request, AkunService $akunService)
     {
         return BaseCollection::make($akunService->queryInstansi(akun(), $request->all())->paginate((int)$request->get('count', 100)));
+    }
+
+    public function layanans(Request $request)
+    {
+        return app(SimpkbAkun::class)->layanans(akun()->paspor_id);
     }
 }

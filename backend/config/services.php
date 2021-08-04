@@ -44,4 +44,9 @@ return [
         'score'      => env('RECAPTCHA_SCORE', '0.3'),
     ],
 
+    'simpkb-akun' => [
+        'url'   => env('SIMPKB_AKUN_API_URL', 'https://akun-backend-dev.simpkb.id/graphql'),
+        'token' => env('SIMPKB_AKUN_API_TOKEN', '17bd37723a9e24e9cbe4eed0e6b3287c'),
+    ],
+
 ];

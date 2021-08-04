@@ -19,6 +19,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::get('preferensi', [IndexController::class, 'preferensi']);
     Route::get('master', [IndexController::class, 'master']);
     Route::get('instansi', [IndexController::class, 'instansi']);
+    Route::get('layanans', [IndexController::class, 'layanans']);
 
     Route::get('akun/groups', [AkunController::class, 'groups']);
     Route::get('akun/email/{email}', [AkunController::class, 'email']);
