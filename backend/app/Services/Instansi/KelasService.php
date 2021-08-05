@@ -172,6 +172,15 @@ class KelasService
     {
         $this->validateKelas($paudDiklat, $kelas);
 
+        $tidakBersedia = $kelas
+            ->paudKelasPetugases()
+            ->whereNotIn('k_konfirmasi_paud', [MKonfirmasiPaud::BERSEDIA])
+            ->exists();
+
+        if ($tidakBersedia) {
+            throw new FlowException("Masih terdapat petugas yang belum bersedia");
+        }
+
         $kelas->wkt_ajuan     = Carbon::now();
         $kelas->k_verval_paud = MVervalPaud::DIAJUKAN;
 
