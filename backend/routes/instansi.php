@@ -220,6 +220,14 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/reset', [Akun\AdminKelasController::class, 'reset']);
     });
 
+    Route::group(['prefix' => 'petugas/konfirmasi'], function () {
+        Route::get('', [Petugas\KonfirmasiController::class, 'index']);
+        Route::get('{kelasPetugas}', [Petugas\KonfirmasiController::class, 'fetch']);
+        Route::get('{kelasPetugas}/setuju', [Petugas\KonfirmasiController::class, 'setuju']);
+        Route::get('{kelasPetugas}/tidak-setuju', [Petugas\KonfirmasiController::class, 'tidakSetuju']);
+        Route::get('{kelasPetugas}/reset', [Petugas\KonfirmasiController::class, 'reset']);
+    });
+
     Route::group(['prefix' => 'petugas/profil'], function () {
         Route::get('', [Petugas\ProfilController::class, 'index']);
         Route::post('{petugas}/update', [Petugas\ProfilController::class, 'update']);
