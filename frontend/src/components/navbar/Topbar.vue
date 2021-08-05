@@ -5,7 +5,7 @@
     <v-spacer></v-spacer>
     <template>
       <v-divider vertical inset dark></v-divider>
-      <v-tooltip bottom>
+      <v-tooltip bottom v-if="layanans.length">
         <template v-slot:activator="{ on, attrs }">
           <div v-bind="attrs" v-on="on">
             <v-menu v-model="menu" left :close-on-content-click="false" offset-y :nudge-width="200">
