@@ -5,7 +5,6 @@ namespace App\Services\Instansi;
 use App\Exceptions\FlowException;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MVervalPaud;
-use App\Models\PaudKelas;
 use App\Models\PaudKelasPetugas;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -48,6 +47,7 @@ class PetugasKelasService
             ->join('paud_kelas', 'paud_kelas.paud_kelas_id', '=', 'paud_kelas_petugas.paud_kelas_id')
             ->where('paud_kelas.tahun', config('paud.tahun'))
             ->where('paud_kelas.angkatan', config('paud.angkatan'))
+            ->where('paud_kelas.k_verval_paud', '=', MVervalPaud::KANDIDAT)
             ->where('paud_kelas_petugas.akun_id', '=', $akunId);
     }
 
