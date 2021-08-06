@@ -51,7 +51,12 @@
             <v-toolbar flat>
               <v-toolbar-title class="body-2">Daftar {{ item.text }}</v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-text-field dense placeholder="Pencarian Data" append-icon="mdi-magnify"></v-text-field>
+              <v-text-field
+                v-model="search"
+                dense
+                placeholder="Pencarian Data"
+                append-icon="mdi-magnify"
+              ></v-text-field>
               <v-btn v-if="false" class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
               <v-btn
                 class="mt-n4 ml-2"
@@ -69,9 +74,8 @@
               <v-data-table
                 v-model="peserta"
                 :headers="headers"
-                :items="items"
+                :items="filteredItems"
                 :single-select="false"
-                show-select
                 :no-data-text="`Daftar ${item.text} belum ditemukan`"
               >
                 <template v-slot:[`item.aksi`]="{ item }">
@@ -120,6 +124,7 @@ export default {
         { value: 'pengajar', kPetugas: 1, text: 'Pengajar' },
         { value: 'pengajar-tambahan', kPetugas: 2, text: 'Pengajar Tambahan' },
       ],
+      search: '',
     };
   },
   computed: {
@@ -152,6 +157,12 @@ export default {
         };
       });
     },
+
+    filteredItems() {
+      return this.items.filter((s) => {
+        return s.nama.toLowerCase().includes(this.search.toLowerCase());
+      });
+    },
   },
   methods: {
     ...mapActions('diklatKelas', ['getListKelas', 'action']),
@@ -162,6 +173,7 @@ export default {
       this.pesertas = [];
       this.peserta = [];
       this.petugas = [];
+      this.search = '';
     },
 
     fetch(tipe, k_petugas = null) {
