@@ -6,6 +6,7 @@ namespace App\Services\Instansi;
 
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
+use App\Models\Akun;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudDiklat;
@@ -200,6 +201,56 @@ class KelasService
 
         if (!$kelas->save()) {
             throw new FlowException('Proses ajuan tidak berhasil');
+        }
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function verval(Akun $akun, PaudKelas $kelas, array $params): PaudKelas
+    {
+        if (in_array($kelas->k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
+            throw new FlowException('Kelas sudah diverval');
+        }
+
+        if ($kelas->k_verval_paud != MVervalPaud::DIAJUKAN) {
+            throw new FlowException('Kelas belum diajukan');
+        }
+
+        $kelas->k_verval_paud  = $params['k_verval_paud'];
+        $kelas->wkt_verval     = Carbon::now();
+        $kelas->akun_id_verval = $akun->akun_id;
+        $kelas->alasan         = $params['alasan'] ?? null;
+
+        if (!$kelas->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function batalVerval(Akun $akun, PaudKelas $kelas): PaudKelas
+    {
+        if ($kelas->k_verval_paud == MVervalPaud::DIAJUKAN) {
+            throw new FlowException('Kelas masih diajukan');
+        }
+
+        if (!in_array($kelas->k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
+            throw new FlowException('Kelas belum diverval');
+        }
+
+        $kelas->k_verval_paud  = MVervalPaud::DIAJUKAN;
+        $kelas->wkt_verval     = Carbon::now();
+        $kelas->akun_id_verval = $akun->akun_id;
+        $kelas->alasan         = null;
+
+        if (!$kelas->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
         }
 
         return $kelas;

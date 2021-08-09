@@ -3,8 +3,9 @@
 use App\Http\Controllers\Instansi\AdminKelas;
 use App\Http\Controllers\Instansi\Akun;
 use App\Http\Controllers\Instansi\AkunController;
-use App\Http\Controllers\Instansi\IndexController;
 use App\Http\Controllers\Instansi\Diklat;
+use App\Http\Controllers\Instansi\IndexController;
+use App\Http\Controllers\Instansi\Kelas;
 use App\Http\Controllers\Instansi\Lpd;
 use App\Http\Controllers\Instansi\LpdController;
 use App\Http\Controllers\Instansi\Petugas;
@@ -94,6 +95,18 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
             Route::get('kelas/{kelas}/petugas/kandidat', [Lpd\Kelas\PetugasKandidatController::class, 'index']);
             Route::post('kelas/{kelas}/petugas/create', [Lpd\Kelas\PetugasController::class, 'create']);
             Route::get('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Kelas\PetugasController::class, 'delete']);
+        });
+    });
+
+    Route::group(['prefix' => 'kelas'], function () {
+        Route::get('', [Kelas\VervalController::class, 'index']);
+
+        Route::group(['prefix' => '{kelas}'], function () {
+            Route::get('', [Kelas\VervalController::class, 'fetch']);
+            Route::get('peserta', [Kelas\VervalController::class, 'peserta']);
+            Route::get('petugas', [Kelas\VervalController::class, 'petugas']);
+            Route::post('verval', [Kelas\VervalController::class, 'updateVerval']);
+            Route::post('batal-verval', [Kelas\VervalController::class, 'batalVerval']);
         });
     });
 
