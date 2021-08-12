@@ -48,7 +48,6 @@ class AdminKelasService
             && $akun->kelamin
             && $akun->k_propinsi
             && $akun->k_kota
-            && $akun->kodepos
             && $akun->alamat
             && $akun->no_hp;
 
