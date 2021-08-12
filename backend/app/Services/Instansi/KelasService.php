@@ -14,6 +14,7 @@ use App\Models\PaudKelas;
 use App\Models\PaudKelasPeserta;
 use App\Models\PaudKelasPetugas;
 use App\Models\PaudPetugas;
+use App\Models\Ptk;
 use Arr;
 use Carbon\Carbon;
 use DB;
@@ -111,6 +112,28 @@ class KelasService
         return $query;
     }
 
+    public function indexPesertaKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        $query = Ptk::query()
+            ->whereNotExists(function ($query) use ($params, $kelas) {
+                $query->select(DB::raw(1))
+                    ->from('paud_kelas_peserta')
+                    ->where([
+                        'paud_kelas_peserta.tahun'    => config('paud.tahun'),
+                        'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
+                    ])
+                    ->whereRaw('ptk.ptk_id = paud_kelas_peserta.ptk_id');
+            });
+
+        if ($keyword = Arr::get($params, 'keyword')) {
+            $query->where('ptk.nama', 'like', '%' . $keyword . '%');
+        }
+
+        return $query;
+    }
+
     public function indexPetugasKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
     {
         $this->validateKelas($paudDiklat, $kelas);
@@ -132,6 +155,43 @@ class KelasService
         }
 
         return $query;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function createPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        $ptks = Ptk::query()->whereIn('ptk_id', $params['ptk_id'])
+            ->whereNotExists(function ($query) use ($params) {
+                $query->select(DB::raw(1))
+                    ->from('paud_kelas_peserta')
+                    ->where([
+                        'paud_kelas_peserta.tahun'    => config('paud.tahun'),
+                        'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
+                    ])
+                    ->whereRaw('ptk.ptk_id = paud_kelas_peserta.ptk_id');
+            })
+            ->get();
+
+        /** @var Ptk $ptk */
+        foreach ($ptks as $ptk) {
+            $paudKelasPeserta = new PaudKelasPeserta();
+            $paudKelasPeserta->fill($params);
+            $paudKelasPeserta->paud_kelas_id = $kelas->paud_kelas_id;
+            $paudKelasPeserta->tahun         = $kelas->tahun;
+            $paudKelasPeserta->angkatan      = $kelas->angkatan;
+            $paudKelasPeserta->ptk_id        = $ptk->ptk_id;
+            $paudKelasPeserta->created_by    = akunId();
+
+            if (!$paudKelasPeserta->save()) {
+                throw new FlowException("Peserta tidak berhasil disimpan");
+            }
+        }
+
+        return $ptks;
     }
 
     public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
