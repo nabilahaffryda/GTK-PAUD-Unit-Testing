@@ -63,7 +63,7 @@
                 small
                 color="secondary"
                 depressed
-                v-if="$allow('lpd-kelas-petugas.create')"
+                v-if="isPeserta ? $allow('lpd-kelas-peserta.create') : $allow('lpd-kelas-petugas.create')"
                 @click="onAddPetugas"
               >
                 <v-icon left>mdi-plus</v-icon>Tambah
@@ -79,7 +79,11 @@
                 :no-data-text="`Daftar ${item.text} belum ditemukan`"
               >
                 <template v-slot:[`item.aksi`]="{ item }">
-                  <v-btn icon @click="onDelete(item)">
+                  <v-btn
+                    v-if="isPeserta ? $allow('lpd-kelas-peserta.delete') : $allow('lpd-kelas-petugas.delete')"
+                    icon
+                    @click="onDelete(item)"
+                  >
                     <v-icon small>mdi-trash-can</v-icon>
                   </v-btn>
                 </template>
@@ -250,15 +254,15 @@ export default {
       const fields = {
         kandidat: [
           {
-            key: 'ptk.data.nama',
+            key: 'nama',
             title: 'Nama',
             icon: 'mdi-account-circle',
             grid: { md: 4, sm: 12, cols: 12 },
           },
           {
-            key: 'ptk.data.email',
+            key: 'email',
             title: 'Email',
-            grid: { md: 2, sm: 12, cols: 12 },
+            grid: { md: 6, sm: 12, cols: 12 },
           },
         ],
         petugas: [
@@ -284,7 +288,7 @@ export default {
       const params = {
         diklat_id: this.detail.paud_diklat_id,
         id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
-        tipe: this.tab === 0 ? 'peserta' : 'petugas/kandidat',
+        tipe: this.tab === 0 ? 'peserta/kandidat' : 'petugas/kandidat',
         params: {
           k_petugas_paud: this.tabItems[+this.tab]['kPetugas'],
         },
