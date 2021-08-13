@@ -19,6 +19,7 @@ class PetugasKandidatController extends Controller
     public function index(PaudDiklat $paudDiklat, PaudKelas $kelas, IndexPetugasRequest $request)
     {
         return BaseCollection::make($this->service
-            ->indexPetugasKandidat($paudDiklat, $kelas, $request->validated())->get());
+            ->indexPetugasKandidat($paudDiklat, $kelas, $request->validated())
+            ->paginate((int)$request->get('count', 10)));
     }
 }
