@@ -19,7 +19,10 @@
                 <v-col cols="12" md="11" sm="10" class="px-0">
                   <div>
                     <div class="label--text">Nama Kelas</div>
-                    <div class="body-1">{{ $getDeepObj(detail, 'nama') || '-' }}</div>
+                    <div class="body-1">
+                      {{ $getDeepObj(detail, 'paud_mapel_kelas.data.nama') || '-' }} -
+                      {{ $getDeepObj(detail, 'nama') || '-' }}
+                    </div>
                   </div>
                   <div class="my-5">
                     <div class="label--text">Deskripsi Kelas</div>
