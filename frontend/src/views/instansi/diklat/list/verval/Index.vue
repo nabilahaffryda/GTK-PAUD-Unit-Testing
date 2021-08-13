@@ -92,7 +92,7 @@
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             <v-btn
-                              v-if="[2].includes(item.k_verval_paud)"
+                              v-if="[2].includes(item.k_verval_paud) && $allow('kelas-verval.update-verval')"
                               color="primary"
                               small
                               block
@@ -108,7 +108,13 @@
                   </v-row>
                 </v-list-item-content>
                 <v-list-item-action-text>
-                  <base-list-action v-if="true" :data="item" :actions="actions" :allow="allow" @action="onAction" />
+                  <base-list-action
+                    v-if="$allow('kelas-verval.batal-verval')"
+                    :data="item"
+                    :actions="actions"
+                    :allow="allow"
+                    @action="onAction"
+                  />
                   <template v-else>
                     <v-icon class="mr-3" color="white">mdi-dots-vertical</v-icon>
                   </template>
@@ -297,7 +303,7 @@ export default {
 
     allowVerval(item) {
       const kVerval = this.getKVerval(item);
-      return kVerval <= 3;
+      return this.$allow('kelas-verval.update-verval') && kVerval <= 3;
     },
 
     getKVerval(item) {

@@ -187,7 +187,7 @@ export default [
         desc: 'Evaluasi dan Verifikasi Kelas Diklat',
         color: 'red',
         deepColor: 'darken-1',
-        akses: true,
+        akses: 'kelas-verval.index',
         link: 'verval-kelas',
         to: { name: 'verval-kelas' },
       },
