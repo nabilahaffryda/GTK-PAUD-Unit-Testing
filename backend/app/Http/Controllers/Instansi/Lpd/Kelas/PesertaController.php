@@ -25,13 +25,14 @@ class PesertaController extends Controller
 
     public function index(PaudDiklat $paudDiklat, PaudKelas $kelas, IndexRequest $request)
     {
-        return BaseCollection::make($this->service->indexPeserta($paudDiklat, $kelas, $request->validated())->get());
+        return BaseCollection::make($this->service->indexPeserta($paudDiklat, $kelas, $request->validated())
+            ->paginate((int)$request->get('count', 10)));
     }
 
     public function candidate(PaudDiklat $paudDiklat, PaudKelas $kelas, IndexPesertaRequest $request)
     {
         return BaseCollection::make($this->service
-            ->indexPesertaKandidat($paudDiklat, $kelas, $request->validated())->paginate($request->query('page')));
+            ->indexPesertaKandidat($paudDiklat, $kelas, $request->validated())->paginate((int)$request->get('count', 10)));
     }
 
     /**
