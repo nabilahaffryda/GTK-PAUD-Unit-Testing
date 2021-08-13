@@ -33,7 +33,8 @@ class VervalController extends Controller
             ->whereNotIn('paud_kelas.k_verval_paud', [MVervalPaud::KANDIDAT])
             ->with([
                 'mVervalPaud',
-                'paudDiklat',
+                'paudDiklat.paudPeriode',
+                'paudMapelKelas',
             ]);
 
         return BaseCollection::make($q->paginate((int)$request->get('count', 10)));
