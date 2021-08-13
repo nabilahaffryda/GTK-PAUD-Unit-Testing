@@ -135,9 +135,27 @@ class KelasService
         return $query;
     }
 
+    /**
+     * @throws FlowException
+     */
     public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
     {
         $this->validateKelas($paudDiklat, $kelas);
+
+        $jmlPetugas = PaudKelasPetugas::query()
+            ->where('paud_petugas_kelas.k_petugas_paud', '=', $params['k_petugas_paud'])
+            ->count();
+
+        $batasan = [
+            MPetugasPaud::PENGAJAR           => 9,
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => 4,
+            MPetugasPaud::PEMBIMBING_PRAKTIK => 4,
+            MPetugasPaud::ADMIN_KELAS        => 1,
+        ];
+
+        if (isset($batasan[$params['k_petugas_paud']]) && $jmlPetugas >= $batasan[$params['k_petugas_paud']]) {
+            throw new FlowException("Jumlah petugas maksimal adalah {$batasan[$params['k_petugas_paud']]} orang");
+        }
 
         $paudPetugases = PaudPetugas::whereIn('akun_id', $params['akun_id'])
             ->when($params['k_petugas_paud'] != MPetugasPaud::PENGAJAR, function ($query) use ($paudDiklat) {
@@ -177,9 +195,31 @@ class KelasService
         return $paudPetugases->load('akun:akun_id,nama,email');
     }
 
+    /**
+     * @throws FlowException
+     */
     public function ajuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
         $this->validateKelas($paudDiklat, $kelas);
+
+        $jmlPetugases = PaudKelasPetugas::query()
+            ->groupBy('k_petugas_paud')
+            ->get(['k_petugas_paud', DB::raw('count(1) jumlah')])
+            ->keyBy('k_petugas_paud');
+
+        $batasan = [
+            MPetugasPaud::PENGAJAR           => 3,
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => 2,
+            MPetugasPaud::PEMBIMBING_PRAKTIK => 2,
+            MPetugasPaud::ADMIN_KELAS        => 1,
+        ];
+
+        foreach ($batasan as $kPetugasPaud => $jmlMin) {
+            if ($jmlPetugases->get($kPetugasPaud, 0) < $jmlMin) {
+                $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
+                throw new FlowException("Petugas {$mPetugasPaud->keterangan} minimal {$jmlMin} orang");
+            }
+        }
 
         $kelas->wkt_ajuan     = Carbon::now();
         $kelas->k_verval_paud = MVervalPaud::DIAJUKAN;
