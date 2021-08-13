@@ -7,6 +7,7 @@ namespace App\Services\Instansi;
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Models\MKonfirmasiPaud;
+use App\Models\MPetugasPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudDiklat;
 use App\Models\PaudKelas;
@@ -113,7 +114,9 @@ class KelasService
         $this->validateKelas($paudDiklat, $kelas);
 
         $query = PaudPetugas::query()
-            ->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id)
+            ->when($params['k_petugas_paud'] != MPetugasPaud::PENGAJAR, function ($query) use ($paudDiklat) {
+                $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
+            })
             ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
             ->whereNotExists(function ($query) use ($params) {
                 $query->select(DB::raw(1))
@@ -136,7 +139,9 @@ class KelasService
         $this->validateKelas($paudDiklat, $kelas);
 
         $paudPetugases = PaudPetugas::whereIn('akun_id', $params['akun_id'])
-            ->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id)
+            ->when($params['k_petugas_paud'] != MPetugasPaud::PENGAJAR, function ($query) use ($paudDiklat) {
+                $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
+            })
             ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
             ->whereNotExists(function ($query) use ($params) {
                 $query->select(DB::raw(1))
