@@ -6,6 +6,7 @@ namespace App\Services\Instansi;
 
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
+use App\Models\Akun;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MPetugasPaud;
 use App\Models\MVervalPaud;
@@ -150,6 +151,13 @@ class KelasService
                     ->whereRaw('paud_petugas.paud_petugas_id = paud_kelas_petugas.paud_petugas_id');
             })
             ->get();
+
+        if ($diff = array_diff($params['akun_id'], $paudPetugases->pluck('akun_id')->all())) {
+            $akuns = Akun::whereIn('akun_id', $diff)->pluck('email')->unique()->all();
+            $namas = implode(', ', $akuns);
+
+            throw new FlowException("Petugas dengan email {$namas} tidak ditemukan");
+        }
 
         /** @var PaudPetugas $petugas */
         foreach ($paudPetugases as $petugas) {
