@@ -43,7 +43,9 @@ class VervalController extends Controller
     public function fetch(PaudKelas $kelas)
     {
         $kelas->load([
+            'mVervalPaud',
             'paudDiklat.paudPeriode',
+            'paudMapelKelas',
         ]);
 
         return BaseResource::make($kelas);
