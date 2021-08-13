@@ -22,4 +22,12 @@ export default [
       paudkey: 'instansi',
     },
   },
+  {
+    path: '/i/:id(\\d+)/verval/kelas',
+    name: 'verval-kelas',
+    component: () => lazyLoadView(import('@views/instansi/diklat/list/verval/Index.vue')),
+    meta: {
+      title: 'Verval Kelas Diklat',
+    },
+  },
 ];
