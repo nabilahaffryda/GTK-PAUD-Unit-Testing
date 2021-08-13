@@ -21,6 +21,7 @@ use Arr;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -59,7 +60,7 @@ class PetugasService
     /**
      * @return PaudPetugas|null
      */
-    public function getPetugas(Akun $akun)
+    public function getPetugas(Akun $akun, array|int $kPetugasPaud = null)
     {
         /** @var PaudPetugas $petugas */
         $petugas = PaudPetugas::query()
@@ -68,6 +69,9 @@ class PetugasService
                 'tahun'    => config('paud.tahun'),
                 'angkatan' => config('paud.angkatan'),
             ])
+            ->when($kPetugasPaud, function ($query, $value) {
+                $query->whereIn('k_petugas_paud', (array)$value);
+            })
             ->with(['akun'])
             ->first();
 
@@ -570,5 +574,52 @@ class PetugasService
             // Disable hapus berkas, untuk backup plan
             // static::deleteBerkas($oldFile);
         }
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function setStatusAkun(array $kPetugasPauds, array $akunIds, array $statuses)
+    {
+        /** @var PaudPetugas[]|Collection $petugases */
+        $petugases = PaudPetugas::query()
+            ->whereIn('akun_id', $akunIds)
+            ->where([
+                'tahun'    => config('paud.tahun'),
+                'angkatan' => config('paud.angkatan'),
+            ])
+            ->get();
+
+        if (array_diff($akunIds, $petugases->pluck('akun_id')->unique()->all())) {
+            throw new FlowException('Tidak semua akun dikenali');
+        }
+
+        $petugasPauds = $petugases->pluck('k_petugas_paud')->unique()->all();
+        if (array_diff($petugasPauds, $kPetugasPauds)) {
+            throw new FlowException('Ada akun yang tidak dikenali');
+        }
+
+        foreach ($petugases as $petugas) {
+            foreach ($statuses as $key => $value) {
+                if ($value) {
+                    $petugas->$key = $value;
+                }
+            }
+            $petugas->save();
+        }
+
+        return $petugases;
+    }
+
+    public function resetStatus(PaudPetugas $petugas, array $statuses)
+    {
+        foreach ($statuses as $key => $value) {
+            if ($value) {
+                $petugas->$key = 0;
+            }
+        }
+        $petugas->save();
+
+        return $petugas;
     }
 }

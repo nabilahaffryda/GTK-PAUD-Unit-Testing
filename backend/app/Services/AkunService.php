@@ -21,19 +21,21 @@ use Log;
 
 class AkunService
 {
+    protected static $instansiGroup = [
+        MGroup::AP_GTK_PAUD_DIKLAT_PAUD        => [14],
+        MGroup::ADM_GTK_PAUD_DIKLAT_PAUD       => [14],
+        MGroup::AP_LPD_DIKLAT_PAUD             => [23],
+        MGroup::OP_LPD_DIKLAT_PAUD             => [23],
+        MGroup::PENGAJAR_BIMTEK_DIKLAT_PAUD    => [14],
+        MGroup::PENGAJAR_DIKLAT_PAUD           => [14],
+        MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD  => [23],
+        MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD => [14, 23],
+        MGroup::ADM_KELAS_DIKLAT_PAUD          => [23],
+    ];
+
     public function kGroups()
     {
-        return [
-            MGroup::AP_GTK_PAUD_DIKLAT_PAUD,
-            MGroup::ADM_GTK_PAUD_DIKLAT_PAUD,
-            MGroup::AP_LPD_DIKLAT_PAUD,
-            MGroup::OP_LPD_DIKLAT_PAUD,
-            MGroup::PENGAJAR_BIMTEK_DIKLAT_PAUD,
-            MGroup::PENGAJAR_DIKLAT_PAUD,
-            MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD,
-            MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD,
-            MGroup::ADM_KELAS_DIKLAT_PAUD,
-        ];
+        return array_keys(static::$instansiGroup);
     }
 
     public static function childGroup($kGroup)
@@ -42,15 +44,16 @@ class AkunService
             MGroup::AP_GTK_PAUD_DIKLAT_PAUD  => [
                 MGroup::ADM_GTK_PAUD_DIKLAT_PAUD,
             ],
-            MGroup::ADM_GTK_PAUD_DIKLAT_PAUD  => [
+            MGroup::ADM_GTK_PAUD_DIKLAT_PAUD => [
                 MGroup::AP_LPD_DIKLAT_PAUD,
                 MGroup::PENGAJAR_BIMTEK_DIKLAT_PAUD,
                 MGroup::PENGAJAR_DIKLAT_PAUD,
+                MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD,
             ],
-            MGroup::AP_LPD_DIKLAT_PAUD  => [
+            MGroup::AP_LPD_DIKLAT_PAUD       => [
                 MGroup::OP_LPD_DIKLAT_PAUD,
             ],
-            MGroup::OP_LPD_DIKLAT_PAUD => [
+            MGroup::OP_LPD_DIKLAT_PAUD       => [
                 MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD,
                 MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD,
                 MGroup::ADM_KELAS_DIKLAT_PAUD,
@@ -78,9 +81,17 @@ class AkunService
             $kGroups = array_merge($kGroups, static::childGroup($akunInstansi->k_group));
         }
 
+        $kGroups = array_unique($kGroups);
+
+        $groupInstansis = [];
+        foreach ($kGroups as $kGroup) {
+            if (in_array($instansi->k_jenis_instansi, static::$instansiGroup[$kGroup] ?? [])) {
+                $groupInstansis[] = $kGroup;
+            }
+        }
+
         return MGroup::query()
-            ->whereIn('k_group', array_unique($kGroups))
-            ->where('k_jenis_instansi', $instansi->k_jenis_instansi)
+            ->whereIn('k_group', $groupInstansis)
             ->get();
     }
 
@@ -274,7 +285,7 @@ class AkunService
                     'is_aktif' => '1',
                     'is_email' => '1',
                     'admin_id' => $admin->paspor_id,
-                ]
+                ],
             ];
 
             $paspor->add($users, [config('services.paspor.layanan_id')], $admin->paspor_id);

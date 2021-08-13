@@ -35,7 +35,7 @@
         <v-container grid-list-md v-if="form && form.render">
           <v-layout wrap class="pa-2">
             <span class="pa-1" v-html="form.desc"></span>
-            <base-render :renderEl="form.render" :params="form.params"></base-render>
+            <base-render ref="render" :renderEl="form.render" :params="form.params"></base-render>
           </v-layout>
         </v-container>
         <v-card-text

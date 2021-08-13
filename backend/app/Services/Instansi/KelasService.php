@@ -8,6 +8,7 @@ use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Models\Akun;
 use App\Models\MKonfirmasiPaud;
+use App\Models\MPetugasPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudDiklat;
 use App\Models\PaudKelas;
@@ -139,7 +140,9 @@ class KelasService
         $this->validateKelas($paudDiklat, $kelas);
 
         $query = PaudPetugas::query()
-            ->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id)
+            ->when($params['k_petugas_paud'] != MPetugasPaud::PENGAJAR, function ($query) use ($paudDiklat) {
+                $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
+            })
             ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
             ->whereNotExists(function ($query) use ($params) {
                 $query->select(DB::raw(1))
@@ -160,46 +163,29 @@ class KelasService
     /**
      * @throws FlowException
      */
-    public function createPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
-    {
-        $this->validateKelas($paudDiklat, $kelas);
-
-        $ptks = Ptk::query()->whereIn('ptk_id', $params['ptk_id'])
-            ->whereNotExists(function ($query) use ($params) {
-                $query->select(DB::raw(1))
-                    ->from('paud_kelas_peserta')
-                    ->where([
-                        'paud_kelas_peserta.tahun'    => config('paud.tahun'),
-                        'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
-                    ])
-                    ->whereRaw('ptk.ptk_id = paud_kelas_peserta.ptk_id');
-            })
-            ->get();
-
-        /** @var Ptk $ptk */
-        foreach ($ptks as $ptk) {
-            $paudKelasPeserta = new PaudKelasPeserta();
-            $paudKelasPeserta->fill($params);
-            $paudKelasPeserta->paud_kelas_id = $kelas->paud_kelas_id;
-            $paudKelasPeserta->tahun         = $kelas->tahun;
-            $paudKelasPeserta->angkatan      = $kelas->angkatan;
-            $paudKelasPeserta->ptk_id        = $ptk->ptk_id;
-            $paudKelasPeserta->created_by    = akunId();
-
-            if (!$paudKelasPeserta->save()) {
-                throw new FlowException("Peserta tidak berhasil disimpan");
-            }
-        }
-
-        return $ptks;
-    }
-
     public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
     {
         $this->validateKelas($paudDiklat, $kelas);
 
+        $jmlPetugas = PaudKelasPetugas::query()
+            ->where('paud_petugas_kelas.k_petugas_paud', '=', $params['k_petugas_paud'])
+            ->count();
+
+        $batasan = [
+            MPetugasPaud::PENGAJAR           => 9,
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => 4,
+            MPetugasPaud::PEMBIMBING_PRAKTIK => 4,
+            MPetugasPaud::ADMIN_KELAS        => 1,
+        ];
+
+        if (isset($batasan[$params['k_petugas_paud']]) && $jmlPetugas >= $batasan[$params['k_petugas_paud']]) {
+            throw new FlowException("Jumlah petugas maksimal adalah {$batasan[$params['k_petugas_paud']]} orang");
+        }
+
         $paudPetugases = PaudPetugas::whereIn('akun_id', $params['akun_id'])
-            ->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id)
+            ->when($params['k_petugas_paud'] != MPetugasPaud::PENGAJAR, function ($query) use ($paudDiklat) {
+                $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
+            })
             ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
             ->whereNotExists(function ($query) use ($params) {
                 $query->select(DB::raw(1))
@@ -208,6 +194,13 @@ class KelasService
                     ->whereRaw('paud_petugas.paud_petugas_id = paud_kelas_petugas.paud_petugas_id');
             })
             ->get();
+
+        if ($diff = array_diff($params['akun_id'], $paudPetugases->pluck('akun_id')->all())) {
+            $akuns = Akun::whereIn('akun_id', $diff)->pluck('email')->unique()->all();
+            $namas = implode(', ', $akuns);
+
+            throw new FlowException("Petugas dengan email {$namas} tidak ditemukan");
+        }
 
         /** @var PaudPetugas $petugas */
         foreach ($paudPetugases as $petugas) {
@@ -229,6 +222,9 @@ class KelasService
         return $paudPetugases->load('akun:akun_id,nama,email');
     }
 
+    /**
+     * @throws FlowException
+     */
     public function ajuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
         $this->validateKelas($paudDiklat, $kelas);
@@ -240,6 +236,25 @@ class KelasService
 
         if ($tidakBersedia) {
             throw new FlowException("Masih terdapat petugas yang belum bersedia");
+        }
+
+        $jmlPetugases = PaudKelasPetugas::query()
+            ->groupBy('k_petugas_paud')
+            ->get(['k_petugas_paud', DB::raw('count(1) jumlah')])
+            ->keyBy('k_petugas_paud');
+
+        $batasan = [
+            MPetugasPaud::PENGAJAR           => 3,
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => 2,
+            MPetugasPaud::PEMBIMBING_PRAKTIK => 2,
+            MPetugasPaud::ADMIN_KELAS        => 1,
+        ];
+
+        foreach ($batasan as $kPetugasPaud => $jmlMin) {
+            if ($jmlPetugases->get($kPetugasPaud, 0) < $jmlMin) {
+                $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
+                throw new FlowException("Petugas {$mPetugasPaud->keterangan} minimal {$jmlMin} orang");
+            }
         }
 
         $kelas->wkt_ajuan     = Carbon::now();

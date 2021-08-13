@@ -19,6 +19,7 @@ export default {
       'downloadList',
       'templateUpload',
       'upload',
+      'setStatus',
     ]),
 
     ...mapActions('institusi', { listInstansis: 'fetch' }),
@@ -223,18 +224,27 @@ export default {
     },
 
     onDownload() {
-      const M_LAPORAN = [
-        {
-          key: 'download',
-          label: `Daftar ${this.$titleCase(this.jenis)}`,
-          acl: this.$allow(`akun-${this.akses}.download`),
-        },
-        {
-          key: 'download-aktivasi',
-          label: `Daftar Aktivasi ${this.$titleCase(this.jenis)}`,
-          acl: this.$allow(`akun-${this.akses}.download-aktivasi`),
-        },
-      ];
+      const M_LAPORAN =
+        this.akses === 'kelas'
+          ? [
+              {
+                key: 'download',
+                label: `Daftar ${this.$titleCase(this.jenis)}`,
+                acl: this.$allow(`akun-${this.akses}.download`),
+              },
+              {
+                key: 'download-aktivasi',
+                label: `Daftar Aktivasi ${this.$titleCase(this.jenis)}`,
+                acl: this.$allow(`akun-${this.akses}.download-aktivasi`),
+              },
+            ]
+          : [
+              {
+                key: 'download-aktivasi',
+                label: `Daftar Aktivasi ${this.$titleCase(this.title)}`,
+                acl: this.$allow(`akun-${this.akses}.download-aktivasi`),
+              },
+            ];
 
       let url = {};
       this.$confirm('Pilih jenis Berkas yang ingin di Unduh?', 'Unduh Berkas', {
@@ -369,6 +379,140 @@ export default {
     unduhTemplate() {
       this.templateUpload({ tipe: this.akses }).then((url) => {
         this.$downloadFile(url);
+      });
+    },
+
+    setAkunInti(item) {
+      const id = item.akun_id;
+      const params = {
+        akun_ids: [id],
+      };
+
+      this.$confirm(
+        `Anda yakin ingin menjadikan ${this.title} Inti atas nama <strong>${item.akun?.data?.nama ?? ''}</strong> ?`,
+        `Set ${this.title} Inti`,
+        {
+          tipe: 'warning',
+        }
+      ).then(() => {
+        this.setStatus({
+          name: this.attr.tipe,
+          type: this.akses === 'pengajar' ? 'set-status' : 'set-inti',
+          params,
+        }).then(() => {
+          this.$success(`Set ${this.title} Inti berhasil`);
+          this.fetchData();
+        });
+      });
+    },
+
+    setMultiInti(tipe) {
+      this.$set(this.selector, 'tipe', tipe || 'inti');
+      this.$set(this.selector, 'title', `Set Peran ${this.title}`);
+      this.$set(this.selector, 'valueId', 'akun_id');
+      this.$set(this.selector, 'attr', this.attr);
+      this.$set(this.selector, 'fetch', this.fetch);
+      this.$set(
+        this.selector,
+        'filters',
+        tipe !== 'inti'
+          ? {
+              is_aktif: 1,
+              is_bimtek: 0,
+            }
+          : {
+              is_aktif: 1,
+              is_inti: 0,
+            }
+      );
+      this.$nextTick(() => {
+        this.$refs.selector.open();
+      });
+    },
+
+    onSaveInti(akunIds) {
+      let params = {
+        akun_ids: akunIds,
+      };
+
+      if (this.akses === 'pengajar' && this.selector.tipe === 'inti') {
+        Object.assign(params, {
+          is_inti: 1,
+        });
+      }
+      if (this.akses === 'pengajar' && this.selector.tipe !== 'inti') {
+        Object.assign(params, {
+          is_bimtek: 1,
+        });
+      }
+
+      if (akunIds && !akunIds.length) {
+        this.$error(`Silakan pilih ${this.title} pada daftar yang tersedia!`);
+        return;
+      }
+
+      this.$confirm(`Anda yakin ingin set ${this.title} terpilih?`, `Set ${this.title}`, {
+        tipe: 'warning',
+        lblConfirmButton: this.akses !== 'pengajar' ? 'Simpan' : 'Set',
+      }).then(() => {
+        this.setStatus({
+          name: this.attr.tipe,
+          type: this.akses === 'pengajar' ? 'set-status' : 'set-inti',
+          params,
+        }).then(() => {
+          this.$refs.selector.close();
+          this.$success(`Set ${this.selector.tipe === 'inti' ? 'Inti' : 'Lulus Bimtek'} ${this.title} berhasil`);
+          this.fetchData();
+        });
+      });
+    },
+
+    onResetInti(item) {
+      const id = item.paud_admin_id;
+      const params = {
+        is_inti: true,
+      };
+      this.$confirm(
+        `Anda yakin ingin membatalkan ${this.title} Inti atas nama <strong>${item.akun?.data?.nama ?? ''}</strong> ?`,
+        `Reset ${this.title} Inti`,
+        {
+          tipe: 'error',
+        }
+      ).then(() => {
+        this.action(
+          Object.assign(
+            {
+              id,
+              type: this.akses === 'pengajar' ? 'reset-status' : 'reset-inti',
+              name: this.attr.tipe,
+            },
+            this.akses === 'pengajar' ? { params } : {}
+          )
+        ).then(() => {
+          this.$success(`Batal Set Inti ${this.title} berhasil`);
+          this.fetchData();
+        });
+      });
+    },
+
+    onResetBimtek(item) {
+      const id = item.paud_admin_id;
+      const params = {
+        is_bimtek: true,
+      };
+      this.$confirm(
+        `Anda yakin ingin membatalkan Lulus Bimtek ${this.title} atas nama <strong>${
+          item.akun?.data?.nama ?? ''
+        }</strong> ?`,
+        `Batal Lulus Bimtek ${this.title} `,
+        {
+          tipe: 'error',
+        }
+      ).then(() => {
+        this.action({ id, type: 'reset-status', name: this.attr.tipe, params }).then(() => {
+          this.$success(`Batal Lulus Bimtek ${this.title} berhasil`);
+          this.fetchData();
+        });
       });
     },
   },

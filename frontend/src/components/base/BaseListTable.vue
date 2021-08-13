@@ -10,6 +10,7 @@
     :hide-default-header="hideHeader"
     :headers="headers"
     :footer-props="{ itemsPerPageOptions: [limit] }"
+    :show-select="showSelect"
   >
     <template v-slot:header="{ props: { headers } }">
       <thead>
@@ -52,6 +53,10 @@ export default {
       default: true,
     },
     hideHeader: {
+      type: Boolean,
+      default: false,
+    },
+    showSelect: {
       type: Boolean,
       default: false,
     },

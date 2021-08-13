@@ -2,7 +2,7 @@
   <v-card flat width="100%">
     <v-card-text :class="!searchInput ? 'py-1' : ''">
       <v-row no-gutters>
-        <v-col cols="12" md="4" class="my-auto">
+        <v-col cols="12" md="3" class="my-auto">
           <v-row no-gutters>
             <v-col>
               <v-list-item class="pa-0">
@@ -36,7 +36,7 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="9">
           <div class="hidden-md-and-up">
             <v-text-field
               v-if="searchInput"
@@ -70,7 +70,6 @@
                 @click:append="search"
               >
               </v-text-field>
-              <slot name="toolbar" style="width: 89%" />
               <div style="min-width: 8%">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -167,6 +166,7 @@
                   <span>Tambah</span>
                 </v-tooltip>
               </div>
+              <slot name="toolbar" style="width: 89%" />
             </v-toolbar>
           </div>
         </v-col>

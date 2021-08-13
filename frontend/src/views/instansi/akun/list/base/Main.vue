@@ -5,13 +5,37 @@
         <base-table-header
           @search="onSearch"
           :btnFilter="true"
-          :btnAdd="$allow(`akun-${this.akses}.create`)"
-          :btnDownload="$allow(`akun-${this.akses}.download`)"
+          :btnAdd="$allow(`akun-${akses}.create`)"
+          :btnDownload="
+            akses === 'kelas' ? $allow(`akun-${akses}.download`) : $allow(`akun-${akses}.download-aktivasi`)
+          "
           @add="onAdd"
           @reload="onReload"
           @filter="onFilter"
           @download="onDownload"
         >
+          <template v-slot:toolbar>
+            <template v-if="akses === 'pembimbing-praktik'">
+              <v-btn small color="info" class="ml-2 py-5" @click="setMultiInti('inti')"> Set Pembimbing Praktik </v-btn>
+            </template>
+            <template v-if="akses === 'pengajar'">
+              <v-menu :close-on-content-click="false" :nudge-width="200" offset-x offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn v-bind="attrs" v-on="on" small color="info" class="ml-2 py-5"> Set Pengajar </v-btn>
+                </template>
+                <v-card>
+                  <v-list>
+                    <v-list-item @click="setMultiInti('inti')">
+                      <v-list-item-title>Pengajar Inti </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="setMultiInti('bimtek')">
+                      <v-list-item-title>Lulus Bimtek</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-menu>
+            </template>
+          </template>
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text">
               <b>{{ total }} </b> {{ title }}
@@ -43,7 +67,11 @@
                 <v-list-item dense class="px-0">
                   <v-list-item-content>
                     <v-row>
-                      <v-col class="py-0" cols="12" md="4">
+                      <v-col
+                        class="py-0"
+                        cols="12"
+                        :md="['pembimbing-praktik'].includes(akses) ? 3 : ['pengajar'].includes(akses) ? 4 : 4"
+                      >
                         <v-list-item class="px-0" @click="onDetail(item)">
                           <v-list-item-avatar color="primary">
                             <v-icon dark>mdi-account-circle</v-icon>
@@ -55,10 +83,16 @@
                             <p class="caption black--text">
                               <span>Email: {{ $getDeepObj(item, 'akun.data.email') || '-' }}</span>
                             </p>
+                            <p
+                              class="caption purple--text"
+                              v-if="akses === 'pengajar' && Number(item.is_refreshment) === 1"
+                            >
+                              <v-icon small color="purple">mdi-check-circle</v-icon> Lulus Bimtek
+                            </p>
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col class="py-0" cols="12" md="3">
+                      <v-col class="py-0" cols="12" :md="['pembimbing-praktik', 'pengajar'].includes(akses) ? 3 : 4">
                         <v-list-item class="px-0">
                           <v-list-item-content class="py-0 mt-3">
                             <span class="caption">Grup</span>
@@ -74,7 +108,7 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col class="py-0" cols="12" md="3">
+                      <v-col class="py-0" cols="12" :md="['pembimbing-praktik', 'pengajar'].includes(akses) ? 2 : 2">
                         <v-list-item class="px-0">
                           <v-list-item-content class="py-0 mt-3">
                             <span class="caption">No HP/WA</span>
@@ -84,7 +118,11 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col class="py-0" cols="12" md="2">
+                      <v-col
+                        class="py-0"
+                        cols="12"
+                        :md="['pembimbing-praktik'].includes(akses) ? 2 : ['pengajar'].includes(akses) ? 2 : 2"
+                      >
                         <v-list-item class="px-0">
                           <v-list-item-content>
                             <span class="caption">Status</span>
@@ -100,6 +138,23 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
+                      <template
+                        v-if="
+                          ['pembimbing-praktik', 'pengajar'].includes(akses) &&
+                          Number($getDeepObj(item, 'is_inti') || 0) === 1
+                        "
+                      >
+                        <v-col class="py-0" cols="12" md="2">
+                          <v-list-item class="px-0">
+                            <v-list-item-content>
+                              <span class="caption">Peran</span>
+                              <div>
+                                <v-chip small dark color="pink"> {{ title }} Inti </v-chip>
+                              </div>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-col>
+                      </template>
                     </v-row>
                   </v-list-item-content>
                   <v-list-item-action-text>
@@ -160,6 +215,60 @@
       @save="setFile"
       @unduhTemplate="unduhTemplate"
     ></popup-upload>
+    <popup-selector
+      v-if="selector && selector.fetch"
+      ref="selector"
+      :title="selector && selector.title"
+      :valueId="selector && selector.valueId"
+      :fetch="selector && selector.fetch"
+      :filterSelect="selector && selector.filters"
+      :attr="selector && selector.attr"
+      @save="onSaveInti"
+    >
+      <template slot-scope="{ item }">
+        <v-list-item dense class="px-0">
+          <v-list-item-content>
+            <v-row>
+              <v-col class="py-0" cols="12" md="5">
+                <v-list-item class="px-0" @click="onDetail(item)">
+                  <v-list-item-avatar color="primary">
+                    <v-icon dark>mdi-account-circle</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content class="py-0 mt-3">
+                    <div class="body-1 black--text">
+                      <strong>{{ $getDeepObj(item, 'akun.data.nama') || '-' }}</strong>
+                    </div>
+                    <p class="caption black--text">
+                      <span>Email: {{ $getDeepObj(item, 'akun.data.email') || '-' }}</span>
+                    </p>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-col>
+              <v-col class="py-0" cols="12" md="3">
+                <v-list-item class="px-0">
+                  <v-list-item-content class="py-0 mt-3">
+                    <span class="caption">Grup</span>
+                    <p>
+                      <span>{{ $getDeepObj(item, 'm_group.data.keterangan') || '-' }}</span>
+                    </p>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-col>
+              <v-col class="py-0" cols="12" md="4">
+                <v-list-item class="px-0">
+                  <v-list-item-content class="py-0 mt-3">
+                    <span class="caption">Instansi</span>
+                    <p>
+                      <span>{{ $getDeepObj(item, 'instansi.data.nama') || '-' }}</span>
+                    </p>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-col>
+            </v-row>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+    </popup-selector>
   </div>
 </template>
 <script>
@@ -171,6 +280,7 @@ import PopupUpload from '@components/popup/Upload';
 import mixin from './mixin';
 import list from '@mixins/list';
 import { M_AKTIF } from '@utils/master';
+import PopupSelector from '@components/popup/Selector';
 export default {
   name: 'ListAdmin',
   props: {
@@ -196,17 +306,20 @@ export default {
     },
     paramsTipe: {
       type: Object,
-      required: () => {},
+      default: () => {},
     },
   },
   mixins: [list, mixin],
-  components: { DetailView, FormAkun, Akun, PopupUpload },
+  components: { PopupSelector, DetailView, FormAkun, Akun, PopupUpload },
   data() {
     return {
       formulir: {},
+      selector: {},
+      selected: [],
       akun: {},
       groups: {},
       instansis: {},
+      menu: false,
     };
   },
   mounted() {
@@ -277,6 +390,15 @@ export default {
           break;
         case 'onNonAktif':
           disabled = Number(this.$getDeepObj(data, 'is_aktif') || 0);
+          break;
+        case 'setAkunInti':
+          disabled = !Number(this.$getDeepObj(data, 'is_inti') || 0);
+          break;
+        case 'onResetInti':
+          disabled = Number(this.$getDeepObj(data, 'is_inti') || 0);
+          break;
+        case 'onResetBimtek':
+          disabled = Number(this.$getDeepObj(data, 'is_refreshment') || 0);
           break;
         default:
           disabled = this.$allow(action.akses, data.policies || false);
