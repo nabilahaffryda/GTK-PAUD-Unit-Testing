@@ -57,7 +57,7 @@ export const actions = {
     $ajax = kitsu({
       baseURL:
         process.env.VUE_APP_API_URL +
-        `/i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}/kandidat`,
+        `/i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}`,
     });
     return await $ajax.get(`/`, { params: payload.params });
   },
