@@ -171,6 +171,8 @@ class KelasService
             ->where('paud_petugas_kelas.k_petugas_paud', '=', $params['k_petugas_paud'])
             ->count();
 
+        $jmlPetugas += count($params['akun_id']);
+
         $batasan = [
             MPetugasPaud::PENGAJAR           => 9,
             MPetugasPaud::PENGAJAR_TAMBAHAN  => 4,
@@ -178,7 +180,7 @@ class KelasService
             MPetugasPaud::ADMIN_KELAS        => 1,
         ];
 
-        if (isset($batasan[$params['k_petugas_paud']]) && $jmlPetugas >= $batasan[$params['k_petugas_paud']]) {
+        if (isset($batasan[$params['k_petugas_paud']]) && $jmlPetugas > $batasan[$params['k_petugas_paud']]) {
             throw new FlowException("Jumlah petugas maksimal adalah {$batasan[$params['k_petugas_paud']]} orang");
         }
 
@@ -244,16 +246,23 @@ class KelasService
             ->keyBy('k_petugas_paud');
 
         $batasan = [
-            MPetugasPaud::PENGAJAR           => 3,
-            MPetugasPaud::PENGAJAR_TAMBAHAN  => 2,
-            MPetugasPaud::PEMBIMBING_PRAKTIK => 2,
-            MPetugasPaud::ADMIN_KELAS        => 1,
+            MPetugasPaud::PENGAJAR           => [3, 9],
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => [2, 4],
+            MPetugasPaud::PEMBIMBING_PRAKTIK => [2, 4],
+            MPetugasPaud::ADMIN_KELAS        => [1, 1],
         ];
 
-        foreach ($batasan as $kPetugasPaud => $jmlMin) {
+        foreach ($batasan as $kPetugasPaud => $jml) {
+            list($jmlMin, $jmlMax) = $jml;
+
             if ($jmlPetugases->get($kPetugasPaud, 0) < $jmlMin) {
                 $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
                 throw new FlowException("Petugas {$mPetugasPaud->keterangan} minimal {$jmlMin} orang");
+            }
+
+            if ($jmlPetugases->get($kPetugasPaud, 0) > $jmlMax) {
+                $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
+                throw new FlowException("Petugas {$mPetugasPaud->keterangan} maksimal {$jmlMin} orang");
             }
         }
 
