@@ -22,7 +22,15 @@
         <v-col class="grow black--text">
           <div class="font-weight-bold">KONFIRMASI KESEDIAAN</div>
           <span>
-            Anda telah ditambahkan di kelas sebagai (<b>Pengajar, Pengajar Tambahan, Pembimbing Praktik</b>)<br />
+            Anda telah ditambahkan di kelas sebagai
+            <template v-if="filteredGroup.length">
+              <b v-for="(group, g) in filteredGroup" :key="group.value">
+                {{ group.text }}
+                <span v-if="g + 1 !== filteredGroup.length">, </span>
+              </b>
+            </template>
+            <template v-else> (<b>Pengajar, Pengajar Tambahan atau Pembimbing Praktik</b>) </template>
+            <br />
             Silakan untuk melakukan konfirmasi ketersediaan
           </span>
         </v-col>
@@ -81,10 +89,15 @@ export default {
   computed: {
     ...mapState('preferensi', {
       is_kesediaan: (state) => state?.data.konfirmasi_kesediaan ?? false,
+      groups: (state) => state?.data?.groups ?? {},
     }),
 
     menus() {
       return this.$store.state.menus || [];
+    },
+
+    filteredGroup() {
+      return this.$mapForMaster(this.groups).filter((s) => [175, 176, 174].includes(s.value)) || [];
     },
   },
   methods: {
