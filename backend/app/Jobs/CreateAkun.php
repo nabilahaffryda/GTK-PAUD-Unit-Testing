@@ -74,6 +74,12 @@ class CreateAkun implements ShouldQueue
                     'k_petugas_paud' => MPetugasPaud::PEMBIMBING_PRAKTIK,
                 ]);
                 break;
+
+            case MGroup::ADM_KELAS_DIKLAT_PAUD:
+                app(PetugasService::class)->create($paudAdmin, [
+                    'k_petugas_paud' => MPetugasPaud::ADMIN_KELAS,
+                ]);
+                break;
         }
     }
 }
