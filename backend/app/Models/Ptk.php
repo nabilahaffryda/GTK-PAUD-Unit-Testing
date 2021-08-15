@@ -242,7 +242,6 @@ class Ptk extends Authenticatable
         'dapodik_nama',
         'kebutuhan_khusus_id',
         'wkt_sinkron',
-        'is_aktif',
         'akun_id',
     ];
 
