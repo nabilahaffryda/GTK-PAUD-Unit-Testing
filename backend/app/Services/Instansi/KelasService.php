@@ -179,6 +179,11 @@ class KelasService
             })
             ->get();
 
+        if ($diff = array_diff($params['ptk_id'], $ptks->pluck('ptk_id')->all())) {
+            $ptkIds = implode(', ', $diff);
+
+            throw new FlowException("Peserta dengan PTK_ID {$ptkIds} tidak ditemukan");
+        }
 
         /** @var Ptk $ptk */
         foreach ($ptks as $ptk) {
