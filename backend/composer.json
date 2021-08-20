@@ -18,6 +18,7 @@
         "itsgoingd/clockwork": "^5.0",
         "laravel/framework": "^8.37",
         "laravel/tinker": "^2.6",
+        "nuwave/lighthouse": "^5.19",
         "pda/pheanstalk": "^4.0",
         "sentry/sentry-laravel": "^2.4",
         "subfission/cas": "^4.0",
@@ -29,6 +30,7 @@
         "facade/ignition": "^2.8",
         "fakerphp/faker": "^1.14",
         "hurie/laravel-generator": "^1.0",
+        "mll-lab/laravel-graphql-playground": "^2.5",
         "mockery/mockery": "^1.4",
         "nunomaduro/collision": "^5.4",
         "phpunit/phpunit": "^9.5"
@@ -64,7 +66,8 @@
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "@php artisan ide-helper:generate",
-            "@php artisan ide-helper:meta"
+            "@php artisan ide-helper:meta",
+            "@php artisan lighthouse:ide-helper"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

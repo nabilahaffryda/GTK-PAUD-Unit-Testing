@@ -15562,6 +15562,17 @@
      
 }
 
+    namespace Nuwave\Lighthouse { 
+            /**
+     * The main entrypoint to start and end GraphQL execution.
+     *
+     */ 
+        class GraphQL {
+         
+    }
+     
+}
+
     namespace Sentry\Laravel { 
             /**
      * 
@@ -19215,6 +19226,7 @@ namespace  {
             class JsonApi extends \CloudCreativity\LaravelJsonApi\Facades\JsonApi {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
             class Clockwork extends \Clockwork\Support\Laravel\Facade {}
+            class graphql extends \Nuwave\Lighthouse\GraphQL {}
             class Sentry extends \Sentry\Laravel\Facade {}
             class Cas extends \Subfission\Cas\Facades\Cas {}
      
