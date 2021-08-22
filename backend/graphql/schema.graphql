@@ -18,5 +18,6 @@ extend type Query @guard(with: ["ptk"]) {
     instansisAkun(keyword: String): [Instansi!]! @paginate(builder: "\\App\\GraphQL\\Queries\\InstansisAkun")
 }
 
+#import master.graphql
 #import preferensi.graphql
 #import model/*.graphql
