@@ -388,18 +388,14 @@ class AkunService
      */
     public function validateInstansi(int $instansiId): Instansi
     {
-        /** @var AkunInstansi $akunInstansi */
-        $akunInstansi = akun()
-            ?->akunInstansis()
-            ->where('is_aktif', 1)
-            ->where('instansi_id', $instansiId)
-            ->first();
+        $instansi = Instansi::find($instansiId);
 
+        $akunInstansi = $this->akunInstansis($instansi)->first();
         if (!$akunInstansi) {
             throw new AuthorizationException("Instansi {$instansiId} tidak dikenali");
         }
 
-        app()->instance('INSTANSI', $akunInstansi->instansi);
-        return $akunInstansi->instansi;
+        app()->instance('INSTANSI', $instansi);
+        return $instansi;
     }
 }
