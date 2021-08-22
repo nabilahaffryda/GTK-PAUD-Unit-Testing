@@ -12,6 +12,7 @@ use App\Models\Ptk;
 use App\Remotes\Paspor\User;
 use Arr;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent;
 use Illuminate\Database\Query;
 use Illuminate\Support;
@@ -375,5 +376,37 @@ class AkunService
 
         $path = sprintf("%s/%s", $ftpPath, $filename);
         return Storage::disk('akun-foto')->delete($path);
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function validateInstansi(int $instansiId): Instansi
+    {
+        /** @var AkunInstansi $akunInstansi */
+        $akunInstansi = akun()
+            ?->akunInstansis()
+            ->where('is_aktif', 1)
+            ->where('instansi_id', $instansiId)
+            ->first();
+
+        if (!$akunInstansi) {
+            throw new AuthorizationException("Instansi {$instansiId} tidak dikenali");
+        }
+
+        app()->instance('INSTANSI', $akunInstansi->instansi);
+        return $akunInstansi->instansi;
+    }
+
+    /**
+     * @throws \Nuwave\Lighthouse\Exceptions\AuthorizationException
+     */
+    public function validateInstansiGraphQL(int $instansiId): Instansi
+    {
+        try {
+            return $this->validateInstansi($instansiId);
+        } catch (AuthorizationException $e) {
+            throw new \Nuwave\Lighthouse\Exceptions\AuthorizationException($e->getMessage());
+        }
     }
 }

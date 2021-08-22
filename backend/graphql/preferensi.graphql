@@ -1,0 +1,15 @@
+extend type Query {
+    preferensi(instansi_id: Int): Preferensi
+}
+
+type Preferensi {
+    groups: [MGroup!]!
+    akseses: [PaudAkses!]!
+
+    aktivasi: Boolean
+    konfig: PreferensiKonfig
+}
+
+type PreferensiKonfig {
+    simpkb: String
+}
