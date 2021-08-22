@@ -143,12 +143,17 @@ class AkunService
      */
     public function akunInstansis(Instansi $instansi)
     {
-        return akun()
-            ->akunInstansis()
-            ->whereIn('k_group', $this->kGroups())
-            ->where('is_aktif', '1')
-            ->whereInstansiId($instansi->instansi_id)
-            ->get();
+        static $akunInstansis = [];
+        if (!isset($akunInstansis[$instansi->instansi_id])) {
+            $akunInstansis[$instansi->instansi_id] = akun()
+                ->akunInstansis()
+                ->where('is_aktif', '1')
+                ->whereIn('k_group', $this->kGroups())
+                ->whereInstansiId($instansi->instansi_id)
+                ->get();
+        }
+
+        return $akunInstansis[$instansi->instansi_id];
     }
 
     /**
