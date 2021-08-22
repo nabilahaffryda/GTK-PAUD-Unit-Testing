@@ -31,7 +31,7 @@ class Preferensi
      */
     public function __invoke($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
     {
-        $this->instansi = $this->akunService->validateInstansiGraphQL($args['instansi_id']);
+        $this->instansi = instansi();
 
         return [
             'groups'   => function () {
