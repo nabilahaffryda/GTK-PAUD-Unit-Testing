@@ -1,0 +1,44 @@
+type Akun {
+    akun_id: String!
+    nip: String
+    nama: String!
+    passwd: String
+    tmp_lahir: String
+    tgl_lahir: Date
+    no_telpon: String
+    no_hp: String
+    email: String!
+    kelamin: String
+    foto: String
+    k_golongan: Int
+    moodle_id: Int
+    paspor_id: Int
+    token: String
+    jabatan: String
+    instansi_asal: String
+    instansi_k_propinsi: Int
+    instansi_k_kota: Int
+    instansi_k_kecamatan: Int
+    instansi_alamat: String
+    instansi_kodepos: String
+    alamat: String
+    k_propinsi: Int
+    k_kota: Int
+    kodepos: String
+    nik: String
+    npwp: String
+    rekening_nama: String
+    rekening_bank: String
+    rekening_cabang: String
+    rekening_nomor: String
+    k_jabatan_guru: Int
+    k_jabatan_dosen_ppg: Int
+    gelar_depan: String
+    gelar_belakang: String
+    is_aktif: String!
+    k_status_email: Int!
+    admin_id: String
+
+    m_propinsi: MPropinsi @belongsTo(relation: "mPropinsi")
+    m_kota: MKota @belongsTo(relation: "mKota")
+}

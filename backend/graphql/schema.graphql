@@ -4,15 +4,14 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
-type Query {
-    users: [User!]! @paginate(defaultCount: 10)
-    user(id: ID @eq): User @find
+union User = Akun | Ptk
+
+type Query @guard(with: ["akun", "ptk"]) {
+    me: User @auth
+    akun: Akun @auth(guard: "akun")
+    ptk: Ptk @auth(guard: "ptk")
+
+    instansi(instansi_id: Int! @eq): Instansi @first
 }
 
-type User {
-    id: ID!
-    name: String!
-    email: String!
-    created_at: DateTime!
-    updated_at: DateTime!
-}
+#import model/*.graphql

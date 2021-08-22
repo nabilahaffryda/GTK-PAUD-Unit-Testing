@@ -1,0 +1,9 @@
+type MPropinsi {
+    k_propinsi: Int!
+    singkat: String
+    keterangan: String
+    kode_ukg: String
+    timezone: Int
+
+    m_kotas: [MKota!] @hasMany(relation: "mKotas", type: SIMPLE)
+}

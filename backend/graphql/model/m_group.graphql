@@ -1,0 +1,6 @@
+type MGroup {
+    k_group: Int!
+    singkat: String
+    keterangan: String
+    k_jenis_instansi: Int
+}

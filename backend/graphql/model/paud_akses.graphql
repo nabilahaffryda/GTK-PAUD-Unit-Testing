@@ -1,0 +1,7 @@
+type PaudAkses {
+    paud_akses_id: Int!
+    akses: String!
+    label: String
+    guard: String
+    is_aktif: Int
+}
