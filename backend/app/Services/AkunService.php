@@ -402,16 +402,4 @@ class AkunService
         app()->instance('INSTANSI', $akunInstansi->instansi);
         return $akunInstansi->instansi;
     }
-
-    /**
-     * @throws \Nuwave\Lighthouse\Exceptions\AuthorizationException
-     */
-    public function validateInstansiGraphQL(int $instansiId): Instansi
-    {
-        try {
-            return $this->validateInstansi($instansiId);
-        } catch (AuthorizationException $e) {
-            throw new \Nuwave\Lighthouse\Exceptions\AuthorizationException($e->getMessage());
-        }
-    }
 }
