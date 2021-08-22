@@ -200,11 +200,11 @@ class AksesService
     public function getAkses(Collection $groups)
     {
         return PaudAkses::query()
-            ->join('paud_group_akses', 'paud_akses.paud_akses_id', '=', 'paud_group_akses.paud_akses_id')
-            ->whereIn('paud_group_akses.k_group', $groups->keys())
-            ->select('paud_akses.*')
-            ->where('paud_akses.is_aktif', 1)
-            ->where('paud_group_akses.is_aktif', 1)
+            ->join('paud_group_akses2', 'paud_akses2.paud_akses_id', '=', 'paud_group_akses2.paud_akses_id')
+            ->whereIn('paud_group_akses2.k_group', $groups->keys())
+            ->select('paud_akses2.*')
+            ->where('paud_akses2.is_aktif', 1)
+            ->where('paud_group_akses2.is_aktif', 1)
             ->distinct()
             ->get();
     }
@@ -212,12 +212,12 @@ class AksesService
     public function isAkses(Collection $groups, $PaudAksesId)
     {
         $count = PaudAkses::query()
-            ->join('paud_group_akses', 'paud_akses.paud_akses_id', '=', 'paud_group_akses.paud_akses_id')
-            ->where('paud_group_akses.paud_akses_id', $PaudAksesId)
-            ->whereIn('paud_group_akses.k_group', $groups->keys())
-            ->select('paud_akses.*')
-            ->where('paud_akses.is_aktif', 1)
-            ->where('paud_group_akses.is_aktif', 1)
+            ->join('paud_group_akses2', 'paud_akses2.paud_akses_id', '=', 'paud_group_akses2.paud_akses_id')
+            ->where('paud_group_akses2.paud_akses_id', $PaudAksesId)
+            ->whereIn('paud_group_akses2.k_group', $groups->keys())
+            ->select('paud_akses2.*')
+            ->where('paud_akses2.is_aktif', 1)
+            ->where('paud_group_akses2.is_aktif', 1)
             ->count();
 
         return $count ? true : false;
