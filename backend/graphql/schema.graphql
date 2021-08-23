@@ -14,7 +14,7 @@ type Query @guard {
     instansi(instansi_id: Int! @eq): Instansi @first
 }
 
-extend type Query @guard(with: ["ptk"]) {
+extend type Query @guard(with: ["akun"]) {
     instansisAkun(keyword: String): [Instansi!]! @paginate(builder: "\\App\\GraphQL\\Queries\\InstansisAkun")
 }
 
