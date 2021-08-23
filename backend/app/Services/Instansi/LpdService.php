@@ -119,10 +119,15 @@ class LpdService
      */
     public function update(PaudInstansi $paudInstansi, array $data)
     {
+        $paudInstansi->ratio_pengajar_tambahan = $data['ratio_pengajar_tambahan'] ?? $paudInstansi->ratio_pengajar_tambahan;
+        $paudInstansi->jml_pembimbing          = $data['jml_pembimbing'] ?? $paudInstansi->jml_pembimbing;
+
+
         $instansi = $paudInstansi->instansi;
 
         $instansi->nama = $data['nama'] ?? $instansi->nama;
 
+        $paudInstansi->save();
         $instansi->save();
 
         return $paudInstansi;
