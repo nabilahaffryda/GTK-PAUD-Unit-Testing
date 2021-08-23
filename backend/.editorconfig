@@ -35,3 +35,4 @@ ij_php_lower_case_null_const = true
 ij_php_new_line_after_php_opening_tag = true
 ij_php_variable_naming_style = camel_case
 ij_php_while_brace_force = always
+ij_php_align_phpdoc_param_names = false

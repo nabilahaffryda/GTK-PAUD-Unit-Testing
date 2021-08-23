@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class MUnsurPengajarPaud extends Eloquent
 {
-    public const UNSUR_GURU = 1;
+    public const UNSUR_GURU  = 1;
     public const UNSUR_DOSEN = 2;
     /**
      * The table associated with the model.
