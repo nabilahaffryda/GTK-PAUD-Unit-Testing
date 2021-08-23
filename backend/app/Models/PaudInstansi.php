@@ -12,32 +12,35 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\PaudInstansi
  *
- * @property int                                  $paud_instansi_id
- * @property int                                  $instansi_id
- * @property null|int                             $tahun
- * @property null|int                             $angkatan
- * @property int                                  $k_verval_paud
- * @property null|Carbon                          $wkt_ajuan
- * @property null|Carbon                          $wkt_verval
- * @property null|string                          $kodepos
- * @property null|string                          $nama_penanggung_jawab
- * @property null|string                          $telp_penanggung_jawab
- * @property null|string                          $nama_sekretaris
- * @property null|string                          $telp_sekretaris
- * @property null|string                          $nama_bendahara
- * @property null|string                          $telp_bendahara
- * @property null|array                           $diklat
- * @property null|string                          $akun_id_verval
- * @property null|string                          $alasan
- * @property null|string                          $catatan
- * @property string                               $is_aktif
- * @property null|Carbon                          $created_at
- * @property null|Carbon                          $updated_at
- * @property null|string                          $akun_id
+ * @property int $paud_instansi_id
+ * @property int $instansi_id
+ * @property null|int $tahun
+ * @property null|int $angkatan
+ * @property int $k_verval_paud
+ * @property null|Carbon $wkt_ajuan
+ * @property null|Carbon $wkt_verval
+ * @property null|string $kodepos
+ * @property null|string $nama_penanggung_jawab
+ * @property null|string $telp_penanggung_jawab
+ * @property null|string $nama_sekretaris
+ * @property null|string $telp_sekretaris
+ * @property null|string $nama_bendahara
+ * @property null|string $telp_bendahara
+ * @property null|array $diklat
+ * @property null|string $akun_id_verval
+ * @property null|int $ratio_pengajar_tambahan
+ * @property null|int $jml_pembimbing
+ * @property null|string $alasan
+ * @property null|string $catatan
+ * @property null|string $data
+ * @property string $is_aktif
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|string $akun_id
  *
- * @property-read Instansi                        $instansi
- * @property-read MVervalPaud                     $mVervalPaud
- * @property-read Akun                            $akunVerval
+ * @property-read Instansi $instansi
+ * @property-read MVervalPaud $mVervalPaud
+ * @property-read Akun $akunVerval
  * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
  *
@@ -57,8 +60,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudInstansi whereTelpBendahara($value)
  * @method static Builder|PaudInstansi whereDiklat($value)
  * @method static Builder|PaudInstansi whereAkunIdVerval($value)
+ * @method static Builder|PaudInstansi whereRatioPengajarTambahan($value)
+ * @method static Builder|PaudInstansi whereJmlPembimbing($value)
  * @method static Builder|PaudInstansi whereAlasan($value)
  * @method static Builder|PaudInstansi whereCatatan($value)
+ * @method static Builder|PaudInstansi whereData($value)
  * @method static Builder|PaudInstansi whereCreatedAt($value)
  * @method static Builder|PaudInstansi whereUpdatedAt($value)
  * @method static Builder|PaudInstansi whereAkunId($value)
@@ -85,27 +91,30 @@ class PaudInstansi extends Eloquent
      * @var array
      */
     protected $casts = [
-        'instansi_id'           => 'int',
-        'tahun'                 => 'int',
-        'angkatan'              => 'int',
-        'k_verval_paud'         => 'int',
-        'wkt_ajuan'             => 'datetime',
-        'wkt_verval'            => 'datetime',
-        'kodepos'               => 'string',
-        'nama_penanggung_jawab' => 'string',
-        'telp_penanggung_jawab' => 'string',
-        'nama_sekretaris'       => 'string',
-        'telp_sekretaris'       => 'string',
-        'nama_bendahara'        => 'string',
-        'telp_bendahara'        => 'string',
-        'diklat'                => 'array',
-        'akun_id_verval'        => 'string',
-        'alasan'                => 'string',
-        'catatan'               => 'string',
-        'is_aktif'              => 'integer',
-        'created_at'            => 'datetime',
-        'updated_at'            => 'datetime',
-        'akun_id'               => 'string',
+        'instansi_id'             => 'int',
+        'tahun'                   => 'int',
+        'angkatan'                => 'int',
+        'k_verval_paud'           => 'int',
+        'wkt_ajuan'               => 'datetime',
+        'wkt_verval'              => 'datetime',
+        'kodepos'                 => 'string',
+        'nama_penanggung_jawab'   => 'string',
+        'telp_penanggung_jawab'   => 'string',
+        'nama_sekretaris'         => 'string',
+        'telp_sekretaris'         => 'string',
+        'nama_bendahara'          => 'string',
+        'telp_bendahara'          => 'string',
+        'diklat'                  => 'array',
+        'akun_id_verval'          => 'string',
+        'ratio_pengajar_tambahan' => 'int',
+        'jml_pembimbing'          => 'int',
+        'alasan'                  => 'string',
+        'catatan'                 => 'string',
+        'data'                    => 'string',
+        'is_aktif'                => 'integer',
+        'created_at'              => 'datetime',
+        'updated_at'              => 'datetime',
+        'akun_id'                 => 'string',
     ];
 
     /**
@@ -130,8 +139,11 @@ class PaudInstansi extends Eloquent
         'telp_bendahara',
         'diklat',
         'akun_id_verval',
+        'ratio_pengajar_tambahan',
+        'jml_pembimbing',
         'alasan',
         'catatan',
+        'data',
         'is_aktif',
         'akun_id',
     ];
