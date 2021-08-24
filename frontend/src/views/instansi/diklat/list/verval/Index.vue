@@ -1,6 +1,19 @@
 <template>
   <div class="verval">
     <!--daftar-->
+    <v-card tile flat class="my-5">
+      <v-card-text class="pa-0">
+        <v-row no-gutters>
+          <v-col cols="2">
+            <div class="bg-kiri"></div>
+          </v-col>
+          <v-col cols="10" class="pa-5">
+            <h1 class="headline black--text--text"> Verval Kelas Diklat </h1>
+            <div>  </div>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
     <v-card flat>
       <v-card-text>
         <base-table-header
@@ -13,7 +26,7 @@
         >
           <template v-slot:subtitle>
             <div class="body-1 black--text">
-              <b>{{ total }}</b> Daftar Kandidat yang perlu di periksa
+              Daftar Ajuan Verval <b>{{ total }}</b>
             </div>
           </template>
         </base-table-header>
