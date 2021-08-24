@@ -211,7 +211,10 @@ class KelasService
         $this->validateKelas($paudDiklat, $kelas);
 
         $jmlPetugas = PaudKelasPetugas::query()
-            ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+            ->where([
+                'paud_kelas_petugas.paud_kelas_id'  => $kelas->paud_kelas_id,
+                'paud_kelas_petugas.k_petugas_paud' => $params['k_petugas_paud'],
+            ])
             ->count();
 
         $jmlPetugas += count($params['akun_id']);
