@@ -19,6 +19,22 @@
               <div class="body-1">{{ $getDeepObj(kelas, 'deskripsi') || '-' }}</div>
             </div>
             <v-row class="my-5">
+              <!--              <v-col>-->
+              <!--                <div class="label&#45;&#45;text">Lokasi</div>-->
+              <!--                <div class="body-1">-->
+              <!--                  {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) || '-' }}-->
+              <!--                </div>-->
+              <!--              </v-col>-->
+              <v-col>
+                <div class="label--text">Jumlah Pengajar</div>
+                <div class="body-1">
+                  <v-chip class="ma-2" color="green" text-color="white">
+                    {{ $getDeepObj(detail, 'jml_pengajar') || '-' }}
+                  </v-chip>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row class="my-5">
               <v-col>
                 <div class="label--text">Tanggal Mulai Kelas</div>
                 <div class="body-1">
