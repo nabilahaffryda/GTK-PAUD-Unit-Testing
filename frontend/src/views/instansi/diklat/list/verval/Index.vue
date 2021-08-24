@@ -9,7 +9,7 @@
           </v-col>
           <v-col cols="10" class="pa-5">
             <h1 class="headline black--text--text"> Verval Kelas Diklat </h1>
-            <div>  </div>
+            <div> </div>
           </v-col>
         </v-row>
       </v-card-text>
@@ -63,6 +63,9 @@
                             {{ $getDeepObj(item, `paud_mapel_kelas.data.nama`) || '-' }} -
                             {{ $getDeepObj(item, `nama`) || '-' }}
                           </span>
+                          <div class="font-italic">
+                            {{ $getDeepObj(item, `paud_diklat.data.instansi.data.nama`) || '-' }}
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>

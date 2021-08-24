@@ -23,6 +23,9 @@
                       {{ $getDeepObj(detail, 'paud_mapel_kelas.data.nama') || '-' }} -
                       {{ $getDeepObj(detail, 'nama') || '-' }}
                     </div>
+                    <div class="font-italic">
+                      {{ $getDeepObj(detail, `paud_diklat.data.instansi.data.nama`) || '-' }}
+                    </div>
                   </div>
                   <div class="my-5">
                     <div class="label--text">Deskripsi Kelas</div>
