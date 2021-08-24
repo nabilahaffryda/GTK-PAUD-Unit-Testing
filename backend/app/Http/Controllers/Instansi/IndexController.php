@@ -27,7 +27,9 @@ class IndexController extends Controller
         $aktivasi = $akunService->isAktivasi($akunInstansi);
 
         $konfirmasi = false;
-        if ($groups->intersect(array_flip([MGroup::PENGAJAR_DIKLAT_PAUD, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD]))) {
+
+        $subgroup = $groups->intersect(array_flip([MGroup::PENGAJAR_DIKLAT_PAUD, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD]));
+        if ($subgroup->isNotEmpty()) {
             $konfirmasi = app(PetugasKelasService::class)
                 ->listKonfirmasiKesediaan(akunId())
                 ->exists();
