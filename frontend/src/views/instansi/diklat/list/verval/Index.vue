@@ -9,7 +9,7 @@
           </v-col>
           <v-col cols="10" class="pa-5">
             <h1 class="headline black--text--text"> Verval Kelas Diklat </h1>
-            <div>  </div>
+            <div> </div>
           </v-col>
         </v-row>
       </v-card-text>

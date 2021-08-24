@@ -85,7 +85,28 @@
                 <v-icon left>mdi-plus</v-icon>Tambah
               </v-btn>
             </v-toolbar>
-
+            <v-alert dense text type="info" v-if="tab > 1">
+              <template v-if="tab === 2">
+                Penambahan <b>{{ tabItems[tab]['text'] }}</b> pada kelas sebanyak
+                {{ $getDeepObj(kelas, 'paud_diklat.data.paud_instansi.data.jml_pembimbing') || 0 }}
+              </template>
+              <template v-else>
+                Penambahan <b>{{ tabItems[tab]['text'] }}</b> pada kelas sebanyak
+                <b>
+                  {{
+                    tab === 3
+                      ? `${
+                          100 -
+                          Number($getDeepObj(kelas, 'paud_diklat.data.paud_instansi.data.ratio_pengajar_tambahan') || 0)
+                        }%`
+                      : `${Number(
+                          $getDeepObj(kelas, 'paud_diklat.data.paud_instansi.data.ratio_pengajar_tambahan') || 0
+                        )}%`
+                  }}
+                </b>
+                dari total Pengajar
+              </template>
+            </v-alert>
             <div class="my-4">
               <v-data-table
                 v-model="peserta"
