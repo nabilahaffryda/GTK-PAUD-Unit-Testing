@@ -2,9 +2,9 @@ FROM centos:7
 
 # setup repo, install nginx dan cleanup
 RUN yum install -y \
-        https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+        http://mirror.telkomuniversity.ac.id/epel/epel-release-latest-7.noarch.rpm \
     && yum install -y \
-        nginx \
+        nginx-1.20.1-2.el7 \
     && rm -rf \
         /var/cache/yum \
         /var/tmp/yum-*
@@ -14,7 +14,8 @@ ARG STAGE
 RUN \
     # setup nginx
     sed -ri \
-        -e '47a\\ \
+        -e '46a\\ \
+        location / {\n\
             try_files \$uri \$uri/ @rewrites;\n\
         }\n\
 \n\
@@ -22,7 +23,8 @@ RUN \
         gzip_proxied expired no-cache no-store private auth;\n\
 \n\
         location @rewrites {\n\
-            rewrite ^(.+)$ /index.html last;' \
+            rewrite ^(.+)$ /index.html last;\n\
+        }' \
         -e 's!^(\s*access_log\s+)\S+(\s*\S*);!\1/proc/self/fd/1\2;!g' \
         -e 's!^(\s*error_log\s+)\S+(\s*\S*);!\1/proc/self/fd/2\2;!g' \
         /etc/nginx/nginx.conf ; \
