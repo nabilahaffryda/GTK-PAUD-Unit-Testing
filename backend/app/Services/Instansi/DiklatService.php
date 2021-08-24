@@ -7,6 +7,7 @@ namespace App\Services\Instansi;
 use App\Exceptions\SaveException;
 use App\Models\Instansi;
 use App\Models\PaudDiklat;
+use App\Models\PaudInstansi;
 use Arr;
 
 class DiklatService
@@ -31,10 +32,17 @@ class DiklatService
 
     public function create(Instansi $instansi, array $params)
     {
-        $paudDiklat              = new PaudDiklat($params);
-        $paudDiklat->tahun       = config('paud.tahun');
-        $paudDiklat->angkatan    = config('paud.angkatan');
-        $paudDiklat->instansi_id = $instansi->instansi_id;
+        $paudInstansi = PaudInstansi::where([
+            'instansi_id' => $instansi->instansi_id,
+            'tahun'       => config('paud.tahun'),
+            'angkatan'    => config('paud.angkatan'),
+        ])->first();
+
+        $paudDiklat                   = new PaudDiklat($params);
+        $paudDiklat->tahun            = config('paud.tahun');
+        $paudDiklat->angkatan         = config('paud.angkatan');
+        $paudDiklat->instansi_id      = $instansi->instansi_id;
+        $paudDiklat->paud_instansi_id = $paudInstansi->paud_instansi_id;
 
         $paudDiklat->save();
 
@@ -47,7 +55,7 @@ class DiklatService
             'instansi',
             'mPropinsi',
             'mKota',
-            'paudPeriode'
+            'paudPeriode',
         ]);
 
         return $paudDiklat;
