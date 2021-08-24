@@ -181,6 +181,16 @@ export default [
         link: 'verval-pengajar',
         to: { name: 'verval-pengajar' },
       },
+      {
+        icon: 'mdi-account-check',
+        title: 'Verval Kelas Diklat',
+        desc: 'Evaluasi dan Verifikasi Kelas Diklat',
+        color: 'red',
+        deepColor: 'darken-1',
+        akses: 'kelas-verval.index',
+        link: 'verval-kelas',
+        to: { name: 'verval-kelas' },
+      },
     ],
   },
   {

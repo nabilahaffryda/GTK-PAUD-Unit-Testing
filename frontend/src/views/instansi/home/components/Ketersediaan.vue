@@ -6,6 +6,17 @@
         <div>Silakan lakukan konfirmasi ketersediaan Anda untuk mengisi kelas diklat</div>
 
         <div class="mt-5">
+          <v-row v-if="$vuetify.breakpoint.mdAndUp">
+            <v-col cols="12" md="4" sm="12">
+              <span class="font-weight-medium">Nama Kelas</span>
+            </v-col>
+            <v-col cols="12" md="3" sm="12">
+              <span class="font-weight-medium">Jadwal Pelaksanaan</span>
+            </v-col>
+            <v-col cols="12" md="3" sm="12">
+              <span class="font-weight-medium">Status</span>
+            </v-col>
+          </v-row>
           <v-row v-for="(item, i) in items" :key="i">
             <v-col class="py-0" cols="12" md="4">
               <v-list-item class="px-0">
@@ -19,17 +30,31 @@
             <v-col class="py-0" cols="12" md="3">
               <v-list-item class="px-0">
                 <v-list-item-content class="pa-0">
-                  {{ $localDate($getDeepObj(item, 'wkt_mulai')) || '-' }} s/d
-                  {{ $localDate($getDeepObj(item, 'wkt_selesai')) || '-' }}
+                  <div>
+                    {{
+                      $durasi(
+                        $getDeepObj(item, 'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
+                        $getDeepObj(item, 'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                      )
+                    }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
             </v-col>
             <v-col class="py-0" cols="12" md="3">
               <v-list-item class="px-0">
                 <v-list-item-content class="pa-0">
-                  <span :class="item.status === 1 ? 'success--text' : item.status === 0 ? 'red--text' : 'grey--text'">
+                  <span
+                    :class="
+                      +item.k_konfirmasi_paud === 3
+                        ? 'success--text'
+                        : +item.k_konfirmasi_paud === 4
+                        ? 'red--text'
+                        : 'grey--text'
+                    "
+                  >
                     <i>
-                      {{ item.status === 1 ? 'Bersedia' : item.status === 0 ? 'Tidak Bersedia' : 'Belum Konfirmasi' }}
+                      {{ $getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') }}
                     </i>
                   </span>
                 </v-list-item-content>
@@ -39,8 +64,16 @@
               <v-list-item class="pa-0">
                 <v-list-item-content>
                   <div>
-                    <v-btn color="orange" block depressed dark :outlined="item.status !== null" @click="onDetail(item)">
-                      {{ item.status === null ? 'Konfirmasi' : 'Detail' }}
+                    <v-btn
+                      color="orange"
+                      block
+                      depressed
+                      dark
+                      small
+                      :outlined="+item.k_konfirmasi_paud !== 2"
+                      @click="onDetail(item)"
+                    >
+                      {{ +item.k_konfirmasi_paud === 2 ? 'Konfirmasi' : 'Detail' }}
                     </v-btn>
                   </div>
                 </v-list-item-content>
@@ -65,10 +98,16 @@
           <v-card outlined flat>
             <v-card-title>
               <v-toolbar flat>
-                {{ $getDeepObj(diklat, 'nama') || '-' }}
+                {{ $getDeepObj(diklat, 'paud_kelas.data.nama') || '-' }}
               </v-toolbar>
               <v-spacer></v-spacer>
-              <v-chip>Belum Konfirmasi</v-chip>
+              <v-chip
+                :color="+diklat.k_konfirmasi_paud === 3 ? 'success' : +diklat.k_konfirmasi_paud === 4 ? 'red' : ''"
+                small
+                dark
+              >
+                {{ $getDeepObj(diklat, 'm_konfirmasi_paud.data.keterangan') }}
+              </v-chip>
             </v-card-title>
             <v-card-text>
               <v-row>
@@ -80,8 +119,12 @@
                     <v-list-item-content class="py-0 mt-3">
                       <div class="label--text">Jadwal Diklat</div>
                       <div class="body-1 black--text">
-                        {{ $localDate($getDeepObj(diklat, 'wkt_mulai')) || '-' }} s/d
-                        {{ $localDate($getDeepObj(diklat, 'wkt_selesai')) || '-' }}
+                        {{
+                          $durasi(
+                            $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
+                            $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                          )
+                        }}
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -94,7 +137,7 @@
                     <v-list-item-content class="py-0 mt-3">
                       <div class="label--text">Kota/Kab</div>
                       <div class="body-1 black--text">
-                        {{ $getDeepObj(diklat, 'm_kota.keterangan') || '-' }}
+                        {{ $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.m_kota.data.keterangan') || '-' }}
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -104,7 +147,7 @@
                     <v-list-item-content class="py-0 mt-3">
                       <div class="label--text">Kecamatan</div>
                       <div class="body-1 black--text">
-                        {{ $getDeepObj(diklat, 'm_kota.keterangan') || '-' }}
+                        {{ $getDeepObj(diklat, 'paud_kelas.data.m_kecamatan.data.keterangan') || '-' }}
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -114,7 +157,7 @@
                     <v-list-item-content class="py-0 mt-3">
                       <div class="label--text">Kelurahan</div>
                       <div class="body-1 black--text">
-                        {{ $getDeepObj(diklat, 'm_kota.keterangan') || '-' }}
+                        {{ $getDeepObj(diklat, 'paud_kelas.data.m_kelurahan.data.keterangan') || '-' }}
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -123,16 +166,24 @@
             </v-card-text>
           </v-card>
           <div>
-            Apakan Anda bersedia berpartisipasi dalam program diklat gtk paud sebagi
-            <b>[PENGAJAR, PEMBIMBING PRAKTIK]</b>
+            Apakan Anda bersedia berpartisipasi dalam program diklat gtk paud sebagai
+            <b>{{ $getDeepObj(diklat, 'm_petugas_paud.data.keterangan') }}</b>
           </div>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
           <div class="text-right">
-            <v-btn color="red" dark depressed>Tidak Bersedia</v-btn>
-            <v-btn class="mx-md-1" color="success" dark depressed>Bersedia</v-btn>
+            <template v-if="+diklat.k_konfirmasi_paud === 2">
+              <v-btn color="red" dark depressed @click="onKonfirmasi('tidak-setuju')">Tidak Bersedia</v-btn>
+              <v-btn class="mx-md-1" color="success" dark depressed @click="onKonfirmasi('setuju')">Bersedia</v-btn>
+            </template>
+            <template v-else-if="+diklat.k_konfirmasi_paud !== 1">
+              <v-btn color="red" dark depressed @click="onKonfirmasi('reset')">
+                <v-icon left>mdi-close</v-icon>
+                Batalkan
+              </v-btn>
+            </template>
           </div>
         </v-card-actions>
       </v-card>
@@ -140,55 +191,44 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex';
 export default {
+  props: {
+    items: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       dialog: false,
       diklat: {},
     };
   },
-  computed: {
-    items() {
-      return [
-        {
-          nama: 'Diklat Matematika Dasat - Kelas A',
-          wkt_mulai: '2021-03-06',
-          wkt_selesai: '2021-05-07',
-          status: null,
-          m_kota: {
-            keterangan: 'Malang',
-          },
-        },
-        {
-          nama: 'Ilmu Pengetahuan Alam',
-          wkt_mulai: '2021-03-06',
-          wkt_selesai: '2021-05-07',
-          status: 0,
-          m_kota: {
-            keterangan: 'Malang',
-          },
-        },
-        {
-          nama: 'Matematika Kelas 12 B',
-          wkt_mulai: '2021-03-06',
-          wkt_selesai: '2021-05-07',
-          status: 1,
-          m_kota: {
-            keterangan: 'Malang',
-          },
-        },
-      ];
-    },
-  },
+  computed: {},
   methods: {
+    ...mapActions('petugas', ['getDetail', 'actions']),
+
     close() {
       this.dialog = false;
     },
 
-    onDetail(data) {
+    async onDetail(data) {
+      const resp = await this.getDetail({ id: this.$getDeepObj(data, 'paud_kelas_petugas_id') }).then(
+        ({ data }) => data
+      );
+      console.log(data);
       this.dialog = true;
       this.$nextTick(() => {
-        this.$set(this, 'diklat', data);
+        this.$set(this, 'diklat', resp);
+      });
+    },
+
+    onKonfirmasi(status) {
+      this.actions({ id: this.$getDeepObj(this.diklat, 'paud_kelas_petugas_id'), name: status }).then(() => {
+        this.$success('Aksi berhasil dijalankan');
+        this.dialog = false;
+        this.$emit('reload');
       });
     },
   },
