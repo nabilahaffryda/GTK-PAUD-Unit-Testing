@@ -254,7 +254,7 @@ export default {
         { text: 'Surel', value: 'email', sortable: false },
       ];
 
-      if (this.tab > 0) {
+      if (this.tab > 1) {
         temp.push({ text: 'Status', value: 'status', sortable: false });
       }
 

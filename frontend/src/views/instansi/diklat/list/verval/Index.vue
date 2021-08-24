@@ -125,7 +125,7 @@
                 </v-list-item-content>
                 <v-list-item-action-text>
                   <base-list-action
-                    v-if="$allow('kelas-verval.batal-verval')"
+                    v-if="$allow('kelas-verval.batal-verval') && getKVerval(item) > 2"
                     :data="item"
                     :actions="actions"
                     :allow="allow"
