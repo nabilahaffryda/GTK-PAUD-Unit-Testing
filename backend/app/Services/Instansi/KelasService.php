@@ -70,7 +70,7 @@ class KelasService
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        return $kelas->load(['mVervalPaud', 'paudDiklat', 'paudMapelKelas']);
+        return $kelas->load(['mVervalPaud', 'paudDiklat.instansi', 'paudDiklat.paudInstansi', 'paudMapelKelas']);
     }
 
     public function validateKelas(PaudDiklat $diklat, PaudKelas $kelas)
