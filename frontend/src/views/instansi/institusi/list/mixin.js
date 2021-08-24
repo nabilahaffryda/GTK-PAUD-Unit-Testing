@@ -53,6 +53,8 @@ export default {
             nama_penanggung_jawab: item.nama_penanggung_jawab,
             telp_penanggung_jawab: item.telp_penanggung_jawab,
             kodepos: item.kodepos,
+            ratio_pengajar_tambahan: item.ratio_pengajar_tambahan,
+            jml_pembimbing: item.jml_pembimbing,
           })
         );
       });

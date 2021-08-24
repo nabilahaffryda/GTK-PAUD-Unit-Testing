@@ -66,6 +66,17 @@
                           </div>
                           <p class="caption black--text">
                             <span>ID Institusi: {{ $getDeepObj(item, 'instansi.data.instansi_id') || '-' }}</span>
+                            <br />
+                            <span>
+                              Alamat: {{ $getDeepObj(item, 'instansi.data.alamat') || '-' }}
+                              <br />
+                              {{
+                                [
+                                  $getDeepObj(item, 'instansi.data.m_kota.data.keterangan') || '-',
+                                  $getDeepObj(item, 'instansi.data.m_propinsi.data.keterangan') || '-',
+                                ].join(' - ')
+                              }}
+                            </span>
                           </p>
                         </v-list-item-content>
                       </v-list-item>
@@ -95,17 +106,28 @@
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content>
-                          <span class="caption">Alamat</span>
-                          <div>
-                            {{ $getDeepObj(item, 'instansi.data.alamat') || '-' }}
+                          <span class="caption">Petugas Diklat</span>
+                          <p class="caption black--text">
+                            <span
+                              >Pengajar:
+                              {{
+                                $getDeepObj(item, 'ratio_pengajar_tambahan')
+                                  ? `${100 - Number($getDeepObj(item, 'ratio_pengajar_tambahan'))}%`
+                                  : '-'
+                              }}</span
+                            >
                             <br />
-                            {{
-                              [
-                                $getDeepObj(item, 'instansi.data.m_kota.data.keterangan') || '-',
-                                $getDeepObj(item, 'instansi.data.m_propinsi.data.keterangan') || '-',
-                              ].join(' - ')
-                            }}
-                          </div>
+                            <span
+                              >Pengajar Tambahan:
+                              {{
+                                $getDeepObj(item, 'ratio_pengajar_tambahan')
+                                  ? `${$getDeepObj(item, 'ratio_pengajar_tambahan')}%`
+                                  : '-'
+                              }}</span
+                            >
+                            <br />
+                            <span> Pembimbing Praktik: {{ $getDeepObj(item, 'jml_pembimbing') || '-' }} </span>
+                          </p>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
