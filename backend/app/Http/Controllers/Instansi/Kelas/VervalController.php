@@ -33,6 +33,8 @@ class VervalController extends Controller
             ->whereNotIn('paud_kelas.k_verval_paud', [MVervalPaud::KANDIDAT])
             ->with([
                 'mVervalPaud',
+                'paudDiklat.Instansi',
+                'paudDiklat.paudInstansi',
                 'paudDiklat.paudPeriode',
                 'paudMapelKelas',
             ]);
@@ -44,6 +46,8 @@ class VervalController extends Controller
     {
         $kelas->load([
             'mVervalPaud',
+            'paudDiklat.Instansi',
+            'paudDiklat.paudInstansi',
             'paudDiklat.paudPeriode',
             'paudMapelKelas',
         ]);
