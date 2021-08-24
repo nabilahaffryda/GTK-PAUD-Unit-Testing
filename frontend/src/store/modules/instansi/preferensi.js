@@ -1,5 +1,7 @@
-import http from '@plugins/axios';
 import kitsu from '@plugins/kitsu';
+import gql from 'graphql-tag';
+import graphqlClient from '@plugins/graphql';
+
 let $ajax;
 /* eslint-disable no-empty-pattern */
 export const state = {
@@ -23,9 +25,31 @@ export const actions = {
   async getPreferensi({ commit, rootState }, reset) {
     if (state.data && !reset) return Promise.resolve(state.data);
     const id = rootState.auth.instansi_id;
-    const responses = await http.get(`i/${id}/preferensi`, { params: {} }).then(({ data }) => data);
-    commit('SET_DATA', responses ?? null);
-    return Promise.resolve(responses ?? null);
+    console.log(id)
+    const response = await graphqlClient.query({
+      query: gql`query GetPreferensi($instansi_id: Int!) {
+          preferensi(instansi_id: $instansi_id) {
+            groups {
+              k_group
+              keterangan
+            }
+            akseses {
+              akses
+              is_aktif
+            }
+            aktivasi
+            konfig {
+              simpkb
+            }
+          }
+        }
+      `,
+      variables: { instansi_id: Number(id) },
+    });
+
+    console.log(response)
+    commit('SET_DATA', response ?? null);
+    return true
   },
 
   async getInstansi({ rootState }, payload) {

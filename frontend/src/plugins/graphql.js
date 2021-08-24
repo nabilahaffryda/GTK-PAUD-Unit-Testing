@@ -4,7 +4,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 export default new ApolloClient({
   // Provide the URL to the API server.
-  link: new HttpLink({ uri: 'http://localhost:3000/graphql' }),
+  link: new HttpLink({ uri: process.env.VUE_APP_API_URL + '/graphql' }),
   // Using a cache for blazingly
   // fast subsequent queries.
   cache: new InMemoryCache(),

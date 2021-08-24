@@ -115,17 +115,21 @@ router.beforeEach((to, from, next) => {
       const id = routeId || store.getters['auth/instansiId'];
 
       const preferensi = await getPreferensi(id);
-      const menus = await setMenus(preferensi);
-      const currMenu = getObjMenu(menus, to.name);
 
-      const params = role === 'instansi' ? { id } : {};
-      // cek akses menu yang dituju
-      if (role === 'instansi' && !routeId) return next({ name: 'home', params });
-      if (isObject(currMenu) && (!currMenu?.akses || currMenu?.disable)) return next({ name: 'home', params });
-      return to.name ? next() : ['/', `/i/${id}/home`].includes(path) ? next({ name: 'home', params }) : next(path);
+      console.log(preferensi)
+      // return next('/');
+
+      // const menus = await setMenus(preferensi);
+      // const currMenu = getObjMenu(menus, to.name);
+      //
+      // const params = role === 'instansi' ? { id } : {};
+      // // cek akses menu yang dituju
+      // if (role === 'instansi' && !routeId) return next({ name: 'home', params });
+      // if (isObject(currMenu) && (!currMenu?.akses || currMenu?.disable)) return next({ name: 'home', params });
+      // return to.name ? next() : ['/', `/i/${id}/home`].includes(path) ? next({ name: 'home', params }) : next(path);
     })
     .catch(() => {
-      redirectToLogin();
+      // redirectToLogin();
     });
 });
 
