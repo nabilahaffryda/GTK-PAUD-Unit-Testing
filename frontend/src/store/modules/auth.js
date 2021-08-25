@@ -129,9 +129,9 @@ export const actions = {
     commit('SET_LOGIN', isLogin);
     commit('SET_AKUN', me && me.__typename === 'Akun' ? me : null);
     commit('SET_PTK', me && me.__typename === 'Ptk' ? me : null);
-    commit('SET_INSTANSI_ID', getDeepObj(instansisAkun, 'data.0.instansi_id') || 800001);
-
     const role = me && me.__typename === 'Akun' ? 'instansi' : 'gtk';
+    if (role === 'instansi') commit('SET_INSTANSI_ID', getDeepObj(instansisAkun, 'data.0.instansi_id') || 800001);
+
     const done = await dispatch('setRole', role);
     return Promise.resolve(done);
   },

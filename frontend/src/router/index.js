@@ -38,8 +38,22 @@ async function getPreferensi(id) {
   return await store.dispatch('auth/userPreferensi', id);
 }
 
-function getMenuGtk() {
-  return [];
+function getMenuGtk(preferensi) {
+  const roleMenu = roleMenus['gtk'];
+
+  const menus = roleMenu.map((item) => {
+    let temp = Object.assign({}, item);
+    if (temp && temp.href) {
+      temp.href = temp.href.replace(
+        /#PORTAL_URL#/g,
+        'https://sekolah.penggerak.kemdikbud.go.id/programsekolahpenggerak/'
+      );
+      temp.href = temp.href.replace(/#SIM_PKB_URL#/g, preferensi?.simpkb);
+    }
+
+    return temp;
+  });
+  return menus;
 }
 
 function getMenuIns(preferensi) {
@@ -109,8 +123,7 @@ router.beforeEach((to, from, next) => {
     const routeId = (to.params && to.params.id) || (path.match(/\d+/g) && path.match(/\d+/g)[0]) || '';
     const id = routeId || store.getters['auth/instansiId'];
 
-    const preferensi = await getPreferensi(id);
-
+    const preferensi = await getPreferensi(id || '');
     console.log(preferensi);
 
     const menus = await setMenus(preferensi);
