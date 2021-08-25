@@ -2,8 +2,9 @@
 import kitsu from '@plugins/kitsu';
 import $http from '@plugins/axios';
 import store from '@store';
-import { isObject } from '@/utils/format';
-
+import { getDeepObj, isObject } from '@/utils/format';
+import gql from 'graphql-tag';
+import graphqlClient from '@plugins/graphql';
 const $get = kitsu();
 
 const newState = {
@@ -94,18 +95,43 @@ export const actions = {
       return Promise.resolve(done);
     }
 
-    const resp = await $http.get('/');
-    const { data } = resp.data || {};
-    const isLogin =
-      (state && state.isLogin) || (data?.akun && isObject(data?.akun)) || (data?.ptk && isObject(data?.ptk));
+    const resp = await graphqlClient.query({
+      query: gql`
+        query GetAkun {
+          me {
+            ... on Akun {
+              __typename
+              akun_id
+              namaAkun: nama
+            }
+            ... on Ptk {
+              __typename
+              ptk_id
+              namaPtk: nama
+            }
+          }
+          instansisAkun(first: 1) {
+            data {
+              instansi_id
+              nama
+            }
+          }
+        }
+      `,
+    });
+
+    const { me, instansisAkun } = (resp && resp.data) || {};
+    const isLogin = (state && state.isLogin) || isObject(me || {});
+
     // Error belum login
     if (!isLogin) return Promise.reject(new Error('User belum login!'));
-    commit('SET_LOGIN', isLogin);
-    commit('SET_AKUN', data?.akun);
-    commit('SET_PTK', data?.ptk);
-    commit('SET_INSTANSI_ID', data?.instansi?.instansi_id || 800001);
 
-    const role = data?.akun && isObject(data?.akun) ? 'instansi' : 'gtk';
+    commit('SET_LOGIN', isLogin);
+    commit('SET_AKUN', me && me.__typename === 'Akun' ? me : null);
+    commit('SET_PTK', me && me.__typename === 'Ptk' ? me : null);
+    commit('SET_INSTANSI_ID', getDeepObj(instansisAkun, 'data.0.instansi_id') || 800001);
+
+    const role = me && me.__typename === 'Akun' ? 'instansi' : 'gtk';
     const done = await dispatch('setRole', role);
     return Promise.resolve(done);
   },
