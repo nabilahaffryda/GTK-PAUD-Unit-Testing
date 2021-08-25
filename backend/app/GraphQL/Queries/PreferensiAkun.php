@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class Preferensi
+class PreferensiAkun
 {
     protected Instansi $instansi;
     /**
