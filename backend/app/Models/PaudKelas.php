@@ -12,36 +12,36 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\PaudKelas
  *
- * @property int                                $paud_kelas_id
- * @property null|int                           $paud_diklat_id
- * @property null|int                           $tahun
- * @property null|int                           $angkatan
- * @property null|string                        $nama
- * @property null|int                           $paud_mapel_kelas_id
- * @property null|string                        $deskripsi
- * @property null|int                           $k_kecamatan
- * @property null|int                           $k_kelurahan
- * @property null|string                        $sekolah_kbl
- * @property null|string                        $sekolah_alamat
- * @property null|int                           $jml_pengajar
- * @property null|int                           $jml_pembimbing
- * @property null|int                           $k_verval_paud
- * @property null|Carbon                        $wkt_sinkron
- * @property null|Carbon                        $wkt_ajuan
- * @property null|string                        $akun_id_verval
- * @property null|string                        $alasan
- * @property null|string                        $catatan
- * @property null|Carbon                        $wkt_verval
- * @property null|Carbon                        $created_at
- * @property null|Carbon                        $updated_at
- * @property null|string                        $created_by
- * @property null|string                        $updated_by
+ * @property int $paud_kelas_id
+ * @property null|int $paud_diklat_id
+ * @property null|int $tahun
+ * @property null|int $angkatan
+ * @property null|string $nama
+ * @property null|int $paud_mapel_kelas_id
+ * @property null|string $deskripsi
+ * @property null|int $k_kecamatan
+ * @property null|int $k_kelurahan
+ * @property null|string $sekolah_kbl
+ * @property null|string $sekolah_alamat
+ * @property null|int $jml_pengajar
+ * @property null|int $jml_pembimbing
+ * @property null|int $k_verval_paud
+ * @property null|Carbon $wkt_sinkron
+ * @property null|Carbon $wkt_ajuan
+ * @property null|string $akun_id_verval
+ * @property null|string $alasan
+ * @property null|string $catatan
+ * @property null|Carbon $wkt_verval
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|string $created_by
+ * @property null|string $updated_by
  *
- * @property-read MVervalPaud                   $mVervalPaud
- * @property-read PaudDiklat                    $paudDiklat
- * @property-read PaudMapelKelas                $paudMapelKelas
- * @property-read MKecamatan                    $mKecamatan
- * @property-read MKelurahan                    $mKelurahan
+ * @property-read MKecamatan $mKecamatan
+ * @property-read MKelurahan $mKelurahan
+ * @property-read MVervalPaud $mVervalPaud
+ * @property-read PaudDiklat $paudDiklat
+ * @property-read PaudMapelKelas $paudMapelKelas
  * @property-read Collection|PaudKelasPeserta[] $paudKelasPesertas
  * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
  *
@@ -148,7 +148,7 @@ class PaudKelas extends Eloquent
     ];
 
     /**
-     * @return BelongsTo|Builder|MKecamatan
+     * @return BelongsTo
      */
     public function mKecamatan()
     {
@@ -156,7 +156,7 @@ class PaudKelas extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MKelurahan
+     * @return BelongsTo
      */
     public function mKelurahan()
     {

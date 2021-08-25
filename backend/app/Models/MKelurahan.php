@@ -14,15 +14,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\MKelurahan
  *
- * @property integer                       $k_kelurahan
- * @property integer                       $k_kecamatan
- * @property null|string                   $singkat
- * @property string                        $keterangan
- * @property null|integer                  $kode_dagri
+ * @property integer $k_kelurahan
+ * @property integer $k_kecamatan
+ * @property null|string $singkat
+ * @property string $keterangan
+ * @property null|integer $kode_dagri
  *
- * @property-read Collection|PaudKelas[]   $paudKelases
+ * @property-read Collection|PaudKelas[] $paudKelases
  * @property-read Collection|PaudPetugas[] $paudPetugases
- * @property-read MKecamatan               $mKecamatan
+ * @property-read MKecamatan $mKecamatan
  *
  * @method static Builder|MKelurahan whereKKelurahan($value)
  * @method static Builder|MKelurahan whereKKecamatan($value)
@@ -39,7 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static MKelurahan                  findOrFail($id, $columns = ['*'])
  * @method static MKelurahan|null             first($columns = ['*'])
  * @method static MKelurahan                  firstOrFail($columns = ['*'])
- * @method static MKelurahan                  firstOrNew($attributes, $values = array())
+ * @method static MKelurahan                  firstOrNew($attributes, $values = [])
  * @method static MKelurahan                  firstOrCreate($attributes, $values = ['*'])
  * @method static MKelurahan                  updateOrCreate($attributes, $values = ['*'])
  * @method static Collection|MKelurahan[]     get($columns = ['*'])

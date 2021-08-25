@@ -24,6 +24,8 @@ type PaudKelas {
     created_by: String
     updated_by: String
 
+    m_kecamatan: MKecamatan @belongsTo(relation: "mKecamatan")
+    m_kelurahan: MKelurahan @belongsTo(relation: "mKelurahan")
     m_verval_paud: MVervalPaud @belongsTo(relation: "mVervalPaud")
     paud_diklat: PaudDiklat @belongsTo(relation: "paudDiklat")
     paud_mapel_kelas: PaudMapelKelas @belongsTo(relation: "paudMapelKelas")

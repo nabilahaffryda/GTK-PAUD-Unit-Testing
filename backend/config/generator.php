@@ -15,6 +15,8 @@ return [
         'm_group',
         'm_golongan',
         'm_jenis_instansi',
+        'm_kelurahan',
+        'm_kecamatan',
         'm_kota',
         'm_propinsi',
         'm_status_email',

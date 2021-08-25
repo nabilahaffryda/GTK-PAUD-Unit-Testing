@@ -14,32 +14,32 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\MKecamatan
  *
- * @property integer                                   $k_kecamatan
- * @property integer                                   $k_kota
- * @property null|string                               $singkat
- * @property null|string                               $keterangan
- * @property null|string                               $kode_dapodik
- * @property null|integer                              $kode_dagri
- * @property integer                                   $is_aktif
+ * @property integer $k_kecamatan
+ * @property integer $k_kota
+ * @property null|string $singkat
+ * @property null|string $keterangan
+ * @property null|string $kode_dapodik
+ * @property null|integer $kode_dagri
+ * @property integer $is_aktif
  *
- * @property-read Collection|AjuanNik[]                $ajuanNiks
- * @property-read Collection|Akun[]                    $akunInstansiKs
- * @property-read Collection|GpmPraktisiRegistrasi[]   $gpmPraktisiRegistrasis
- * @property-read Collection|Komunitas[]               $komunitases
- * @property-read Collection|MKelurahan[]              $mKelurahans
- * @property-read Collection|MerdekaOrganisasi[]       $merdekaOrganisasis
- * @property-read Collection|MerdekaRelawan[]          $merdekaRelawans
- * @property-read Collection|PaudKelas[]               $paudKelases
- * @property-read Collection|PaudPetugas[]             $paudPetugases
- * @property-read Collection|Pb[]                      $pbs
+ * @property-read Collection|AjuanNik[] $ajuanNiks
+ * @property-read Collection|Akun[] $akunInstansiKs
+ * @property-read Collection|GpmPraktisiRegistrasi[] $gpmPraktisiRegistrasis
+ * @property-read Collection|Komunitas[] $komunitases
+ * @property-read Collection|MKelurahan[] $mKelurahans
+ * @property-read Collection|MerdekaOrganisasi[] $merdekaOrganisasis
+ * @property-read Collection|MerdekaRelawan[] $merdekaRelawans
+ * @property-read Collection|PaudKelas[] $paudKelases
+ * @property-read Collection|PaudPetugas[] $paudPetugases
+ * @property-read Collection|Pb[] $pbs
  * @property-read Collection|PpgInstrukturRegistrasi[] $ppgInstrukturRegistrasis
- * @property-read Collection|Ptk[]                     $ptks
- * @property-read Collection|RayonWilayahK13[]         $rayonWilayahK13s
- * @property-read Collection|SekolahDapodik[]          $sekolahDapodiks
- * @property-read Collection|Sekolah[]                 $sekolahs
- * @property-read Collection|StudiKtp[]                $studiKtps
- * @property-read Collection|VcSasaran[]               $vcSasarans
- * @property-read MKota                                $mKota
+ * @property-read Collection|Ptk[] $ptks
+ * @property-read Collection|RayonWilayahK13[] $rayonWilayahK13s
+ * @property-read Collection|SekolahDapodik[] $sekolahDapodiks
+ * @property-read Collection|Sekolah[] $sekolahs
+ * @property-read Collection|StudiKtp[] $studiKtps
+ * @property-read Collection|VcSasaran[] $vcSasarans
+ * @property-read MKota $mKota
  *
  * @method static Builder|MKecamatan whereKKecamatan($value)
  * @method static Builder|MKecamatan whereKKota($value)
@@ -58,7 +58,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static MKecamatan                  findOrFail($id, $columns = ['*'])
  * @method static MKecamatan|null             first($columns = ['*'])
  * @method static MKecamatan                  firstOrFail($columns = ['*'])
- * @method static MKecamatan                  firstOrNew($attributes, $values = array())
+ * @method static MKecamatan                  firstOrNew($attributes, $values = [])
  * @method static MKecamatan                  firstOrCreate($attributes, $values = ['*'])
  * @method static MKecamatan                  updateOrCreate($attributes, $values = ['*'])
  * @method static Collection|MKecamatan[]     get($columns = ['*'])

@@ -30,6 +30,8 @@ type PaudPetugas {
     instansi: Instansi @belongsTo(relation: "instansi")
     instansi_kota: MKota @belongsTo(relation: "instansiKota")
     instansi_propinsi: MPropinsi @belongsTo(relation: "instansiPropinsi")
+    m_kecamatan: MKecamatan @belongsTo(relation: "mKecamatan")
+    m_kelurahan: MKelurahan @belongsTo(relation: "mKelurahan")
     m_petugas_paud: MPetugasPaud @belongsTo(relation: "mPetugasPaud")
     m_unsur_pengajar_paud: MUnsurPengajarPaud @belongsTo(relation: "mUnsurPengajarPaud")
 }

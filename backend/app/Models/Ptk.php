@@ -57,6 +57,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property null|int $is_aktif
  * @property null|string $akun_id
  *
+ * @property-read MKecamatan $mKecamatan
  * @property-read MKota $mKota
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|PaudKelasPeserta[] $paudKelasPesertas
@@ -244,6 +245,14 @@ class Ptk extends Authenticatable
         'wkt_sinkron',
         'akun_id',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function mKecamatan()
+    {
+        return $this->belongsTo('App\Models\MKecamatan', 'k_kecamatan', 'k_kecamatan');
+    }
 
     /**
      * @return BelongsTo
