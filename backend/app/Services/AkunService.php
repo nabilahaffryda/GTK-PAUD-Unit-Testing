@@ -382,20 +382,4 @@ class AkunService
         $path = sprintf("%s/%s", $ftpPath, $filename);
         return Storage::disk('akun-foto')->delete($path);
     }
-
-    /**
-     * @throws AuthorizationException
-     */
-    public function validateInstansi(int $instansiId): Instansi
-    {
-        $instansi = Instansi::find($instansiId);
-
-        $akunInstansi = $this->akunInstansis($instansi)->first();
-        if (!$akunInstansi) {
-            throw new AuthorizationException("Instansi {$instansiId} tidak dikenali");
-        }
-
-        app()->instance('INSTANSI', $instansi);
-        return $instansi;
-    }
 }
