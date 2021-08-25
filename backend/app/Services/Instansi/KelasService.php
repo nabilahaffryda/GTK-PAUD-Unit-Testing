@@ -289,7 +289,7 @@ class KelasService
         $jmlPetugases = PaudKelasPetugas::query()
             ->groupBy('k_petugas_paud')
             ->get(['k_petugas_paud', DB::raw('count(1) jumlah')])
-            ->keyBy('k_petugas_paud');
+            ->pluck('jumlah', 'k_petugas_paud');
 
         $batasan = [
             MPetugasPaud::PENGAJAR           => [3, 9],
