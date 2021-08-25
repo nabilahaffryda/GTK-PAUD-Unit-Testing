@@ -18,6 +18,24 @@ extend type Query @guard(with: ["akun"]) {
     instansisAkun(keyword: String): [Instansi!]! @paginate(builder: "\\App\\GraphQL\\Queries\\InstansisAkun")
 }
 
+extend type Query @guard(with: ["akun"]) @instansi {
+    preferensiAkun(instansi_id: Int): PreferensiAkun
+}
+
+extend type Query @guard(with: ["ptk"]) {
+}
+
+type PreferensiAkun {
+    groups: [MGroup!]!
+    akseses: [PaudAkses!]!
+
+    aktivasi: Boolean
+    konfig: PreferensiAkunKonfig
+}
+
+type PreferensiAkunKonfig {
+    simpkb: String
+}
+
 #import master.graphql
-#import preferensi.graphql
 #import model/*.graphql
