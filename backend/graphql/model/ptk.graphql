@@ -4,7 +4,7 @@ type Ptk {
     nik: String
     nrg: String
     k_sumber: Int!
-    nama: String
+    nama: String!
     tmp_lahir: String
     tgl_lahir: Date
     kelamin: String
