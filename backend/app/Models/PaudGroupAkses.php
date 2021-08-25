@@ -29,7 +29,7 @@ class PaudGroupAkses extends Eloquent
      *
      * @var string
      */
-    protected $table = 'paud_group_akses2';
+    protected $table = 'paud_group_akses';
 
     /**
      * The primary key for the model.
