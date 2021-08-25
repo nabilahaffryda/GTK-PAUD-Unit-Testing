@@ -29,7 +29,9 @@ export const actions = {
       `,
     });
 
-    commit('SET_DATA', resp ?? null);
-    return Promise.resolve(resp ?? null);
+    const { data } = resp;
+
+    commit('SET_DATA', data ?? null);
+    return Promise.resolve(data ?? null);
   },
 };
