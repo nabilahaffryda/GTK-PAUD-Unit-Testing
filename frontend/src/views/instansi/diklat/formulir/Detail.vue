@@ -29,7 +29,7 @@
                 <div class="label--text">Jumlah Pengajar</div>
                 <div class="body-1">
                   <v-chip class="ma-2" color="green" text-color="white">
-                    {{ $getDeepObj(detail, 'jml_pengajar') || '-' }}
+                    {{ $getDeepObj(kelas, 'jml_pengajar') || '-' }}
                   </v-chip>
                 </div>
               </v-col>
