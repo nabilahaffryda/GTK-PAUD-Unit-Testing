@@ -24,6 +24,30 @@ extend type Query @guard(with: ["akun"]) {
 
 extend type Query @guard(with: ["ptk"]) {
     preferensiPtk: PreferensiPtk
+
+    ptkListKelas(keyword: String): [PaudKelas!]! @paginate(builder: "App\\GraphQL\\Queries\\Ptk\\Kelas@list")
+    ptkListKelasPeserta: [PaudKelasPeserta!]! @paginate(builder: "App\\GraphQL\\Queries\\Ptk\\KelasPeserta@list")
+
+    ptkFetchKelas(id: Int!): PaudKelas @field(resolver: "App\\GraphQL\\Queries\\Ptk\\Kelas@fetch")
+    ptkFetchKelasPeserta(id: Int!): PaudKelasPeserta @field(resolver: "App\\GraphQL\\Queries\\Ptk\\KelasPeserta@fetch")
+}
+
+type Mutation @guard(with: ["ptk"]) {
+    ptkKelasPesertaBersedia(
+        kelasPesertaId: Int!,
+    ): PaudKelasPeserta
+    @field(resolver: "App\\GraphQL\\Mutations\\Ptk\\KelasPeserta@konfirmasiSetuju")
+
+    ptkKelasPesertaTolak(
+        kelasPesertaId: Int!,
+        alasan: String
+    ): PaudKelasPeserta
+    @field(resolver: "App\\GraphQL\\Mutations\\Ptk\\KelasPeserta@konfirmasiTolak")
+
+    ptkKelasPesertaBatal(
+        kelasPesertaId: Int!,
+    ): PaudKelasPeserta
+    @field(resolver: "App\\GraphQL\\Mutations\\Ptk\\KelasPeserta@konfirmasiBatal")
 }
 
 type PreferensiAkun {
