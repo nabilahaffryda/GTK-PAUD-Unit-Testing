@@ -1,24 +1,25 @@
 type Instansi {
     instansi_id: Int!
-    k_jenis_instansi : Int
-    nama : String!
-    alamat : String
-    k_propinsi : Int
-    k_kota : Int
-    moodle_id : Int
-    kode_penyelenggara : String
-    email : String
-    no_telpon : String
-    foto : String
-    nama_pejabat : String
-    nip_pejabat : String
-    nama_pkp : String
-    kode_pkp : String
-    anggaran_pkp : String
-    data_pkp : String
-    kode_rkakl : String
-    nama_rkakl : String
+    k_jenis_instansi: Int
+    nama: String!
+    alamat: String
+    k_propinsi: Int
+    k_kota: Int
+    moodle_id: Int
+    kode_penyelenggara: String
+    email: String
+    no_telpon: String
+    foto: String
+    nama_pejabat: String
+    nip_pejabat: String
+    nama_pkp: String
+    kode_pkp: String
+    anggaran_pkp: String
+    data_pkp: String
+    kode_rkakl: String
+    nama_rkakl: String
 
-    m_propinsi: MPropinsi @belongsTo(relation: "mPropinsi")
+    m_jenis_instansi: MJenisInstansi @belongsTo(relation: "mJenisInstansi")
     m_kota: MKota @belongsTo(relation: "mKota")
+    m_propinsi: MPropinsi @belongsTo(relation: "mPropinsi")
 }

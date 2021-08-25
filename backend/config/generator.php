@@ -38,7 +38,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | JSON:API Default Configuration
+    | Eloquent Model Default Configuration
     |--------------------------------------------------------------------------
     */
     'model'   => [
@@ -101,21 +101,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | JSON:API Default Configuration
+    | GraphQL Default Configuration
     |--------------------------------------------------------------------------
     */
-    'jsonapi' => [
+    'graphql' => [
         'path'    => [
-            /*
-            |--------------------------------------------------------------------------
-            | Path to existing file to be use as reference
-            |--------------------------------------------------------------------------
-            | false = don't load existing model
-            | null  = load from App/JsonApi
-            | other path = load from there
-            */
-            'reference' => false,
-
             /*
             |--------------------------------------------------------------------------
             | Path to save resulting file

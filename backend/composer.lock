@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9088b9211f09567d78c7423fa20e7ae8",
+    "content-hash": "39b6e2d9530b15375b587f80a446975f",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -8482,11 +8482,11 @@
         },
         {
             "name": "hurie/laravel-generator",
-            "version": "v1.1",
+            "version": "v2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.dev.siap.id/azhar/laravel-generator.git",
-                "reference": "532eb48a232e4e066bfc9cd13a0e531b6f0b1c43"
+                "reference": "0c7de6d46a90563aa891cb097dd175aeb4dd62ca"
             },
             "require": {
                 "nikic/php-parser": "^4.10",
@@ -8534,7 +8534,7 @@
                 "generator",
                 "laravel"
             ],
-            "time": "2021-04-17T08:35:51+00:00"
+            "time": "2021-08-24T22:41:02+00:00"
         },
         {
             "name": "justinrainbow/json-schema",

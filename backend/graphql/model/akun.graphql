@@ -26,6 +26,7 @@ type Akun {
     k_kota: Int
     kodepos: String
     nik: String
+    ktp: String
     npwp: String
     rekening_nama: String
     rekening_bank: String
@@ -39,6 +40,9 @@ type Akun {
     k_status_email: Int!
     admin_id: String
 
-    m_propinsi: MPropinsi @belongsTo(relation: "mPropinsi")
+    instansi_kota: MKota @belongsTo(relation: "instansiKota")
+    instansi_propinsi: MPropinsi @belongsTo(relation: "instansiPropinsi")
+    m_golongan: MGolongan @belongsTo(relation: "mGolongan")
     m_kota: MKota @belongsTo(relation: "mKota")
+    m_propinsi: MPropinsi @belongsTo(relation: "mPropinsi")
 }

@@ -1,0 +1,7 @@
+type MBerkasLpdPaud {
+    k_berkas_lpd_paud: Int!
+    singkat: String
+    keterangan: String
+    maks: Int
+    validasi: String
+}

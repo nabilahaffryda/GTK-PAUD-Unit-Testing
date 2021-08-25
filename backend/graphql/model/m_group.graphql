@@ -3,4 +3,6 @@ type MGroup {
     singkat: String
     keterangan: String
     k_jenis_instansi: Int
+
+    m_jenis_instansi: MJenisInstansi @belongsTo(relation: "mJenisInstansi")
 }

@@ -1,0 +1,5 @@
+type MTingkatDiklatPaud {
+    k_tingkat_diklat_paud: Int!
+    singkat: String
+    keterangan: String
+}

@@ -29,7 +29,7 @@
         "cloudcreativity/json-api-testing": "^3.2",
         "facade/ignition": "^2.8",
         "fakerphp/faker": "^1.14",
-        "hurie/laravel-generator": "^1.0",
+        "hurie/laravel-generator": "^2.0",
         "mll-lab/laravel-graphql-playground": "^2.5",
         "mockery/mockery": "^1.4",
         "nunomaduro/collision": "^5.4",

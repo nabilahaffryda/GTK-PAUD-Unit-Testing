@@ -1,0 +1,9 @@
+type PaudGroupAkses2 {
+    paud_group_akses_id: Int!
+    paud_akses_id: Int!
+    k_group: Int
+    is_aktif: Int!
+
+    m_group: MGroup @belongsTo(relation: "mGroup")
+    paud_akses2: PaudAkses2 @belongsTo(relation: "paudAkses2")
+}

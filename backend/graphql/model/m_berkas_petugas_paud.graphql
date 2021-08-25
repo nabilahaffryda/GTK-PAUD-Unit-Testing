@@ -1,0 +1,7 @@
+type MBerkasPetugasPaud {
+    k_berkas_petugas_paud: Int!
+    singkat: String
+    keterangan: String
+    maks: Int
+    validasi: String
+}

@@ -4,6 +4,6 @@ type MPropinsi {
     keterangan: String
     kode_ukg: String
     timezone: Int
-
-    m_kotas: [MKota!] @hasMany(relation: "mKotas", type: SIMPLE)
+    kode_dapodik: String
+    kode_dagri: Int
 }
