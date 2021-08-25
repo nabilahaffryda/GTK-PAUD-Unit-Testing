@@ -6,6 +6,7 @@ use App\Exceptions\FlowException;
 use App\Models\MGroup;
 use App\Models\PaudAkses;
 use App\Models\PaudGroupAkses;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -278,5 +279,55 @@ class AksesService
     {
         return PaudAkses::query()->whereIn('paud_akses_id', (array)$aksesIds)
             ->update(['is_aktif' => $isAktif ? 1 : 0]);
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function validate(array $abilities)
+    {
+        $instansiId = instansiId();
+        if (!$instansiId) {
+            throw new AuthorizationException("Akun tidak memiliki akses ke Instansi");
+        }
+
+        static $akseses = null;
+        if ($akseses === null) {
+            $akseses = PaudAkses::where([
+                'guard' => 'akun',
+            ])->get()->keyBy('akses');
+        }
+
+        foreach ($abilities as $ability) {
+            /** @var PaudAkses $akses */
+            $akses = $akseses->get($ability);
+            if (!$akses) {
+                $akses = PaudAkses::create([
+                    'akses'    => $ability,
+                    'label'    => $ability,
+                    'guard'    => 'akun',
+                    'is_aktif' => 0,
+                ]);
+
+                $akseses->put($ability, $akses);
+                continue;
+            }
+
+            if (!$akses->is_aktif) {
+                continue;
+            }
+
+            static $akunAkseses = [];
+            if (!isset($akunAkseses[$instansiId])) {
+                $akunInstansi = app(AkunService::class)->akunInstansis(instansi());
+                $groups       = app(AkunService::class)->getGroups($akunInstansi);
+
+                $akunAkseses[$instansiId] = app(AksesService::class)->getAkses($groups)->keyBy('paud_akses_id')->all();
+            }
+
+            if (!isset($akunAkseses[$instansiId][$akses->paud_akses_id])) {
+                throw new AuthorizationException("Akun tidak memiliki akses {$akses->label}");
+            }
+        }
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\GraphQL\Directives;
 
+use App\Models\Instansi;
 use App\Services\AkunService;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
-use Illuminate\Auth\Access\AuthorizationException;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
 use Nuwave\Lighthouse\Support\Contracts\FieldMiddleware;
@@ -17,7 +18,7 @@ class InstansiDirective extends BaseDirective implements FieldMiddleware
     public static function definition(): string
     {
         return /** @lang GraphQL */ <<<'GRAPHQL'
-directive @instansi on FIELD_DEFINITION
+directive @instansi on FIELD_DEFINITION | OBJECT
 GRAPHQL;
     }
 
@@ -35,14 +36,20 @@ GRAPHQL;
         $fieldValue->setResolver(function ($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo) use ($resolver) {
             $instansiId = $args['instansi_id'] ?? null;
             if (!$instansiId) {
-                throw new \Nuwave\Lighthouse\Exceptions\AuthorizationException('Instansi tidak ditemukan/dikenali');
+                throw new AuthorizationException('Instansi tidak ditemukan/dikenali');
             }
 
-            try {
-                app(AkunService::class)->validateInstansi($instansiId);
-            } catch (AuthorizationException $e) {
-                throw new \Nuwave\Lighthouse\Exceptions\AuthorizationException($e->getMessage());
+            $instansi = Instansi::find($instansiId);
+            if (!$instansi) {
+                throw new AuthorizationException('Instansi tidak ditemukan/dikenali');
             }
+
+            $akunInstansi = app(AkunService::class)->akunInstansis($instansi)->first();
+            if (!$akunInstansi) {
+                throw new AuthorizationException("Instansi {$instansiId} tidak dikenali");
+            }
+
+            app()->instance('INSTANSI', $instansi);
 
             return $resolver($root, $args, $context, $resolveInfo);
         });
