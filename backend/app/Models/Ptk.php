@@ -268,4 +268,14 @@ class Ptk extends Authenticatable
     {
         return $this->hasMany('App\Models\PaudKelasPeserta', 'ptk_id', 'ptk_id');
     }
+
+    /**
+     * Get the name of the unique identifier for the user.
+     *
+     * @return string
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'paspor_id';
+    }
 }
