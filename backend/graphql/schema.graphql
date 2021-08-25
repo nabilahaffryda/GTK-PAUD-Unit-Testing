@@ -22,8 +22,9 @@ extend type Query @guard(with: ["akun"]) {
     preferensiAkun(instansi_id: Int): PreferensiAkun @instansi
 }
 
-#extend type Query @guard(with: ["ptk"]) {
-#}
+extend type Query @guard(with: ["ptk"]) {
+    preferensiPtk: PreferensiPtk
+}
 
 type PreferensiAkun {
     groups: [MGroup!]!
@@ -31,6 +32,10 @@ type PreferensiAkun {
 
     aktivasi: Boolean
     konfig: PreferensiAkunKonfig
+}
+
+type PreferensiPtk {
+    konfirmasiKesediaan: Boolean
 }
 
 type PreferensiAkunKonfig {
