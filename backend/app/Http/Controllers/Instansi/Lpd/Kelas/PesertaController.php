@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Instansi\Lpd\Kelas;
 use App\Exceptions\FlowException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Instansi\Lpd\Kelas\CreatePeserta;
+use App\Http\Requests\Instansi\Lpd\Kelas\CreatePesertaRequest;
+use App\Http\Requests\Instansi\Lpd\Kelas\IndexPesertaRequest;
 use App\Http\Requests\Instansi\Lpd\Kelas\IndexRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
@@ -23,7 +25,24 @@ class PesertaController extends Controller
 
     public function index(PaudDiklat $paudDiklat, PaudKelas $kelas, IndexRequest $request)
     {
-        return BaseCollection::make($this->service->indexPeserta($paudDiklat, $kelas, $request->validated())->get());
+        return BaseCollection::make($this->service->indexPeserta($paudDiklat, $kelas, $request->validated())
+            ->paginate((int)$request->get('count', 10)));
+    }
+
+    public function candidate(PaudDiklat $paudDiklat, PaudKelas $kelas, IndexPesertaRequest $request)
+    {
+        return BaseCollection::make($this->service
+            ->indexPesertaKandidat($paudDiklat, $kelas, $request->validated())->paginate((int)$request->get('count', 10)));
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function create(PaudDiklat $paudDiklat, PaudKelas $kelas, CreatePesertaRequest $request)
+    {
+        $paudPesertas = $this->service->createPeserta($paudDiklat, $kelas, $request->validated());
+
+        return BaseCollection::make($paudPesertas);
     }
 
     public function download(PaudKelas $kelas)

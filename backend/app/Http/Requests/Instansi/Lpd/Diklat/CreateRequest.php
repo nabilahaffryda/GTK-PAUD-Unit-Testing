@@ -15,7 +15,7 @@ class CreateRequest extends FormRequest
     {
         return [
             'nama'            => ['required', 'string'],
-            'singkatan'       => ['required', 'string'],
+            'singkatan'       => ['nullable', 'string'],
             'deskripsi'       => ['nullable', 'string'],
             'k_propinsi'      => ['required', 'integer', 'exists:m_propinsi,k_propinsi'],
             'k_kota'          => ['required', 'integer', 'exists:m_kota,k_kota'],
