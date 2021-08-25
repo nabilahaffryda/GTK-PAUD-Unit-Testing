@@ -24,9 +24,6 @@ enum MasterFilterOperator {
 
     "Apakah nilai didalam set (`IN`)"
     IN @enum(value: "In")
-
-    "Apakah nilai tidak didalam set (`NOT IN`)"
-    NOT_IN @enum(value: "NotIn")
 }
 
 input MasterFilter {
