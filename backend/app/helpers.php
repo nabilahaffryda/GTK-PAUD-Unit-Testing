@@ -29,7 +29,7 @@ function ptk()
 
 function ptkId()
 {
-    return ptk()?->akun_id;
+    return ptk()?->ptk_id;
 }
 
 /**
