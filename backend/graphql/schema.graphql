@@ -18,12 +18,12 @@ extend type Query @guard(with: ["akun"]) {
     instansisAkun(keyword: String): [Instansi!]! @paginate(builder: "\\App\\GraphQL\\Queries\\InstansisAkun")
 }
 
-extend type Query @guard(with: ["akun"]) @instansi {
-    preferensiAkun(instansi_id: Int): PreferensiAkun
+extend type Query @guard(with: ["akun"]) {
+    preferensiAkun(instansi_id: Int): PreferensiAkun @instansi
 }
 
-extend type Query @guard(with: ["ptk"]) {
-}
+#extend type Query @guard(with: ["ptk"]) {
+#}
 
 type PreferensiAkun {
     groups: [MGroup!]!
