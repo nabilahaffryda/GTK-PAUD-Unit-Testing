@@ -3,7 +3,7 @@ export default [
   {
     path: '/home',
     name: 'home',
-    component: () => lazyLoadView(import('@views/instansi/home/Index')),
+    component: () => lazyLoadView(import('@views/gtk/home/Index')),
     meta: {
       title: 'Beranda',
     },
