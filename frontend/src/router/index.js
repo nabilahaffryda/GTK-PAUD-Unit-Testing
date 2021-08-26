@@ -124,7 +124,6 @@ router.beforeEach((to, from, next) => {
     const id = routeId || store.getters['auth/instansiId'];
 
     const preferensi = await getPreferensi(id || '');
-    console.log(preferensi);
 
     const menus = await setMenus(preferensi);
     const currMenu = getObjMenu(menus, to.name);

@@ -21,6 +21,8 @@ export const actions = {
           ptk {
             ptk_id
             nama
+            email
+            foto
           }
           preferensiPtk {
             konfirmasiKesediaan
