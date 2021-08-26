@@ -1,40 +1,11 @@
-import gql from 'graphql-tag';
 import graphqlClient from '@plugins/graphql';
 import graphQuery from '../../../graphql/kelas';
+import { getDeepObj } from '../../../utils/format';
 
 export const actions = {
   async fetch() {
     const resp = await graphqlClient.query({
-      query: gql`
-        query getKelas {
-          ptkListKelasPeserta(first: 10) {
-            paginatorInfo {
-              currentPage
-              total
-            }
-            data {
-              paud_kelas_peserta_id
-              k_konfirmasi_paud
-              m_konfirmasi_paud {
-                singkat
-                keterangan
-              }
-              paud_kelas {
-                nama
-                k_verval_paud
-                paud_diklat {
-                  nama
-                  paud_periode {
-                    nama
-                    tgl_diklat_mulai
-                    tgl_diklat_selesai
-                  }
-                }
-              }
-            }
-          }
-        }
-      `,
+      query: graphQuery['LIST_KONFIRMASI'],
     });
 
     const { data } = resp;
@@ -44,41 +15,24 @@ export const actions = {
   // eslint-disable-next-line no-empty-pattern
   async getDetail({}, payload) {
     const resp = await graphqlClient.query({
-      query: gql`
-        query fetchKelas {
-          ptkFetchKelasPeserta(id: ${payload.id}) {
-            paud_kelas_peserta_id
-            k_konfirmasi_paud
-            m_konfirmasi_paud {
-              singkat
-              keterangan
-            }
-            paud_kelas {
-              nama
-              m_kecamatan {
-                keterangan
-              }
-              m_kelurahan {
-                keterangan
-              }
-              paud_diklat {
-                nama
-                m_kota {
-                  keterangan
-                }
-                m_propinsi {
-                  keterangan
-                }
-                paud_periode {
-                  nama
-                  tgl_diklat_mulai
-                  tgl_diklat_selesai
-              }
-            }
-          }
-        }
-      }
-      `,
+      query: graphQuery['DETAIL_KONFIRMASI'],
+      variables: {
+        id: payload.id,
+      },
+    });
+
+    const { data } = resp;
+    return Promise.resolve(data ?? null);
+  },
+
+  // eslint-disable-next-line no-empty-pattern
+  async getListKelas({}, payload) {
+    const resp = await graphqlClient.query({
+      query: graphQuery['KELAS'],
+      variables: {
+        page: payload.params.page,
+        keyword: getDeepObj(payload, 'params.filter.keyword') || '',
+      },
     });
 
     const { data } = resp;
