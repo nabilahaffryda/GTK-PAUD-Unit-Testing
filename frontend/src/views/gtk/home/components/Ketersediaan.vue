@@ -55,7 +55,7 @@
                     "
                   >
                     <i>
-                      {{ $getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') }}
+                      {{ $getDeepObj(item, 'm_konfirmasi_paud.keterangan') }}
                     </i>
                   </span>
                 </v-list-item-content>
@@ -166,14 +166,13 @@
               </v-row>
             </v-card-text>
           </v-card>
-
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
           <div class="text-right">
             <template v-if="+diklat.k_konfirmasi_paud === 2">
-              <v-btn color="red" dark depressed @click="onKonfirmasi('tidak-setuju')">Tidak Bersedia</v-btn>
+              <v-btn color="red" dark depressed @click="onKonfirmasi('tolak')">Tidak Bersedia</v-btn>
               <v-btn class="mx-md-1" color="success" dark depressed @click="onKonfirmasi('setuju')">Bersedia</v-btn>
             </template>
             <template v-else-if="+diklat.k_konfirmasi_paud !== 1">
@@ -205,7 +204,7 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapActions('diklat', ['getDetail']),
+    ...mapActions('diklat', ['getDetail', 'actions']),
 
     close() {
       this.dialog = false;

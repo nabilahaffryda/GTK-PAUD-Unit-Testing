@@ -27,7 +27,7 @@
           </span>
         </v-col>
         <v-col class="shrink">
-          <v-btn class="mt-4" color="orange" depressed dark @click="onKonfirmasi">konfirmasi</v-btn>
+          <v-btn class="mt-4" color="orange" depressed dark @click="onKonfirmasi(true)">konfirmasi</v-btn>
         </v-col>
       </v-row>
     </v-alert>

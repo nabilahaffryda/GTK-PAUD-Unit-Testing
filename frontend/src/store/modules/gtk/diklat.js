@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import graphqlClient from '@plugins/graphql';
+import graphQuery from '../../../graphql/kelas';
 
 export const actions = {
   async fetch() {
@@ -46,6 +47,7 @@ export const actions = {
       query: gql`
         query fetchKelas {
           ptkFetchKelasPeserta(id: ${payload.id}) {
+            paud_kelas_peserta_id
             k_konfirmasi_paud
             m_konfirmasi_paud {
               singkat
@@ -77,6 +79,19 @@ export const actions = {
         }
       }
       `,
+    });
+
+    const { data } = resp;
+    return Promise.resolve(data ?? null);
+  },
+
+  // eslint-disable-next-line no-empty-pattern
+  async actions({}, payload) {
+    const resp = await graphqlClient.mutate({
+      mutation: graphQuery[payload.name.toUpperCase()],
+      variables: {
+        kelasPesertaId: payload.id,
+      },
     });
 
     const { data } = resp;

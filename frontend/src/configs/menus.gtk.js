@@ -6,6 +6,7 @@ export default [
     color: 'success',
     deepColor: 'darken-1',
     link: 'kelas',
+    akses: false,
     to: { name: 'kelas' },
   },
 ];
