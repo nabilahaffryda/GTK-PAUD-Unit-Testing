@@ -1,10 +1,30 @@
 import gql from 'graphql-tag';
 
+const ATTR_PESERTA = `
+        paud_kelas_peserta_id
+        k_konfirmasi_paud
+        m_konfirmasi_paud {
+          singkat
+          keterangan
+        }
+        paud_kelas {
+          nama
+          k_verval_paud
+          paud_diklat {
+            nama
+            paud_periode {
+              nama
+              tgl_diklat_mulai
+              tgl_diklat_selesai
+            }
+          }
+        }
+        `;
+
 const SETUJU = gql`
   mutation ptkKelasPesertaBersedia($kelasPesertaId: Int!) {
     ptkKelasPesertaBersedia(kelasPesertaId: $kelasPesertaId) {
-      paud_kelas_peserta_id
-      paud_kelas_id
+      ${ATTR_PESERTA}
     }
   }
 `;
@@ -12,8 +32,7 @@ const SETUJU = gql`
 const TOLAK = gql`
   mutation ptkKelasPesertaTolak($kelasPesertaId: Int!) {
     ptkKelasPesertaTolak(kelasPesertaId: $kelasPesertaId) {
-      paud_kelas_peserta_id
-      paud_kelas_id
+      ${ATTR_PESERTA}
     }
   }
 `;
@@ -21,8 +40,7 @@ const TOLAK = gql`
 const RESET = gql`
   mutation ptkKelasPesertaBatal($kelasPesertaId: Int!) {
     ptkKelasPesertaBatal(kelasPesertaId: $kelasPesertaId) {
-      paud_kelas_peserta_id
-      paud_kelas_id
+      ${ATTR_PESERTA}
     }
   }
 `;
@@ -91,27 +109,8 @@ const LIST_KONFIRMASI = gql`
         currentPage
         total
       }
-      data {
-        paud_kelas_peserta_id
-        k_konfirmasi_paud
-        m_konfirmasi_paud {
-          singkat
-          keterangan
-        }
-        paud_kelas {
-          nama
-          k_verval_paud
-          paud_diklat {
-            nama
-            paud_periode {
-              nama
-              tgl_diklat_mulai
-              tgl_diklat_selesai
-            }
-          }
-        }
+      data { ${ATTR_PESERTA} } 
       }
-    }
   }
 `;
 

@@ -2,13 +2,24 @@ import graphqlClient from '@plugins/graphql';
 import graphQuery from '../../../graphql/kelas';
 import { getDeepObj } from '../../../utils/format';
 
+export const state = {
+  data: null,
+};
+
+export const mutations = {
+  SET_DATA(state, newValue) {
+    state.data = newValue;
+  },
+};
+
 export const actions = {
-  async fetch() {
+  async fetch({ commit }) {
     const resp = await graphqlClient.query({
       query: graphQuery['LIST_KONFIRMASI'],
     });
 
     const { data } = resp;
+    commit('SET_DATA', data?.ptkListKelasPeserta?.data ?? []);
     return Promise.resolve(data ?? null);
   },
 
@@ -40,15 +51,53 @@ export const actions = {
   },
 
   // eslint-disable-next-line no-empty-pattern
-  async actions({}, payload) {
+  async actions({ state, commit }, payload) {
+    const mAction = {
+      setuju: 'ptkKelasPesertaBersedia',
+      tolak: 'ptkKelasPesertaTolak',
+      reset: 'ptkKelasPesertaBatal',
+    };
+
     const resp = await graphqlClient.mutate({
       mutation: graphQuery[payload.name.toUpperCase()],
       variables: {
         kelasPesertaId: payload.id,
       },
+      refetchQueries: [
+        () => {
+          return {
+            query: graphQuery['LIST_KONFIRMASI'],
+          };
+        },
+      ],
+      update: (store, { data }) => {
+        const peserta = getDeepObj(data, `${mAction[payload.name]}`) || {};
+        const write = store.readQuery({
+          query: graphQuery['DETAIL_KONFIRMASI'],
+          variables: {
+            id: peserta.paud_kelas_peserta_id,
+          },
+        });
+
+        store.writeQuery({
+          query: graphQuery['DETAIL_KONFIRMASI'],
+          variables: { id: peserta.paud_kelas_peserta_id },
+          data: write,
+        });
+      },
     });
 
     const { data } = resp;
-    return Promise.resolve(data ?? null);
+
+    const peserta = getDeepObj(data, `${mAction[payload.name]}`) || {};
+    let kelas = [...state.data].map((key) => {
+      if (key.paud_kelas_peserta_id === peserta.paud_kelas_peserta_id) {
+        return peserta;
+      }
+    });
+
+    commit('SET_DATA', kelas);
+
+    return Promise.resolve({ kelas, data } ?? null);
   },
 };

@@ -189,11 +189,12 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import { getDeepObj } from '../../../../utils/format';
 export default {
   props: {
     items: {
       type: Array,
-      default: () => [],
+      default: () => null,
     },
   },
   data() {
@@ -204,7 +205,7 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapActions('diklat', ['getDetail', 'actions']),
+    ...mapActions('diklat', ['fetch', 'getDetail', 'actions']),
 
     close() {
       this.dialog = false;
@@ -221,11 +222,23 @@ export default {
     },
 
     onKonfirmasi(status) {
-      this.actions({ id: this.$getDeepObj(this.diklat, 'paud_kelas_peserta_id'), name: status }).then(() => {
-        this.$success('Aksi berhasil dijalankan');
-        this.dialog = false;
-        this.$emit('reload');
-      });
+      this.actions({ id: this.$getDeepObj(this.diklat, 'paud_kelas_peserta_id'), name: status }).then(
+        ({ kelas, data }) => {
+          this.$set(this, 'diklat', {});
+          const mAction = {
+            setuju: 'ptkKelasPesertaBersedia',
+            tolak: 'ptkKelasPesertaTolak',
+            reset: 'ptkKelasPesertaBatal',
+          };
+
+          const peserta = getDeepObj(data, `${mAction[status]}`) || {};
+
+          this.$success('Aksi berhasil dijalankan');
+          this.dialog = false;
+          this.$set(this, 'diklat', peserta);
+          this.$emit('reload', kelas);
+        }
+      );
     },
   },
 };

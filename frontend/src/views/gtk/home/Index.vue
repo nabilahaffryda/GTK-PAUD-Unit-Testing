@@ -58,7 +58,7 @@
     </v-row>
 
     <base-modal-full ref="modal" title="Konfirmasi Ketersediaan" :useSave="false">
-      <form-ketersediaan :items="data" ref="ketersediaan" @reload="onKonfirmasi(false)" />
+      <form-ketersediaan ref="ketersediaan" :items="items" @reload="onKonfirmasi" />
     </base-modal-full>
   </div>
 </template>
@@ -75,7 +75,7 @@ export default {
   },
   data() {
     return {
-      data: [],
+      items: null,
     };
   },
   computed: {
@@ -99,11 +99,16 @@ export default {
       }
     },
 
-    async onKonfirmasi(status = false) {
-      const resp = await this.fetch().then(({ ptkListKelasPeserta }) => ptkListKelasPeserta);
-      this.$set(this, 'data', (resp && resp.data) || []);
+    async onKonfirmasi(status) {
+      if (status.length > 0) {
+        this.items = status;
+      } else {
+        this.items = null;
+        const resp = await this.fetch().then(({ ptkListKelasPeserta }) => ptkListKelasPeserta);
+        this.items = (resp && resp.data) || [];
 
-      if (status) this.$refs.modal.open();
+        if (status || resp) this.$refs.modal.open();
+      }
     },
   },
 };
