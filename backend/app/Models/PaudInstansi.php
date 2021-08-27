@@ -187,4 +187,9 @@ class PaudInstansi extends Eloquent
     {
         return $this->hasMany('App\Models\PaudInstansiBerkas', 'paud_instansi_id', 'paud_instansi_id');
     }
+
+    public function admins()
+    {
+        return $this->hasMany('App\Models\PaudAdmin', 'instansi_id', 'instansi_id');
+    }
 }

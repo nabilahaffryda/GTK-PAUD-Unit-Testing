@@ -48,6 +48,14 @@ class LpdService
             ->when(isset($params['k_propinsi']), function (Builder $query) use ($params) {
                 $query->where('instansi.k_propinsi', $params['k_propinsi']);
             })
+            ->withCount([
+                'admins as jml_admin_program' => function (Builder $query) {
+                    $query->where('k_group', '=', MGroup::AP_LPD_DIKLAT_PAUD);
+                },
+                'admins as jml_operator'      => function (Builder $query) {
+                    $query->where('k_group', '=', MGroup::OP_LPD_DIKLAT_PAUD);
+                },
+            ])
             ->with([
                 'instansi.mPropinsi',
                 'instansi.mKota',
@@ -502,7 +510,7 @@ class LpdService
             'Penanggung Jawab',
             'Telpon',
             'Akun Pengunci',
-            'Status'
+            'Status',
         ];
 
         $date     = Carbon::now()->format('dmYHi');

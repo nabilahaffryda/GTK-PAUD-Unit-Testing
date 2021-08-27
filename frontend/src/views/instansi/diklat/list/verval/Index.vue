@@ -63,6 +63,9 @@
                             {{ $getDeepObj(item, `paud_mapel_kelas.data.nama`) || '-' }} -
                             {{ $getDeepObj(item, `nama`) || '-' }}
                           </span>
+                          <div class="font-italic">
+                            {{ $getDeepObj(item, `paud_diklat.data.instansi.data.nama`) || '-' }}
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -122,7 +125,7 @@
                 </v-list-item-content>
                 <v-list-item-action-text>
                   <base-list-action
-                    v-if="$allow('kelas-verval.batal-verval')"
+                    v-if="$allow('kelas-verval.batal-verval') && getKVerval(item) > 2"
                     :data="item"
                     :actions="actions"
                     :allow="allow"

@@ -211,7 +211,10 @@ class KelasService
         $this->validateKelas($paudDiklat, $kelas);
 
         $jmlPetugas = PaudKelasPetugas::query()
-            ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+            ->where([
+                'paud_kelas_petugas.paud_kelas_id'  => $kelas->paud_kelas_id,
+                'paud_kelas_petugas.k_petugas_paud' => $params['k_petugas_paud'],
+            ])
             ->count();
 
         $jmlPetugas += count($params['akun_id']);
@@ -286,7 +289,7 @@ class KelasService
         $jmlPetugases = PaudKelasPetugas::query()
             ->groupBy('k_petugas_paud')
             ->get(['k_petugas_paud', DB::raw('count(1) jumlah')])
-            ->keyBy('k_petugas_paud');
+            ->pluck('jumlah', 'k_petugas_paud');
 
         $batasan = [
             MPetugasPaud::PENGAJAR           => [3, 9],

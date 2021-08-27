@@ -100,7 +100,7 @@
                           <div class="label--text">Aksi Selanjutnya</div>
                           <v-btn
                             :disabled="!item.is_siap_ajuan"
-                            v-if="$allow('lpd-kelas-ajuan.create')"
+                            v-if="+item.k_verval_paud < 2 && $allow('lpd-kelas-ajuan.create')"
                             color="secondary"
                             depressed
                             small
