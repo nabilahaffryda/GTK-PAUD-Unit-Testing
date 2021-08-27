@@ -118,6 +118,7 @@ class KelasService
         $this->validateKelas($paudDiklat, $kelas);
 
         $query = Ptk::query()
+            ->whereNotNull('dapodik_ptk_id')
             ->whereNotExists(function ($query) use ($params, $kelas) {
                 $query->select(DB::raw(1))
                     ->from('paud_kelas_peserta')
