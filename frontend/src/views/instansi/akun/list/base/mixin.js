@@ -157,11 +157,7 @@ export default {
       const group = this.$getIncluded('m_group', this.$getRelasi(data, 'm_group')['id'], included);
       this.$set(this.akun, 'nama', this.$getAttr(ptk, 'nama') || '-');
       this.$set(this.akun, 'email', this.$getAttr(ptk, 'email') || '-');
-      this.$set(
-        this.akun,
-        'password',
-        this.$getAttr(ptk, 'passwd') || '********* (Gunakan Password SIMPKB Anda)'
-      );
+      this.$set(this.akun, 'password', this.$getAttr(ptk, 'passwd') || '********* (Gunakan Password SIMPKB Anda)');
       this.$set(this.akun, 'peran', (this.$getAttr(group, 'keterangan') || '-').toUpperCase());
       this.$nextTick(() => {
         this.$refs.akun.print();
