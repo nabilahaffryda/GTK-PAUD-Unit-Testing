@@ -37,11 +37,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $created_by
  * @property null|string $updated_by
  *
- * @property-read MKecamatan $mKecamatan
- * @property-read MKelurahan $mKelurahan
  * @property-read MVervalPaud $mVervalPaud
  * @property-read PaudDiklat $paudDiklat
  * @property-read PaudMapelKelas $paudMapelKelas
+ * @property-read MKecamatan $mKecamatan
+ * @property-read MKelurahan $mKelurahan
  * @property-read Collection|PaudKelasPeserta[] $paudKelasPesertas
  * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
  *

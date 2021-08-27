@@ -3,8 +3,9 @@
 use App\Http\Controllers\Instansi\AdminKelas;
 use App\Http\Controllers\Instansi\Akun;
 use App\Http\Controllers\Instansi\AkunController;
-use App\Http\Controllers\Instansi\IndexController;
 use App\Http\Controllers\Instansi\Diklat;
+use App\Http\Controllers\Instansi\IndexController;
+use App\Http\Controllers\Instansi\Kelas;
 use App\Http\Controllers\Instansi\Lpd;
 use App\Http\Controllers\Instansi\LpdController;
 use App\Http\Controllers\Instansi\Petugas;
@@ -88,12 +89,26 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
             Route::post('kelas/{kelas}/ajuan/delete', [Lpd\Kelas\AjuanController::class, 'delete']);
 
             Route::get('kelas/{kelas}/peserta', [Lpd\Kelas\PesertaController::class, 'index']);
-            Route::get('kelas/{kelas}/peserta/{peserta}/delete', [Lpd\Kelas\PesertaController::class, 'delete']);
+            Route::get('kelas/{kelas}/peserta/kandidat', [Lpd\Kelas\PesertaController::class, 'candidate']);
+            Route::post('kelas/{kelas}/peserta/create', [Lpd\Kelas\PesertaController::class, 'create']);
+            Route::post('kelas/{kelas}/peserta/{peserta}/delete', [Lpd\Kelas\PesertaController::class, 'delete']);
 
             Route::get('kelas/{kelas}/petugas', [Lpd\Kelas\PetugasController::class, 'index']);
             Route::get('kelas/{kelas}/petugas/kandidat', [Lpd\Kelas\PetugasKandidatController::class, 'index']);
             Route::post('kelas/{kelas}/petugas/create', [Lpd\Kelas\PetugasController::class, 'create']);
             Route::get('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Kelas\PetugasController::class, 'delete']);
+        });
+    });
+
+    Route::group(['prefix' => 'kelas'], function () {
+        Route::get('', [Kelas\VervalController::class, 'index']);
+
+        Route::group(['prefix' => '{kelas}'], function () {
+            Route::get('', [Kelas\VervalController::class, 'fetch']);
+            Route::get('peserta', [Kelas\VervalController::class, 'peserta']);
+            Route::get('petugas', [Kelas\VervalController::class, 'petugas']);
+            Route::post('verval', [Kelas\VervalController::class, 'updateVerval']);
+            Route::post('batal-verval', [Kelas\VervalController::class, 'batalVerval']);
         });
     });
 
@@ -224,6 +239,14 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/non-aktif', [Akun\AdminKelasController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\AdminKelasController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\AdminKelasController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'petugas/konfirmasi'], function () {
+        Route::get('', [Petugas\KonfirmasiController::class, 'index']);
+        Route::get('{kelasPetugas}', [Petugas\KonfirmasiController::class, 'fetch']);
+        Route::get('{kelasPetugas}/setuju', [Petugas\KonfirmasiController::class, 'setuju']);
+        Route::get('{kelasPetugas}/tidak-setuju', [Petugas\KonfirmasiController::class, 'tidakSetuju']);
+        Route::get('{kelasPetugas}/reset', [Petugas\KonfirmasiController::class, 'reset']);
     });
 
     Route::group(['prefix' => 'petugas/profil'], function () {

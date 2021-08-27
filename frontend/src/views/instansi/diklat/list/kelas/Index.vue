@@ -99,8 +99,8 @@
                         <v-list-item-content>
                           <div class="label--text">Aksi Selanjutnya</div>
                           <v-btn
-                            disabled
-                            v-if="+item.k_verval_paud === 1 && $allow('lpd-kelas-ajuan.create')"
+                            :disabled="!item.is_siap_ajuan"
+                            v-if="+item.k_verval_paud < 2 && $allow('lpd-kelas-ajuan.create')"
                             color="secondary"
                             depressed
                             small
@@ -109,7 +109,6 @@
                           >
                           <v-btn
                             v-if="+item.k_verval_paud > 1 && $allow('lpd-kelas-ajuan.delete')"
-                            disabled
                             color="secondary"
                             outlined
                             depressed

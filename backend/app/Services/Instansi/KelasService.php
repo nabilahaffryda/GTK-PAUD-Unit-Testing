@@ -15,6 +15,7 @@ use App\Models\PaudKelas;
 use App\Models\PaudKelasPeserta;
 use App\Models\PaudKelasPetugas;
 use App\Models\PaudPetugas;
+use App\Models\Ptk;
 use Arr;
 use Carbon\Carbon;
 use DB;
@@ -39,6 +40,8 @@ class KelasService
     public function create(PaudDiklat $paudDiklat, array $params): PaudKelas
     {
         $kelas                 = new PaudKelas($params);
+        $kelas->tahun          = $paudDiklat->tahun;
+        $kelas->angkatan       = $paudDiklat->angkatan;
         $kelas->paud_diklat_id = $paudDiklat->paud_diklat_id;
         $kelas->k_verval_paud  = MVervalPaud::KANDIDAT;
         $kelas->created_by     = akunId();
@@ -110,6 +113,28 @@ class KelasService
         return $query;
     }
 
+    public function indexPesertaKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        $query = Ptk::query()
+            ->whereNotExists(function ($query) use ($params, $kelas) {
+                $query->select(DB::raw(1))
+                    ->from('paud_kelas_peserta')
+                    ->where([
+                        'paud_kelas_peserta.tahun'    => config('paud.tahun'),
+                        'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
+                    ])
+                    ->whereRaw('ptk.ptk_id = paud_kelas_peserta.ptk_id');
+            });
+
+        if ($keyword = Arr::get($params, 'keyword')) {
+            $query->where('ptk.nama', 'like', '%' . $keyword . '%');
+        }
+
+        return $query;
+    }
+
     public function indexPetugasKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
     {
         $this->validateKelas($paudDiklat, $kelas);
@@ -138,13 +163,61 @@ class KelasService
     /**
      * @throws FlowException
      */
+    public function createPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        $ptks = Ptk::query()->whereIn('ptk_id', $params['ptk_id'])
+            ->whereNotExists(function ($query) use ($params) {
+                $query->select(DB::raw(1))
+                    ->from('paud_kelas_peserta')
+                    ->where([
+                        'paud_kelas_peserta.tahun'    => config('paud.tahun'),
+                        'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
+                    ])
+                    ->whereRaw('ptk.ptk_id = paud_kelas_peserta.ptk_id');
+            })
+            ->get();
+
+        if ($diff = array_diff($params['ptk_id'], $ptks->pluck('ptk_id')->all())) {
+            $ptkIds = implode(', ', $diff);
+
+            throw new FlowException("Peserta dengan PTK_ID {$ptkIds} tidak ditemukan");
+        }
+
+        /** @var Ptk $ptk */
+        foreach ($ptks as $ptk) {
+            $paudKelasPeserta = new PaudKelasPeserta();
+            $paudKelasPeserta->fill($params);
+            $paudKelasPeserta->paud_kelas_id = $kelas->paud_kelas_id;
+            $paudKelasPeserta->tahun         = $kelas->tahun;
+            $paudKelasPeserta->angkatan      = $kelas->angkatan;
+            $paudKelasPeserta->ptk_id        = $ptk->ptk_id;
+            $paudKelasPeserta->created_by    = akunId();
+
+            if (!$paudKelasPeserta->save()) {
+                throw new FlowException("Peserta tidak berhasil disimpan");
+            }
+        }
+
+        return $ptks;
+    }
+
+    /**
+     * @throws FlowException
+     */
     public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
     {
         $this->validateKelas($paudDiklat, $kelas);
 
         $jmlPetugas = PaudKelasPetugas::query()
-            ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+            ->where([
+                'paud_kelas_petugas.paud_kelas_id'  => $kelas->paud_kelas_id,
+                'paud_kelas_petugas.k_petugas_paud' => $params['k_petugas_paud'],
+            ])
             ->count();
+
+        $jmlPetugas += count($params['akun_id']);
 
         $batasan = [
             MPetugasPaud::PENGAJAR           => 9,
@@ -153,7 +226,7 @@ class KelasService
             MPetugasPaud::ADMIN_KELAS        => 1,
         ];
 
-        if (isset($batasan[$params['k_petugas_paud']]) && $jmlPetugas >= $batasan[$params['k_petugas_paud']]) {
+        if (isset($batasan[$params['k_petugas_paud']]) && $jmlPetugas > $batasan[$params['k_petugas_paud']]) {
             throw new FlowException("Jumlah petugas maksimal adalah {$batasan[$params['k_petugas_paud']]} orang");
         }
 
@@ -183,6 +256,8 @@ class KelasService
             $paudKelasPetugas->fill($params);
             $paudKelasPetugas->paud_petugas_id   = $petugas->paud_petugas_id;
             $paudKelasPetugas->paud_kelas_id     = $kelas->paud_kelas_id;
+            $paudKelasPetugas->tahun             = $kelas->tahun;
+            $paudKelasPetugas->angkatan          = $kelas->angkatan;
             $paudKelasPetugas->akun_id           = $petugas->akun_id;
             $paudKelasPetugas->k_konfirmasi_paud = MKonfirmasiPaud::BELUM_KONFIRMASI;
             $paudKelasPetugas->created_by        = akunId();
@@ -202,22 +277,38 @@ class KelasService
     {
         $this->validateKelas($paudDiklat, $kelas);
 
+        $tidakBersedia = $kelas
+            ->paudKelasPetugases()
+            ->whereNotIn('k_konfirmasi_paud', [MKonfirmasiPaud::BERSEDIA])
+            ->exists();
+
+        if ($tidakBersedia) {
+            throw new FlowException("Masih terdapat petugas yang belum bersedia");
+        }
+
         $jmlPetugases = PaudKelasPetugas::query()
             ->groupBy('k_petugas_paud')
             ->get(['k_petugas_paud', DB::raw('count(1) jumlah')])
-            ->keyBy('k_petugas_paud');
+            ->pluck('jumlah', 'k_petugas_paud');
 
         $batasan = [
-            MPetugasPaud::PENGAJAR           => 3,
-            MPetugasPaud::PENGAJAR_TAMBAHAN  => 2,
-            MPetugasPaud::PEMBIMBING_PRAKTIK => 2,
-            MPetugasPaud::ADMIN_KELAS        => 1,
+            MPetugasPaud::PENGAJAR           => [3, 9],
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => [2, 4],
+            MPetugasPaud::PEMBIMBING_PRAKTIK => [2, 4],
+            MPetugasPaud::ADMIN_KELAS        => [1, 1],
         ];
 
-        foreach ($batasan as $kPetugasPaud => $jmlMin) {
+        foreach ($batasan as $kPetugasPaud => $jml) {
+            list($jmlMin, $jmlMax) = $jml;
+
             if ($jmlPetugases->get($kPetugasPaud, 0) < $jmlMin) {
                 $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
                 throw new FlowException("Petugas {$mPetugasPaud->keterangan} minimal {$jmlMin} orang");
+            }
+
+            if ($jmlPetugases->get($kPetugasPaud, 0) > $jmlMax) {
+                $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
+                throw new FlowException("Petugas {$mPetugasPaud->keterangan} maksimal {$jmlMin} orang");
             }
         }
 
@@ -240,6 +331,56 @@ class KelasService
 
         if (!$kelas->save()) {
             throw new FlowException('Proses ajuan tidak berhasil');
+        }
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function verval(Akun $akun, PaudKelas $kelas, array $params): PaudKelas
+    {
+        if (in_array($kelas->k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
+            throw new FlowException('Kelas sudah diverval');
+        }
+
+        if ($kelas->k_verval_paud != MVervalPaud::DIAJUKAN) {
+            throw new FlowException('Kelas belum diajukan');
+        }
+
+        $kelas->k_verval_paud  = $params['k_verval_paud'];
+        $kelas->wkt_verval     = Carbon::now();
+        $kelas->akun_id_verval = $akun->akun_id;
+        $kelas->alasan         = $params['alasan'] ?? null;
+
+        if (!$kelas->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function batalVerval(Akun $akun, PaudKelas $kelas): PaudKelas
+    {
+        if ($kelas->k_verval_paud == MVervalPaud::DIAJUKAN) {
+            throw new FlowException('Kelas masih diajukan');
+        }
+
+        if (!in_array($kelas->k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
+            throw new FlowException('Kelas belum diverval');
+        }
+
+        $kelas->k_verval_paud  = MVervalPaud::DIAJUKAN;
+        $kelas->wkt_verval     = Carbon::now();
+        $kelas->akun_id_verval = $akun->akun_id;
+        $kelas->alasan         = null;
+
+        if (!$kelas->save()) {
+            throw new FlowException('Proses simpan status verval tidak berhasil');
         }
 
         return $kelas;

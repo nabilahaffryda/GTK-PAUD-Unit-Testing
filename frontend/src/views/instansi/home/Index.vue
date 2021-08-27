@@ -17,17 +17,25 @@
       </v-col>
     </v-row>
 
-    <v-alert v-if="false" class="my-4" prominent color="orange" text icon="mdi-information">
+    <v-alert v-if="is_kesediaan" class="my-4" prominent color="orange" text icon="mdi-information">
       <v-row>
         <v-col class="grow black--text">
-          <div class="font-weight-bold">KONFIRMASI KETERSEDIAAN</div>
+          <div class="font-weight-bold">KONFIRMASI KESEDIAAN</div>
           <span>
-            Anda telah ditambahkan di kelas sebagai (<b>Pengajar, Pengajar Tambahan, Pembimbing Praktik</b>)<br />
+            Anda telah ditambahkan di kelas sebagai
+            <template v-if="filteredGroup.length">
+              <b v-for="(group, g) in filteredGroup" :key="group.value">
+                {{ group.text }}
+                <span v-if="g + 1 !== filteredGroup.length">, </span>
+              </b>
+            </template>
+            <template v-else> (<b>Pengajar, Pengajar Tambahan atau Pembimbing Praktik</b>) </template>
+            <br />
             Silakan untuk melakukan konfirmasi ketersediaan
           </span>
         </v-col>
         <v-col class="shrink">
-          <v-btn class="mt-4" color="orange" depressed dark @click="onKonfirmasi">konfirmasi</v-btn>
+          <v-btn class="mt-4" color="orange" depressed dark @click="onKonfirmasi(true)">konfirmasi</v-btn>
         </v-col>
       </v-row>
     </v-alert>
@@ -58,12 +66,13 @@
     </v-row>
 
     <base-modal-full ref="modal" title="Konfirmasi Ketersediaan" :useSave="false">
-      <form-ketersediaan ref="ketersediaan" />
+      <form-ketersediaan :items="data" ref="ketersediaan" @reload="onKonfirmasi(false)" />
     </base-modal-full>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 import BaseCardMenus from '@/components/base/BaseCardMenus';
 import FormKetersediaan from './components/Ketersediaan';
 export default {
@@ -72,12 +81,28 @@ export default {
     BaseCardMenus,
     FormKetersediaan,
   },
+  data() {
+    return {
+      data: [],
+    };
+  },
   computed: {
+    ...mapState('preferensi', {
+      is_kesediaan: (state) => state?.data.konfirmasi_kesediaan ?? false,
+      groups: (state) => state?.data?.groups ?? {},
+    }),
+
     menus() {
       return this.$store.state.menus || [];
     },
+
+    filteredGroup() {
+      return this.$mapForMaster(this.groups).filter((s) => [175, 176, 174].includes(s.value)) || [];
+    },
   },
   methods: {
+    ...mapActions('petugas', ['fetch']),
+
     onAction({ action }) {
       switch (action) {
         default:
@@ -85,8 +110,10 @@ export default {
       }
     },
 
-    onKonfirmasi() {
-      this.$refs.modal.open();
+    async onKonfirmasi(status = false) {
+      const resp = await this.fetch().then(({ data }) => data);
+      this.$set(this, 'data', resp || []);
+      if (status) this.$refs.modal.open();
     },
   },
 };

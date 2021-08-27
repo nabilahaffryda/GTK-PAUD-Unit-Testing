@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Instansi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MasterRequest;
 use App\Http\Resources\BaseCollection;
+use App\Models\MGroup;
 use App\Services\AksesService;
 use App\Services\AkunService;
+use App\Services\Instansi\PetugasKelasService;
 use App\Services\MasterService;
 use Illuminate\Http\Request;
 
@@ -24,6 +26,15 @@ class IndexController extends Controller
 
         $aktivasi = $akunService->isAktivasi($akunInstansi);
 
+        $konfirmasi = false;
+
+        $subgroup = $groups->intersectByKeys(array_flip([MGroup::PENGAJAR_DIKLAT_PAUD, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD]));
+        if ($subgroup->isNotEmpty()) {
+            $konfirmasi = app(PetugasKelasService::class)
+                ->listKonfirmasiKesediaan(akunId())
+                ->exists();
+        }
+
         return [
             'akun'     => $akun,
             'instansi' => $instansi,
@@ -33,7 +44,9 @@ class IndexController extends Controller
             'aktivasi' => $aktivasi,
             'konfig'   => [
                 'simpkb' => $simpkb,
-            ]
+            ],
+
+            'konfirmasi_kesediaan' => $konfirmasi,
         ];
     }
 

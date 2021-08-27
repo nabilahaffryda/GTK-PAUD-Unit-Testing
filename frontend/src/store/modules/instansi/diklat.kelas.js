@@ -55,10 +55,11 @@ export const actions = {
   async getListKandidat({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL:
-        process.env.VUE_APP_API_URL +
-        `/i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}/kandidat`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}`,
     });
-    return await $ajax.get(`/`, { params: payload.params });
+
+    return await $ajax.get(`/`, {
+      params: Object.assign(payload.params, { page: payload.page || 1 }),
+    });
   },
 };

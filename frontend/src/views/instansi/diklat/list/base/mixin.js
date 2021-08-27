@@ -141,10 +141,7 @@ export default {
             iconSize: 30,
             iconColor: 'secondary',
             title: `${this.$getDeepObj(item, 'nama')}`,
-            subtitles: [
-              `<span>Jumlah Pembimbing: ${this.$getDeepObj(item, 'jml_pembimbing') || 0}</span>`,
-              `<span>Jumlah Pengajar: ${this.$getDeepObj(item, 'jml_pengajar') || 0}</span>`,
-            ],
+            subtitles: [`<span>Deskripsi: ${this.$getDeepObj(item, 'deskripsi') || ''}</span>`],
           },
         ],
       }).then(() => {
@@ -164,10 +161,7 @@ export default {
             iconSize: 30,
             iconColor: 'secondary',
             title: `${this.$getDeepObj(item, 'nama')}`,
-            subtitles: [
-              `<span>Jumlah Pembimbing: ${this.$getDeepObj(item, 'jml_pembimbing') || 0}</span>`,
-              `<span>Jumlah Pengajar: ${this.$getDeepObj(item, 'jml_pengajar') || 0}</span>`,
-            ],
+            subtitles: [`<span>Deskripsi: ${this.$getDeepObj(item, 'deskripsi') || ''}</span>`],
           },
         ],
       }).then(() => {

@@ -29,7 +29,10 @@ class MasterService
             $key = $info[0]->Column_name;
 
             $query = DB::table($table)
-                ->select(array_unique(array_merge([$key], $field)));
+                ->select(array_unique(array_merge([$key], $field)))
+                ->when($table == 'm_kecamatan' || $table == 'm_kelurahan', function ($query) {
+                    $query->where('kode_dagri', '>', 0);
+                });
 
             if ($filter) {
                 foreach ($filter as $column => $value) {
