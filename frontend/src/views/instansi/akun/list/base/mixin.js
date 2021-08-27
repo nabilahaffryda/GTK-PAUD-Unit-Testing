@@ -132,13 +132,13 @@ export default {
       }
 
       this[isEdit ? 'update' : 'create']({ params, id, name })
-        .then(({ data }) => {
+        .then(({ data, included }) => {
           this.$success(`Data ${this.title} berhasil di ${isEdit ? 'diubah' : 'ditambahkan'}`);
           this.$refs.modal.close();
           this.fetchData();
 
           if (!isEdit) {
-            this.resetAkun(this.$getDeepObj(data, 'id'));
+            this.onPrint(data, included);
           }
         })
         .catch(() => {
@@ -148,15 +148,23 @@ export default {
 
     resetAkun(id) {
       this.action({ id, type: 'reset', name: this.$getDeepObj(this, 'attr.tipe') }).then(({ data, included }) => {
-        const ptk = this.$getIncluded('akun', this.$getRelasi(data, 'akun')['id'], included);
-        const group = this.$getIncluded('m_group', this.$getRelasi(data, 'm_group')['id'], included);
-        this.$set(this.akun, 'nama', this.$getAttr(ptk, 'nama') || '-');
-        this.$set(this.akun, 'email', this.$getAttr(ptk, 'email') || '-');
-        this.$set(this.akun, 'password', !this.formulir.isExist ? this.$getAttr(ptk, 'passwd') : '*********');
-        this.$set(this.akun, 'peran', (this.$getAttr(group, 'keterangan') || '-').toUpperCase());
-        this.$nextTick(() => {
-          this.$refs.akun.print();
-        });
+        this.onPrint(data, included);
+      });
+    },
+
+    onPrint(data, included) {
+      const ptk = this.$getIncluded('akun', this.$getRelasi(data, 'akun')['id'], included);
+      const group = this.$getIncluded('m_group', this.$getRelasi(data, 'm_group')['id'], included);
+      this.$set(this.akun, 'nama', this.$getAttr(ptk, 'nama') || '-');
+      this.$set(this.akun, 'email', this.$getAttr(ptk, 'email') || '-');
+      this.$set(
+        this.akun,
+        'password',
+        this.$getAttr(ptk, 'passwd') || '********* (Gunakan Password SIMPKB Anda)'
+      );
+      this.$set(this.akun, 'peran', (this.$getAttr(group, 'keterangan') || '-').toUpperCase());
+      this.$nextTick(() => {
+        this.$refs.akun.print();
       });
     },
 
