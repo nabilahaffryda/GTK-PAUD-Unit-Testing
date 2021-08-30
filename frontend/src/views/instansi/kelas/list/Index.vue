@@ -8,28 +8,14 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5 black--text">
-            <base-breadcrumbs :items="breadcrumbs" class="px-0 pb-0" />
-            <div class="my-2" />
-            <div class="headline">{{ $getDeepObj(detail, 'nama') || '' }}</div>
-            <div class="body-1">
-              <v-icon small left>mdi-clock</v-icon>
-              {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) }} s/d
-              {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) }}
-            </div>
+            <div class="headline">Kelas Diklat</div>
           </v-col>
         </v-row>
       </v-card-text>
     </v-card>
     <v-card>
       <v-card-title class="pa-0">
-        <base-table-header
-          @search="onSearch"
-          :btnFilter="false"
-          :btnAdd="$allow('lpd-kelas.create')"
-          @add="onAdd"
-          @reload="onReload"
-          @filter="onFilter"
-        >
+        <base-table-header @search="onSearch" :btnFilter="false" @reload="onReload" @filter="onFilter">
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text">
               <b>{{ total }}</b> Kelas Diklat
@@ -44,7 +30,7 @@
         :filtered="filtered"
         :filters="formFilter"
         :paramsFilter="filters"
-        @save="filterStatus"
+        @save="filterSave"
       />
       <v-card-text class="pa-0">
         <base-list-table
@@ -60,7 +46,7 @@
               <v-list-item dense class="px-0">
                 <v-list-item-content>
                   <v-row>
-                    <v-col class="py-2" cols="12" md="4">
+                    <v-col class="py-2" cols="12" md="6">
                       <v-list-item class="px-0">
                         <v-list-item-avatar color="primary">
                           <v-icon dark>mdi-teach</v-icon>
@@ -73,49 +59,28 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="3">
+                    <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <div class="label--text">Mata Pelajaran</div>
+                          <div class="label--text">Jadwal Pelaksanaan</div>
                           <span>
                             {{
-                              (objMapel[$getDeepObj(item, 'paud_mapel_kelas_id')] &&
-                                objMapel[$getDeepObj(item, 'paud_mapel_kelas_id')]['nama']) ||
-                              '-'
+                              $durasi(
+                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
+                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                              )
                             }}
                           </span>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                     <v-col class="py-0" cols="12" md="2">
-                      <v-list-item class="px-0">
+                      <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
-                          <div class="label--text">Status</div>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-col>
-                    <v-col class="py-0" cols="12" md="2">
-                      <v-list-item class="px-0">
-                        <v-list-item-content>
-                          <div class="label--text">Aksi Selanjutnya</div>
-                          <v-btn
-                            :disabled="!item.is_siap_ajuan"
-                            v-if="+item.k_verval_paud < 2 && $allow('lpd-kelas-ajuan.create')"
-                            color="secondary"
-                            depressed
-                            small
-                            @click="onAjuan(item)"
-                            >Ajukan</v-btn
-                          >
-                          <v-btn
-                            v-if="+item.k_verval_paud > 1 && $allow('lpd-kelas-ajuan.delete')"
-                            color="secondary"
-                            outlined
-                            depressed
-                            small
-                            @click="onBatalAjuan(item)"
-                            >Batal Ajuan</v-btn
-                          >
+                          <v-btn :disabled="true" color="primary" depressed small>
+                            <v-icon left> mdi-link </v-icon>
+                            Tautan LMS
+                          </v-btn>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -133,14 +98,7 @@
         <base-table-footer :pageTotal="pageTotal" @changePage="onChangePage"></base-table-footer>
       </v-card-actions>
     </v-card>
-    <base-modal-full
-      ref="modal"
-      colorBtn="primary"
-      generalError
-      :title="formulir.title"
-      :useSave="formulir.useSave"
-      @save="onSave"
-    >
+    <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title" :useSave="formulir.useSave">
       <component
         ref="formulir"
         :is="formulir.form"
@@ -175,10 +133,6 @@ export default {
     ...mapState('master', {
       masters: (state) => Object.assign({}, state.masters),
     }),
-
-    breadcrumbs() {
-      return [{ text: 'Daftar Diklat', to: 'kelola-diklat' }, { text: this.$getDeepObj(this, 'detail.nama') }];
-    },
 
     configs() {
       const M_PROPINSI = this.masters.m_propinsi || {};
@@ -229,8 +183,6 @@ export default {
         },
       },
     });
-
-    this.listMapels();
   },
   methods: {
     allow(action, data) {

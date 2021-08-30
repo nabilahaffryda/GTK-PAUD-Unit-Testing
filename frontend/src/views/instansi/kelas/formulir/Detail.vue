@@ -3,7 +3,7 @@
     <v-card-text>
       <v-container class="black--text">
         <div class="body-1 font-weight-medium">Info dan Detil Kelas</div>
-        <v-row dense no-gutters class="my-5">
+        <v-row dense no-gutters class="my-2">
           <v-col cols="12" md="1" sm="2" class="pa-0">
             <v-avatar color="primary" size="60">
               <v-icon dark>mdi-teach</v-icon>
@@ -14,25 +14,35 @@
               <div class="label--text">Nama Kelas</div>
               <div class="body-1 font-weight-medium">{{ $getDeepObj(kelas, 'nama') || '-' }}</div>
             </div>
-            <div class="my-5">
+            <div class="my-2">
               <div class="label--text">Deskripsi Kelas</div>
               <div class="body-1">{{ $getDeepObj(kelas, 'deskripsi') || '-' }}</div>
             </div>
-            <v-row class="my-5">
+            <v-row class="my-2">
+              <v-col>
+                <div class="label--text">Jumlah Pengajar</div>
+                <div class="body-1">
+                  <v-chip class="ma-2" color="green" text-color="white">
+                    {{ $getDeepObj(kelas, 'jml_pengajar') || '-' }}
+                  </v-chip>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row class="my-2">
               <v-col>
                 <div class="label--text">Tanggal Mulai Kelas</div>
                 <div class="body-1">
-                  {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) || '-' }}
+                  {{ $localDate($getDeepObj(kelas, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai')) || '-' }}
                 </div>
               </v-col>
               <v-col>
                 <div class="label--text">Tanggal Selesai Kelas</div>
                 <div class="body-1">
-                  {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) || '-' }}
+                  {{ $localDate($getDeepObj(kelas, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')) || '-' }}
                 </div>
               </v-col>
             </v-row>
-            <div class="my-5" v-if="false">
+            <div class="my-2" v-if="false">
               <v-btn depressed link><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn>
             </div>
           </v-col>
@@ -40,73 +50,38 @@
             <v-chip v-if="false" color="success">TERSINKRON</v-chip>
           </v-col>
         </v-row>
-
-        <v-tabs v-model="tab" fixed-tabs>
-          <v-tab v-for="item in tabItems" :key="item.value">
-            {{ item.text }}
-          </v-tab>
-        </v-tabs>
-        <v-tabs-items v-model="tab" class="my-3">
-          <v-tab-item v-for="item in tabItems" :key="item.value">
-            <v-toolbar flat>
-              <v-toolbar-title class="body-2">Daftar {{ item.text }}</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                dense
-                placeholder="Pencarian Data"
-                append-icon="mdi-magnify"
-              ></v-text-field>
-              <v-btn v-if="false" class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
-              <v-btn
-                class="mt-n4 ml-2"
-                small
-                color="secondary"
-                depressed
-                v-if="isPeserta ? $allow('lpd-kelas-peserta.create') : $allow('lpd-kelas-petugas.create')"
-                @click="onAddPetugas"
-              >
-                <v-icon left>mdi-plus</v-icon>Tambah
-              </v-btn>
-            </v-toolbar>
-
-            <div class="my-4">
-              <v-data-table
-                v-model="peserta"
-                :headers="headers"
-                :items="filteredItems"
-                :single-select="false"
-                :no-data-text="`Daftar ${item.text} belum ditemukan`"
-              >
-                <template v-slot:[`item.aksi`]="{ item }">
-                  <v-btn
-                    v-if="isPeserta ? $allow('lpd-kelas-peserta.delete') : $allow('lpd-kelas-petugas.delete')"
-                    icon
-                    @click="onDelete(item)"
-                  >
-                    <v-icon small>mdi-trash-can</v-icon>
-                  </v-btn>
-                </template>
-              </v-data-table>
-            </div>
-          </v-tab-item>
-        </v-tabs-items>
+        <div>
+          <v-toolbar flat>
+            <v-toolbar-title class="title secondary--text">Daftar Peserta Diklat</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              dense
+              placeholder="Pencarian Data"
+              append-icon="mdi-magnify"
+              @keyup.enter="fetch"
+            ></v-text-field>
+            <v-btn v-if="false" class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
+          </v-toolbar>
+          <div class="my-4">
+            <v-data-table
+              :headers="headers"
+              :items="items"
+              :options.sync="options"
+              :server-items-length="totalItems"
+              :loading="loading"
+              :no-data-text="`Daftar Peserta Diklat belum ditemukan`"
+            >
+            </v-data-table>
+          </div>
+        </div>
       </v-container>
     </v-card-text>
-    <base-list-popup
-      ref="popup"
-      :api="`diklatKelas/getListKandidat`"
-      :id="tab === 0 ? 'ptk_id' : 'akun_id'"
-      :title="`Pilih ${tab === 0 ? 'Peserta' : 'Petugas'} Diklat`"
-      multiselect
-    />
   </v-card>
 </template>
 <script>
 import { mapActions } from 'vuex';
-import BaseListPopup from '@components/base/BaseListPopup';
 export default {
-  components: { BaseListPopup },
   props: {
     detail: {
       type: Object,
@@ -119,9 +94,9 @@ export default {
       kelas: {},
       pesertas: [],
       peserta: null,
-      petugas: [],
-      tab: null,
-      tabItems: [{ value: 'peserta', kPetugas: 0, text: 'Peserta Diklat' }],
+      loading: true,
+      options: {},
+      totalItems: 0,
       search: '',
     };
   },
@@ -136,13 +111,6 @@ export default {
         },
         { text: 'Surel', value: 'email', sortable: false },
       ];
-
-      if (this.tab > 1) {
-        temp.push({ text: 'Status', value: 'status', sortable: false });
-      }
-
-      temp.push({ text: '', value: 'aksi', sortable: false });
-
       return temp;
     },
 
@@ -159,18 +127,12 @@ export default {
       });
     },
 
-    filteredItems() {
-      return this.items.filter((s) => {
-        return s.nama.toLowerCase().includes(this.search.toLowerCase());
-      });
-    },
-
-    isPeserta() {
-      return this.tab === 0;
+    kelasId() {
+      return this.$getDeepObj(this.kelas, 'paud_kelas_id');
     },
   },
   methods: {
-    ...mapActions('diklatKelas', ['getListKelas', 'action']),
+    ...mapActions('petugasKelas', ['getListKelas']),
 
     reset() {
       this.tab = 0;
@@ -181,182 +143,32 @@ export default {
       this.search = '';
     },
 
-    fetch(tipe, k_petugas = null) {
-      if (!Object.keys(this.kelas).length) return;
-      this.getListKelas({
-        diklat_id: this.detail.paud_diklat_id,
-        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
-        tipe: tipe,
-        params: {
-          k_petugas_paud: k_petugas,
-        },
-      }).then(({ data }) => {
-        this.pesertas = data || [];
-      });
-    },
+    fetch() {
+      if (!this.kelasId) return;
 
-    onDelete(item) {
-      const url = `${this.isPeserta ? 'peserta' : 'petugas'}/${
-        item.paud_kelas_petugas_id || item.paud_kelas_peserta_id
-      }/delete`;
-      this.$confirm(
-        `Apakan anda ingin membatalkan ${this.isPeserta ? 'peserta' : 'petugas'} ?`,
-        `Hapus ${this.isPeserta ? 'Peserta' : 'Petugas'}`,
-        {
-          tipe: 'warning',
-          data: [
-            {
-              icon: 'mdi-teach',
-              iconSize: 30,
-              iconColor: 'secondary',
-              title: `${this.$getDeepObj(item, 'nama')}`,
-              subtitles: [
-                this.isPeserta
-                  ? `<span>Email: ${this.$getDeepObj(item, 'email') || '-'}</span>`
-                  : `<span>Status: ${this.$getDeepObj(item, 'status') || '-'}</span>`,
-              ],
-            },
-          ],
-        }
-      ).then(() => {
-        const params = {
-          ptk_id: [item.ptk_id],
-        };
-        this.action({
-          id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
-          diklat_id: this.detail.paud_diklat_id,
-          type: url,
-          method: this.isPeserta ? 'post' : 'get',
-          params: this.isPeserta ? params : {},
-        }).then(() => {
-          this.$success(`${this.isPeserta ? 'Peserta' : 'Petugas'} berhasil dihapus`);
-          this.onReload();
-        });
+      const params = Object.assign({}, this.search && this.search.length >= 3 ? { keyword: this.search || '' } : {});
+      this.getListKelas({
+        id: this.kelasId,
+        page: this.options.page || 1,
+        params,
+      }).then(({ data, meta }) => {
+        this.loading = false;
+        this.pesertas = data || [];
+        this.totalItems = (meta && meta.total) || 0;
       });
     },
 
     onReload() {
       this.$emit('reload');
-      if (this.isPeserta) {
-        this.fetch('peserta');
-      } else {
-        this.fetch('petugas', this.tabItems[+this.tab]['kPetugas']);
-      }
-    },
-
-    onAddPetugas() {
-      const fields = {
-        kandidat: [
-          {
-            key: 'nama',
-            title: 'Nama',
-            icon: 'mdi-account-circle',
-            grid: { md: 4, sm: 12, cols: 12 },
-          },
-          {
-            key: 'email',
-            title: 'Email',
-            grid: { md: 6, sm: 12, cols: 12 },
-          },
-        ],
-        petugas: [
-          {
-            key: 'akun.data.nama',
-            title: 'Nama',
-            icon: 'mdi-account-circle',
-            grid: { md: 4, sm: 12, cols: 12 },
-          },
-          {
-            key: 'akun.data.id',
-            title: 'No UKG',
-            grid: { md: 2, sm: 12, cols: 12 },
-          },
-          {
-            key: 'akun.data.email',
-            title: 'Alamat Surel',
-            grid: { md: 4, sm: 12, cols: 12 },
-          },
-        ],
-      };
-
-      const params = {
-        diklat_id: this.detail.paud_diklat_id,
-        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
-        tipe: this.tab === 0 ? 'peserta/kandidat' : 'petugas/kandidat',
-        params: {
-          k_petugas_paud: this.tabItems[+this.tab]['kPetugas'],
-        },
-      };
-
-      this.$refs.popup.open(fields[this.tab === 0 ? 'kandidat' : 'petugas'], params).then((data) => {
-        if (data) {
-          this.petugas = Object.assign({}, data);
-          if (this.tab === 0) {
-            this.onSavePeserta();
-          } else {
-            this.onSavePetugas();
-          }
-        }
-      });
-    },
-
-    onSavePetugas() {
-      const petugas = this.petugas;
-      this.action({
-        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
-        diklat_id: this.detail.paud_diklat_id,
-        type: 'petugas/create',
-        params: {
-          k_petugas_paud: this.tabItems[+this.tab]['kPetugas'],
-          akun_id: petugas,
-        },
-      }).then(() => {
-        this.$success(`Data petugas berhasil ditambahkan`);
-        this.onReload();
-      });
-    },
-
-    onSavePeserta() {
-      const petugas = this.petugas;
-      this.action({
-        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
-        diklat_id: this.detail.paud_diklat_id,
-        type: 'peserta/create',
-        params: {
-          ptk_id: petugas,
-        },
-      }).then(() => {
-        this.$success(`Data peserta berhasil ditambahkan`);
-        this.onReload();
-      });
+      this.fetch();
     },
   },
+
   watch: {
-    tab: function (value) {
-      this.pesertas = [];
-      switch (Number(value)) {
-        case 0:
-          this.fetch('peserta');
-          break;
-        case 1:
-          this.fetch('petugas', 4);
-          break;
-        case 2:
-          this.fetch('petugas', 3);
-          break;
-        case 3:
-          this.fetch('petugas', 1);
-          break;
-        case 4:
-          this.fetch('petugas', 2);
-          break;
-      }
-    },
-    kelas: {
-      handler(value) {
-        if (value && value.paud_kelas_id) {
-          this.fetch('peserta');
-        }
+    kelasId: 'fetch',
+    options: {
+      handler() {
+        this.fetch();
       },
       deep: true,
     },

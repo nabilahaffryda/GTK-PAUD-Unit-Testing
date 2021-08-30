@@ -3,10 +3,10 @@ import { mapActions } from 'vuex';
 export default {
   methods: {
     ...mapActions('master', ['getMasters']),
-    ...mapActions('kelas', ['fetch', 'getDetail', 'getMapels']),
+    ...mapActions('petugasKelas', ['fetch', 'getDetail']),
 
     async onDetail(item) {
-      const data = await this.getDetail({ diklat_id: this.diklatId, id: item.id }).then(({ data }) => data);
+      const data = await this.getDetail({ id: item.id }).then(({ data }) => data);
       this.$set(this.formulir, 'title', 'Detail Diklat');
       this.$set(this.formulir, 'form', 'detail-kelas');
       this.$set(this.formulir, 'useSave', false);
@@ -15,12 +15,6 @@ export default {
       this.$nextTick(() => {
         this.$refs.formulir.reset();
         this.$refs.formulir.kelas = data || {};
-      });
-    },
-
-    listMapels() {
-      this.getMapels().then(({ data }) => {
-        this.mapels = data || [];
       });
     },
   },
