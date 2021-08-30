@@ -225,7 +225,7 @@ export default [
         desc: 'Daftar Kelas diklat kelas dan peserta diklat',
         color: 'success',
         deepColor: 'darken-1',
-        // akses: 'lpd-diklat.index',
+        akses: 'petugas-kelas.index',
         link: 'kelas',
         to: { name: 'kelas' },
       },
