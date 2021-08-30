@@ -29,7 +29,7 @@ class KelasController extends Controller
 
         $kelasIds = $kelases->getCollection()->pluck('paud_kelas_id');
 
-        $belumKonfirms = PaudKelasPetugas::query()
+        $petugasKelases = PaudKelasPetugas::query()
             ->whereIn('paud_kelas_id', $kelasIds)
             ->groupBy('paud_kelas_id', 'k_konfirmasi_paud')
             ->get(['paud_kelas_id', 'k_konfirmasi_paud', \DB::raw('COUNT(1) jumlah')])
@@ -44,21 +44,11 @@ class KelasController extends Controller
         foreach ($kelases as $kelas) {
             $kelas->is_siap_ajuan = true;
 
-            if ($data = $belumKonfirms->get($kelas->paud_kelas_id)) {
-                foreach ($data as $item) {
-                    switch ($item->k_konfirmasi_paud) {
-                        case MKonfirmasiPaud::BERSEDIA:
-                            // TODO: cek komposisi petugas apakah boleh diajukan atau tidak
-                            break;
-
-                        case MKonfirmasiPaud::DIHAPUS:
-                            break;
-
-                        default:
-                            if ($item->jumlah > 0) {
-                                $kelas->is_siap_ajuan = false;
-                                continue 3;
-                            }
+            if ($petugases = $petugasKelases->get($kelas->paud_kelas_id)) {
+                foreach ($petugases as $petugas) {
+                    if ($petugas->k_konfirmasi_paud != MKonfirmasiPaud::BERSEDIA) {
+                        $kelas->is_siap_ajuan = false;
+                        continue 2;
                     }
                 }
             }
