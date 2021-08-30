@@ -15,6 +15,7 @@ const errorHandler = onError(({ networkError, response, operation }) => {
 const httpLink = createHttpLink({
   // You should use an absolute URL here
   uri: process.env.VUE_APP_API_URL + '/graphql',
+  credentials: 'include',
 });
 
 // Cache implementation
