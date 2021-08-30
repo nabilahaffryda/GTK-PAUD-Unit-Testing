@@ -13,13 +13,15 @@ export const mutations = {
 };
 
 export const actions = {
-  async fetch({ commit }) {
+  async fetch({ commit, rootState }) {
+    rootState.loading = true;
     const resp = await graphqlClient.query({
       query: graphQuery['LIST_KONFIRMASI'],
     });
 
     const { data } = resp;
     commit('SET_DATA', data?.ptkListKelasPeserta?.data ?? []);
+    rootState.loading = false;
     return Promise.resolve(data ?? null);
   },
 
@@ -37,7 +39,8 @@ export const actions = {
   },
 
   // eslint-disable-next-line no-empty-pattern
-  async getListKelas({}, payload) {
+  async getListKelas({ rootState }, payload) {
+    rootState.loading = true;
     const resp = await graphqlClient.query({
       query: graphQuery['KELAS'],
       variables: {
@@ -47,11 +50,13 @@ export const actions = {
     });
 
     const { data } = resp;
+    rootState.loading = false;
     return Promise.resolve(data ?? null);
   },
 
   // eslint-disable-next-line no-empty-pattern
-  async actions({ state, commit }, payload) {
+  async actions({ state, commit, rootState }, payload) {
+    rootState.loading = true;
     const mAction = {
       setuju: 'ptkKelasPesertaBersedia',
       tolak: 'ptkKelasPesertaTolak',
@@ -97,7 +102,7 @@ export const actions = {
     });
 
     commit('SET_DATA', kelas);
-
+    rootState.loading = false;
     return Promise.resolve({ kelas, data } ?? null);
   },
 };

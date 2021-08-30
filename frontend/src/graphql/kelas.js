@@ -10,12 +10,24 @@ const ATTR_PESERTA = `
         paud_kelas {
           nama
           k_verval_paud
+          m_kecamatan {
+            keterangan
+          }
+          m_kelurahan {
+            keterangan
+          }
           paud_diklat {
             nama
             paud_periode {
               nama
               tgl_diklat_mulai
               tgl_diklat_selesai
+            }
+            m_kota {
+              keterangan
+            }
+            m_propinsi {
+              keterangan
             }
           }
         }

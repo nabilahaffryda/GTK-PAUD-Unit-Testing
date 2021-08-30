@@ -212,12 +212,9 @@ export default {
     },
 
     async onDetail(data) {
-      const resp = await this.getDetail({ id: this.$getDeepObj(data, 'paud_kelas_peserta_id') }).then(
-        ({ ptkFetchKelasPeserta }) => ptkFetchKelasPeserta
-      );
       this.dialog = true;
       this.$nextTick(() => {
-        this.$set(this, 'diklat', resp);
+        this.$set(this, 'diklat', data);
       });
     },
 
