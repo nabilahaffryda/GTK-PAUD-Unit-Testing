@@ -121,13 +121,7 @@ export default {
       peserta: null,
       petugas: [],
       tab: null,
-      tabItems: [
-        { value: 'peserta', kPetugas: 0, text: 'Peserta' },
-        { value: 'admin', kPetugas: 4, text: 'Admin Kelas' },
-        { value: 'pembimbing-praktik', kPetugas: 3, text: 'Pembimbing Praktik' },
-        { value: 'pengajar', kPetugas: 1, text: 'Pengajar' },
-        { value: 'pengajar-tambahan', kPetugas: 2, text: 'Pengajar Tambahan' },
-      ],
+      tabItems: [{ value: 'peserta', kPetugas: 0, text: 'Peserta Diklat' }],
       search: '',
     };
   },
