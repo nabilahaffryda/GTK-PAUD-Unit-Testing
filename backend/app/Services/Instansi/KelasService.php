@@ -86,7 +86,7 @@ class KelasService
 
         $query = PaudKelasPeserta::query()
             ->where('paud_kelas_peserta.paud_kelas_id', '=', $kelas->paud_kelas_id)
-            ->with(['ptk:ptk_id,nama,email']);
+            ->with(['ptk:ptk_id,nama,email', 'mKonfirmasiPaud']);
 
         if ($keyword = Arr::get($params, 'keyword')) {
             $query->join('ptk', 'ptk.ptk_id', '=', 'paud_kelas_peserta.ptk_id')
