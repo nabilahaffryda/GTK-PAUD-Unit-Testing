@@ -111,9 +111,11 @@
               <v-data-table
                 v-model="peserta"
                 :headers="headers"
+                :items-per-page="10"
                 :items="filteredItems"
                 :single-select="false"
                 :no-data-text="`Daftar ${item.text} belum ditemukan`"
+                hide-default-footer
               >
                 <template v-slot:[`item.aksi`]="{ item }">
                   <v-btn
@@ -123,6 +125,25 @@
                   >
                     <v-icon small>mdi-trash-can</v-icon>
                   </v-btn>
+                </template>
+                <template v-slot:footer>
+                  <div class="text-right">
+                    <v-spacer></v-spacer>
+                    <span class="grey--text">{{ `${meta.from || 0} - 10 of ${meta.total || 0}` }}</span>
+                    <span class="mx-2"></span>
+                    <v-btn color="grey" :disabled="page === 1" icon small @click="onChangePage('prev')">
+                      <v-icon>mdi-chevron-left</v-icon>
+                    </v-btn>
+                    <v-btn
+                      color="grey"
+                      :disabled="Number(page) === Number(meta.last_page || 0)"
+                      icon
+                      small
+                      @click="onChangePage('next')"
+                    >
+                      <v-icon>mdi-chevron-right</v-icon>
+                    </v-btn>
+                  </div>
                 </template>
               </v-data-table>
             </div>
@@ -166,6 +187,8 @@ export default {
         { value: 'pengajar-tambahan', kPetugas: 2, text: 'Pengajar Tambahan' },
       ],
       search: '',
+      meta: {},
+      page: 1,
     };
   },
   computed: {
@@ -180,7 +203,7 @@ export default {
         { text: 'Surel', value: 'email', sortable: false },
       ];
 
-      if (this.tab > 1) {
+      if (this.tab !== 1) {
         temp.push({ text: 'Status', value: 'status', sortable: false });
       }
 
@@ -232,8 +255,10 @@ export default {
         tipe: tipe,
         params: {
           k_petugas_paud: k_petugas,
+          page: this.page,
         },
-      }).then(({ data }) => {
+      }).then(({ data, meta }) => {
+        this.meta = meta;
         this.pesertas = data || [];
       });
     },
@@ -373,10 +398,21 @@ export default {
         this.onReload();
       });
     },
+
+    onChangePage(key) {
+      if (key === 'next') {
+        this.page++;
+      } else {
+        this.page--;
+      }
+
+      this.onReload();
+    },
   },
   watch: {
     tab: function (value) {
       this.pesertas = [];
+      this.page = 1;
       switch (Number(value)) {
         case 0:
           this.fetch('peserta');

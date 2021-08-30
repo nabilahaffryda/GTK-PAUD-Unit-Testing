@@ -254,7 +254,7 @@ export default {
         { text: 'Surel', value: 'email', sortable: false },
       ];
 
-      if (this.tab > 1) {
+      if (this.tab !== 1) {
         temp.push({ text: 'Status', value: 'status', sortable: false });
       }
 
@@ -328,6 +328,7 @@ export default {
         tipe: tipe,
         params: {
           k_petugas_paud: k_petugas,
+          count: 50,
         },
       }).then(({ data }) => {
         this.pesertas = data || [];
