@@ -345,6 +345,13 @@ deploy-real:
             ${SERVER}/ 2>&1 | sed -e "s/^/${LOGIN_HOST}-backend:\ /"
         ) &
         PIDS+=($!)
+
+        ( ssh -o ConnectTimeout=2 -o ServerAliveInterval=2 -o ServerAliveCountMax=2 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            ${SERVER_LOGIN} \
+            "/usr/bin/php ${SERVER_PATH}/artisan lighthouse:clear-cache
+            && /usr/bin/php ${SERVER_PATH}/artisan lighthouse:cache" 2>&1 | sed -e "s/^/${LOGIN_HOST}:\ /"
+        ) &
+        PIDS+=($!)
       done
 
       for SERVER in ${REAL_SERVER_FRONTEND} ; do
