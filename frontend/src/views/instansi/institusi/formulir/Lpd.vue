@@ -13,12 +13,15 @@
           <v-stepper-items>
             <v-stepper-content step="1" style="padding: 0">
               <v-card flat>
-                <v-card-text class="pa-0 pt-7">
-                  <base-form-generator :schema="schema" v-model="form" />
+                <v-card-text class="pa-0 pt-3">
+                  <h1 class="title mb-3">Data Institusi LPD</h1>
+                  <base-form-generator :schema="schema.dasar" v-model="form" />
+                  <h1 class="title my-3">Pengaturan Petugas Diklat</h1>
+                  <base-form-generator :schema="schema.petugas" v-model="form" />
                   <v-divider class="my-4" />
                 </v-card-text>
                 <v-card-actions class="pa-0">
-                  <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
+                  <span class="secondary--text font-italic">Form dengan tanda (*) wajib di isi</span>
                   <v-spacer></v-spacer>
                   <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')"> Selanjutnya </v-btn>
                 </v-card-actions>
@@ -95,100 +98,133 @@ export default {
       };
     },
     schema() {
-      return [
-        {
-          type: 'VTextField',
-          name: 'nama',
-          label: 'Nama Institusi',
-          dense: true,
-          hint: 'wajib diisi',
-          required: true,
-          hideDetails: false,
-          outlined: true,
-          singleLine: true,
-          grid: { cols: 12, md: 6 },
-          labelColor: 'secondary',
-        },
-        {
-          type: 'VTextField',
-          name: 'email',
-          label: `Alamat Surel`,
-          labelColor: 'secondary',
-          hideDetails: false,
-          placeholder: 'Alamat Surel',
-          hint: 'wajib diisi',
-          grid: { cols: 12, md: 6 },
-          required: true,
-          outlined: true,
-          dense: true,
-          singleLine: true,
-        },
-        {
-          type: 'VTextarea',
-          name: 'alamat',
-          label: 'Alamat',
-          hint: 'wajib diisi',
-          labelColor: 'secondary',
-          required: true,
-          grid: { cols: 12 },
-          outlined: true,
-          dense: true,
-          singleLine: true,
-          disabled: this.isEdit || false,
-        },
-        {
-          type: 'cascade',
-          configs: this.configs,
-          grid: { cols: 12 },
-          labelColor: 'secondary',
-        },
-        {
-          type: 'VTextField',
-          name: 'kodepos',
-          label: 'Kode Pos',
-          hint: 'wajib diisi',
-          required: false,
-          hideDetails: false,
-          outlined: true,
-          dense: true,
-          singleLine: true,
-          mask: '######',
-          grid: { cols: 12, md: 6 },
-          labelColor: 'secondary',
-          disabled: this.isEdit || false,
-        },
-        {
-          type: 'VTextField',
-          name: 'nama_penanggung_jawab',
-          label: 'Penanggung Jawab',
-          dense: true,
-          hint: 'wajib diisi',
-          required: true,
-          hideDetails: false,
-          outlined: true,
-          singleLine: true,
-          grid: { cols: 12, md: 6 },
-          labelColor: 'secondary',
-          disabled: this.isEdit || false,
-        },
-        {
-          type: 'VTextField',
-          name: `telp_penanggung_jawab`,
-          label: `No. Telpon (Penanggung Jawab)`,
-          labelColor: 'secondary',
-          hideDetails: false,
-          placeholder: 'Nomor Telpon Penanggung Jawab',
-          hint: 'wajib diisi',
-          grid: { cols: 12, md: 6 },
-          required: true,
-          dense: true,
-          outlined: true,
-          singleLine: true,
-          mask: '##############',
-          counter: 14,
-          disabled: this.isEdit || false,
-        },
-      ];
+      return {
+        dasar: [
+          {
+            type: 'VTextField',
+            name: 'nama',
+            label: 'Nama Institusi',
+            dense: true,
+            hint: 'wajib diisi',
+            required: true,
+            hideDetails: false,
+            outlined: true,
+            singleLine: true,
+            grid: { cols: 12, md: 6 },
+            labelColor: 'secondary',
+          },
+          {
+            type: 'VTextField',
+            name: 'email',
+            label: `Alamat Surel`,
+            labelColor: 'secondary',
+            hideDetails: false,
+            placeholder: 'Alamat Surel',
+            hint: 'wajib diisi',
+            grid: { cols: 12, md: 6 },
+            required: true,
+            outlined: true,
+            dense: true,
+            singleLine: true,
+          },
+          {
+            type: 'VTextarea',
+            name: 'alamat',
+            label: 'Alamat',
+            hint: 'wajib diisi',
+            labelColor: 'secondary',
+            required: true,
+            grid: { cols: 12 },
+            outlined: true,
+            dense: true,
+            singleLine: true,
+            disabled: this.isEdit || false,
+          },
+          {
+            type: 'cascade',
+            configs: this.configs,
+            grid: { cols: 12 },
+            labelColor: 'secondary',
+          },
+          {
+            type: 'VTextField',
+            name: 'kodepos',
+            label: 'Kode Pos',
+            hint: 'wajib diisi',
+            required: false,
+            hideDetails: false,
+            outlined: true,
+            dense: true,
+            singleLine: true,
+            mask: '######',
+            grid: { cols: 12, md: 6 },
+            labelColor: 'secondary',
+            disabled: this.isEdit || false,
+          },
+          {
+            type: 'VTextField',
+            name: 'nama_penanggung_jawab',
+            label: 'Penanggung Jawab',
+            dense: true,
+            hint: 'wajib diisi',
+            required: true,
+            hideDetails: false,
+            outlined: true,
+            singleLine: true,
+            grid: { cols: 12, md: 6 },
+            labelColor: 'secondary',
+            disabled: this.isEdit || false,
+          },
+          {
+            type: 'VTextField',
+            name: `telp_penanggung_jawab`,
+            label: `No. Telpon (Penanggung Jawab)`,
+            labelColor: 'secondary',
+            hideDetails: false,
+            placeholder: 'Nomor Telpon Penanggung Jawab',
+            hint: 'wajib diisi',
+            grid: { cols: 12, md: 6 },
+            required: true,
+            dense: true,
+            outlined: true,
+            singleLine: true,
+            mask: '##############',
+            counter: 14,
+            disabled: this.isEdit || false,
+          },
+        ],
+        petugas: [
+          {
+            type: 'VTextField',
+            name: 'ratio_pengajar_tambahan',
+            label: 'Pengajar Tambahan',
+            hint: 'wajib diisi',
+            required: true,
+            hideDetails: false,
+            outlined: true,
+            dense: true,
+            singleLine: true,
+            mask: '###',
+            grid: { cols: 12, md: 6 },
+            labelColor: 'secondary',
+            suffix: '%',
+          },
+          {
+            type: 'VTextField',
+            name: 'jml_pembimbing',
+            label: 'Jumlah Pembimbing Praktik',
+            hint: 'wajib diisi',
+            required: true,
+            hideDetails: false,
+            outlined: true,
+            dense: true,
+            singleLine: true,
+            mask: '######',
+            grid: { cols: 12, md: 6 },
+            labelColor: 'secondary',
+          },
+        ],
+      };
     },
   },
   methods: {
@@ -201,7 +237,13 @@ export default {
     },
 
     initForm(value) {
-      const formulir = [...(this.schema || []), { name: 'email' }, { name: 'k_propinsi' }, { name: 'k_kota' }];
+      const formulir = [
+        ...(this.schema.dasar || []),
+        ...(this.schema.petugas || []),
+        { name: 'email' },
+        { name: 'k_propinsi' },
+        { name: 'k_kota' },
+      ];
       for (const item of formulir) {
         if (item.name) {
           this.$set(this.form, item.name, this.$getDeepObj(value, item.name) || '');
@@ -211,7 +253,7 @@ export default {
     },
 
     getValue() {
-      let keys = (this.schema || []).map((item) => {
+      let keys = [...this.schema.dasar, ...this.schema.petugas].map((item) => {
         if (!item.disabled) {
           return item.name;
         }
@@ -278,9 +320,23 @@ export default {
             value: this.$getDeepObj(this.form, 'nama_penanggung_jawab') || '-',
           },
           {
+            key: 'ratio_pengajar_tambahan',
+            label: 'Pengajar Tambahan',
+            value: this.$getDeepObj(this.form, 'ratio_pengajar_tambahan')
+              ? `${this.$getDeepObj(this.form, 'ratio_pengajar_tambahan')}%`
+              : '-',
+          },
+        ],
+        [
+          {
             key: 'telp_penanggung_jawab',
             label: 'No. Telpon (Penanggung Jawab)',
             value: this.$getDeepObj(this.form, 'telp_penanggung_jawab') || '-',
+          },
+          {
+            key: 'jml_pembimbing',
+            label: 'Jumlah Pembimbing Praktik',
+            value: this.$getDeepObj(this.form, 'jml_pembimbing') || '-',
           },
         ],
       ];

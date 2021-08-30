@@ -21,6 +21,7 @@ class CreateRequest extends FormRequest
             'k_kota'              => ['required', 'integer', 'exists:m_kota,k_kota'],
             'k_kecamatan'         => ['required', 'integer', 'exists:m_kecamatan,k_kecamatan'],
             'k_kelurahan'         => ['required', 'integer', 'exists:m_kelurahan,k_kelurahan'],
+            'jml_pengajar'        => ['required', 'integer', 'min:0'],
         ];
     }
 }
