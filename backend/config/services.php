@@ -44,4 +44,8 @@ return [
         'score'      => env('RECAPTCHA_SCORE', '0.3'),
     ],
 
+    'sertifikat-api' => [
+        'url'   => env('SERTIFIKAT_API_URL', 'https://sertifikat-api-dev.simpkb.id/backend'),
+        'token' => env('SERTIFIKAT_API_TOKEN', ''),
+    ],
 ];
