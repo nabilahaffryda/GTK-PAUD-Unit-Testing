@@ -237,8 +237,8 @@ class KelasService
 
         $paudInstansi = $paudDiklat->paudInstansi;
         $batasan      = [
-            MPetugasPaud::PENGAJAR           => 9,
-            MPetugasPaud::PENGAJAR_TAMBAHAN  => 9,
+            MPetugasPaud::PENGAJAR           => $kelas->jml_pengajar,
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => $kelas->jml_pengajar,
             MPetugasPaud::PEMBIMBING_PRAKTIK => $paudInstansi->jml_pembimbing,
             MPetugasPaud::ADMIN_KELAS        => 1,
         ];
@@ -317,8 +317,8 @@ class KelasService
 
         $paudInstansi = $paudDiklat->paudInstansi;
         $batasan      = [
-            MPetugasPaud::PENGAJAR           => [1, 9],
-            MPetugasPaud::PENGAJAR_TAMBAHAN  => [1, 9],
+            MPetugasPaud::PENGAJAR           => [$kelas->jml_pengajar, $kelas->jml_pengajar],
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => [$kelas->jml_pengajar, $kelas->jml_pengajar],
             MPetugasPaud::PEMBIMBING_PRAKTIK => [min(4, $paudInstansi->jml_pembimbing), $paudInstansi->jml_pembimbing],
             MPetugasPaud::ADMIN_KELAS        => [1, 1],
         ];
