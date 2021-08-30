@@ -50,6 +50,22 @@ extend('maxChar', {
   message: 'Data isian Anda ditolak! Karena lebih dari {length} karakter, mohon untuk disesuaikan',
 });
 
+extend('max', {
+  validate(value, { length }) {
+    return value <= length;
+  },
+  params: ['length'],
+  message: 'Maksimal nilai yang diperbolehkan adalah {length}, mohon untuk disesuaikan',
+});
+
+extend('min', {
+  validate(value, { length }) {
+    return value >= length;
+  },
+  params: ['length'],
+  message: 'Minimal nilai yang diperbolehkan adalah {length}, mohon untuk disesuaikan',
+});
+
 extend('length', length);
 extend('confirmed', confirmed);
 // Install English and Arabic locales.
