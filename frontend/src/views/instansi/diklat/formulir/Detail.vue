@@ -110,7 +110,6 @@
             <div class="my-4">
               <v-data-table
                 v-model="peserta"
-                :items-per-page="5"
                 :headers="headers"
                 :items-per-page="10"
                 :items="filteredItems"
