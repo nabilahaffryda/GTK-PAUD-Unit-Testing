@@ -37,11 +37,11 @@ class KelasController extends Controller
             ->get(['paud_kelas_id', 'k_konfirmasi_paud', \DB::raw('COUNT(1) jumlah')])
             ->groupBy('paud_kelas_id');
 
-        $pesertas = PaudKelasPeserta::query()
+        $pesertaKelases = PaudKelasPeserta::query()
             ->whereIn('paud_kelas_id', $kelasIds)
-            ->groupBy('paud_kelas_id')
-            ->get(['paud_kelas_id', \DB::raw('COUNT(1) jumlah')])
-            ->pluck('jumlah', 'paud_kelas_id');
+            ->groupBy('paud_kelas_id', 'k_konfirmasi_paud')
+            ->get(['paud_kelas_id', 'k_konfirmasi_paud', \DB::raw('COUNT(1) jumlah')])
+            ->groupBy('paud_kelas_id');
 
         foreach ($kelases as $kelas) {
             $kelas->is_siap_ajuan = true;
@@ -55,8 +55,13 @@ class KelasController extends Controller
                 }
             }
 
-            if ($pesertas->get($kelas->paud_kelas_id, 0) <= 0) {
-                $kelas->is_siap_ajuan = false;
+            if ($pesertas = $pesertaKelases->get($kelas->paud_kelas_id)) {
+                foreach ($pesertas as $peserta) {
+                    if ($peserta->k_konfirmasi_paud != MKonfirmasiPaud::BERSEDIA) {
+                        $kelas->is_siap_ajuan = false;
+                        continue 2;
+                    }
+                }
             }
         }
 
