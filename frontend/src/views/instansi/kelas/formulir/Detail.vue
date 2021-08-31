@@ -60,6 +60,7 @@
               placeholder="Pencarian Data"
               append-icon="mdi-magnify"
               @keyup.enter="fetch"
+              @click:append="fetch"
             ></v-text-field>
             <v-btn v-if="false" class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
           </v-toolbar>
