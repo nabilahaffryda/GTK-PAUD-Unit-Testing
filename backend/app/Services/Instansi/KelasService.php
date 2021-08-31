@@ -307,6 +307,15 @@ class KelasService
             throw new FlowException("Masih terdapat petugas yang belum bersedia");
         }
 
+        $tidakBersedia = $kelas
+            ->paudKelasPesertas()
+            ->whereNotIn('k_konfirmasi_paud', [MKonfirmasiPaud::BERSEDIA])
+            ->exists();
+
+        if ($tidakBersedia) {
+            throw new FlowException("Masih ada peserta yang belum bersedia/belum konfirmasi");
+        }
+
         $jmlPetugases = PaudKelasPetugas::query()
             ->where([
                 'paud_kelas_id' => $kelas->paud_kelas_id,
