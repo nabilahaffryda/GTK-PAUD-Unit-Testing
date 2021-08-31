@@ -304,7 +304,7 @@ class KelasService
             ->exists();
 
         if ($tidakBersedia) {
-            throw new FlowException("Masih terdapat petugas yang belum bersedia");
+            throw new FlowException("Masih ada petugas yang belum bersedia/belum konfirmasi");
         }
 
         $tidakBersedia = $kelas
