@@ -328,6 +328,7 @@ class KelasService
 
         $tidakBersedia = $kelas
             ->paudKelasPetugases()
+            ->whereNotIn('k_petugas_paud', [MPetugasPaud::ADMIN_KELAS])
             ->whereNotIn('k_konfirmasi_paud', [MKonfirmasiPaud::BERSEDIA])
             ->exists();
 
