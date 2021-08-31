@@ -118,13 +118,15 @@
                 hide-default-footer
               >
                 <template v-slot:[`item.aksi`]="{ item }">
-                  <v-btn
-                    v-if="isPeserta ? $allow('lpd-kelas-peserta.delete') : $allow('lpd-kelas-petugas.delete')"
-                    icon
-                    @click="onDelete(item)"
-                  >
-                    <v-icon small>mdi-trash-can</v-icon>
-                  </v-btn>
+                  <template v-if="Number((item && item.k_konfirmasi_paud) || 1) !== 3">
+                    <v-btn
+                      v-if="isPeserta ? $allow('lpd-kelas-peserta.delete') : $allow('lpd-kelas-petugas.delete')"
+                      icon
+                      @click="onDelete(item)"
+                    >
+                      <v-icon small>mdi-trash-can</v-icon>
+                    </v-btn>
+                  </template>
                 </template>
                 <template v-slot:footer>
                   <div class="text-right">
@@ -218,6 +220,7 @@ export default {
           nama: this.$getDeepObj(item, 'ptk.data.nama') || this.$getDeepObj(item, 'akun.data.nama') || '-',
           email: this.$getDeepObj(item, 'ptk.data.email') || this.$getDeepObj(item, 'akun.data.email') || '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
+          k_konfirmasi_paud: (item && item.k_konfirmasi_paud) || 1,
           paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
           paud_kelas_peserta_id: this.$getDeepObj(item, 'paud_kelas_peserta_id') || '',
           ptk_id: this.$getDeepObj(item, 'ptk_id') || '',

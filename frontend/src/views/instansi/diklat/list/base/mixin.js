@@ -153,6 +153,11 @@ export default {
     },
 
     onBatalAjuan(item) {
+      if (item?.m_verval_paud ?? 1 > 3) {
+        this.$error('Kelas sudah diverval, untuk pembatalan silahkan menghubungi Admin GTK');
+        return;
+      }
+
       this.$confirm(`Apakan anda ingin membatalkan ajuan pada kelas berikut ?`, `Batalkan Ajuan Diklat`, {
         tipe: 'warning',
         data: [
