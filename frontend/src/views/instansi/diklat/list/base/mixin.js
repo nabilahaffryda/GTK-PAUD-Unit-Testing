@@ -125,7 +125,7 @@ export default {
           },
         ],
       }).then(() => {
-        this.action({ id: item.paud_periode_id, type: 'delete', name: this.attr.tipe }).then(() => {
+        this.action({ id: item.paud_diklat_id, type: 'delete', name: this.attr.tipe }).then(() => {
           this.$success(`Data diklat berhasil di hapus`);
           this.fetchData();
         });
