@@ -249,6 +249,12 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('{kelasPetugas}/reset', [Petugas\KonfirmasiController::class, 'reset']);
     });
 
+    Route::group(['prefix' => 'petugas/kelas'], function () {
+        Route::get('', [Petugas\KelasController::class, 'index']);
+        Route::get('{kelas}', [Petugas\KelasController::class, 'fetch']);
+        Route::get('{kelas}/peserta', [Petugas\KelasController::class, 'peserta']);
+    });
+
     Route::group(['prefix' => 'petugas/profil'], function () {
         Route::get('', [Petugas\ProfilController::class, 'index']);
         Route::post('{petugas}/update', [Petugas\ProfilController::class, 'update']);

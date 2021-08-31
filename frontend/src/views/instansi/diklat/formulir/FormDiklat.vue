@@ -208,7 +208,7 @@ export default {
               type: 'VSelect',
               name: 'jml_pengajar',
               label: 'Jumlah Pengajar',
-              hint: 'wajib diisi',
+              hint: 'wajib dipilih',
               required: true,
               hideDetails: false,
               outlined: true,

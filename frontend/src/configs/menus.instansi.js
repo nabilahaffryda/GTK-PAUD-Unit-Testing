@@ -195,8 +195,8 @@ export default [
   },
   {
     key: 'diklat',
-    program: 'Kelola Diklat',
-    subheading: 'Kelola Diklat',
+    program: 'Diklat',
+    subheading: 'Diklat',
     submenu: false,
     menu: [
       {
@@ -218,6 +218,16 @@ export default [
         akses: 'lpd-diklat.index',
         link: 'kelola-diklat',
         to: { name: 'kelola-diklat' },
+      },
+      {
+        icon: 'mdi-chair-rolling',
+        title: 'Kelas Diklat',
+        desc: 'Daftar Kelas diklat kelas dan peserta diklat',
+        color: 'success',
+        deepColor: 'darken-1',
+        akses: 'petugas-kelas.index',
+        link: 'kelas',
+        to: { name: 'kelas' },
       },
     ],
   },
