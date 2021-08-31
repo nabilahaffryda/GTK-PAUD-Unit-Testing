@@ -8,6 +8,7 @@ use App\Http\Requests\Instansi\Lpd\Kelas\IndexRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\MKonfirmasiPaud;
+use App\Models\MPetugasPaud;
 use App\Models\PaudDiklat;
 use App\Models\PaudKelas;
 use App\Models\PaudKelasPeserta;
@@ -31,6 +32,7 @@ class KelasController extends Controller
 
         $petugasKelases = PaudKelasPetugas::query()
             ->whereIn('paud_kelas_id', $kelasIds)
+            ->whereIn('k_petugas_paud', [MPetugasPaud::PENGAJAR, MPetugasPaud::PENGAJAR_TAMBAHAN, MPetugasPaud::PEMBIMBING_PRAKTIK])
             ->groupBy('paud_kelas_id', 'k_konfirmasi_paud')
             ->get(['paud_kelas_id', 'k_konfirmasi_paud', \DB::raw('COUNT(1) jumlah')])
             ->groupBy('paud_kelas_id');
