@@ -129,7 +129,7 @@
                 <template v-slot:footer>
                   <div class="text-right">
                     <v-spacer></v-spacer>
-                    <span class="grey--text">{{ `${meta.from || 0} - 10 of ${meta.total || 0}` }}</span>
+                    <span class="grey--text">{{ `${meta.from || 0} - ${meta.to || 0} of ${meta.total || 0}` }}</span>
                     <span class="mx-2"></span>
                     <v-btn color="grey" :disabled="page === 1" icon small @click="onChangePage('prev')">
                       <v-icon>mdi-chevron-left</v-icon>
