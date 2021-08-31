@@ -153,7 +153,7 @@ export default {
     },
 
     onBatalAjuan(item) {
-      if (item?.m_verval_paud ?? 1 > 3) {
+      if ([4, 6].includes(item?.m_verval_paud ?? 1)) {
         this.$error('Kelas sudah diverval, untuk pembatalan silahkan menghubungi Admin GTK');
         return;
       }
