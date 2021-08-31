@@ -328,6 +328,7 @@ export default {
         tipe: tipe,
         params: {
           k_petugas_paud: k_petugas,
+          count: 50,
         },
       }).then(({ data }) => {
         this.pesertas = data || [];
@@ -360,7 +361,7 @@ export default {
           break;
       }
     },
-    kelas: {
+    detail: {
       handler(value) {
         if (value && value.id) {
           this.fetch('peserta');

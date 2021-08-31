@@ -19,6 +19,22 @@
               <div class="body-1">{{ $getDeepObj(kelas, 'deskripsi') || '-' }}</div>
             </div>
             <v-row class="my-5">
+              <!--              <v-col>-->
+              <!--                <div class="label&#45;&#45;text">Lokasi</div>-->
+              <!--                <div class="body-1">-->
+              <!--                  {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) || '-' }}-->
+              <!--                </div>-->
+              <!--              </v-col>-->
+              <v-col>
+                <div class="label--text">Jumlah Pengajar</div>
+                <div class="body-1">
+                  <v-chip class="ma-2" color="green" text-color="white">
+                    {{ $getDeepObj(kelas, 'jml_pengajar') || '-' }}
+                  </v-chip>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row class="my-5">
               <v-col>
                 <div class="label--text">Tanggal Mulai Kelas</div>
                 <div class="body-1">
@@ -69,12 +85,34 @@
                 <v-icon left>mdi-plus</v-icon>Tambah
               </v-btn>
             </v-toolbar>
-
+            <v-alert dense text type="info" v-if="tab > 1">
+              <template v-if="tab === 2">
+                Penambahan <b>{{ tabItems[tab]['text'] }}</b> pada kelas sebanyak
+                {{ $getDeepObj(kelas, 'paud_diklat.data.paud_instansi.data.jml_pembimbing') || 0 }}
+              </template>
+              <template v-else>
+                Penambahan <b>{{ tabItems[tab]['text'] }}</b> pada kelas sebanyak
+                <b>
+                  {{
+                    tab === 3
+                      ? `${
+                          100 -
+                          Number($getDeepObj(kelas, 'paud_diklat.data.paud_instansi.data.ratio_pengajar_tambahan') || 0)
+                        }%`
+                      : `${Number(
+                          $getDeepObj(kelas, 'paud_diklat.data.paud_instansi.data.ratio_pengajar_tambahan') || 0
+                        )}%`
+                  }}
+                </b>
+                dari total Pengajar
+              </template>
+            </v-alert>
             <div class="my-4">
               <v-data-table
                 v-model="peserta"
                 :items-per-page="5"
                 :headers="headers"
+                :items-per-page="10"
                 :items="filteredItems"
                 :single-select="false"
                 :no-data-text="`Daftar ${item.text} belum ditemukan`"
@@ -99,7 +137,7 @@
                     </v-btn>
                     <v-btn
                       color="grey"
-                      :disabled="page === meta.last_page || 1"
+                      :disabled="Number(page) === Number(meta.last_page || 0)"
                       icon
                       small
                       @click="onChangePage('next')"
@@ -368,6 +406,8 @@ export default {
       } else {
         this.page--;
       }
+
+      this.onReload();
     },
   },
   watch: {
