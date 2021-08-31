@@ -57,6 +57,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property null|int $is_aktif
  * @property null|string $akun_id
  *
+ * @property-read MKecamatan $mKecamatan
  * @property-read MKota $mKota
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|PaudKelasPeserta[] $paudKelasPesertas
@@ -248,6 +249,14 @@ class Ptk extends Authenticatable
     /**
      * @return BelongsTo
      */
+    public function mKecamatan()
+    {
+        return $this->belongsTo('App\Models\MKecamatan', 'k_kecamatan', 'k_kecamatan');
+    }
+
+    /**
+     * @return BelongsTo
+     */
     public function mKota()
     {
         return $this->belongsTo('App\Models\MKota', 'k_kota', 'k_kota');
@@ -267,5 +276,15 @@ class Ptk extends Authenticatable
     public function paudKelasPesertas()
     {
         return $this->hasMany('App\Models\PaudKelasPeserta', 'ptk_id', 'ptk_id');
+    }
+
+    /**
+     * Get the name of the unique identifier for the user.
+     *
+     * @return string
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'paspor_id';
     }
 }

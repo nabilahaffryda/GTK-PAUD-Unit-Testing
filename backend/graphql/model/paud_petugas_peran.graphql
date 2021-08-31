@@ -1,0 +1,22 @@
+type PaudPetugasPeran {
+    paud_petugas_peran_id: Int!
+    paud_petugas_id: Int
+    akun_id: String
+    tahun: Int
+    angkatan: Int
+    k_verval_paud: Int!
+    wkt_ajuan: DateTime
+    wkt_verval: DateTime
+    akun_id_verval: String
+    alasan: String
+    catatan: String
+    created_at: DateTime
+    updated_at: DateTime
+    created_by: String
+    updated_by: String
+
+    akun: Akun @belongsTo(relation: "akun")
+    akun_verval: Akun @belongsTo(relation: "akunVerval")
+    m_verval_paud: MVervalPaud @belongsTo(relation: "mVervalPaud")
+    paud_petugas: PaudPetugas @belongsTo(relation: "paudPetugas")
+}

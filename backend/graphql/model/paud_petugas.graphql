@@ -1,0 +1,37 @@
+type PaudPetugas {
+    paud_petugas_id: Int!
+    akun_id: String
+    instansi_id: Int
+    tahun: Int
+    angkatan: Int
+    k_petugas_paud: Int!
+    lulusan: String
+    prodi: String
+    k_kualifikasi: Int
+    k_kecamatan: Int
+    k_kelurahan: Int
+    instansi_nama: String
+    instansi_jabatan: String
+    instansi_alamat: String
+    instansi_k_propinsi: Int
+    instansi_k_kota: Int
+    instansi_kodepos: String
+    data_akun: String
+    created_at: DateTime
+    updated_at: DateTime
+    created_by: String
+    updated_by: String
+    is_inti: Int
+    is_refreshment: Int
+    is_pengimbasan: Int
+    k_unsur_pengajar_paud: Int
+
+    akun: Akun @belongsTo(relation: "akun")
+    instansi: Instansi @belongsTo(relation: "instansi")
+    instansi_kota: MKota @belongsTo(relation: "instansiKota")
+    instansi_propinsi: MPropinsi @belongsTo(relation: "instansiPropinsi")
+    m_kecamatan: MKecamatan @belongsTo(relation: "mKecamatan")
+    m_kelurahan: MKelurahan @belongsTo(relation: "mKelurahan")
+    m_petugas_paud: MPetugasPaud @belongsTo(relation: "mPetugasPaud")
+    m_unsur_pengajar_paud: MUnsurPengajarPaud @belongsTo(relation: "mUnsurPengajarPaud")
+}

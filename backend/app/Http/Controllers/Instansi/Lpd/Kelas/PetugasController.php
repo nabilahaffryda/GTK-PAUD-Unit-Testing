@@ -35,6 +35,7 @@ class PetugasController extends Controller
     public function delete(PaudDiklat $paudDiklat, PaudKelas $kelas, PaudKelasPetugas $petugas)
     {
         $this->service->validateKelas($paudDiklat, $kelas);
+        $this->service->validateKelasBaru($kelas);
 
         $petugas->delete();
 

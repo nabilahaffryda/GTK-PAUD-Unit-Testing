@@ -28,105 +28,112 @@ export function resetRouter(newModules) {
   router.addRoutes(newModules);
 }
 
+// Page yang perlu login
+// perlu pengecekan user login
+async function isUserLogin() {
+  return await store.dispatch('auth/checkUser');
+}
+
+async function getPreferensi(id) {
+  return await store.dispatch('auth/userPreferensi', id);
+}
+
+function getMenuGtk(preferensi) {
+  const roleMenu = roleMenus['gtk'];
+
+  const menus = roleMenu.map((item) => {
+    let temp = Object.assign({}, item);
+    if (temp && temp.href) {
+      temp.href = temp.href.replace(
+        /#PORTAL_URL#/g,
+        'https://sekolah.penggerak.kemdikbud.go.id/programsekolahpenggerak/'
+      );
+      temp.href = temp.href.replace(/#SIM_PKB_URL#/g, preferensi?.simpkb);
+    }
+
+    return temp;
+  });
+  return menus;
+}
+
+function getMenuIns(preferensi) {
+  const roleMenu = roleMenus['instansi'];
+
+  const menus = roleMenu.map((item) => {
+    let temp = Object.assign({}, item);
+    if (temp && temp.href) {
+      temp.href = temp.href.replace(
+        /#PORTAL_URL#/g,
+        'https://sekolah.penggerak.kemdikbud.go.id/programsekolahpenggerak/'
+      );
+      temp.href = temp.href.replace(/#SIM_PKB_URL#/g, preferensi?.simpkb);
+    }
+
+    return temp;
+  });
+  return menus;
+}
+
+async function setMenus(preferensi) {
+  if (store.state.menus && store.state.menus.length) return store.state.menus;
+
+  // get menu by role dan tahap
+  const role = store.state.auth.role;
+  const menus = role === 'gtk' ? getMenuGtk(preferensi) : getMenuIns(preferensi);
+
+  // store menus
+  await store.commit('SET_MENUS', menus);
+  return menus;
+}
+
+function getObjMenu(menus, name) {
+  if (!name || !menus.length) return {};
+
+  const parent = menus.filter((item) => item.key === name);
+  if (parent.length) return parent && parent[0];
+
+  let children = [];
+  let i = 0;
+  for (i; i < menus.length; i++) {
+    if (menus[i]?.children) children.push(menus[i]?.children);
+  }
+  if (children.length) return children.filter((item) => item.key === name)[0] ?? {};
+}
+
 let initRoute = false;
 // Before each route evaluates
 router.beforeEach((to, from, next) => {
   // Semua bisa akses, karena page yang dituju tidak perlu login
   if (to.meta?.public) return next();
 
-  // Page yang perlu login
-  // perlu pengecekan user login
-  async function isUserLogin() {
-    return await store.dispatch('auth/checkUser');
-  }
-
-  async function getPreferensi(id) {
-    return await store.dispatch('auth/userPreferensi', id);
-  }
-
-  function getMenuGtk() {
-    return [];
-  }
-
-  function getMenuIns(preferensi) {
-    const roleMenu = roleMenus['instansi'];
-
-    const menus = roleMenu.map((item) => {
-      let temp = Object.assign({}, item);
-      if (temp && temp.href) {
-        temp.href = temp.href.replace(
-          /#PORTAL_URL#/g,
-          'https://sekolah.penggerak.kemdikbud.go.id/programsekolahpenggerak/'
-        );
-        temp.href = temp.href.replace(/#SIM_PKB_URL#/g, preferensi?.simpkb);
-      }
-
-      return temp;
-    });
-    return menus;
-  }
-
-  async function setMenus(preferensi) {
-    if (store.state.menus && store.state.menus.length) return store.state.menus;
-
-    // get menu by role dan tahap
+  isUserLogin().then(async () => {
     const role = store.state.auth.role;
-    const menus = role === 'gtk' ? getMenuGtk(preferensi) : getMenuIns(preferensi);
-
-    // store menus
-    await store.commit('SET_MENUS', menus);
-    return menus;
-  }
-
-  function getObjMenu(menus, name) {
-    if (!name || !menus.length) return {};
-
-    const parent = menus.filter((item) => item.key === name);
-    if (parent.length) return parent && parent[0];
-
-    let children = [];
-    let i = 0;
-    for (i; i < menus.length; i++) {
-      if (menus[i]?.children) children.push(menus[i]?.children);
+    // register route
+    if (!initRoute) {
+      const modules = await import(`./routes/${role}`);
+      resetRouter(modules.default);
+      initRoute = true;
     }
-    if (children.length) return children.filter((item) => item.key === name)[0] ?? {};
-  }
 
-  function redirectToLogin() {
-    window.location.href = process.env.VUE_APP_API_URL + `/auth/login`;
-  }
+    // to akses tidak perlu id
+    if (to.name === 'access') return next();
 
-  isUserLogin()
-    .then(async () => {
-      const role = store.state.auth.role;
-      // register route
-      if (!initRoute) {
-        const modules = await import(`./routes/${role}`);
-        resetRouter(modules.default);
-        initRoute = true;
-      }
+    // normalisasi path setelah login
+    const path = to.redirectedFrom ?? to.fullPath;
+    const routeId = (to.params && to.params.id) || (path.match(/\d+/g) && path.match(/\d+/g)[0]) || '';
+    const id = routeId || store.getters['auth/instansiId'];
 
-      // to akses tidak perlu id
-      if (to.name === 'access') return next();
+    const preferensi = await getPreferensi(id || '');
 
-      // normalisasi path setelah login
-      const path = to.redirectedFrom ?? to.fullPath;
-      const routeId = (to.params && to.params.id) || (path.match(/\d+/g) && path.match(/\d+/g)[0]) || '';
-      const id = routeId || store.getters['auth/instansiId'];
+    const menus = await setMenus(preferensi);
+    const currMenu = getObjMenu(menus, to.name);
 
-      const preferensi = await getPreferensi(id);
-      const menus = await setMenus(preferensi);
-      const currMenu = getObjMenu(menus, to.name);
-
-      const params = role === 'instansi' ? { id } : {};
-      // cek akses menu yang dituju
-      if (role === 'instansi' && !routeId) return next({ name: 'home', params });
-      if (isObject(currMenu) && (!currMenu?.akses || currMenu?.disable)) return next({ name: 'home', params });
-      return to.name ? next() : ['/', `/i/${id}/home`].includes(path) ? next({ name: 'home', params }) : next(path);
-    })
-    .catch(() => {
-      redirectToLogin();
-    });
+    const params = role === 'instansi' ? { id } : {};
+    // cek akses menu yang dituju
+    if (role === 'instansi' && !routeId) return next({ name: 'home', params });
+    if (isObject(currMenu) && (!currMenu?.akses || currMenu?.disable)) return next({ name: 'home', params });
+    return to.name ? next() : ['/', `/i/${id}/home`].includes(path) ? next({ name: 'home', params }) : next(path);
+  });
 });
 
 router.beforeResolve(async (to, from, next) => {

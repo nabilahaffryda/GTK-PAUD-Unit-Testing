@@ -53,6 +53,7 @@ class PesertaController extends Controller
     public function delete(PaudDiklat $paudDiklat, PaudKelas $kelas, PaudKelasPeserta $peserta)
     {
         $this->service->validateKelas($paudDiklat, $kelas);
+        $this->service->validateKelasBaru($kelas);
 
         $peserta->delete();
 

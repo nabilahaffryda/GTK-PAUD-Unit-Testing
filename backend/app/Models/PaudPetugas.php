@@ -43,6 +43,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Instansi $instansi
  * @property-read MKota $instansiKota
  * @property-read MPropinsi $instansiPropinsi
+ * @property-read MKecamatan $mKecamatan
+ * @property-read MKelurahan $mKelurahan
  * @property-read MPetugasPaud $mPetugasPaud
  * @property-read MUnsurPengajarPaud $mUnsurPengajarPaud
  * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
@@ -189,6 +191,22 @@ class PaudPetugas extends Eloquent
     public function instansiPropinsi()
     {
         return $this->belongsTo('App\Models\MPropinsi', 'instansi_k_propinsi', 'k_propinsi');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mKecamatan()
+    {
+        return $this->belongsTo('App\Models\MKecamatan', 'k_kecamatan', 'k_kecamatan');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mKelurahan()
+    {
+        return $this->belongsTo('App\Models\MKelurahan', 'k_kelurahan', 'k_kelurahan');
     }
 
     /**

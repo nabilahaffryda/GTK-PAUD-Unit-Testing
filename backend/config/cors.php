@@ -24,6 +24,7 @@ return [
         'i/*',
         'akses',
         'akses/*',
+        'graphql',
     ],
 
     'allowed_methods' => ['*'],

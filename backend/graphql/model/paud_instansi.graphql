@@ -1,0 +1,33 @@
+type PaudInstansi {
+    paud_instansi_id: Int!
+    instansi_id: Int!
+    tahun: Int
+    angkatan: Int
+    instansi_id_verval: Int
+    k_verval_paud: Int!
+    wkt_ajuan: DateTime
+    wkt_verval: DateTime
+    kodepos: String
+    nama_penanggung_jawab: String
+    telp_penanggung_jawab: String
+    nama_sekretaris: String
+    telp_sekretaris: String
+    nama_bendahara: String
+    telp_bendahara: String
+    diklat: String
+    akun_id_verval: String
+    ratio_pengajar_tambahan: Int
+    jml_pembimbing: Int
+    alasan: String
+    catatan: String
+    data: String
+    is_aktif: String!
+    created_at: DateTime
+    updated_at: DateTime
+    created_by: String
+    updated_by: String
+
+    instansi: Instansi @belongsTo(relation: "instansi")
+    instansi_verval: Instansi @belongsTo(relation: "instansiVerval")
+    m_verval_paud: MVervalPaud @belongsTo(relation: "mVervalPaud")
+}

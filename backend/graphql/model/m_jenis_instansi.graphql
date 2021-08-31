@@ -1,0 +1,5 @@
+type MJenisInstansi {
+    k_jenis_instansi: Int!
+    singkat: String
+    keterangan: String
+}

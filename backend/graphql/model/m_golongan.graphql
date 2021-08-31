@@ -1,0 +1,5 @@
+type MGolongan {
+    k_golongan: Int!
+    singkat: String
+    keterangan: String
+}

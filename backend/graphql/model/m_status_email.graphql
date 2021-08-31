@@ -1,0 +1,5 @@
+type MStatusEmail {
+    k_status_email: Int!
+    singkat: String
+    keterangan: String
+}

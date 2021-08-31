@@ -1,0 +1,70 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+union User = Akun | Ptk
+
+type Query @guard {
+    me: User @auth
+    akun: Akun @auth(guard: "akun")
+    ptk: Ptk @auth(guard: "ptk")
+
+    instansi(instansi_id: Int! @eq): Instansi @first
+}
+
+extend type Query @guard(with: ["akun"]) {
+    instansisAkun(keyword: String): [Instansi!]! @paginate(builder: "\\App\\GraphQL\\Queries\\InstansisAkun")
+}
+
+extend type Query @guard(with: ["akun"]) {
+    preferensiAkun(instansi_id: Int): PreferensiAkun @instansi
+}
+
+extend type Query @guard(with: ["ptk"]) {
+    preferensiPtk: PreferensiPtk
+
+    ptkListKelas(keyword: String): [PaudKelas!]! @paginate(builder: "App\\GraphQL\\Queries\\Ptk\\Kelas@list")
+    ptkListKelasPeserta: [PaudKelasPeserta!]! @paginate(builder: "App\\GraphQL\\Queries\\Ptk\\KelasPeserta@list")
+
+    ptkFetchKelas(id: Int!): PaudKelas @field(resolver: "App\\GraphQL\\Queries\\Ptk\\Kelas@fetch")
+    ptkFetchKelasPeserta(id: Int!): PaudKelasPeserta @field(resolver: "App\\GraphQL\\Queries\\Ptk\\KelasPeserta@fetch")
+}
+
+type Mutation @guard(with: ["ptk"]) {
+    ptkKelasPesertaBersedia(
+        kelasPesertaId: Int!,
+    ): PaudKelasPeserta
+    @field(resolver: "App\\GraphQL\\Mutations\\Ptk\\KelasPeserta@konfirmasiSetuju")
+
+    ptkKelasPesertaTolak(
+        kelasPesertaId: Int!,
+        alasan: String
+    ): PaudKelasPeserta
+    @field(resolver: "App\\GraphQL\\Mutations\\Ptk\\KelasPeserta@konfirmasiTolak")
+
+    ptkKelasPesertaBatal(
+        kelasPesertaId: Int!,
+    ): PaudKelasPeserta
+    @field(resolver: "App\\GraphQL\\Mutations\\Ptk\\KelasPeserta@konfirmasiBatal")
+}
+
+type PreferensiAkun {
+    groups: [MGroup!]!
+    akseses: [PaudAkses!]!
+
+    aktivasi: Boolean
+    konfig: PreferensiAkunKonfig
+}
+
+type PreferensiPtk {
+    konfirmasiKesediaan: Boolean
+}
+
+type PreferensiAkunKonfig {
+    simpkb: String
+}
+
+#import master.graphql
+#import model/*.graphql

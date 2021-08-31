@@ -60,6 +60,7 @@ class VervalController extends Controller
         $q = $kelas->paudKelasPesertas()
             ->with([
                 'ptk',
+                'mKonfirmasiPaud',
             ]);
 
         return BaseCollection::make($q->paginate((int)$request->get('count', 10)));
@@ -75,6 +76,7 @@ class VervalController extends Controller
             ->with([
                 'akun',
                 'paudPetugas',
+                'mKonfirmasiPaud',
             ]);
 
         return BaseCollection::make($q->paginate((int)$request->get('count', 10)));

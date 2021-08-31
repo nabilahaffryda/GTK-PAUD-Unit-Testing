@@ -1,0 +1,15 @@
+type AkunInstansi {
+    akun_instansi_id: Int!
+    akun_id: String!
+    k_group: Int
+    instansi_id: Int
+    token: String
+    is_aktif: String!
+    admin_id: String
+    created_at: DateTime
+    updated_at: DateTime
+
+    akun: Akun @belongsTo(relation: "akun")
+    instansi: Instansi @belongsTo(relation: "instansi")
+    m_group: MGroup @belongsTo(relation: "mGroup")
+}

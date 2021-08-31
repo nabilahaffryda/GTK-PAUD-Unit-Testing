@@ -148,7 +148,7 @@ class PaudKelas extends Eloquent
     ];
 
     /**
-     * @return BelongsTo|Builder|MKecamatan
+     * @return BelongsTo
      */
     public function mKecamatan()
     {
@@ -156,7 +156,7 @@ class PaudKelas extends Eloquent
     }
 
     /**
-     * @return BelongsTo|Builder|MKelurahan
+     * @return BelongsTo
      */
     public function mKelurahan()
     {

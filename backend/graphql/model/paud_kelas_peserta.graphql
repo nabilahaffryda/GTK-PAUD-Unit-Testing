@@ -1,0 +1,17 @@
+type PaudKelasPeserta {
+    paud_kelas_peserta_id: Int!
+    paud_kelas_id: Int
+    tahun: Int
+    angkatan: Int
+    ptk_id: String
+    k_konfirmasi_paud: Int
+    alasan: String
+    created_at: DateTime
+    updated_at: DateTime
+    created_by: String
+    updated_by: String
+
+    m_konfirmasi_paud: MKonfirmasiPaud @belongsTo(relation: "mKonfirmasiPaud")
+    paud_kelas: PaudKelas @belongsTo(relation: "paudKelas")
+    ptk: Ptk @belongsTo(relation: "ptk")
+}
