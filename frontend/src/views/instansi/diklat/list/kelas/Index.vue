@@ -97,6 +97,11 @@
                             <v-chip :color="getColor($getDeepObj(item, 'k_verval_paud'))" dark small>
                               {{ $getDeepObj(item, 'm_verval_paud.data.keterangan') }}
                             </v-chip>
+                            <template v-if="[4, 5].includes(Number(item && item.k_verval_paud))">
+                              <v-btn class="ml-1" rounded outlined x-small color="orange" @click="onCatatan(item)">
+                                <v-icon left>mdi-file-edit</v-icon> Catatan
+                              </v-btn>
+                            </template>
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -125,6 +130,14 @@
                           >
                         </v-list-item-content>
                       </v-list-item>
+                    </v-col>
+                    <v-col v-if="catatans[item.paud_kelas_id]" cols="12" sm="12" md="12" class="px-0 pb-0">
+                      <v-alert text color="orange" class="ml-3">
+                        <div class="black--text body-2">
+                          <b>Catatan:</b> <br />
+                          {{ $getDeepObj(item, 'alasan') }}
+                        </div>
+                      </v-alert>
                     </v-col>
                   </v-row>
                 </v-list-item-content>
@@ -177,6 +190,7 @@ export default {
       actions: actions,
       mapels: [],
       detail: {},
+      catatans: {},
     };
   },
   computed: {
@@ -268,6 +282,15 @@ export default {
           break;
       }
       return disabled;
+    },
+
+    onCatatan(data) {
+      const id = data.paud_kelas_id;
+      if (this.catatans && this.catatans[id]) {
+        this.$delete(this.catatans, id);
+      } else {
+        this.$set(this.catatans, id, true);
+      }
     },
   },
 };
