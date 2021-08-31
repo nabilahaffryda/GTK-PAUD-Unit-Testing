@@ -8,6 +8,7 @@ use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\PaudKelas;
 use App\Services\Instansi\PetugasKelasService;
+use DB;
 
 class KelasController extends Controller
 {
@@ -44,6 +45,15 @@ class KelasController extends Controller
     {
         $pesertas = $kelas
             ->paudKelasPesertas()
+            ->when($request->input('keyword'), function ($query, $value) {
+                $query->whereExists(function ($query) use ($value) {
+                    $query
+                        ->select(DB::raw(1))
+                        ->from('ptk')
+                        ->whereColumn('paud_kelas_peserta.ptk_id', 'ptk.ptk_id')
+                        ->where('ptk.nama', 'like', "%{$value}%");
+                });
+            })
             ->with(['ptk']);
 
         return BaseCollection::make($pesertas
