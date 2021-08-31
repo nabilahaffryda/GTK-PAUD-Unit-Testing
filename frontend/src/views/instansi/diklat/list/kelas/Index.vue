@@ -89,8 +89,15 @@
                     </v-col>
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
-                        <v-list-item-content class="py-0 mt-3">
-                          <div class="label--text">Status</div>
+                        <v-list-item-content class="py-0">
+                          <v-list-item-title>
+                            <div class="label--text">Status</div>
+                          </v-list-item-title>
+                          <v-list-item-subtitle class="link black--text body-2">
+                            <v-chip :color="getColor($getDeepObj(item, 'k_verval_paud'))" dark small>
+                              {{ $getDeepObj(item, 'm_verval_paud.data.keterangan') }}
+                            </v-chip>
+                          </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>

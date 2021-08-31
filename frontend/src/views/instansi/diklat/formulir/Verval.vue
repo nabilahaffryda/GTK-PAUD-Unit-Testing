@@ -361,7 +361,7 @@ export default {
           break;
       }
     },
-    kelas: {
+    detail: {
       handler(value) {
         if (value && value.id) {
           this.fetch('peserta');

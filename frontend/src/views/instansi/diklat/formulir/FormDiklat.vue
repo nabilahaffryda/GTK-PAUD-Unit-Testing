@@ -80,6 +80,12 @@ export default {
     },
 
     schemas() {
+      const mPengajar = [];
+
+      for (let i = 3; i <= 9; i++) {
+        mPengajar.push({ value: i, text: i });
+      }
+
       return {
         diklat: {
           tambah_diklat: [
@@ -203,12 +209,12 @@ export default {
               name: 'jml_pengajar',
               label: 'Jumlah Pengajar',
               hint: 'wajib dipilih',
-              items: [3, 4, 5, 6, 7, 8, 9],
               required: true,
               hideDetails: false,
               outlined: true,
               dense: true,
               singleLine: true,
+              items: mPengajar,
               grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
             },

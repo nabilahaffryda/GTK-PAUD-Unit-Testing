@@ -28,7 +28,7 @@ class KelasService
     {
         $query = PaudKelas::query()
             ->where('paud_kelas.paud_diklat_id', $paudDiklat->paud_diklat_id)
-            ->with(['mKelurahan', 'mKecamatan']);
+            ->with(['mKelurahan', 'mKecamatan', 'mVervalPaud']);
 
         if ($keyword = Arr::get($params, 'keyword')) {
             $query->where('paud_kelas.nama', 'like', '%' . $keyword . '%');
