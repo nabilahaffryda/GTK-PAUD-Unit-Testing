@@ -110,24 +110,30 @@
                       <v-list-item class="px-0">
                         <v-list-item-content>
                           <div class="label--text">Aksi Selanjutnya</div>
-                          <v-btn
-                            :disabled="!item.is_siap_ajuan"
-                            v-if="+item.k_verval_paud < 2 && $allow('lpd-kelas-ajuan.create')"
-                            color="secondary"
-                            depressed
-                            small
-                            @click="onAjuan(item)"
-                            >Ajukan</v-btn
-                          >
-                          <v-btn
-                            v-if="+item.k_verval_paud > 1 && $allow('lpd-kelas-ajuan.delete')"
-                            color="secondary"
-                            outlined
-                            depressed
-                            small
-                            @click="onBatalAjuan(item)"
-                            >Batal Ajuan</v-btn
-                          >
+                          <template v-if="Number(item.k_verval_paud) === 6">
+                            <v-btn color="blue" disabled small>Menuju LMS</v-btn>
+                          </template>
+                          <template v-else-if="Number(item.k_verval_paud) === 5"> </template>
+                          <template v-else>
+                            <v-btn
+                              :disabled="!item.is_siap_ajuan"
+                              v-if="+item.k_verval_paud < 2 && $allow('lpd-kelas-ajuan.create')"
+                              color="secondary"
+                              depressed
+                              small
+                              @click="onAjuan(item)"
+                              >Ajukan</v-btn
+                            >
+                            <v-btn
+                              v-if="+item.k_verval_paud > 1 && $allow('lpd-kelas-ajuan.delete')"
+                              color="secondary"
+                              outlined
+                              depressed
+                              small
+                              @click="onBatalAjuan(item)"
+                              >Batal Ajuan</v-btn
+                            >
+                          </template>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
