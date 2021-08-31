@@ -80,6 +80,30 @@ class KelasService
         }
     }
 
+    /**
+     * @throws FlowException
+     */
+    public function validateKelasBaru(PaudKelas $kelas)
+    {
+        if ($kelas->k_verval_paud != MVervalPaud::KANDIDAT) {
+            throw new FlowException('Kelas sudah diajukan/diverval');
+        }
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateKelasAjuan(PaudKelas $kelas)
+    {
+        if ($kelas->k_verval_paud == MVervalPaud::KANDIDAT) {
+            throw new FlowException('Kelas belum diajukan');
+        }
+
+        if (!in_array($kelas->k_verval_paud, [MVervalPaud::DIAJUKAN, MVervalPaud::REVISI])) {
+            throw new FlowException('Kelas sudah diverval');
+        }
+    }
+
     public function indexPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Builder
     {
         $this->validateKelas($paudDiklat, $kelas);
@@ -167,6 +191,7 @@ class KelasService
     public function createPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
     {
         $this->validateKelas($paudDiklat, $kelas);
+        $this->validateKelasBaru($kelas);
 
         $ptks = Ptk::query()->whereIn('ptk_id', $params['ptk_id'])
             ->whereNotExists(function ($query) use ($params) {
@@ -222,6 +247,7 @@ class KelasService
     public function createPetugas(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
     {
         $this->validateKelas($paudDiklat, $kelas);
+        $this->validateKelasBaru($kelas);
 
         $isPengajar = in_array($params['k_petugas_paud'], [MPetugasPaud::PENGAJAR, MPetugasPaud::PENGAJAR_TAMBAHAN]);
         $jmlPetugas = PaudKelasPetugas::query()
@@ -298,6 +324,7 @@ class KelasService
     public function ajuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
         $this->validateKelas($paudDiklat, $kelas);
+        $this->validateKelasBaru($kelas);
 
         $tidakBersedia = $kelas
             ->paudKelasPetugases()
@@ -378,6 +405,7 @@ class KelasService
     public function batalAjuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
         $this->validateKelas($paudDiklat, $kelas);
+        $this->validateKelasAjuan($kelas);
 
         $kelas->wkt_ajuan     = null;
         $kelas->k_verval_paud = MVervalPaud::KANDIDAT;
