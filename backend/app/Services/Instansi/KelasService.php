@@ -201,11 +201,12 @@ class KelasService
         foreach ($ptks as $ptk) {
             $paudKelasPeserta = new PaudKelasPeserta();
             $paudKelasPeserta->fill($params);
-            $paudKelasPeserta->paud_kelas_id = $kelas->paud_kelas_id;
-            $paudKelasPeserta->tahun         = $kelas->tahun;
-            $paudKelasPeserta->angkatan      = $kelas->angkatan;
-            $paudKelasPeserta->ptk_id        = $ptk->ptk_id;
-            $paudKelasPeserta->created_by    = akunId();
+            $paudKelasPeserta->paud_kelas_id     = $kelas->paud_kelas_id;
+            $paudKelasPeserta->tahun             = $kelas->tahun;
+            $paudKelasPeserta->angkatan          = $kelas->angkatan;
+            $paudKelasPeserta->ptk_id            = $ptk->ptk_id;
+            $paudKelasPeserta->k_konfirmasi_paud = MKonfirmasiPaud::BELUM_KONFIRMASI;
+            $paudKelasPeserta->created_by        = akunId();
 
             if (!$paudKelasPeserta->save()) {
                 throw new FlowException("Peserta tidak berhasil disimpan");
