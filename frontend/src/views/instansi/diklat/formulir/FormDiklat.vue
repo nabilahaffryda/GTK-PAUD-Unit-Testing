@@ -80,6 +80,12 @@ export default {
     },
 
     schemas() {
+      const mPengajar = [];
+
+      for (let i = 3; i <= 9; i++) {
+        mPengajar.push({ value: i, text: i });
+      }
+
       return {
         diklat: {
           tambah_diklat: [
@@ -199,7 +205,7 @@ export default {
               labelColor: 'secondary',
             },
             {
-              type: 'VTextField',
+              type: 'VSelect',
               name: 'jml_pengajar',
               label: 'Jumlah Pengajar',
               hint: 'wajib diisi',
@@ -208,8 +214,7 @@ export default {
               outlined: true,
               dense: true,
               singleLine: true,
-              mask: '#',
-              rules: { min: 3, max: 6 },
+              items: mPengajar,
               grid: { cols: 12, md: 6 },
               labelColor: 'secondary',
             },
