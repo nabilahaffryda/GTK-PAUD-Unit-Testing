@@ -6,7 +6,6 @@ namespace App\Services\Instansi;
 
 use App\Exceptions\SaveException;
 use App\Models\Instansi;
-use App\Models\MVervalPaud;
 use App\Models\PaudDiklat;
 use App\Models\PaudInstansi;
 use Arr;
@@ -77,31 +76,15 @@ class DiklatService
         ]);
     }
 
+    /**
+     * @throws SaveException
+     */
     public function delete(PaudDiklat $paudDiklat)
     {
         $instansi = $paudDiklat->instansi;
 
-        foreach ($paudDiklat->paudKelases as $kelas) {
-            if (in_array($kelas->k_verval_paud, [
-                MVervalPaud::DIAJUKAN,
-                MVervalPaud::DIPROSES,
-                MVervalPaud::REVISI,
-                MVervalPaud::DISETUJUI])
-            ) {
-                throw new SaveException('Sudah ada kelas yang diajukan, sedang diproses atau telah disetujui');
-            }
-        }
-
-        foreach ($paudDiklat->paudKelases as $kelas) {
-            foreach ($kelas->paudKelasPetugases as $petugas) {
-                $petugas->delete();
-            }
-
-            foreach ($kelas->paudKelasPesertas as $peserta) {
-                $peserta->delete();
-            }
-
-            $kelas->delete();
+        if ($paudDiklat->paudKelases()->exists()) {
+            throw new SaveException('Diklat tidak bisa dihapus karena sudah mempunyai kelas');
         }
 
         $paudDiklat->delete();
