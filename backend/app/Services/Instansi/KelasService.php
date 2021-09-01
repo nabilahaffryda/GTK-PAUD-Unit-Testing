@@ -249,15 +249,11 @@ class KelasService
         $this->validateKelas($paudDiklat, $kelas);
         $this->validateKelasBaru($kelas);
 
-        $isPengajar = in_array($params['k_petugas_paud'], [MPetugasPaud::PENGAJAR, MPetugasPaud::PENGAJAR_TAMBAHAN]);
         $jmlPetugas = PaudKelasPetugas::query()
             ->where([
                 'paud_kelas_petugas.paud_kelas_id' => $kelas->paud_kelas_id,
             ])
-            ->whereIn('paud_kelas_petugas.k_petugas_paud', $isPengajar
-                ? [MPetugasPaud::PENGAJAR, MPetugasPaud::PENGAJAR_TAMBAHAN]
-                : [$params['k_petugas_paud']]
-            )
+            ->whereIn('paud_kelas_petugas.k_petugas_paud', [$params['k_petugas_paud']])
             ->count();
 
         $jmlPetugas += count($params['akun_id']);
