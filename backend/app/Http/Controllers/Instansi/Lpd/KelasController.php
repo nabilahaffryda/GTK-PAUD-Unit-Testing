@@ -44,9 +44,10 @@ class KelasController extends Controller
             ->groupBy('paud_kelas_id');
 
         foreach ($kelases as $kelas) {
-            $kelas->is_siap_ajuan = true;
+            $kelas->is_siap_ajuan = false;
 
             if ($petugases = $petugasKelases->get($kelas->paud_kelas_id)) {
+                $kelas->is_siap_ajuan = true;
                 foreach ($petugases as $petugas) {
                     if ($petugas->k_konfirmasi_paud != MKonfirmasiPaud::BERSEDIA) {
                         $kelas->is_siap_ajuan = false;
@@ -56,6 +57,7 @@ class KelasController extends Controller
             }
 
             if ($pesertas = $pesertaKelases->get($kelas->paud_kelas_id)) {
+                $kelas->is_siap_ajuan = true;
                 foreach ($pesertas as $peserta) {
                     if ($peserta->k_konfirmasi_paud != MKonfirmasiPaud::BERSEDIA) {
                         $kelas->is_siap_ajuan = false;
