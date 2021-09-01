@@ -28,6 +28,6 @@ if (process.env.NODE_ENV !== 'development') {
   });
 
   Sentry.configureScope(function (scope) {
-    scope.setTag('app', 'frontend ' + window.location.host);
+    scope.setTag('app', 'frontend');
   });
 }
