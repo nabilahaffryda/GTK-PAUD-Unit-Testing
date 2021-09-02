@@ -128,7 +128,7 @@ class KelasService
             ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelas->paud_kelas_id)
             ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
             ->with([
-                'akun:akun_id,nama,email',
+                'akun',
                 'akun.mKota',
                 'akun.mPropinsi',
                 'mKonfirmasiPaud',
