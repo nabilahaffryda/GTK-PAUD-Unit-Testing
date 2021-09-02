@@ -75,6 +75,8 @@ class VervalController extends Controller
             ])
             ->with([
                 'akun',
+                'akun.mKota',
+                'akun.mPropinsi',
                 'paudPetugas',
                 'mKonfirmasiPaud',
             ]);
