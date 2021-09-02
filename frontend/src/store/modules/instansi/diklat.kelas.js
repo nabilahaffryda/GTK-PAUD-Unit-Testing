@@ -59,7 +59,7 @@ export const actions = {
     });
 
     return await $ajax.get(`/`, {
-      params: Object.assign(payload.params, { page: payload.page || 1, keyword: payload.keyword || '' }),
+      params: Object.assign(payload.params, { page: payload.page || 1, filter: { keyword: payload.keyword || '' } }),
     });
   },
 };
