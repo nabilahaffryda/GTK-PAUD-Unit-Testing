@@ -127,7 +127,12 @@ class KelasService
         $query = PaudKelasPetugas::query()
             ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelas->paud_kelas_id)
             ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
-            ->with(['akun:akun_id,nama,email', 'mKonfirmasiPaud']);
+            ->with([
+                'akun:akun_id,nama,email',
+                'akun.mKota',
+                'akun.mPropinsi',
+                'mKonfirmasiPaud',
+            ]);
 
         if ($keyword = Arr::get($params, 'keyword')) {
             $query->join('akun', 'akun.akun_id', '=', 'paud_kelas_petugas.akun_id')
