@@ -254,6 +254,12 @@ export default {
         { text: 'Surel', value: 'email', sortable: false },
       ];
 
+      // Tambahkan info provinsi dan kota pada tab pembimbing praktik
+      if (this.tab === 2) {
+        temp.push({ text: 'Provisi', value: 'propinsi', sortable: false });
+        temp.push({ text: 'Kota/Kabupaten', value: 'kota', sortable: false });
+      }
+
       if (this.tab !== 1) {
         temp.push({ text: 'Status', value: 'status', sortable: false });
       }
@@ -270,6 +276,8 @@ export default {
           paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
           paud_kelas_peserta_id: this.$getDeepObj(item, 'paud_kelas_peserta_id') || '',
           ptk_id: this.$getDeepObj(item, 'ptk_id') || '',
+          propinsi: this.$getDeepObj(item, 'akun.data.m_propinsi.data.keterangan') || '-',
+          kota: this.$getDeepObj(item, 'akun.data.m_kota.data.keterangan') || '-',
         };
       });
     },
