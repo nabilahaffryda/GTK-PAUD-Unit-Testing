@@ -142,4 +142,13 @@ class PengajarController extends AkunController
             'is_refreshment' => $request->is_bimtek,
         ]));
     }
+
+    public function downloadAktivasi(Request $request)
+    {
+        $params = array_merge($request->input('filter', []), [
+            'k_group' => [$this->kGroup, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD],
+        ]);
+
+        return $this->service->downloadAktivasi(instansi(), $params);
+    }
 }
