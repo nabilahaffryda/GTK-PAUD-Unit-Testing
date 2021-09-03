@@ -255,7 +255,7 @@ export default {
       ];
 
       // Tambahkan info provinsi dan kota pada tab pembimbing praktik
-      if (this.tab === 2) {
+      if (this.tab >= 2) {
         temp.push({ text: 'Provisi', value: 'propinsi', sortable: false });
         temp.push({ text: 'Kota/Kabupaten', value: 'kota', sortable: false });
       }
