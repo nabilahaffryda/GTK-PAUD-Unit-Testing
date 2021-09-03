@@ -15,7 +15,7 @@ class IndexPetugasRequest extends FormRequest
     {
         return [
             'k_petugas_paud' => ['required', 'integer', 'exists:m_petugas_paud,k_petugas_paud'],
-            'keyword'        => ['string', 'min:3', 'max:100'],
+            'keyword'        => ['nullable', 'string', 'min:3', 'max:100'],
             'count'          => ['integer', 'max:50'],
             'page'           => ['integer', 'min:1'],
         ];

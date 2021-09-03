@@ -15,7 +15,7 @@ class IndexRequest extends FormRequest
     {
         return [
             'k_unsur_pengajar_paud' => ['required', 'exists:m_unsur_pengajar_paud,k_unsur_pengajar_paud'],
-            'keyword'               => ['string', 'min:3', 'max:100'],
+            'keyword'               => ['nullable', 'string', 'min:3', 'max:100'],
             'count'                 => ['integer', 'max:50'],
             'page'                  => ['integer', 'min:1'],
         ];

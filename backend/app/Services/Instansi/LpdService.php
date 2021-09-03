@@ -332,7 +332,7 @@ class LpdService
 
     public function indexAjuan(array $params)
     {
-        $query = $this->query($params['filter'] ?? []);
+        $query = $this->query($params);
 
         if ($kVervalPaud = Arr::get($params, 'filter.k_verval_paud')) {
             $query->whereIn('k_verval_paud', $kVervalPaud);
