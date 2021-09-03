@@ -115,7 +115,7 @@
                   {{ $getDeepObj(diklat, 'paud_kelas.paud_diklat.nama') || '-' }} -
                   {{ $getDeepObj(diklat, 'paud_kelas.nama') || '-' }}<br />
                   <span class="body-2">
-                    {{ $getDeepObj(diklat, 'paud_kelas.paud_diklat.paud_instansi.instansi.nama') || '-' }}
+                    {{ $getDeepObj(diklat, 'paud_kelas.paud_diklat.instansi.nama') || '-' }}
                   </span>
                 </div>
               </v-toolbar>
