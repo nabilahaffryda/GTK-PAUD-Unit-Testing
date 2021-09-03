@@ -2,10 +2,10 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import VueGtag from 'vue-gtag';
 import vuetify from './plugins/vuetify';
 import mixins from '@mixins/global';
 import { mask } from 'vue-the-mask';
+import VueAnalytics from 'vue-analytics'
 import BaseModalFull from '@components/base/BaseModalFull';
 import './plugins/vee-validate';
 import './sentry';
@@ -20,13 +20,10 @@ Vue.component('base-modal-full', BaseModalFull);
 Vue.config.productionTip = false;
 
 if (process.env.NODE_ENV !== 'development') {
-  Vue.use(
-    VueGtag,
-    {
-      config: { id: 'G-Z6NFYNHPP5' },
-    },
-    router
-  );
+  Vue.use(VueAnalytics, {
+    id: 'UA-57652882-56',
+    router,
+  })
 }
 
 export default new Vue({
