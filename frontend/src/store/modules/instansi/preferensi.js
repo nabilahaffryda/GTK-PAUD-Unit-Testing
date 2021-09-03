@@ -35,4 +35,12 @@ export const actions = {
     });
     return await $ajax.get('/instansi', { params: payload.params });
   },
+
+  async getLayanan({ rootState }) {
+    const id = rootState.auth.instansi_id;
+    $ajax = kitsu({
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}`,
+    });
+    return await $ajax.get('/layanans');
+  },
 };
