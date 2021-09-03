@@ -26,6 +26,7 @@ class KonfirmasiController extends Controller
                 'mPetugasPaud',
                 'mKonfirmasiPaud',
                 'paudKelas.paudDiklat.paudPeriode',
+                'paudKelas.paudDiklat.paudInstansi',
             ])
             ->get()
         );
@@ -37,6 +38,7 @@ class KonfirmasiController extends Controller
             ->load([
                 'mPetugasPaud',
                 'mKonfirmasiPaud',
+                'paudKelas.paudDiklat.paudInstansi',
                 'paudKelas.paudDiklat.paudPeriode',
                 'paudKelas.paudDiklat.mPropinsi',
                 'paudKelas.paudDiklat.mKota',
