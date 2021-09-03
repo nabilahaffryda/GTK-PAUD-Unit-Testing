@@ -7,18 +7,30 @@
 
         <div class="mt-5">
           <v-row v-if="$vuetify.breakpoint.mdAndUp">
-            <v-col cols="12" md="4" sm="12">
+            <v-col cols="12" md="3" sm="12">
+              <span class="font-weight-medium">Nama Instansi</span>
+            </v-col>
+            <v-col cols="12" md="3" sm="12">
               <span class="font-weight-medium">Nama Kelas</span>
             </v-col>
-            <v-col cols="12" md="3" sm="12">
+            <v-col cols="12" md="2" sm="12">
               <span class="font-weight-medium">Jadwal Pelaksanaan</span>
             </v-col>
-            <v-col cols="12" md="3" sm="12">
+            <v-col cols="12" md="2" sm="12">
               <span class="font-weight-medium">Status</span>
             </v-col>
           </v-row>
           <v-row v-for="(item, i) in items" :key="i">
-            <v-col class="py-0" cols="12" md="4">
+            <v-col class="py-0" cols="12" md="3">
+              <v-list-item class="px-0">
+                <v-list-item-content class="pa-0">
+                  <div class="black--text">
+                    {{ $getDeepObj(item, 'paud_kelas.paud_diklat.instansi.nama') || '-' }}
+                  </div>
+                </v-list-item-content>
+              </v-list-item>
+            </v-col>
+            <v-col class="py-0" cols="12" md="3">
               <v-list-item class="px-0">
                 <v-list-item-content class="pa-0">
                   <div class="black--text">
@@ -28,7 +40,7 @@
                 </v-list-item-content>
               </v-list-item>
             </v-col>
-            <v-col class="py-0" cols="12" md="3">
+            <v-col class="py-0" cols="12" md="2">
               <v-list-item class="px-0">
                 <v-list-item-content class="pa-0">
                   <div>
@@ -42,7 +54,7 @@
                 </v-list-item-content>
               </v-list-item>
             </v-col>
-            <v-col class="py-0" cols="12" md="3">
+            <v-col class="py-0" cols="12" md="2">
               <v-list-item class="px-0">
                 <v-list-item-content class="pa-0">
                   <span
@@ -98,6 +110,9 @@
         <v-card-text class="pb-0 black--text my-5">
           <v-card outlined flat>
             <v-card-title>
+              <div> {{ $getDeepObj(diklat, 'paud_kelas.paud_diklat.instansi.nama') || '-' }} </div>
+            </v-card-title>
+            <v-card-title class="my-n5">
               <v-toolbar flat>
                 {{ $getDeepObj(diklat, 'paud_kelas.nama') || '-' }}
               </v-toolbar>

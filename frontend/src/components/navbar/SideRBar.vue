@@ -157,12 +157,7 @@ export default {
     },
 
     currRole() {
-      const role =
-        this.role === 'instansi'
-          ? Object.values(this.groups)
-          : this.isKasek
-          ? 'Peserta - Kepala Sekolah'
-          : 'Pelatih Ahli';
+      const role = this.role === 'instansi' ? Object.values(this.groups) : 'Peserta';
       return role;
     },
 

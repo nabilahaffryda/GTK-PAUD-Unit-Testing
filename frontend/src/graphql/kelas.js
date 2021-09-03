@@ -29,6 +29,9 @@ const ATTR_PESERTA = `
             m_propinsi {
               keterangan
             }
+            instansi {
+              nama
+            }
           }
         }
         `;

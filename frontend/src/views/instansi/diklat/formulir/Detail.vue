@@ -72,6 +72,7 @@
                 dense
                 placeholder="Pencarian Data"
                 append-icon="mdi-magnify"
+                @keyup.enter="onReload"
               ></v-text-field>
               <v-btn v-if="false" class="mt-n3" icon><v-icon>mdi-download</v-icon></v-btn>
               <v-btn
@@ -237,9 +238,11 @@ export default {
     },
 
     filteredItems() {
-      return this.items.filter((s) => {
-        return s.nama.toLowerCase().includes(this.search.toLowerCase());
-      });
+      // Disable inline filter
+      // return this.items.filter((s) => {
+      //   return s.nama.toLowerCase().includes(this.search.toLowerCase());
+      // });
+      return this.items || [];
     },
 
     isPeserta() {
@@ -260,14 +263,18 @@ export default {
 
     fetch(tipe, k_petugas = null) {
       if (!Object.keys(this.kelas).length) return;
+      let params = {
+        k_petugas_paud: k_petugas,
+        page: this.page,
+      };
+
+      if (this.search) this.$set(params, 'keyword', this.search);
+
       this.getListKelas({
         diklat_id: this.detail.paud_diklat_id,
         id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
         tipe: tipe,
-        params: {
-          k_petugas_paud: k_petugas,
-          page: this.page,
-        },
+        params: params,
       }).then(({ data, meta }) => {
         this.meta = meta;
         this.pesertas = data || [];
@@ -419,6 +426,8 @@ export default {
 
       this.onReload();
     },
+
+    onSearch() {},
   },
   watch: {
     tab: function (value) {
