@@ -112,7 +112,16 @@
           <v-card outlined flat>
             <v-card-title>
               <v-toolbar flat>
-                {{ $getDeepObj(diklat, 'paud_kelas.data.nama') || '-' }}
+                <div class="font-weight-medium body-1">
+                  {{ $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.nama') || '-' }} -
+                  {{ $getDeepObj(diklat, 'paud_kelas.data.nama') || '-' }}<br />
+                  <span class="body-2">
+                    {{
+                      $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.paud_instansi.data.instansi.data.nama') ||
+                      '-'
+                    }}
+                  </span>
+                </div>
               </v-toolbar>
               <v-spacer></v-spacer>
               <v-chip
@@ -125,25 +134,7 @@
             </v-card-title>
             <v-card-text>
               <v-row>
-                <v-col cols="12" sm="12" md="6">
-                  <v-list-item>
-                    <v-list-item-avatar color="primary">
-                      <v-icon dark>mdi-office-building-outline</v-icon>
-                    </v-list-item-avatar>
-                    <v-list-item-content class="py-0 mt-3">
-                      <div class="label--text">Nama Instansi</div>
-                      <div class="body-1 black--text">
-                        {{
-                          $getDeepObj(
-                            diklat,
-                            'paud_kelas.data.paud_diklat.data.paud_instansi.data.instansi.data.nama'
-                          ) || '-'
-                        }}
-                      </div>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-col>
-                <v-col cols="12" sm="12" md="6">
+                <v-col cols="12" sm="12" md="12">
                   <v-list-item>
                     <v-list-item-avatar color="primary">
                       <v-icon dark>mdi-calendar-clock</v-icon>
