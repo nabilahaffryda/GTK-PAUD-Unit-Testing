@@ -1,11 +1,13 @@
 <template>
-  <v-dialog v-model="dialog" width="800">
-    <v-toolbar color="secondary" dark>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-spacer />
-      <v-btn text icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
-    </v-toolbar>
+  <v-dialog v-model="dialog" width="800" scrollable>
     <v-card flat>
+      <v-card-title class="pa-0">
+        <v-toolbar color="secondary" dark>
+          <v-toolbar-title>{{ title }}</v-toolbar-title>
+          <v-spacer />
+          <v-btn text icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
+        </v-toolbar>
+      </v-card-title>
       <v-card-text class="pt-2">
         <v-alert type="info" text v-if="selected.length">
           <div>
