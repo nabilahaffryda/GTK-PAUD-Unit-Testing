@@ -409,6 +409,23 @@ class AdminService
     /**
      * @param Instansi $instansi
      * @param PaudAdmin $paudAdmin
+     * @return PaudAdmin
+     */
+    public function fetchPengajar(Instansi $instansi, PaudAdmin $paudAdmin)
+    {
+        $paudAdmin = $this->fetch($instansi, $paudAdmin);
+
+        $pengajar = app(PetugasService::class)->getPetugas($paudAdmin->akun);
+        $pengajar = app(PetugasService::class)->fetch($pengajar);
+
+        $paudAdmin->pengajar = $pengajar;
+
+        return $paudAdmin;
+    }
+
+    /**
+     * @param Instansi $instansi
+     * @param PaudAdmin $paudAdmin
      * @param array $params
      * @return PaudAdmin
      * @throws FlowException

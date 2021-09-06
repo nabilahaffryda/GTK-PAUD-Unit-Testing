@@ -55,6 +55,18 @@ class PembimbingPraktikController extends AkunController
     }
 
     /**
+     * @param PaudAdmin $paudAdmin
+     * @return BaseResource
+     * @throws FlowException
+     */
+    public function fetch(PaudAdmin $paudAdmin)
+    {
+        $this->validateGroup($paudAdmin);
+
+        return BaseResource::make($this->service->fetchPengajar(instansi(), $paudAdmin));
+    }
+
+    /**
      * @throws SaveException
      * @throws FlowException
      * @throws GuzzleException
