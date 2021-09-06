@@ -58,9 +58,7 @@ export const actions = {
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}`,
     });
 
-    let params = {
-      page: payload.page || 1,
-    };
+    let params = Object.assign({}, payload.params, { page: payload.page || 1 });
 
     if (payload.keyword) params['keyword'] = payload.keyword;
 
