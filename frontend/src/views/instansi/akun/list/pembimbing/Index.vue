@@ -15,7 +15,7 @@
       </v-card-text>
     </v-card>
     <list-admin
-      jenis="kelas"
+      jenis="pembimbing"
       akses="pembimbing-praktik"
       title="Pembimbing Praktik"
       desc=""

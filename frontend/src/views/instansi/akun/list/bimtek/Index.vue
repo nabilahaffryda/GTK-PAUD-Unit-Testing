@@ -14,13 +14,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <list-admin
-      jenis="pengajar"
-      akses="pengajar-bimtek"
-      title="Pengajar BIMTEK"
-      desc=""
-      :actions="actions"
-    ></list-admin>
+    <list-admin jenis="bimtek" akses="pengajar-bimtek" title="Pengajar BIMTEK" desc="" :actions="actions"></list-admin>
   </div>
 </template>
 

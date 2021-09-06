@@ -5,7 +5,7 @@ import store from './store';
 import vuetify from './plugins/vuetify';
 import mixins from '@mixins/global';
 import { mask } from 'vue-the-mask';
-import VueAnalytics from 'vue-analytics'
+import VueAnalytics from 'vue-analytics';
 import BaseModalFull from '@components/base/BaseModalFull';
 import './plugins/vee-validate';
 import './sentry';
@@ -23,7 +23,7 @@ if (process.env.NODE_ENV !== 'development') {
   Vue.use(VueAnalytics, {
     id: 'UA-57652882-56',
     router,
-  })
+  });
 }
 
 export default new Vue({

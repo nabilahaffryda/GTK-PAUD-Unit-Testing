@@ -67,11 +67,7 @@
                 <v-list-item dense class="px-0">
                   <v-list-item-content>
                     <v-row>
-                      <v-col
-                        class="py-0"
-                        cols="12"
-                        :md="['pembimbing-praktik'].includes(akses) ? 3 : ['pengajar'].includes(akses) ? 4 : 4"
-                      >
+                      <v-col class="py-0" cols="12" :md="['pembimbing-praktik', 'pengajar'].includes(akses) ? 3 : 4">
                         <v-list-item class="px-0" @click="onDetail(item)">
                           <v-list-item-avatar color="primary">
                             <v-icon dark>mdi-account-circle</v-icon>
@@ -118,11 +114,7 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col
-                        class="py-0"
-                        cols="12"
-                        :md="['pembimbing-praktik'].includes(akses) ? 2 : ['pengajar'].includes(akses) ? 2 : 2"
-                      >
+                      <v-col class="py-0" cols="12" :md="['pembimbing-praktik', 'pengajar'].includes(akses) ? 2 : 2">
                         <v-list-item class="px-0">
                           <v-list-item-content>
                             <span class="caption">Status</span>
@@ -370,7 +362,7 @@ export default {
   created() {
     // this.getGroups();
     this.getMasters({
-      name: ['m_propinsi', 'm_kota', 'm_golongan'].join(';'),
+      name: ['m_propinsi', 'm_kota', 'm_kualifikasi', 'm_golongan'].join(';'),
       filter: {
         0: {
           k_propinsi: {
