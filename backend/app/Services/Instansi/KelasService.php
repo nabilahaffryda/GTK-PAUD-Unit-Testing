@@ -159,7 +159,12 @@ class KelasService
             });
 
         if ($keyword = Arr::get($params, 'keyword')) {
-            $query->where('ptk.nama', 'like', '%' . $keyword . '%');
+            $query->where(function ($query) use ($keyword) {
+                $query
+                    ->orWhere('ptk.ptk_id', '=', $keyword)
+                    ->orWhere('ptk.nama', 'like', '%' . $keyword . '%')
+                    ->orWhere('ptk.email', 'like', '%' . $keyword . '%');
+            });
         }
 
         return $query;
@@ -183,8 +188,12 @@ class KelasService
             ->with(['akun:akun_id,nama,email']);
 
         if ($keyword = Arr::get($params, 'keyword')) {
-            $query->join('akun', 'akun.akun_id', '=', 'paud_kelas_petugas.akun_id')
-                ->where('akun.nama', 'like', '%' . $keyword . '%');
+            $query->join('akun', 'akun.akun_id', '=', 'paud_petugas.akun_id')
+                ->where(function ($query) use ($keyword) {
+                    $query
+                        ->orWhere('akun.nama', 'like', '%' . $keyword . '%')
+                        ->orWhere('akun.email', 'like', '%' . $keyword . '%');
+                });
         }
 
         return $query;
