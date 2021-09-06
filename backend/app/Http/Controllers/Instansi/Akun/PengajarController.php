@@ -149,6 +149,6 @@ class PengajarController extends AkunController
             'k_group' => [$this->kGroup, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD],
         ]);
 
-        return $this->service->downloadAktivasi(instansi(), $params);
+        return $this->service->downloadAktivasiFull(instansi(), $params);
     }
 }

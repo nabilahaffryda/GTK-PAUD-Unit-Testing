@@ -13,6 +13,7 @@ use App\Http\Resources\BaseResource;
 use App\Models\MGroup;
 use App\Models\MPetugasPaud;
 use App\Models\PaudAdmin;
+use App\Services\AkunService;
 use App\Services\Instansi\PetugasService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent;
@@ -104,5 +105,18 @@ class PembimbingPraktikController extends AkunController
         }
 
         return BaseResource::make(app(PetugasService::class)->resetStatus($petugas, ['is_inti' => true]));
+    }
+
+    public function downloadAktivasi(Request $request)
+    {
+        $params = array_merge($request->input('filter', []), [
+            'k_group' => $this->kGroup,
+        ]);
+
+        if (app(AkunService::class)->isGroup(instansi(), [MGroup::ADM_GTK_PAUD_DIKLAT_PAUD])) {
+            return $this->service->downloadAktivasiFull(instansi(), $params);
+        }
+
+        return $this->service->downloadAktivasi(instansi(), $params);
     }
 }

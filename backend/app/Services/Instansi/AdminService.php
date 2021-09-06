@@ -269,6 +269,79 @@ class AdminService
         $writer->close();
     }
 
+    public function downloadAktivasiFull(Instansi $instansi, $params = [])
+    {
+        $q = $this->query($instansi, $params)
+            ->whereNotNull('akun.passwd');
+
+        if (Arr::get($params, 'format') == 'json') {
+            return $q->paginate(10);
+        }
+
+        $header = [
+            'NO',
+            'EMAIL',
+            'NAMA',
+            'JENIS KELAMIN',
+            'TEMPAT LAHIR',
+            'TANGGAL LAHIR',
+            'INSTANSI',
+            'PROVINSI',
+            'KAB/KOTA',
+            'NIP',
+            'NOMOR TELEPON',
+            'NOMOR HP',
+            'PERAN',
+            'KODE AKTIVASI',
+        ];
+
+        $date     = Carbon::now()->format('dmYHi');
+        $filename = "Laporan-Aktivasi-Akun-{$date}.xlsx";
+
+        $defaultStyle = (new StyleBuilder())
+            ->setFontName('Calibri')
+            ->setFontSize(11)
+            ->setShouldWrapText(false)
+            ->build();
+        $headerStyle  = clone $defaultStyle;
+        $headerStyle->setFontBold();
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($filename);
+        $writer->setDefaultRowStyle($defaultStyle);
+
+        $writer->addRow(WriterEntityFactory::createRowFromArray($header, $headerStyle));
+
+        $i = 1;
+        $q->chunk(1000, function ($akunInstansis) use ($writer, &$i) {
+            foreach ($akunInstansis as $akunInstansi) {
+                /** @var AkunInstansi $akunInstansi */
+                $akun = $akunInstansi->akun;
+
+                $row = [
+                    $i++,
+                    $akun->email,
+                    $akun->nama,
+                    $akun->kelamin,
+                    $akun->tmp_lahir,
+                    $akun->tgl_lahir?->format('Y-m-d'),
+                    $akunInstansi->instansi->nama,
+                    $akun->mPropinsi?->keterangan,
+                    $akun->mKota?->keterangan,
+                    $akun->nip,
+                    $akun->no_telpon,
+                    $akun->no_hp,
+                    $akunInstansi->mGroup->keterangan,
+                    $akun->passwd,
+                ];
+
+                $writer->addRow(WriterEntityFactory::createRowFromArray($row));
+            }
+        });
+
+        $writer->close();
+    }
+
     /**
      * @param Instansi $instansi
      * @param array $params
