@@ -22,7 +22,7 @@
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="item in items" :key="item.tab">
         <list-admin
-          jenis="kelas"
+          jenis="pengajar"
           akses="pengajar-tambahan"
           :paramsTipe="item.params"
           :title="item.tab"

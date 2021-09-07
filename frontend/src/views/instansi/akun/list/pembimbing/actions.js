@@ -1,4 +1,5 @@
 export default [
+  { icon: 'mdi-account', title: 'Data Profil', event: 'onDetail' },
   { icon: 'mdi-lock-reset', title: 'Reset Password', event: 'onReset', akses: 'akun-pembimbing-praktik.reset' },
   { icon: 'mdi-pencil', title: 'Edit Akun', event: 'onEdit', akses: 'akun-pembimbing-praktik.update' },
   {

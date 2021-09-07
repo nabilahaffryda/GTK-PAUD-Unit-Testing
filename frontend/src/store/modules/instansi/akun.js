@@ -16,7 +16,7 @@ export const actions = {
   async getDetail({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/akun`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/akun/${payload.tipe}`,
     });
     return await $ajax.get(`/${payload.id}`);
   },

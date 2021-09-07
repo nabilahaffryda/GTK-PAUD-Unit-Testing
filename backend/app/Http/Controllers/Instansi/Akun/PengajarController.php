@@ -79,7 +79,7 @@ class PengajarController extends AkunController
             throw new FlowException("Grup tidak dikenali");
         }
 
-        return BaseResource::make($this->service->fetch(instansi(), $paudAdmin));
+        return BaseResource::make($this->service->fetchPengajar(instansi(), $paudAdmin));
     }
 
     /**

@@ -112,7 +112,6 @@ export default {
 
     async onKonfirmasi(status = false) {
       const resp = await this.fetch().then(({ data }) => data);
-      console.log(resp);
       this.$set(this, 'data', resp || []);
       if (status) this.$refs.modal.open();
     },

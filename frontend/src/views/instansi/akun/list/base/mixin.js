@@ -35,12 +35,22 @@ export default {
       this.groups = temp;
     },
 
-    onDetail(data) {
-      this.$set(this.formulir, 'title', `Detail ${this.title}`);
-      this.$set(this.formulir, 'detail', data);
-      this.$set(this.formulir, 'component', 'DetailView');
-      this.$set(this.formulir, 'isValid', false);
-      this.$refs.modal.open();
+    onDetail(detail) {
+      const id = (detail && detail.id) || '';
+      const tipe = this.$getDeepObj(this.attr, 'tipe');
+      if (!id) return;
+
+      this.getDetail({ id, tipe })
+        .then(({ data }) => {
+          this.$set(this.formulir, 'title', `Detail ${this.title}`);
+          this.$set(this.formulir, 'detail', data);
+          this.$set(this.formulir, 'component', 'DetailView');
+          this.$set(this.formulir, 'isValid', false);
+          this.$refs.modal.open();
+        })
+        .catch(() => {
+          this.$refs.modal.loading = false;
+        });
     },
 
     onAdd() {

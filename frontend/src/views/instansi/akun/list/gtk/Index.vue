@@ -14,7 +14,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <list-admin jenis="pengajar" akses="admin-gtk" title="Akun Admin GTK" desc="" :actions="actions"></list-admin>
+    <list-admin jenis="admin" akses="admin-gtk" title="Akun Admin GTK" desc="" :actions="actions"></list-admin>
   </div>
 </template>
 
