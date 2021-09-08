@@ -98,6 +98,12 @@ export default {
       };
     },
     schema() {
+      const mPengajar = [];
+
+      for (let i = 4; i <= 8; i++) {
+        mPengajar.push({ value: i, text: i });
+      }
+
       return {
         dasar: [
           {
@@ -210,7 +216,7 @@ export default {
             suffix: '%',
           },
           {
-            type: 'VTextField',
+            type: 'VSelect',
             name: 'jml_pembimbing',
             label: 'Jumlah Pembimbing Praktik',
             hint: 'wajib diisi',
@@ -219,7 +225,7 @@ export default {
             outlined: true,
             dense: true,
             singleLine: true,
-            mask: '######',
+            items: mPengajar,
             grid: { cols: 12, md: 6 },
             labelColor: 'secondary',
           },
@@ -234,6 +240,10 @@ export default {
       this.step = 1;
       this.info = [];
       this.id = null;
+
+      // Set default nilai pengaturan petugas diklat
+      this.$set(this.form, 'ratio_pengajar_tambahan', 40);
+      this.$set(this.form, 'jml_pembimbing', 4);
     },
 
     initForm(value) {
