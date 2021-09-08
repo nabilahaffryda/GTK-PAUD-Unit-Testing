@@ -2,8 +2,8 @@
   <div class="mx-auto">
     <v-card flat>
       <v-card-text class="black--text">
-        <div class="font-weight-bold headline">Daftar Konfirmasi Ketersediaan</div>
-        <div>Silakan lakukan konfirmasi ketersediaan Anda untuk mengisi kelas diklat</div>
+        <div class="font-weight-bold headline">Daftar Konfirmasi Kesediaan</div>
+        <div>Silakan lakukan konfirmasi kesediaan Anda untuk mengisi kelas diklat</div>
 
         <div class="mt-5">
           <v-row v-if="$vuetify.breakpoint.mdAndUp">
@@ -101,7 +101,7 @@
       <v-card>
         <v-card-title class="pa-0">
           <v-toolbar flat dark color="secondary">
-            <v-toolbar-title>Konfirmasi Ketersediaan</v-toolbar-title>
+            <v-toolbar-title>Konfirmasi Kesediaan</v-toolbar-title>
             <v-spacer />
             <v-btn right icon dark @click="close">
               <v-icon>mdi-close</v-icon>

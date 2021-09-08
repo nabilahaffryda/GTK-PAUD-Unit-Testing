@@ -31,7 +31,7 @@
             </template>
             <template v-else> (<b>Pengajar, Pengajar Tambahan atau Pembimbing Praktik</b>) </template>
             <br />
-            Silakan untuk melakukan konfirmasi ketersediaan
+            Silakan untuk melakukan konfirmasi kesediaan
           </span>
         </v-col>
         <v-col class="shrink">
@@ -65,7 +65,7 @@
       </template>
     </v-row>
 
-    <base-modal-full ref="modal" title="Konfirmasi Ketersediaan" :useSave="false">
+    <base-modal-full ref="modal" title="Konfirmasi Kesediaan" :useSave="false">
       <form-ketersediaan :items="data" ref="ketersediaan" @reload="onKonfirmasi(false)" />
     </base-modal-full>
   </div>

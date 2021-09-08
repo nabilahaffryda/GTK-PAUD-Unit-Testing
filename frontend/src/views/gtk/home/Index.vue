@@ -20,10 +20,10 @@
     <v-alert v-if="is_konfirmasi" class="my-4" prominent color="orange" text icon="mdi-information">
       <v-row>
         <v-col class="grow black--text">
-          <div class="font-weight-bold">KONFIRMASI KETERSEDIAAN</div>
+          <div class="font-weight-bold">KONFIRMASI KESEDIAAN</div>
           <span>
             Anda telah ditambahkan di kelas sebagai (<b>Peserta Diklat</b>)<br />
-            Silakan untuk melakukan konfirmasi ketersediaan
+            Silakan untuk melakukan konfirmasi kesediaan
           </span>
         </v-col>
         <v-col class="shrink">
@@ -57,7 +57,7 @@
       </template>
     </v-row>
 
-    <base-modal-full ref="modal" title="Konfirmasi Ketersediaan" :useSave="false">
+    <base-modal-full ref="modal" title="Konfirmasi Kesediaan" :useSave="false">
       <form-ketersediaan ref="ketersediaan" :items="items" @reload="onKonfirmasi" />
     </base-modal-full>
   </div>
