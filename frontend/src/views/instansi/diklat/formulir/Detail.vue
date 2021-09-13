@@ -48,6 +48,11 @@
                 </div>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="12" md="12" sm="12">
+                <berkases :berkas="berkas" :valid="false" :use-icon="false" :withAction="true" @upload="onUpload" />
+              </v-col>
+            </v-row>
             <div class="my-5" v-if="false">
               <v-btn depressed link><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn>
             </div>
@@ -161,13 +166,26 @@
       :title="`Pilih ${tab === 0 ? 'Peserta' : 'Petugas'} Diklat`"
       multiselect
     />
+    <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title" @save="onSave">
+      <component
+        ref="formulir"
+        :is="'FormUnggah'"
+        :title="formulir.title"
+        :type="formulir.type"
+        :max="formulir.max"
+        :format="formulir.format"
+        :rules="formulir.rules"
+      />
+    </base-modal-full>
   </v-card>
 </template>
 <script>
 import { mapActions } from 'vuex';
 import BaseListPopup from '@components/base/BaseListPopup';
+import Berkases from '../../profil/formulir/Berkas';
+import FormUnggah from '@components/form/Unggah';
 export default {
-  components: { BaseListPopup },
+  components: { BaseListPopup, Berkases, FormUnggah },
   props: {
     detail: {
       type: Object,
@@ -192,6 +210,11 @@ export default {
       search: '',
       meta: {},
       page: 1,
+      berkas: {
+        title: 'Jadwal Diklat Dasar',
+        pesan: `<span class='grey--text'>Silakan unduh template Jadwal dasar </span>`,
+      },
+      formulir: {},
     };
   },
   computed: {
@@ -428,6 +451,23 @@ export default {
     },
 
     onSearch() {},
+
+    onUpload() {
+      const rules = 'PDF/JPEG/JPG/PNG';
+
+      this.$set(this.formulir, 'form', 'FormUnggah');
+      this.$set(this.formulir, 'title', `Jadwal Diklat Dasar`);
+      this.$set(this.formulir, 'format', `harus bertipe ${rules}`);
+      this.$set(this.formulir, 'rules', rules);
+      this.$set(this.formulir, 'mode', 'upload');
+      this.$set(this.formulir, 'init', null);
+      this.$set(this.formulir, 'max', 1500);
+      this.$refs.modal.open();
+      this.$nextTick(() => {
+        this.$refs.formulir.reset();
+        // this.$set(this.formulir, 'init', berkas[0])
+      });
+    },
   },
   watch: {
     tab: function (value) {

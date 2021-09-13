@@ -1,6 +1,6 @@
 <template>
   <v-list-item class="pa-0">
-    <v-list-item-icon>
+    <v-list-item-icon v-if="useIcon">
       <v-avatar color="primary">
         <v-icon color="white">mdi-attachment</v-icon>
       </v-avatar>
@@ -86,6 +86,10 @@ export default {
     useDelete: {
       type: Boolean,
       default: false,
+    },
+    useIcon: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {
