@@ -10,6 +10,7 @@ const ATTR_PESERTA = `
         paud_kelas {
           nama
           k_verval_paud
+          url_jadwal
           m_kecamatan {
             keterangan
           }

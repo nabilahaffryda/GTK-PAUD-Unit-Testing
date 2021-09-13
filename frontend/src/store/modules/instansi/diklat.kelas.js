@@ -41,7 +41,7 @@ export const actions = {
   action({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     const url = `i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.type}`;
-    return http[payload.method || 'post'](url, payload.params).then(({ data }) => data);
+    return http[payload.method || 'post'](url, payload.params, payload.config || {}).then(({ data }) => data);
   },
 
   async getListKelas({ rootState }, payload) {
