@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $wkt_sinkron
  * @property null|Carbon $wkt_ajuan
  * @property null|string $akun_id_verval
+ * @property null|string $file_jadwal
  * @property null|string $alasan
  * @property null|string $catatan
  * @property null|Carbon $wkt_verval
@@ -36,6 +37,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $updated_at
  * @property null|string $created_by
  * @property null|string $updated_by
+ *
+ * @property-read null|string $url_jadwal
  *
  * @property-read MVervalPaud $mVervalPaud
  * @property-read PaudDiklat $paudDiklat
@@ -62,6 +65,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudKelas whereWktSinkron($value)
  * @method static Builder|PaudKelas whereWktAjuan($value)
  * @method static Builder|PaudKelas whereAkunIdVerval($value)
+ * @method static Builder|PaudKelas whereFileJadwal($value)
  * @method static Builder|PaudKelas whereAlasan($value)
  * @method static Builder|PaudKelas whereCatatan($value)
  * @method static Builder|PaudKelas whereWktVerval($value)
@@ -108,6 +112,7 @@ class PaudKelas extends Eloquent
         'wkt_sinkron'         => 'datetime',
         'wkt_ajuan'           => 'datetime',
         'akun_id_verval'      => 'string',
+        'file_jadwal'         => 'string',
         'alasan'              => 'string',
         'catatan'             => 'string',
         'wkt_verval'          => 'datetime',
@@ -115,6 +120,15 @@ class PaudKelas extends Eloquent
         'updated_at'          => 'datetime',
         'created_by'          => 'string',
         'updated_by'          => 'string',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url_jadwal',
     ];
 
     /**
@@ -140,6 +154,7 @@ class PaudKelas extends Eloquent
         'wkt_sinkron',
         'wkt_ajuan',
         'akun_id_verval',
+        'file_jadwal',
         'alasan',
         'catatan',
         'wkt_verval',
@@ -201,5 +216,10 @@ class PaudKelas extends Eloquent
     public function paudMapelKelas()
     {
         return $this->belongsTo('App\Models\PaudMapelKelas', 'paud_mapel_kelas_id', 'paud_mapel_kelas_id');
+    }
+
+    public function getUrlJadwalAttribute()
+    {
+        return $this->file_jadwal ? sprintf("%s/%s", config('filesystems.disks.kelas-jadwal.url'), $this->file_jadwal) : null;
     }
 }
