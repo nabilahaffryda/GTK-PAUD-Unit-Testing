@@ -24,6 +24,7 @@ type PaudKelas {
     updated_at: DateTime
     created_by: String
     updated_by: String
+    url_jadwal: String
 
     m_kecamatan: MKecamatan @belongsTo(relation: "mKecamatan")
     m_kelurahan: MKelurahan @belongsTo(relation: "mKelurahan")
