@@ -95,10 +95,7 @@
                             <p class="caption black--text">
                               <span>Email: {{ $getDeepObj(item, 'akun.data.email') || '-' }}</span>
                             </p>
-                            <p
-                              class="caption purple--text"
-                              v-if="akses === 'pengajar' && Number(item.is_refreshment) === 1"
-                            >
+                            <p class="caption purple--text" v-if="Number(item.is_refreshment) === 1">
                               <v-icon small color="purple">mdi-check-circle</v-icon> Lulus Bimtek
                             </p>
                           </v-list-item-content>
