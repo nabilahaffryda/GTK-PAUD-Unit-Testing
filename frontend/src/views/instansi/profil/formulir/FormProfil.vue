@@ -105,7 +105,14 @@ export default {
       let keys = [9, 10, 11];
       if (['pembimbing'].includes(this.jenis)) keys.unshift(3, 5, 6, 7, 8);
 
-      return this.$mapForMaster(this.masters.m_kualifikasi || {}).filter((s) => keys.includes(s.value)) || [];
+      return (
+        this.$mapForMaster(this.masters.m_kualifikasi || {})
+          .filter((s) => keys.includes(s.value))
+          .map((key) => {
+            if (key.value === 3) key.text = 'SMA Sederajat';
+            return key;
+          }) || []
+      );
     },
 
     configs() {
