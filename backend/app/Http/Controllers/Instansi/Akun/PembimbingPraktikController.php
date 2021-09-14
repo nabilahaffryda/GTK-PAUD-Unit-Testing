@@ -47,6 +47,16 @@ class PembimbingPraktikController extends AkunController
             ->when(isset($params['is_inti']), function (Eloquent\Builder $query) use ($params) {
                 $query->where('paud_petugas.is_inti', $params['is_inti']);
             })
+            ->when(isset($params['is_bimtek']), function (Eloquent\Builder $query) use ($params) {
+                $query->where('paud_petugas.is_refreshment', $params['is_bimtek']);
+            })
+            ->when($params['is_notset'] ?? 0, function (Eloquent\Builder $query) use ($params) {
+                $query
+                    ->orWhere([
+                        'paud_petugas.is_inti'        => 0,
+                        'paud_petugas.is_refreshment' => 0,
+                    ]);
+            })
             ->orderBy('paud_admin_id', 'desc')
             ->paginate((int)$request->get('count', 10))
             ->format(function (PaudAdmin $item) {
