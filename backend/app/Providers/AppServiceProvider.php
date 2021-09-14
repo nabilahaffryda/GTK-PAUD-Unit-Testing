@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App;
 use Carbon\Carbon;
-use CloudCreativity\LaravelJsonApi\LaravelJsonApi;
 use Config;
 use DateTime;
 use DB;
@@ -81,7 +80,5 @@ class AppServiceProvider extends ServiceProvider
                 'app' => App::runningInConsole() ? 'console' : 'backend',
             ]);
         });
-
-        LaravelJsonApi::defaultApi('v1');
     }
 }
