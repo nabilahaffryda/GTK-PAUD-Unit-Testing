@@ -16,7 +16,23 @@
         >
           <template v-slot:toolbar>
             <template v-if="akses === 'pembimbing-praktik'">
-              <v-btn small color="info" class="ml-2 py-5" @click="setMultiInti('inti')"> Set Pembimbing Praktik </v-btn>
+              <v-menu bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn v-bind="attrs" v-on="on" small color="info" class="ml-2 py-5"> set pembimbing praktik</v-btn>
+                </template>
+                <v-list dense>
+                  <v-list-item @click="setMultiInti('inti')">
+                    <v-list-item-content>
+                      <v-list-item-title>Set Pembimbing Praktik Inti</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item @click="setMultiInti('bimtek')">
+                    <v-list-item-content>
+                      <v-list-item-title>Set Keterangan BIMTEK</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </template>
             <template v-if="akses === 'pengajar'">
               <v-menu :close-on-content-click="false" :nudge-width="200" offset-x offset-y>
