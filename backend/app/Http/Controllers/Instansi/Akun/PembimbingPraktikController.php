@@ -6,7 +6,8 @@ use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Http\Controllers\Instansi\AkunController;
 use App\Http\Requests\Instansi\Admin\CreateRequest;
-use App\Http\Requests\Instansi\Admin\PembimbingPraktik\SetIntiRequest;
+use App\Http\Requests\Instansi\Admin\PembimbingPraktik\ResetPembimbingRequest;
+use App\Http\Requests\Instansi\Admin\PembimbingPraktik\SetPembimbingRequest;
 use App\Http\Requests\Instansi\Admin\UpdateRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
@@ -101,22 +102,30 @@ class PembimbingPraktikController extends AkunController
     /**
      * @throws FlowException
      */
-    public function setInti(SetIntiRequest $request)
+    public function setStatus(SetPembimbingRequest $request)
     {
-        return BaseCollection::make(app(PetugasService::class)->setStatusAkun([MPetugasPaud::PEMBIMBING_PRAKTIK], $request->akun_ids, ['is_inti' => 1]));
+        return BaseCollection::make(app(PetugasService::class)->setStatusAkun([
+            MPetugasPaud::PEMBIMBING_PRAKTIK,
+        ], $request->akun_ids, [
+            'is_inti'        => $request->is_inti,
+            'is_refreshment' => $request->is_bimtek,
+        ]));
     }
 
     /**
      * @throws FlowException
      */
-    public function resetInti(PaudAdmin $paudAdmin)
+    public function resetStatus(PaudAdmin $paudAdmin, ResetPembimbingRequest $request)
     {
-        $petugas = app(PetugasService::class)->getPetugas($paudAdmin->akun, MPetugasPaud::PEMBIMBING_PRAKTIK);
+        $petugas = app(PetugasService::class)->getPetugas($paudAdmin->akun, [MPetugasPaud::PEMBIMBING_PRAKTIK]);
         if (!$petugas) {
-            throw new FlowException('Data akun bukan merupakan pembimbing praktik');
+            throw new FlowException('Data akun bukan merupakan pengajar');
         }
 
-        return BaseResource::make(app(PetugasService::class)->resetStatus($petugas, ['is_inti' => true]));
+        return BaseResource::make(app(PetugasService::class)->resetStatus($petugas, [
+            'is_inti'        => $request->is_inti,
+            'is_refreshment' => $request->is_bimtek,
+        ]));
     }
 
     public function downloadAktivasi(Request $request)
