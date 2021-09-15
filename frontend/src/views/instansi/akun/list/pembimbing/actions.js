@@ -14,7 +14,13 @@ export default [
     icon: 'mdi-close',
     title: 'Batalkan Pembimbing Inti',
     event: 'onResetInti',
-    akses: 'akun-pembimbing-praktik.reset-inti',
+    akses: 'akun-pembimbing-praktik.reset-status',
+  },
+  {
+    icon: 'mdi-close',
+    title: 'Batalkan Keterangan Bimtek',
+    event: 'onResetBimtek',
+    akses: 'akun-pembimbing-praktik.reset-status',
   },
   { icon: 'mdi-delete', title: 'Hapus', event: 'onDelete', akses: 'akun-pembimbing-praktik.delete' },
 ];

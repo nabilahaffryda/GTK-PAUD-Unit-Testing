@@ -440,6 +440,8 @@ export default {
             }
       );
       this.$nextTick(() => {
+        this.$refs.selector.filters = this.selector.filters;
+        this.$refs.selector.data = [];
         this.$refs.selector.open();
       });
     },
@@ -449,12 +451,12 @@ export default {
         akun_ids: akunIds,
       };
 
-      if (this.akses === 'pengajar' && this.selector.tipe === 'inti') {
+      if (['pembimbing-praktik', 'pengajar'].includes(this.akses) && this.selector.tipe === 'inti') {
         Object.assign(params, {
           is_inti: 1,
         });
       }
-      if (this.akses === 'pengajar' && this.selector.tipe !== 'inti') {
+      if (['pembimbing-praktik', 'pengajar'].includes(this.akses) && this.selector.tipe !== 'inti') {
         Object.assign(params, {
           is_bimtek: 1,
         });
@@ -471,7 +473,7 @@ export default {
       }).then(() => {
         this.setStatus({
           name: this.attr.tipe,
-          type: this.akses === 'pengajar' ? 'set-status' : 'set-inti',
+          type: 'set-status',
           params,
         }).then(() => {
           this.$refs.selector.close();
@@ -497,10 +499,10 @@ export default {
           Object.assign(
             {
               id,
-              type: this.akses === 'pengajar' ? 'reset-status' : 'reset-inti',
+              type: 'reset-status',
               name: this.attr.tipe,
             },
-            this.akses === 'pengajar' ? { params } : {}
+            { params }
           )
         ).then(() => {
           this.$success(`Batal Set Inti ${this.title} berhasil`);
