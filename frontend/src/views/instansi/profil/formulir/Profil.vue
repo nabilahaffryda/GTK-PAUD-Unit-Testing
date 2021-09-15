@@ -204,7 +204,9 @@ export default {
             {
               title: 'Pendidikan Terakhir',
               value:
-                (this.$getDeepObj(this, `masters.m_kualifikasi.${this.$getDeepObj(item, 'k_kualifikasi')}`) || '-') +
+                (Number(this.$getDeepObj(item, 'k_kualifikasi') === 3)
+                  ? 'SMA Sederajat'
+                  : this.$getDeepObj(this, `masters.m_kualifikasi.${this.$getDeepObj(item, 'k_kualifikasi')}`) || '-') +
                 ' - ' +
                 (this.$getDeepObj(item, 'lulusan') || '-'),
               grid: { cols: 12, md: 3, sm: 12 },
