@@ -22,7 +22,7 @@ class ProfilUpdateRequest extends FormRequest
             'kelamin'             => ['required', 'in:L,P'],
             'lulusan'             => ['required', 'string', 'max:100'],
             'prodi'               => ['required', 'string', 'max:50'],
-            'k_kualifikasi'       => ['required', 'integer', 'exists:m_kualifikasi,k_kualifikasi', 'in:9,10,11'],
+            'k_kualifikasi'       => ['required', 'integer', 'exists:m_kualifikasi,k_kualifikasi', 'in:3,5,6,7,8,9,10,11'],
             'k_propinsi'          => ['required', 'integer', 'exists:m_propinsi,k_propinsi'],
             'k_kota'              => ['required', 'integer', 'exists:m_kota,k_kota'],
             'k_kecamatan'         => ['nullable', 'integer', 'exists:m_kecamatan,k_kecamatan'],
