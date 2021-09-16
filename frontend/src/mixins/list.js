@@ -130,8 +130,7 @@ export default {
     },
 
     onSearch(keyword) {
-      Object.assign(this.filters, { keyword: keyword });
-      Object.assign(this.params, { page: 1 });
+      Object.assign(this.params, { keyword: keyword, page: 1 });
       this.fetchData();
     },
 
