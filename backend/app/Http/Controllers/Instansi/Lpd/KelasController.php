@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Instansi\Lpd;
 
+use App\Exceptions\FlowException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Instansi\Lpd\Kelas\CreateRequest;
 use App\Http\Requests\Instansi\Lpd\Kelas\IndexRequest;
+use App\Http\Requests\Instansi\Lpd\Kelas\UploadRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\MKonfirmasiPaud;
@@ -87,5 +89,14 @@ class KelasController extends Controller
         $paudKelas = $this->service->update($paudDiklat, $kelas, $request->validated());
 
         return BaseResource::make($paudKelas);
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function uploadJadwal(PaudDiklat $paudDiklat, PaudKelas $kelas, UploadRequest $request)
+    {
+        $this->service->uploadJadwal($paudDiklat, $kelas, $request->file);
+        return BaseResource::make($kelas);
     }
 }

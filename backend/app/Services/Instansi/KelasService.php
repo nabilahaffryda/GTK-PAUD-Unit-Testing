@@ -19,8 +19,12 @@ use App\Models\Ptk;
 use Arr;
 use Carbon\Carbon;
 use DB;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use League\Flysystem\Util;
+use Storage;
 
 class KelasService
 {
@@ -476,5 +480,37 @@ class KelasService
         }
 
         return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     * @throws Exception
+     */
+    public function uploadJadwal(PaudDiklat $diklat, PaudKelas $kelas, UploadedFile $file)
+    {
+        $ext = strtolower($file->getClientOriginalExtension());
+        if (!in_array($ext, ['pdf', 'jpeg', 'jpg', 'png'])) {
+            throw new FlowException("Jenis berkas jadwal tidak dikenali");
+        }
+
+        $ftpPath   = config('filesystems.disks.kelas-jadwal.path');
+        $timestamp = date('ymdhis');
+        $random    = random_int(10000, 99999);
+        $name      = Util::normalizePath($file->getClientOriginalName());
+        $filename  = "{$diklat->instansi_id}/{$kelas->paud_kelas_id}-{$timestamp}-{$random}";
+
+        $path = sprintf("%s/%s", $ftpPath, $filename);
+        if (!Storage::disk('instansi-foto')->putFileAs($path, $file, $name)) {
+            throw new FlowException("Unggah berkas jadwal tidak berhasil");
+        }
+
+        $filename = "{$filename}/{$name}";
+
+        $kelas->file_jadwal = $filename;
+        $kelas->save();
+
+        // old file TIDAK DIHAPUS untuk digunakan sebagai backup
+
+        return $filename;
     }
 }

@@ -92,6 +92,16 @@ return [
             'url'      => env('PETUGAS_BERKAS_URL', 'https://upload.dev.siap.id/gpo/paud/petugas-berkas'),
         ],
 
+        'kelas-jadwal' => [
+            'driver'   => 'ftp',
+            'passive'  => env('KELAS_JADWAL_PASSIVE', env('FTP_PASSIVE', true)),
+            'host'     => env('KELAS_JADWAL_HOST', env('FTP_HOST', '172.17.1.20')),
+            'username' => env('KELAS_JADWAL_USER', env('FTP_USER', 'webmaster')),
+            'password' => env('KELAS_JADWAL_PASS', env('FTP_PASS', 'w3bmaster')),
+            'path'     => env('KELAS_JADWAL_PATH', '/upload/gpo/paud/kelas-jadwal'),
+            'url'      => env('KELAS_JADWAL_URL', 'https://upload.dev.siap.id/gpo/paud/kelas-jadwal'),
+        ],
+
     ],
 
     /*

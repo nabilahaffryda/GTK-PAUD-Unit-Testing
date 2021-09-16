@@ -15,12 +15,14 @@ export default {
       this.$router.push({ name: 'diklat-kelas', params: { diklat_id: item.id } });
     },
 
-    async onDetail(item) {
-      const data = await this.getDetail({ diklat_id: this.diklatId, id: item.id }).then(({ data }) => data);
+    async onDetail(item, reload = true) {
+      const data = await this.getDetail({ diklat_id: this.diklatId, id: item.id || item.paud_kelas_id }).then(
+        ({ data }) => data
+      );
       this.$set(this.formulir, 'title', 'Detail Diklat');
       this.$set(this.formulir, 'form', 'detail-kelas');
       this.$set(this.formulir, 'useSave', false);
-      this.$refs.modal.open();
+      if (reload) this.$refs.modal.open();
 
       this.$nextTick(() => {
         this.$refs.formulir.reset();

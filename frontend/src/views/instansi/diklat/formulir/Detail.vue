@@ -48,6 +48,23 @@
                 </div>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="12" md="12" sm="12">
+                <div>
+                  <berkases
+                    :berkas="berkas"
+                    :valid="$getDeepObj(berkas, 'url')"
+                    :use-icon="false"
+                    :value="berkas"
+                    @upload="onUpload"
+                    @detil="onPreview"
+                  />
+                </div>
+                <v-btn v-if="$allow('lpd-kelas.upload-jadwal')" color="secondary" small depressed @click="onUpload"
+                  >Unggah Jadwal</v-btn
+                >
+              </v-col>
+            </v-row>
             <div class="my-5" v-if="false">
               <v-btn depressed link><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn>
             </div>
@@ -161,13 +178,28 @@
       :title="`Pilih ${tab === 0 ? 'Peserta' : 'Petugas'} Diklat`"
       multiselect
     />
+    <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title" @save="upload">
+      <component
+        ref="formulir"
+        :is="'FormUnggah'"
+        :title="formulir.title"
+        :type="formulir.type"
+        :max="formulir.max"
+        :format="formulir.format"
+        :rules="formulir.rules"
+      />
+    </base-modal-full>
+    <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
   </v-card>
 </template>
 <script>
 import { mapActions } from 'vuex';
 import BaseListPopup from '@components/base/BaseListPopup';
+import Berkases from '../../profil/formulir/Berkas';
+import FormUnggah from '@components/form/Unggah';
+import PopupPreviewDetail from '@components/popup/PreviewDetil';
 export default {
-  components: { BaseListPopup },
+  components: { BaseListPopup, Berkases, FormUnggah, PopupPreviewDetail },
   props: {
     detail: {
       type: Object,
@@ -192,6 +224,8 @@ export default {
       search: '',
       meta: {},
       page: 1,
+      formulir: {},
+      preview: {},
     };
   },
   computed: {
@@ -247,6 +281,14 @@ export default {
 
     isPeserta() {
       return this.tab === 0;
+    },
+
+    berkas() {
+      return {
+        title: 'Jadwal Diklat Dasar',
+        pesan: `<span class='grey--text'><i>* Silakan unduh template Jadwal dasar <a class="blue--text" href="https://files1.simpkb.id/berkas/paud/Template_Jadwal Diklat_Dasar_Rev.docx" target="_blank">UNDUH DISINI</a> </i> </span>`,
+        url: this.$getDeepObj(this, 'kelas.url_jadwal'),
+      };
     },
   },
   methods: {
@@ -428,6 +470,65 @@ export default {
     },
 
     onSearch() {},
+
+    onUpload() {
+      const rules = 'PDF/JPEG/JPG/PNG';
+
+      this.$set(this.formulir, 'form', 'FormUnggah');
+      this.$set(this.formulir, 'title', `Jadwal Diklat Dasar`);
+      this.$set(this.formulir, 'format', `harus bertipe ${rules}`);
+      this.$set(this.formulir, 'rules', { format: rules, required: true });
+      this.$set(this.formulir, 'mode', 'upload');
+      this.$set(this.formulir, 'init', null);
+      this.$set(this.formulir, 'max', 1500);
+      this.$refs.modal.open();
+      this.$nextTick(() => {
+        this.$refs.formulir.reset();
+        // this.$set(this.formulir, 'init', berkas[0])
+      });
+    },
+
+    upload() {
+      const params = this.$refs.formulir.form || {};
+      const formData = new FormData();
+
+      if (!this.$getDeepObj(params, 'file')) {
+        this.$error('Berkas belum di pilih');
+        this.$refs.modal.loading = false;
+        return;
+      }
+
+      formData.append('file', params['file']);
+
+      this.action({
+        diklat_id: this.detail.paud_diklat_id,
+        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
+        type: 'upload-jadwal',
+        params: formData,
+        config: {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      })
+        .then(() => {
+          this.$success('Berkas berhasil di unggah');
+          this.$emit('reload', this.kelas, true);
+          this.$refs.modal.close();
+        })
+        .catch(() => {
+          this.$refs.modal.loading = false;
+        });
+    },
+
+    onPreview(berkas) {
+      this.$set(this, 'preview', {});
+      this.preview.url = this.$getDeepObj(berkas, 'url');
+      this.preview.title = this.$getDeepObj(berkas, 'title');
+      this.$nextTick(() => {
+        this.$refs.popup.open();
+      });
+    },
   },
   watch: {
     tab: function (value) {

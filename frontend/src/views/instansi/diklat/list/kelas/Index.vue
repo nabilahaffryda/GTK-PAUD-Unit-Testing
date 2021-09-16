@@ -175,6 +175,7 @@
         :detail="detail"
         :masters="masters"
         :initValue="formulir.init"
+        @reload="onDetail"
       ></component>
     </base-modal-full>
   </div>

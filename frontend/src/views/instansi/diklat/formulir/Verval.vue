@@ -50,6 +50,17 @@
                       </div>
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col cols="12" md="12" sm="12">
+                      <berkases
+                        :berkas="berkases"
+                        :valid="$getDeepObj(berkases, 'url')"
+                        :use-icon="false"
+                        :value="berkases"
+                        @detil="onPreview"
+                      />
+                    </v-col>
+                  </v-row>
                 </v-col>
               </v-row>
 
@@ -157,11 +168,14 @@
         </v-card>
       </v-col>
     </v-row>
+    <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
   </div>
 </template>
 <script>
 import { ValidationProvider } from 'vee-validate';
 import { mapActions } from 'vuex';
+import Berkases from '../../profil/formulir/Berkas';
+import PopupPreviewDetail from '@components/popup/PreviewDetil';
 export default {
   props: {
     detail: {
@@ -201,7 +215,7 @@ export default {
       default: null,
     },
   },
-  components: { ValidationProvider },
+  components: { ValidationProvider, Berkases, PopupPreviewDetail },
   data() {
     return {
       preview: {},
@@ -240,6 +254,7 @@ export default {
         { value: 'pengajar', kPetugas: 1, text: 'Pengajar' },
         { value: 'pengajar-tambahan', kPetugas: 2, text: 'Pengajar Tambahan' },
       ],
+      formulir: {},
     };
   },
   computed: {
@@ -309,6 +324,14 @@ export default {
           : this.$getDeepObj(this.detail, 'paud_petugas_perans.data.0.alasan');
       return catatan;
     },
+
+    berkases() {
+      return {
+        title: 'Jadwal Diklat Dasar',
+        pesan: `<span class='grey--text'><i>* Silakan unduh template Jadwal dasar <a class="blue--text" href="https://files1.simpkb.id/berkas/paud/Template_Jadwal Diklat_Dasar_Rev.docx" target="_blank">UNDUH DISINI</a> </i> </span>`,
+        url: this.$getDeepObj(this, 'detail.url_jadwal'),
+      };
+    },
   },
 
   methods: {
@@ -345,6 +368,15 @@ export default {
 
     onSelected(value) {
       this.$set(this, 'pilihan', value);
+    },
+
+    onPreview(berkas) {
+      this.$set(this, 'preview', {});
+      this.preview.url = this.$getDeepObj(berkas, 'url');
+      this.preview.title = this.$getDeepObj(berkas, 'title');
+      this.$nextTick(() => {
+        this.$refs.popup.open();
+      });
     },
   },
   watch: {
