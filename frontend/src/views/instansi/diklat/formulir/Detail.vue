@@ -189,7 +189,7 @@
         :rules="formulir.rules"
       />
     </base-modal-full>
-    <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
+    <popup-preview-detail ref="filepopup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
   </v-card>
 </template>
 <script>
@@ -526,7 +526,7 @@ export default {
       this.preview.url = this.$getDeepObj(berkas, 'url');
       this.preview.title = this.$getDeepObj(berkas, 'title');
       this.$nextTick(() => {
-        this.$refs.popup.open();
+        this.$refs.filepopup.open();
       });
     },
   },
