@@ -2,20 +2,17 @@
 
 namespace App\Remotes;
 
-use Exception;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
 
 abstract class Paspor extends Remote
 {
     protected $dataKey = 'data';
     protected $errorKey = 'error.message';
+    protected $httpMethod = 'GET';
 
     /**
      * Paspor constructor.
-     * @throws BindingResolutionException
      */
     public function __construct()
     {
@@ -26,24 +23,45 @@ abstract class Paspor extends Remote
     /**
      * @param string $method
      * @param array $args
-     * @return Request
      */
     protected function encode($method, $args)
     {
-        return new Request('GET', $this->object . '.json?' . http_build_query([
+        if (!$this->object && $this->httpMethod == 'GET') {
+            if ($args) {
+                $method .= '?' . http_build_query($args);
+            }
+
+            return new Request($this->httpMethod, $method, [], null);
+        }
+
+        if ($this->httpMethod == 'POST') {
+            return new Request($this->httpMethod, $method, [
+                'Content-type' => 'application/json',
+            ], json_encode($args));
+        }
+
+        if ($this->httpMethod == 'DELETE') {
+            return new Request($this->httpMethod, $method, [], null);
+        }
+
+        $request = new Request($this->httpMethod, $this->object . '.json?' . http_build_query([
                 'service' => $method,
                 'data'    => json_encode($args),
-            ]));
+            ])
+        );
+
+        return $request;
     }
 
     /**
-     * @param Response $response
-     * @throws Exception
+     * @param \GuzzleHttp\Psr7\Response $response
+     * @return array
+     * @throws \Exception
      */
     protected function decode($response)
     {
         if (!$response || $response->getStatusCode() != 200) {
-            throw new Exception('Response engine tidak valid');
+            throw new \Exception('Response engine tidak valid');
         }
 
         parent::decode($response);

@@ -39,13 +39,13 @@ class User extends Paspor
      */
     public function add($users, $layanan, $adminId)
     {
-        $data = array(
+        $data = [
             'users'      => $users,
             'k_layanans' => $layanan,
             'is_notif'   => 0,
             'silent'     => 1,
             'adminid'    => $adminId,
-        );
+        ];
 
         return $this->request('addusers', $data);
     }
@@ -95,8 +95,9 @@ class User extends Paspor
      */
     public function addUserLayan($userId, $layananIds, $adminId)
     {
-        if (!is_array($layananIds))
+        if (!is_array($layananIds)) {
             $layananIds = [$layananIds];
+        }
 
         return $this->request('add_user_layan', [
             'userid'  => $userId,
@@ -129,5 +130,59 @@ class User extends Paspor
     {
         $params['userid'] = $pasporId;
         return $this->request('update_user', $params);
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function addUsersWithSosial(array $users)
+    {
+        $this->object     = null;
+        $this->httpMethod = 'POST';
+        try {
+            $params = [
+                'users' => $users,
+            ];
+
+            return $this->request('v2/user/usersosials?' . http_build_query(['k_jenis_sosial' => 4]), $params);
+        } finally {
+            $this->object     = 'user';
+            $this->httpMethod = 'GET';
+        }
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function findUserSosial(int $pasporId, int $kJenisSosial)
+    {
+        $this->object = null;
+        try {
+            $params['k_jenis_sosial'] = $kJenisSosial;
+            return $this->request('v2/user/' . $pasporId . '/sosial', $params);
+        } finally {
+            $this->object = 'user';
+        }
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function addAkunSosial(int $pasporId, array $params)
+    {
+        $this->object     = null;
+        $this->httpMethod = 'POST';
+        try {
+            $params = [
+                'sosialid'       => $params['sosial_id'],
+                'email'          => $params['email'],
+                'k_jenis_sosial' => $params['k_jenis_sosial'],
+            ];
+
+            return $this->request('v2/user/' . $pasporId . '/sosial', $params);
+        } finally {
+            $this->object     = 'user';
+            $this->httpMethod = 'GET';
+        }
     }
 }
