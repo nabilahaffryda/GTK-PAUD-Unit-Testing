@@ -31,6 +31,7 @@ class PembimbingPraktikController extends AkunController
     {
         $params = array_merge($request->input('filter', []), [
             'k_group' => $this->kGroup,
+            'keyword' => $request->input('keyword'),
         ]);
 
         return BaseCollection::make($this

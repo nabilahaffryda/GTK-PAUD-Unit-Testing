@@ -25,7 +25,9 @@ class LpdController extends Controller
      */
     public function index(Request $request)
     {
-        $params = $request->input('filter', []);
+        $params = array_merge($request->input('filter', []), [
+            'keyword' => $request->input('keyword'),
+        ]);
 
         return BaseCollection::make($this
             ->service

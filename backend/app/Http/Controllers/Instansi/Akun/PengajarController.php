@@ -30,6 +30,7 @@ class PengajarController extends AkunController
     {
         $params = array_merge($request->input('filter', []), [
             'k_group' => [$this->kGroup, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD],
+            'keyword' => $request->input('keyword'),
         ]);
 
         return BaseCollection::make($this
