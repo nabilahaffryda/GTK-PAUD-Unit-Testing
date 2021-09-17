@@ -16,10 +16,13 @@ use App\Models\PaudKelasPeserta;
 use App\Models\PaudKelasPetugas;
 use App\Models\PaudPetugas;
 use App\Models\Ptk;
+use App\Remotes\Paspor\User;
+use App\Remotes\SimpatikaRemote;
 use Arr;
 use Carbon\Carbon;
 use DB;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -77,6 +80,9 @@ class KelasService
         return $kelas->load(['mVervalPaud', 'paudDiklat.instansi', 'paudDiklat.paudInstansi', 'paudMapelKelas']);
     }
 
+    /**
+     * @throws FlowException
+     */
     public function validateKelas(PaudDiklat $diklat, PaudKelas $kelas)
     {
         if ($kelas->paud_diklat_id <> $diklat->paud_diklat_id) {
@@ -174,6 +180,22 @@ class KelasService
         return $query;
     }
 
+    /**
+     * @throws FlowException
+     * @throws GuzzleException
+     */
+    public function indexPesertaKandidatSimpatika(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    {
+        $this->validateKelas($paudDiklat, $kelas);
+
+        return app(SimpatikaRemote::class)
+            ->searchGuruRA(
+                $params['keyword'] ?? '',
+                $params['page'] ?? 1,
+                $params['count'] ?? 10,
+            );
+    }
+
     public function indexPetugasKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
     {
         $this->validateKelas($paudDiklat, $kelas);
@@ -257,6 +279,96 @@ class KelasService
         }
 
         return $ptks;
+    }
+
+    /**
+     * @throws FlowException
+     * @throws GuzzleException
+     */
+    public function createPesertaSimpatika(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
+    {
+        $ptkIds = $params['ptk_id'];
+
+        $ptks = Ptk::query()
+            ->whereIn('ptk_id', $params['ptk_id'])
+            ->get()
+            ->keyBy('ptk_id');
+
+        $newPtkIds = array_diff($ptkIds, $ptks->keys()->all());
+        if ($newPtkIds) {
+            $ptks = app(SimpatikaRemote::class)->fetchGuruRA($newPtkIds);
+
+            // simpan ke paspor
+            $ptkIds   = [];
+            $newUsers = [];
+            foreach ($ptks as $ptk) {
+                $ptkIds['email']   = $ptk['ptk_id'];
+                $newUsers['email'] = [
+                    'userid'   => $ptk['paspor_id'],
+                    'nama'     => $ptk['nama'],
+                    'passwd'   => null,
+                    'email'    => $ptk['email'],
+                    'is_aktif' => '1',
+                    'is_email' => '1',
+                    'admin_id' => akun()?->paspor_id,
+                ];
+            }
+
+            // cek user yang telah terdaftar dipaspor
+            $sosialUsers = [];
+            $pasporUsers = [];
+            $response    = app(User::class)->listUserByEmails(array_keys($newUsers));
+            foreach ($response as $item) {
+                $pasporId = $item['userid'];
+                $email    = $item['email'];
+
+                $pasporUsers[$email] = $item;
+
+                $sosialUsers[$pasporId] = [
+                    'sosialid'       => $newUsers[$email]['userid'],
+                    'email'          => $email,
+                    'k_jenis_sosial' => 4,
+                ];
+
+                unset($newUsers[$email]);
+            }
+
+            // pastikan user sosialnya sudah ditambahkan
+            foreach ($sosialUsers ?: [] as $pasporId => $data) {
+                $response = app(User::class)->findUserSosial($pasporId, 4);
+                if (!$response) {
+                    app(User::class)->addAkunSosial($pasporId, $data);
+                }
+            }
+
+            // tambahkan user yang belum ada di paspor
+            if ($newUsers) {
+                $response = app(User::class)->addUsersWithSosial($newUsers);
+                foreach ($response as $item) {
+                    $pasporUsers[$item['email']] = $item;
+                }
+            }
+
+            if ($miss = array_diff(array_keys($ptkIds), array_keys($pasporUsers))) {
+                throw new FlowException("Gagal menambahkan email : " . implode(', ', $miss));
+            }
+
+            // simpan ptk dengan paspor_id
+            foreach ($ptks as $ptk) {
+                $ptk = new Ptk($ptk);
+
+                $paspor = $pasporUsers[$ptk->email];
+
+
+                $ptk->k_sumber  = 9;// SIMPATIKA
+                $ptk->paspor_id = $paspor['userid'];
+                $ptk->akun_id   = akunId();
+
+                $ptk->save();
+            }
+        }
+
+        return $this->createPeserta($paudDiklat, $kelas, $params);
     }
 
     /**
