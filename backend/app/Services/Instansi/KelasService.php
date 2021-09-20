@@ -188,12 +188,32 @@ class KelasService
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        return app(SimpatikaRemote::class)
+        $result = app(SimpatikaRemote::class)
             ->searchGuruRA(
                 $params['keyword'] ?? '',
                 $params['page'] ?? 1,
                 $params['count'] ?? 10,
             );
+
+        $data   = collect($result['data'] ?? []);
+        $ptkIds = $data->pluck('ptk_id')->unique();
+
+        $pesertas = PaudKelasPeserta::query()
+            ->where([
+                'tahun'    => config('paud.tahun'),
+                'angkatan' => config('paud.angkatan'),
+            ])
+            ->whereIn('ptk_id', $ptkIds)
+            ->get()
+            ->keyBy('ptk_id');
+
+        foreach ($result['data'] ?? [] as $index => $data) {
+            $ptkId = $data['ptk_id'] ?? null;
+
+            $result['data'][$index]['is_baru'] = !($ptkId && $pesertas->has($ptkId));
+        }
+
+        return $result;
     }
 
     public function indexPetugasKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
