@@ -17,7 +17,7 @@ abstract class Paspor extends Remote
     public function __construct()
     {
         $url = \Config::get('services.paspor.url');
-        parent::__construct($url);
+        parent::__construct($url, true);
     }
 
     /**
