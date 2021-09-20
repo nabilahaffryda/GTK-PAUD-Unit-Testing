@@ -63,12 +63,10 @@
       <v-card-actions>
         <base-table-footer :pageTotal="pageTotal" @changePage="onChangePage" />
       </v-card-actions>
-      <v-card-text v-if="multiselect">
-        <div class="text-right">
-          <v-btn text @click="dialog = false">Batal</v-btn>
-          <v-btn color="primary" :disabled="!selected.length" @click="onSaveSelection">Simpan</v-btn>
-        </div>
-      </v-card-text>
+      <div class="text-right pa-2">
+        <v-btn text @click="dialog = false">Batal</v-btn>
+        <v-btn color="primary" :disabled="!selected.length" @click="onSaveSelection">Simpan</v-btn>
+      </div>
     </v-card>
   </v-dialog>
 </template>
@@ -106,7 +104,7 @@ export default {
       items: [
         {
           url: 'peserta/kandidat',
-          text: 'non-simpatika',
+          text: 'simpkb',
         },
         {
           url: 'peserta/kandidat-simpatika',
