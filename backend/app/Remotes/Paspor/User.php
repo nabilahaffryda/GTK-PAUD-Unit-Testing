@@ -171,7 +171,7 @@ class User extends Paspor
         $this->httpMethod = 'POST';
         try {
             $params = [
-                'sosialid'       => $params['sosial_id'],
+                'sosialid'       => $params['sosialid'],
                 'email'          => $params['email'],
                 'k_jenis_sosial' => $params['k_jenis_sosial'],
             ];
