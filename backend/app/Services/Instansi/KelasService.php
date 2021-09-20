@@ -322,12 +322,14 @@ class KelasService
             $ptkIds   = [];
             $newUsers = [];
             foreach ($ptks as $ptk) {
-                $ptkIds['email']   = $ptk['ptk_id'];
-                $newUsers['email'] = [
+                $email = $ptk['email'];
+
+                $ptkIds[$email]   = $ptk['ptk_id'];
+                $newUsers[$email] = [
                     'userid'   => $ptk['paspor_id'],
                     'nama'     => $ptk['nama'],
                     'passwd'   => null,
-                    'email'    => $ptk['email'],
+                    'email'    => $email,
                     'is_aktif' => '1',
                     'is_email' => '1',
                     'admin_id' => akun()?->paspor_id,
@@ -363,7 +365,7 @@ class KelasService
 
             // tambahkan user yang belum ada di paspor
             if ($newUsers) {
-                $response = app(User::class)->addUsersWithSosial($newUsers);
+                $response = app(User::class)->addUsersWithSosial(array_values($newUsers));
                 foreach ($response as $item) {
                     $pasporUsers[$item['email']] = $item;
                 }
@@ -376,9 +378,9 @@ class KelasService
             // simpan ptk dengan paspor_id
             foreach ($ptks as $ptk) {
                 $ptk = new Ptk($ptk);
+                unset($ptk->instansi);
 
                 $paspor = $pasporUsers[$ptk->email];
-
 
                 $ptk->k_sumber  = 9;// SIMPATIKA
                 $ptk->paspor_id = $paspor['userid'];

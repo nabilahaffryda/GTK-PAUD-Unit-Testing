@@ -140,10 +140,7 @@ class User extends Paspor
         $this->object     = null;
         $this->httpMethod = 'POST';
         try {
-            $params = [
-                'users' => $users,
-            ];
-
+            $params = $users;
             return $this->request('v2/user/usersosials?' . http_build_query(['k_jenis_sosial' => 4]), $params);
         } finally {
             $this->object     = 'user';
