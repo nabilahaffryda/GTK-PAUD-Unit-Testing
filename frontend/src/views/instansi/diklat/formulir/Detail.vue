@@ -171,7 +171,8 @@
         </v-tabs-items>
       </v-container>
     </v-card-text>
-    <base-list-popup
+    <component
+      :is="+tab === 0 ? 'PopupPeserta' : 'BaseListPopup'"
       ref="popup"
       :api="`diklatKelas/getListKandidat`"
       :id="tab === 0 ? 'ptk_id' : 'akun_id'"
@@ -198,8 +199,9 @@ import BaseListPopup from '@components/base/BaseListPopup';
 import Berkases from '../../profil/formulir/Berkas';
 import FormUnggah from '@components/form/Unggah';
 import PopupPreviewDetail from '@components/popup/PreviewDetil';
+import PopupPeserta from './PopupPeserta';
 export default {
-  components: { BaseListPopup, Berkases, FormUnggah, PopupPreviewDetail },
+  components: { BaseListPopup, Berkases, FormUnggah, PopupPreviewDetail, PopupPeserta },
   props: {
     detail: {
       type: Object,
@@ -446,10 +448,12 @@ export default {
 
     onSavePeserta() {
       const petugas = this.petugas;
+      const jenis = this.$refs.popup.tab === 0 ? 'peserta/create' : 'peserta/create-simpatika';
+
       this.action({
         id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
         diklat_id: this.detail.paud_diklat_id,
-        type: 'peserta/create',
+        type: jenis,
         params: {
           ptk_id: petugas,
         },
