@@ -336,6 +336,11 @@ export default {
             label: 'Kode Pos ',
             value: this.$getDeepObj(this.form, 'kodepos') || '-',
           },
+          {
+            key: 'level',
+            label: 'Level LPD',
+            value: this.$getDeepObj(this, `masters.m_lpd_paud.${this.$getDeepObj(this.form, 'k_lpd_paud')}`),
+          },
         ],
         [
           {
