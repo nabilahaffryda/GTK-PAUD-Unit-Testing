@@ -30,7 +30,6 @@ class UpdateRequest extends FormRequest
             'diklat'                => ['required', 'array', 'min:1'],
             'diklat.*.nama'         => ['required', 'string', 'max:100'],
             'diklat.*.tahun'        => ['required', 'string', 'max:50'],
-            'k_lpd_paud'            => ['required', 'integer', 'exists:m_lpd_paud,k_lpd_paud'],
         ];
     }
 }
