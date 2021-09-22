@@ -225,7 +225,7 @@ export default {
   },
   created() {
     this.getMasters({
-      name: ['m_propinsi', 'm_kota'].join(';'),
+      name: ['m_propinsi', 'm_kota', 'm_lpd_paud'].join(';'),
       filter: {
         0: {
           k_propinsi: {
