@@ -28,6 +28,7 @@ class UpdateRequest extends FormRequest
             'email'                   => ['required', 'email', 'max:100'],
             'ratio_pengajar_tambahan' => ['required', 'integer', 'min:10', 'max:100'],
             'jml_pembimbing'          => ['required', 'integer', 'min:0'],
+            'k_lpd_paud'              => ['required', 'integer', 'exists:m_lpd_paud,k_lpd_paud'],
         ];
     }
 }

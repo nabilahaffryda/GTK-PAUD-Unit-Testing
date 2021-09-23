@@ -198,6 +198,20 @@ export default {
             counter: 14,
             disabled: this.isEdit || false,
           },
+          {
+            type: 'VSelect',
+            name: 'k_lpd_paud',
+            label: 'Level LPD',
+            hint: 'wajib diisi',
+            required: true,
+            hideDetails: false,
+            outlined: true,
+            dense: true,
+            singleLine: true,
+            items: this.$mapForMaster(this.$getDeepObj(this, 'masters.m_lpd_paud') || {}),
+            grid: { cols: 12, md: 6 },
+            labelColor: 'secondary',
+          },
         ],
         petugas: [
           {
@@ -321,6 +335,11 @@ export default {
             key: 'kodepos',
             label: 'Kode Pos ',
             value: this.$getDeepObj(this.form, 'kodepos') || '-',
+          },
+          {
+            key: 'level',
+            label: 'Level LPD',
+            value: this.$getDeepObj(this, `masters.m_lpd_paud.${this.$getDeepObj(this.form, 'k_lpd_paud')}`),
           },
         ],
         [

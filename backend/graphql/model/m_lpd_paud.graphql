@@ -1,0 +1,5 @@
+type MLpdPaud {
+    k_lpd_paud: Int!
+    singkat: String
+    keterangan: String
+}

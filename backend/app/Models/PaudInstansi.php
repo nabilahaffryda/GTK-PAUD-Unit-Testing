@@ -34,11 +34,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $catatan
  * @property null|string $data
  * @property string $is_aktif
+ * @property null|int $k_lpd_paud
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|string $akun_id
  *
  * @property-read Instansi $instansi
+ * @property-read MLpdPaud $mLpdPaud
  * @property-read MVervalPaud $mVervalPaud
  * @property-read Akun $akunVerval
  * @property-read Collection|PaudDiklat[] $paudDiklats
@@ -65,6 +67,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudInstansi whereAlasan($value)
  * @method static Builder|PaudInstansi whereCatatan($value)
  * @method static Builder|PaudInstansi whereData($value)
+ * @method static Builder|PaudInstansi whereKLpdPaud($value)
  * @method static Builder|PaudInstansi whereCreatedAt($value)
  * @method static Builder|PaudInstansi whereUpdatedAt($value)
  * @method static Builder|PaudInstansi whereAkunId($value)
@@ -112,6 +115,7 @@ class PaudInstansi extends Eloquent
         'catatan'                 => 'string',
         'data'                    => 'string',
         'is_aktif'                => 'integer',
+        'k_lpd_paud'              => 'int',
         'created_at'              => 'datetime',
         'updated_at'              => 'datetime',
         'akun_id'                 => 'string',
@@ -145,6 +149,7 @@ class PaudInstansi extends Eloquent
         'catatan',
         'data',
         'is_aktif',
+        'k_lpd_paud',
         'akun_id',
     ];
 
@@ -162,6 +167,14 @@ class PaudInstansi extends Eloquent
     public function instansi()
     {
         return $this->belongsTo('App\Models\Instansi', 'instansi_id', 'instansi_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mLpdPaud()
+    {
+        return $this->belongsTo('App\Models\MLpdPaud', 'k_lpd_paud', 'k_lpd_paud');
     }
 
     /**

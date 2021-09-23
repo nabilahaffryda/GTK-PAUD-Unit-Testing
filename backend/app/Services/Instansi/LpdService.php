@@ -129,6 +129,7 @@ class LpdService
     {
         $paudInstansi->ratio_pengajar_tambahan = $data['ratio_pengajar_tambahan'] ?? $paudInstansi->ratio_pengajar_tambahan;
         $paudInstansi->jml_pembimbing          = $data['jml_pembimbing'] ?? $paudInstansi->jml_pembimbing;
+        $paudInstansi->k_lpd_paud              = $data['k_lpd_paud'] ?? $paudInstansi->k_lpd_paud;
 
 
         $instansi = $paudInstansi->instansi;

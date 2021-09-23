@@ -55,6 +55,7 @@ export default {
             kodepos: item.kodepos,
             ratio_pengajar_tambahan: item.ratio_pengajar_tambahan,
             jml_pembimbing: item.jml_pembimbing,
+            k_lpd_paud: item.k_lpd_paud,
           })
         );
       });

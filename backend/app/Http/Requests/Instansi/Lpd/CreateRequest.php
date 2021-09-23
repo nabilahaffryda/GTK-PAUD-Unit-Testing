@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property-read $telp_penanggung_jawab
  * @property-read $ratio_pengajar_tambahan
  * @property-read $jml_pembimbing
+ * @property-read $k_lpd_paud
  *
  * @package App\Http\Requests\Instansi\PaudInstansi
  */
@@ -40,6 +41,7 @@ class CreateRequest extends FormRequest
             'telp_penanggung_jawab'   => ['required', 'digits_between:5,20'],
             'ratio_pengajar_tambahan' => ['required', 'integer', 'min:10', 'max:100'],
             'jml_pembimbing'          => ['required', 'integer', 'min:0'],
+            'k_lpd_paud'              => ['required', 'integer', 'exists:m_lpd_paud,k_lpd_paud'],
         ];
     }
 }
