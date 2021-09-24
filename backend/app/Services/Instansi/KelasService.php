@@ -183,6 +183,7 @@ class KelasService
                 $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
             })
             ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+            ->where('paud_petugas.is_refreshment', '=', 1)
             ->whereNotExists(function ($query) use ($params) {
                 $query->select(DB::raw(1))
                     ->from('paud_kelas_petugas')
