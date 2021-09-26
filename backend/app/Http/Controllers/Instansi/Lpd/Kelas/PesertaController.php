@@ -38,9 +38,29 @@ class PesertaController extends Controller
     /**
      * @throws FlowException
      */
+    public function candidateSimpatika(PaudDiklat $paudDiklat, PaudKelas $kelas, IndexPesertaRequest $request)
+    {
+        return $this
+            ->service
+            ->indexPesertaKandidatSimpatika($paudDiklat, $kelas, $request->validated());
+    }
+
+    /**
+     * @throws FlowException
+     */
     public function create(PaudDiklat $paudDiklat, PaudKelas $kelas, CreatePesertaRequest $request)
     {
         $paudPesertas = $this->service->createPeserta($paudDiklat, $kelas, $request->validated());
+
+        return BaseCollection::make($paudPesertas);
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function createSimpatika(PaudDiklat $paudDiklat, PaudKelas $kelas, CreatePesertaRequest $request)
+    {
+        $paudPesertas = $this->service->createPesertaSimpatika($paudDiklat, $kelas, $request->validated());
 
         return BaseCollection::make($paudPesertas);
     }

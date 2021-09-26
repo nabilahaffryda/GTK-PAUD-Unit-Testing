@@ -53,4 +53,10 @@ return [
         'url'   => env('SERTIFIKAT_API_URL', 'https://sertifikat-api-dev.simpkb.id/backend'),
         'token' => env('SERTIFIKAT_API_TOKEN', ''),
     ],
+
+    'simpatika' => [
+        'baseurl'  => env('SIMPATIKA_BASEURL', 'https://simpatika-api.local.siap.web.id'),
+        'username' => env('SIMPATIKA_USERNAME', ''),
+        'password' => env('SIMPATIKA_PASSWORD', ''),
+    ],
 ];

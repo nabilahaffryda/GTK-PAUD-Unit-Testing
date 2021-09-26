@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $k_kota
  * @property int $k_propinsi
+ * @property null|int $k_kota_simpatika
  * @property null|string $singkat
  * @property null|string $keterangan
  * @property null|string $kode_ukg
@@ -34,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @method static Builder|MKota whereKKota($value)
  * @method static Builder|MKota whereKPropinsi($value)
+ * @method static Builder|MKota whereKKotaSimpatika($value)
  * @method static Builder|MKota whereSingkat($value)
  * @method static Builder|MKota whereKeterangan($value)
  * @method static Builder|MKota whereKodeUkg($value)
@@ -74,17 +76,18 @@ class MKota extends Eloquent
      * @var array
      */
     protected $casts = [
-        'k_propinsi'   => 'int',
-        'singkat'      => 'string',
-        'keterangan'   => 'string',
-        'kode_ukg'     => 'string',
-        'is_kota'      => 'int',
-        'is_ibukota'   => 'int',
-        'is_3t'        => 'int',
-        'timezone'     => 'int',
-        'is_aktif'     => 'int',
-        'kode_dapodik' => 'string',
-        'kode_dagri'   => 'int',
+        'k_propinsi'       => 'int',
+        'k_kota_simpatika' => 'int',
+        'singkat'          => 'string',
+        'keterangan'       => 'string',
+        'kode_ukg'         => 'string',
+        'is_kota'          => 'int',
+        'is_ibukota'       => 'int',
+        'is_3t'            => 'int',
+        'timezone'         => 'int',
+        'is_aktif'         => 'int',
+        'kode_dapodik'     => 'string',
+        'kode_dagri'       => 'int',
     ];
 
     /**
@@ -102,6 +105,7 @@ class MKota extends Eloquent
     protected $fillable = [
         'k_kota',
         'k_propinsi',
+        'k_kota_simpatika',
         'singkat',
         'keterangan',
         'kode_ukg',
