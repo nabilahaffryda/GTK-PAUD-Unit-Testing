@@ -236,6 +236,9 @@ class PetugasService
         }
     }
 
+    /**
+     * @throws SaveException
+     */
     public function delete(PaudAdmin $admin)
     {
         $petugas = PaudPetugas::firstWhere([
@@ -246,6 +249,10 @@ class PetugasService
 
         if (!$petugas) {
             return;
+        }
+
+        if ($petugas->paudKelasPetugases()->exists()) {
+            throw new SaveException("Petugas telah ditambakan ke kelas");
         }
 
         if ($petugas->k_petugas_paud == MPetugasPaud::PENGAJAR_TAMBAHAN) {
