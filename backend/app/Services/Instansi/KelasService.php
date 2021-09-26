@@ -8,6 +8,7 @@ use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Models\Akun;
 use App\Models\MKonfirmasiPaud;
+use App\Models\MKota;
 use App\Models\MPetugasPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudDiklat;
@@ -314,6 +315,8 @@ class KelasService
             ->get()
             ->keyBy('ptk_id');
 
+        $kKotaSimpatikas = [];
+
         $newPtkIds = array_diff($ptkIds, $ptks->keys()->all());
         if ($newPtkIds) {
             $ptks = app(SimpatikaRemote::class)->fetchGuruRA($newPtkIds);
@@ -334,6 +337,10 @@ class KelasService
                     'is_email' => '1',
                     'admin_id' => akun()?->paspor_id,
                 ];
+
+                if (isset($ptk['ptk_profils'][0]['k_kota'])) {
+                    $kKotaSimpatikas[] = $ptk['ptk_profils'][0]['k_kota'];
+                }
             }
 
             // cek user yang telah terdaftar dipaspor
@@ -375,10 +382,25 @@ class KelasService
                 throw new FlowException("Gagal menambahkan email : " . implode(', ', $miss));
             }
 
+            if ($kKotaSimpatikas) {
+                $mKotas = MKota::whereIn('k_kota_simpatika', array_unique($kKotaSimpatikas))->get()->keyBy('k_kota_simpatika');
+            } else {
+                $mKotas = collect();
+            }
+
             // simpan ptk dengan paspor_id
             foreach ($ptks as $ptk) {
+                $kKota = $ptk['ptk_profils'][0]['k_kota'] ?? null;
+
                 $ptk = new Ptk($ptk);
                 unset($ptk->instansi);
+                unset($ptk->ptk_profils);
+
+                /** @var MKota $mKota */
+                if ($mKota = $mKotas->get($kKota)) {
+                    $ptk->k_kota     = $mKota->k_kota;
+                    $ptk->k_propinsi = $mKota->k_propinsi;
+                }
 
                 $paspor = $pasporUsers[$ptk->email];
 
