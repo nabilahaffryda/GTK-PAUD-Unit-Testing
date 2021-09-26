@@ -225,16 +225,21 @@ class KelasService
             ->when($params['k_petugas_paud'] != MPetugasPaud::PENGAJAR, function ($query) use ($paudDiklat) {
                 $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
             })
-            ->when($params['k_petugas_paud'] != MPetugasPaud::ADMIN_KELAS, function ($query) {
-                $query->where('paud_petugas.is_refreshment', '=', 1);
+            ->when($params['k_petugas_paud'] != MPetugasPaud::ADMIN_KELAS, function ($query) use ($params) {
+                $query
+                    ->where('paud_petugas.is_refreshment', '=', 1)
+                    ->whereNotExists(function ($query) use ($params) {
+                        $query->select(DB::raw(1))
+                            ->from('paud_kelas_petugas')
+                            ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+                            ->whereRaw('paud_petugas.paud_petugas_id = paud_kelas_petugas.paud_petugas_id');
+                    });
+            }, function (Builder $query) use ($kelas) {
+                $query->whereDoesntHave('paudKelasPetugases', function (Builder $query) use ($kelas) {
+                    $query->where('paud_kelas_id', '=', $kelas->paud_kelas_id);
+                });
             })
             ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
-            ->whereNotExists(function ($query) use ($params) {
-                $query->select(DB::raw(1))
-                    ->from('paud_kelas_petugas')
-                    ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
-                    ->whereRaw('paud_petugas.paud_petugas_id = paud_kelas_petugas.paud_petugas_id');
-            })
             ->with(['akun:akun_id,nama,email']);
 
         if ($keyword = Arr::get($params, 'keyword')) {
