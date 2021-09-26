@@ -557,7 +557,7 @@ class PetugasService
 
                 $fileInfo = pathinfo($file->getClientOriginalName());
 
-                $diklat->nama_file = substr($fileInfo['filename'], 0, 100) . $fileInfo['extension'];
+                $diklat->nama_file = substr($fileInfo['filename'], 0, 100) . ($fileInfo['extension'] ?? '');
                 $diklat->file      = static::uploadBerkas($petugas, 'diklat', $diklat->k_diklat_paud, $file);
             }
         }
