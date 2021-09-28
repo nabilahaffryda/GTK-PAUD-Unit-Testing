@@ -7,6 +7,7 @@ namespace App\Services\Instansi;
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Models\Akun;
+use App\Models\Instansi;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MKota;
 use App\Models\MPetugasPaud;
@@ -222,8 +223,9 @@ class KelasService
         $this->validateKelas($paudDiklat, $kelas);
 
         $query = PaudPetugas::query()
-            ->when($params['k_petugas_paud'] != MPetugasPaud::PENGAJAR, function ($query) use ($paudDiklat) {
-                $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
+            ->where(function ($query) use ($paudDiklat) {
+                $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id)
+                    ->orWhere('paud_petugas.instansi_id', '=', 800006); // instansi GTK PAUD
             })
             ->when($params['k_petugas_paud'] != MPetugasPaud::ADMIN_KELAS, function ($query) use ($params) {
                 $query
