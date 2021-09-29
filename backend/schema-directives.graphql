@@ -9,15 +9,7 @@ Will be replaced by a generated type during schema manipulation.
 scalar _
 
 # Directive class: App\GraphQL\Directives\AllowDirective
-"""
-Cek akses AKUN di instansi tertentu
-"""
-directive @allow(
-  """
-  Akses yang akan dicek.
-  """
-  ability: String!
-) on FIELD_DEFINITION | OBJECT
+directive @allow(ability: String!) on FIELD_DEFINITION | OBJECT
 
 # Directive class: App\GraphQL\Directives\InstansiDirective
 directive @instansi on FIELD_DEFINITION | OBJECT
