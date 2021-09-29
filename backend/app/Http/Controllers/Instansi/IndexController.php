@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Instansi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MasterRequest;
 use App\Http\Resources\BaseCollection;
-use App\Remotes\SimpkbAkun;
 use App\Models\MGroup;
+use App\Models\PaudInstansi;
+use App\Remotes\SimpkbAkun;
 use App\Services\AksesService;
 use App\Services\AkunService;
 use App\Services\Instansi\PetugasKelasService;
@@ -29,6 +30,12 @@ class IndexController extends Controller
 
         $konfirmasi = false;
 
+        $paudInstansi = PaudInstansi::where([
+            'instansi_id' => $instansi->instansi_id,
+            'tahun'       => config('paud.tahun'),
+            'angkatan'    => config('paud.angkatan'),
+        ])->first();
+
         $subgroup = $groups->intersectByKeys(array_flip([MGroup::PENGAJAR_DIKLAT_PAUD, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD]));
         if ($subgroup->isNotEmpty()) {
             $konfirmasi = app(PetugasKelasService::class)
@@ -41,6 +48,8 @@ class IndexController extends Controller
             'instansi' => $instansi,
             'groups'   => $groups,
             'akses'    => $akses,
+
+            'paud_instansi' => $paudInstansi,
 
             'aktivasi' => $aktivasi,
             'konfig'   => [
