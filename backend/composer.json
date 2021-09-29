@@ -25,7 +25,6 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",
-        "cloudcreativity/json-api-testing": "^3.2",
         "facade/ignition": "^2.8",
         "fakerphp/faker": "^1.14",
         "hurie/laravel-generator": "^2.0",

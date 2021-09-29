@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c3d4641d93c81c2b86bc6af061cda437",
+    "content-hash": "9f0ef1cd4a7cc54aeb152961f668ecd0",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7046,63 +7046,6 @@
                 "source": "https://github.com/barryvdh/ReflectionDocBlock/tree/v2.0.6"
             },
             "time": "2018-12-13T10:34:14+00:00"
-        },
-        {
-            "name": "cloudcreativity/json-api-testing",
-            "version": "v3.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cloudcreativity/json-api-testing.git",
-                "reference": "946c13e06025caebd480b8819de4c8c93aa307f9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cloudcreativity/json-api-testing/zipball/946c13e06025caebd480b8819de4c8c93aa307f9",
-                "reference": "946c13e06025caebd480b8819de4c8c93aa307f9",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "illuminate/support": "^6.0|^7.0|^8.0",
-                "php": "^7.2|^8.0",
-                "phpunit/phpunit": "^8.0|^9.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-develop": "3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CloudCreativity\\JsonApi\\Testing\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Cloud Creativity Ltd",
-                    "email": "info@cloudcreativity.co.uk"
-                }
-            ],
-            "description": "PHPUnit test helpers to check JSON API documents.",
-            "homepage": "https://github.com/cloudcreativity/json-api",
-            "keywords": [
-                "JSON-API",
-                "api",
-                "cloudcreativity",
-                "json",
-                "jsonapi",
-                "jsonapi.org"
-            ],
-            "support": {
-                "issues": "https://github.com/cloudcreativity/json-api/issues",
-                "source": "https://github.com/cloudcreativity/json-api-testing/tree/v3.2.0"
-            },
-            "time": "2020-11-25T09:35:46+00:00"
         },
         {
             "name": "composer/ca-bundle",
