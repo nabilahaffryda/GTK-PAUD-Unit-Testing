@@ -7,7 +7,6 @@ namespace App\Services\Instansi;
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Models\Akun;
-use App\Models\Instansi;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MKota;
 use App\Models\MPetugasPaud;
@@ -33,6 +32,44 @@ use Storage;
 
 class KelasService
 {
+    public function queryPetugasKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, int $kPetugasPaud)
+    {
+        return PaudPetugas::query()
+            ->when($kPetugasPaud == MPetugasPaud::PENGAJAR, function (Builder $query) {
+                $query->where('paud_petugas.is_refreshment', '=', 1);
+            })
+            ->when($kPetugasPaud == MPetugasPaud::PENGAJAR_TAMBAHAN, function (Builder $query) use ($paudDiklat) {
+                $query->where('paud_petugas.is_refreshment', '=', 1)
+                    ->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
+            })
+            ->when($kPetugasPaud == MPetugasPaud::PEMBIMBING_PRAKTIK, function (Builder $query) use ($paudDiklat) {
+                $query->where('paud_petugas.is_refreshment', '=', 1)
+                    ->where(function (Builder $query) use ($paudDiklat) {
+                        $query
+                            // PPTM yang ditambahkan oleh LPD hanya bisa dipilih oleh LPD yang menambahkan tersebu
+                            ->orWhere('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id)
+                            // PPTM inti yang ditambahkan oleh GTK bisa dipilih oleh LPD yang berada satu wilayah kota/kab dengan PPTM nya
+                            ->orWhere(function (Builder $query) use ($paudDiklat) {
+                                $query->where('paud_petugas.instansi_id', '=', 800006)
+                                    ->where('paud_petugas.is_inti', '=', 1)
+                                    ->whereHas('akun', function (Builder $query) use ($paudDiklat) {
+                                        $query->where('akun.k_kota', '=', $paudDiklat->k_kota);
+                                    });
+                            });
+                    });
+            })
+            ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($paudDiklat) {
+                $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
+            })
+            ->whereDoesntHave('paudKelasPetugases', function (Builder $query) use ($paudDiklat, $kelas, $kPetugasPaud) {
+                $query->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelas, $kPetugasPaud) {
+                    $query->where('k_petugas_paud', '=', $kPetugasPaud)
+                        ->where('paud_kelas_id', '=', $kelas->paud_kelas_id);
+                });
+            })
+            ->where('paud_petugas.k_petugas_paud', '=', $kPetugasPaud);
+    }
+
     public function index(PaudDiklat $paudDiklat, array $params): Builder
     {
         $query = PaudKelas::query()
@@ -222,26 +259,8 @@ class KelasService
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        $query = PaudPetugas::query()
-            ->where(function ($query) use ($paudDiklat) {
-                $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id)
-                    ->orWhere('paud_petugas.instansi_id', '=', 800006); // instansi GTK PAUD
-            })
-            ->when($params['k_petugas_paud'] != MPetugasPaud::ADMIN_KELAS, function ($query) use ($params) {
-                $query
-                    ->where('paud_petugas.is_refreshment', '=', 1)
-                    ->whereNotExists(function ($query) use ($params) {
-                        $query->select(DB::raw(1))
-                            ->from('paud_kelas_petugas')
-                            ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
-                            ->whereRaw('paud_petugas.paud_petugas_id = paud_kelas_petugas.paud_petugas_id');
-                    });
-            }, function (Builder $query) use ($kelas) {
-                $query->whereDoesntHave('paudKelasPetugases', function (Builder $query) use ($kelas) {
-                    $query->where('paud_kelas_id', '=', $kelas->paud_kelas_id);
-                });
-            })
-            ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+        $query = $this
+            ->queryPetugasKandidat($paudDiklat, $kelas, $params['k_petugas_paud'])
             ->with(['akun:akun_id,nama,email']);
 
         if ($keyword = Arr::get($params, 'keyword')) {
@@ -458,25 +477,8 @@ class KelasService
             throw new FlowException("Jumlah petugas maksimal adalah {$batasan[$params['k_petugas_paud']]} orang");
         }
 
-        $paudPetugases = PaudPetugas::whereIn('akun_id', $params['akun_id'])
-            ->when($params['k_petugas_paud'] != MPetugasPaud::PENGAJAR, function ($query) use ($paudDiklat) {
-                $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
-            })
-            ->when($params['k_petugas_paud'] != MPetugasPaud::ADMIN_KELAS, function ($query) use ($params) {
-                $query
-                    ->where('paud_petugas.is_refreshment', '=', 1)
-                    ->whereNotExists(function ($query) use ($params) {
-                        $query->select(DB::raw(1))
-                            ->from('paud_kelas_petugas')
-                            ->where('paud_kelas_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
-                            ->whereRaw('paud_petugas.paud_petugas_id = paud_kelas_petugas.paud_petugas_id');
-                    });
-            }, function (Builder $query) use ($kelas) {
-                $query->whereDoesntHave('paudKelasPetugases', function (Builder $query) use ($kelas) {
-                    $query->where('paud_kelas_id', '=', $kelas->paud_kelas_id);
-                });
-            })
-            ->where('paud_petugas.k_petugas_paud', '=', $params['k_petugas_paud'])
+        $paudPetugases = $this->queryPetugasKandidat($paudDiklat, $kelas, $params['k_petugas_paud'])
+            ->whereIn('akun_id', $params['akun_id'])
             ->get();
 
         if ($diff = array_diff($params['akun_id'], $paudPetugases->pluck('akun_id')->all())) {
