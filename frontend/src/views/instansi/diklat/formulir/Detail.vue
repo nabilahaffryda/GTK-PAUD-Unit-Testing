@@ -447,8 +447,13 @@ export default {
     },
 
     onSavePeserta() {
+      const mAksi = {
+        0: 'peserta/create',
+        1: 'peserta/create-sd',
+        2: 'peserta/create-simpatika',
+      };
       const petugas = this.petugas;
-      const jenis = this.$refs.popup.tab === 0 ? 'peserta/create' : 'peserta/create-simpatika';
+      const jenis = mAksi[Number(this.$refs.popup.tab)];
 
       this.action({
         id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),

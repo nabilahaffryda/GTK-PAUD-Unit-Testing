@@ -38,7 +38,7 @@
                     <v-col v-if="multiselect" cols="12" md="1" sm="1" class="px-5">
                       <v-checkbox
                         v-model="select[$getDeepObj(item, id)]"
-                        :disabled="Number(tab) === 1 ? !item.is_baru : false"
+                        :disabled="Number(tab) === 2 ? !item.is_baru : false"
                       ></v-checkbox>
                     </v-col>
                     <v-col v-for="(field, f) in fields" :key="f" v-bind="field.grid">
@@ -104,11 +104,15 @@ export default {
       items: [
         {
           url: 'peserta/kandidat',
-          text: 'simpkb',
+          text: 'SIMPKB PAUD',
+        },
+        {
+          url: 'peserta/kandidat-sd',
+          text: 'SIMPKB SD',
         },
         {
           url: 'peserta/kandidat-simpatika',
-          text: 'simpatika',
+          text: 'SIMPKB RA',
         },
       ],
     };
