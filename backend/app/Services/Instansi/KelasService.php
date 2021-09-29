@@ -7,7 +7,6 @@ namespace App\Services\Instansi;
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Models\Akun;
-use App\Models\Instansi;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MKota;
 use App\Models\MPetugasPaud;
@@ -33,6 +32,31 @@ use Storage;
 
 class KelasService
 {
+    public function queryPesertaKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, int $kJenjang = null, int $kSumber = null)
+    {
+        return Ptk::query()
+            ->whereNotNull('dapodik_ptk_id')
+            ->when($kJenjang !== null, function (Builder $query) use ($kJenjang) {
+                $query->whereExists(function ($query) use ($kJenjang) {
+                    $query->selectRaw(1)
+                        ->from('ptk_sekolah')
+                        ->join('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
+                        ->whereColumn('ptk_sekolah.ptk_id', '=', 'ptk.ptk_id')
+                        ->where('sekolah.k_jenjang', '=', $kJenjang);
+                });
+            })
+            ->when($kSumber !== null, function (Builder $query) use ($kSumber) {
+                $query->where('k_sumber', '=', $kSumber);
+            })
+            ->where('k_kota', '=', $paudDiklat->k_kota)
+            ->whereDoesntHave('paudKelasPesertas', function (Builder $query) {
+                $query->where([
+                    'paud_kelas_peserta.tahun'    => config('paud.tahun'),
+                    'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
+                ]);
+            });
+    }
+
     public function index(PaudDiklat $paudDiklat, array $params): Builder
     {
         $query = PaudKelas::query()
@@ -154,32 +178,23 @@ class KelasService
         return $query;
     }
 
-    public function indexPesertaKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
+    /**
+     * @throws FlowException
+     */
+    public function indexPesertaKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params, int $kJenjang)
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        $query = Ptk::query()
-            ->whereNotNull('dapodik_ptk_id')
-            ->whereNotExists(function ($query) use ($params, $kelas) {
-                $query->select(DB::raw(1))
-                    ->from('paud_kelas_peserta')
-                    ->where([
-                        'paud_kelas_peserta.tahun'    => config('paud.tahun'),
-                        'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
-                    ])
-                    ->whereRaw('ptk.ptk_id = paud_kelas_peserta.ptk_id');
+        return $this
+            ->queryPesertaKandidat($paudDiklat, $kelas, kJenjang: $kJenjang)
+            ->when(Arr::get($params, 'keyword'), function (Builder $query, $keyword) {
+                $query->where(function ($query) use ($keyword) {
+                    $query
+                        ->orWhere('ptk.ptk_id', '=', $keyword)
+                        ->orWhere('ptk.nama', 'like', '%' . $keyword . '%')
+                        ->orWhere('ptk.email', 'like', '%' . $keyword . '%');
+                });
             });
-
-        if ($keyword = Arr::get($params, 'keyword')) {
-            $query->where(function ($query) use ($keyword) {
-                $query
-                    ->orWhere('ptk.ptk_id', '=', $keyword)
-                    ->orWhere('ptk.nama', 'like', '%' . $keyword . '%')
-                    ->orWhere('ptk.email', 'like', '%' . $keyword . '%');
-            });
-        }
-
-        return $query;
     }
 
     /**
@@ -259,21 +274,13 @@ class KelasService
     /**
      * @throws FlowException
      */
-    public function createPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
+    public function createPeserta(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params, int $kJenjang = null, int $kSumber = null): Collection
     {
         $this->validateKelas($paudDiklat, $kelas);
         $this->validateKelasBaru($kelas);
 
-        $ptks = Ptk::query()->whereIn('ptk_id', $params['ptk_id'])
-            ->whereNotExists(function ($query) use ($params) {
-                $query->select(DB::raw(1))
-                    ->from('paud_kelas_peserta')
-                    ->where([
-                        'paud_kelas_peserta.tahun'    => config('paud.tahun'),
-                        'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
-                    ])
-                    ->whereRaw('ptk.ptk_id = paud_kelas_peserta.ptk_id');
-            })
+        $ptks = $this
+            ->queryPesertaKandidat($paudDiklat, $kelas, kJenjang: $kJenjang, kSumber: $kSumber)
             ->get();
 
         if ($diff = array_diff($params['ptk_id'], $ptks->pluck('ptk_id')->all())) {
@@ -422,7 +429,7 @@ class KelasService
             }
         }
 
-        return $this->createPeserta($paudDiklat, $kelas, $params);
+        return $this->createPeserta($paudDiklat, $kelas, $params, kSumber: 9);
     }
 
     /**

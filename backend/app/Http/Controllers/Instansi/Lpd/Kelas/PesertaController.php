@@ -9,13 +9,10 @@ use App\Http\Requests\Instansi\Lpd\Kelas\CreatePesertaRequest;
 use App\Http\Requests\Instansi\Lpd\Kelas\IndexPesertaRequest;
 use App\Http\Requests\Instansi\Lpd\Kelas\IndexRequest;
 use App\Http\Resources\BaseCollection;
-use App\Http\Resources\BaseResource;
 use App\Models\PaudDiklat;
 use App\Models\PaudKelas;
 use App\Models\PaudKelasPeserta;
-use App\Models\Ptk;
 use App\Services\Instansi\KelasService;
-use Illuminate\Http\Request;
 
 class PesertaController extends Controller
 {
@@ -29,10 +26,16 @@ class PesertaController extends Controller
             ->paginate((int)$request->get('count', 10)));
     }
 
+    /**
+     * @throws FlowException
+     */
     public function candidate(PaudDiklat $paudDiklat, PaudKelas $kelas, IndexPesertaRequest $request)
     {
-        return BaseCollection::make($this->service
-            ->indexPesertaKandidat($paudDiklat, $kelas, $request->validated())->paginate((int)$request->get('count', 10)));
+        return BaseCollection::make($this
+            ->service
+            ->indexPesertaKandidat($paudDiklat, $kelas, $request->validated(), kJenjang: 1)
+            ->paginate((int)$request->get('count', 10))
+        );
     }
 
     /**
@@ -50,7 +53,7 @@ class PesertaController extends Controller
      */
     public function create(PaudDiklat $paudDiklat, PaudKelas $kelas, CreatePesertaRequest $request)
     {
-        $paudPesertas = $this->service->createPeserta($paudDiklat, $kelas, $request->validated());
+        $paudPesertas = $this->service->createPeserta($paudDiklat, $kelas, $request->validated(), kJenjang: 1);
 
         return BaseCollection::make($paudPesertas);
     }
