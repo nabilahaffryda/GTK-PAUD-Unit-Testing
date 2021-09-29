@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Instansi\Lpd\Kelas;
 
 use App\Exceptions\FlowException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Instansi\Lpd\Kelas\CreatePeserta;
 use App\Http\Requests\Instansi\Lpd\Kelas\CreatePesertaRequest;
 use App\Http\Requests\Instansi\Lpd\Kelas\IndexPesertaRequest;
 use App\Http\Requests\Instansi\Lpd\Kelas\IndexRequest;
@@ -51,6 +50,18 @@ class PesertaController extends Controller
     /**
      * @throws FlowException
      */
+    public function candidateSd(PaudDiklat $paudDiklat, PaudKelas $kelas, IndexPesertaRequest $request)
+    {
+        return BaseCollection::make($this
+            ->service
+            ->indexPesertaKandidat($paudDiklat, $kelas, $request->validated(), 2)
+            ->paginate((int)$request->get('count', 10))
+        );
+    }
+
+    /**
+     * @throws FlowException
+     */
     public function create(PaudDiklat $paudDiklat, PaudKelas $kelas, CreatePesertaRequest $request)
     {
         $paudPesertas = $this->service->createPeserta($paudDiklat, $kelas, $request->validated(), kJenjang: 1);
@@ -64,6 +75,16 @@ class PesertaController extends Controller
     public function createSimpatika(PaudDiklat $paudDiklat, PaudKelas $kelas, CreatePesertaRequest $request)
     {
         $paudPesertas = $this->service->createPesertaSimpatika($paudDiklat, $kelas, $request->validated());
+
+        return BaseCollection::make($paudPesertas);
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function createSd(PaudDiklat $paudDiklat, PaudKelas $kelas, CreatePesertaRequest $request)
+    {
+        $paudPesertas = $this->service->createPeserta($paudDiklat, $kelas, $request->validated(), kJenjang: 2);
 
         return BaseCollection::make($paudPesertas);
     }
