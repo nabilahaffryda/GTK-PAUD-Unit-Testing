@@ -281,6 +281,7 @@ class KelasService
 
         $ptks = $this
             ->queryPesertaKandidat($paudDiklat, $kelas, kJenjang: $kJenjang, kSumber: $kSumber)
+            ->whereIn('ptk_id', $params['ptk_id'])
             ->get();
 
         if ($diff = array_diff($params['ptk_id'], $ptks->pluck('ptk_id')->all())) {
