@@ -473,10 +473,9 @@ class KelasService
         $paudInstansi = $paudDiklat->paudInstansi;
 
         $maxPengajarTambahan = floor($kelas->jml_pengajar * $paudInstansi->ratio_pengajar_tambahan / 100);
-        $maxPengajar         = $kelas->jml_pengajar - $maxPengajarTambahan;
 
         $batasan = [
-            MPetugasPaud::PENGAJAR           => $maxPengajar,
+            MPetugasPaud::PENGAJAR           => $kelas->jml_pengajar,
             MPetugasPaud::PENGAJAR_TAMBAHAN  => $maxPengajarTambahan,
             MPetugasPaud::PEMBIMBING_PRAKTIK => $paudInstansi->jml_pembimbing,
             MPetugasPaud::ADMIN_KELAS        => 1,
@@ -484,6 +483,21 @@ class KelasService
 
         if (isset($batasan[$params['k_petugas_paud']]) && $jmlPetugas > $batasan[$params['k_petugas_paud']]) {
             throw new FlowException("Jumlah petugas maksimal adalah {$batasan[$params['k_petugas_paud']]} orang");
+        }
+
+        if (in_array($params['k_petugas_paud'], [MPetugasPaud::PENGAJAR, MPetugasPaud::PENGAJAR_TAMBAHAN])) {
+            $jmlPetugasLain = PaudKelasPetugas::query()
+                ->where([
+                    'paud_kelas_petugas.paud_kelas_id'  => $kelas->paud_kelas_id,
+                    'paud_kelas_petugas.k_petugas_paud' => $params['k_petugas_paud'] == MPetugasPaud::PENGAJAR
+                        ? MPetugasPaud::PENGAJAR_TAMBAHAN : MPetugasPaud::PENGAJAR,
+                ])
+                ->count();
+
+            $jmlPengajar = $jmlPetugasLain + $jmlPetugas;
+            if ($jmlPengajar > $kelas->jml_pengajar) {
+                throw new FlowException("Jumlah pengajar dan pengajar tambahan maksimal adalah {$kelas->jml_pengajar} orang");
+            }
         }
 
         $paudPetugases = $this->queryPetugasKandidat($paudDiklat, $kelas, $params['k_petugas_paud'])
@@ -555,11 +569,11 @@ class KelasService
         $paudInstansi = $paudDiklat->paudInstansi;
 
         $maxPengajarTambahan = floor($kelas->jml_pengajar * $paudInstansi->ratio_pengajar_tambahan / 100);
-        $maxPengajar         = $kelas->jml_pengajar - $maxPengajarTambahan;
+        $minPengajar         = $kelas->jml_pengajar - $maxPengajarTambahan;
 
         $batasan = [
-            MPetugasPaud::PENGAJAR           => [$maxPengajar, $maxPengajar],
-            MPetugasPaud::PENGAJAR_TAMBAHAN  => [$maxPengajarTambahan, $maxPengajarTambahan],
+            MPetugasPaud::PENGAJAR           => [$minPengajar, $kelas->jml_pengajar],
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => [0, $maxPengajarTambahan],
             MPetugasPaud::PEMBIMBING_PRAKTIK => [min(4, $paudInstansi->jml_pembimbing), $paudInstansi->jml_pembimbing],
             MPetugasPaud::ADMIN_KELAS        => [1, 1],
         ];
@@ -576,6 +590,12 @@ class KelasService
                 $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
                 throw new FlowException("Petugas {$mPetugasPaud->keterangan} maksimal {$jmlMin} orang");
             }
+        }
+
+        $jmlPengajar = $jmlPetugases->get(MPetugasPaud::PENGAJAR, 0);
+        $jmlTambahan = $jmlPetugases->get(MPetugasPaud::PENGAJAR_TAMBAHAN, 0);
+        if (($jmlPengajar + $jmlTambahan) > $kelas->jml_pengajar) {
+            throw new FlowException("Pengajar dan pengajar tambahan maksimal {$kelas->jml_pengajar} orang");
         }
 
         $jmlPeserta = PaudKelasPeserta::query()
