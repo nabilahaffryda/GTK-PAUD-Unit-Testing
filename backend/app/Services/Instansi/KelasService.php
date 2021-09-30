@@ -76,7 +76,6 @@ class KelasService
                             // PPTM inti yang ditambahkan oleh GTK bisa dipilih oleh LPD yang berada satu wilayah kota/kab dengan PPTM nya
                             ->orWhere(function (Builder $query) use ($paudDiklat) {
                                 $query->where('paud_petugas.instansi_id', '=', 800006)
-                                    ->where('paud_petugas.is_inti', '=', 1)
                                     ->whereHas('akun', function (Builder $query) use ($paudDiklat) {
                                         $query->where('akun.k_kota', '=', $paudDiklat->k_kota);
                                     });
