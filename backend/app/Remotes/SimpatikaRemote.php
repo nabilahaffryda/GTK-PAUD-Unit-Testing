@@ -45,7 +45,7 @@ class SimpatikaRemote
     }
 
     /**
-     * @throws Exception|GuzzleException
+     * @throws GuzzleException
      */
     public function request(Request $request)
     {
@@ -59,7 +59,7 @@ class SimpatikaRemote
     }
 
     /**
-     * @throws Exception|GuzzleException
+     * @throws GuzzleException
      */
     public function searchGuruRA(string $keyword = '', int $page = 1, int $count = 10)
     {
@@ -74,7 +74,7 @@ class SimpatikaRemote
     }
 
     /**
-     * @throws Exception|GuzzleException
+     * @throws GuzzleException
      */
     public function fetchGuruRA(array $ptkIds)
     {

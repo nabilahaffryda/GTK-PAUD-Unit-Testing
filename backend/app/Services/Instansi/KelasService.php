@@ -236,18 +236,21 @@ class KelasService
 
     /**
      * @throws FlowException
-     * @throws GuzzleException
      */
     public function indexPesertaKandidatSimpatika(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        $result = app(SimpatikaRemote::class)
-            ->searchGuruRA(
-                $params['keyword'] ?? '',
-                $params['page'] ?? 1,
-                $params['count'] ?? 10,
-            );
+        try {
+            $result = app(SimpatikaRemote::class)
+                ->searchGuruRA(
+                    $params['keyword'] ?? '',
+                    $params['page'] ?? 1,
+                    $params['count'] ?? 10,
+                );
+        } catch (GuzzleException $e) {
+            throw new FlowException('Gagal membaca data dari sistem SIMPATIKA, silakan dicoba beberapa saat lagi', previous: $e);
+        }
 
         $data   = collect($result['data'] ?? []);
         $ptkIds = $data->pluck('ptk_id')->unique();
@@ -340,8 +343,7 @@ class KelasService
     }
 
     /**
-     * @throws FlowException
-     * @throws GuzzleException
+     * @throws FlowException|GuzzleException
      */
     public function createPesertaSimpatika(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
     {
@@ -356,7 +358,11 @@ class KelasService
 
         $newPtkIds = array_diff($ptkIds, $ptks->keys()->all());
         if ($newPtkIds) {
-            $ptks = app(SimpatikaRemote::class)->fetchGuruRA($newPtkIds);
+            try {
+                $ptks = app(SimpatikaRemote::class)->fetchGuruRA($newPtkIds);
+            } catch (GuzzleException $e) {
+                throw new FlowException('Gagal membaca data dari sistem SIMPATIKA, silakan dicoba beberapa saat lagi', previous: $e);
+            }
 
             // simpan ke paspor
             $ptkIds   = [];
