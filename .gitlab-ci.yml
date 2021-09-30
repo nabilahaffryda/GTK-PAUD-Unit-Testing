@@ -66,17 +66,16 @@ build-backend:
       - backend/server.php
 
   script:
-    - |
-      mkdir -p \
-        $HOME/.runner-home
+    - mkdir -p
+      $HOME/.runner-home
 
-      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
-      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
-        --user `id -u`:`id -g` \
-        --volume $HOME/.runner-home:/home \
-        build bash -c "cd backend \
-          && php /composer.phar install --prefer-dist --no-dev \
-          && php /composer.phar dump-autoload --optimize --no-dev"
+    - docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
+    - docker-compose -f .gitlab/build/docker-compose.yml run --rm
+      --user `id -u`:`id -g`
+      --volume $HOME/.runner-home:/home
+      build bash -c "cd backend
+        && php /composer.phar install --prefer-dist --no-dev
+        && php /composer.phar dump-autoload --optimize --no-dev"
 
     - find backend/storage/ -type d \! -perm 777 -print -execdir chmod a+rwx \{\} \;
     - find backend/bootstrap/ -type d \! -perm 777 -print -execdir chmod a+rwx \{\} \;
@@ -106,23 +105,21 @@ build-frontend:
   script:
     - |
       if [[ $CI_COMMIT_REF_NAME == real ]]; then
-        ENV_FRONTEND=$REAL_ENV_FRONTEND
+        cp "$REAL_ENV_FRONTEND" frontend/.env
       elif [[ $CI_COMMIT_REF_NAME == demo ]]; then
-        ENV_FRONTEND=$DEMO_ENV_FRONTEND
+        cp "$DEMO_ENV_FRONTEND" frontend/.env
       else
-        ENV_FRONTEND=$DEVEL_ENV_FRONTEND
+        cp "$DEVEL_ENV_FRONTEND" frontend/.env
       fi
 
-      cp "${ENV_FRONTEND}" frontend/.env
+    - mkdir -p
+      $HOME/.runner-home
 
-      mkdir -p \
-        $HOME/.runner-home
-
-      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
-      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
-        --user `id -u`:`id -g` \
-        --volume $HOME/.runner-home:/home \
-        build bash -c "cd frontend && yarn install && yarn build"
+    - docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
+    - docker-compose -f .gitlab/build/docker-compose.yml run --rm
+      --user `id -u`:`id -g`
+      --volume $HOME/.runner-home:/home
+      build bash -c "cd frontend && yarn install && yarn build"
 
 release-sentry:
   stage: build
@@ -137,18 +134,14 @@ release-sentry:
     - real
 
   script:
-    - |
-      REMOTE=`git remote`
-      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
-
-      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
-      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
-        --user `id -u`:`id -g` \
-        --volume $HOME/.runner-home:/home \
-        build bash -c \
-          "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG new --project=$SENTRY_PROJECT $SOURCE_SHA \
-          && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG set-commits --auto $SOURCE_SHA \
-          && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG finalize $SOURCE_SHA"
+    - docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
+    - docker-compose -f .gitlab/build/docker-compose.yml run --rm
+      --user `id -u`:`id -g`
+      --volume $HOME/.runner-home:/home
+      build bash -c
+        "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG new --project=$SENTRY_PROJECT $CI_COMMIT_SHA
+        && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG set-commits --auto $CI_COMMIT_SHA
+        && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG finalize $CI_COMMIT_SHA"
 
 deploy-devel:
   stage: deploy
@@ -176,12 +169,10 @@ deploy-devel:
     - cp "$DEVEL_ENV_BACKEND" backend/.env
     - cp "$DEVEL_COMPOSE" .gitlab/docker-compose.deploy.yml
 
+    # sentry: set versi
     - |
-      REMOTE=`git remote`
-      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
-
       echo "
-      SENTRY_RELEASE=$SOURCE_SHA" >> .env
+      SENTRY_RELEASE=$CI_COMMIT_SHA" >> backend/.env
 
     # build image
     - setup_image .gitlab/docker-compose.yml $VERSION
@@ -194,16 +185,13 @@ deploy-devel:
     - VARS="VERSION HUB STAGE DOMAIN DOMAIN_FRONTEND"
     - deploy_image "$DEVEL_SERVER" "$VARS" $CI_PROJECT_PATH_SLUG .gitlab/docker-compose.deploy.yml
 
-    - |
-      REMOTE=`git remote`
-      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
-
-      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
-      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
-        --user `id -u`:`id -g` \
-        --volume $HOME/.runner-home:/home \
-        build bash -c \
-        "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG deploys $SOURCE_SHA new --env $STAGE"
+    # sentry: set deployment
+    - docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
+    - docker-compose -f .gitlab/build/docker-compose.yml run --rm
+      --user `id -u`:`id -g`
+      --volume $HOME/.runner-home:/home
+      build bash -c
+      "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG deploys $CI_COMMIT_SHA new --env $STAGE"
 
   after_script:
     - source .gitlab/helper_script.sh
@@ -241,12 +229,10 @@ deploy-demo:
     - cp "$DEMO_ENV_BACKEND" backend/.env
     - cp "$DEMO_COMPOSE" .gitlab/docker-compose.deploy.yml
 
+    # sentry: set versi
     - |
-      REMOTE=`git remote`
-      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
-
       echo "
-      SENTRY_RELEASE=$SOURCE_SHA" >> .env
+      SENTRY_RELEASE=$CI_COMMIT_SHA" >> backend/.env
 
     # build image
     - setup_image .gitlab/docker-compose.yml $VERSION
@@ -259,16 +245,13 @@ deploy-demo:
     - VARS="VERSION HUB STAGE DOMAIN DOMAIN_FRONTEND"
     - deploy_image "$DEMO_SERVER" "$VARS" $CI_PROJECT_PATH_SLUG .gitlab/docker-compose.deploy.yml
 
-    - |
-      REMOTE=`git remote`
-      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
-
-      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
-      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
-        --user `id -u`:`id -g` \
-        --volume $HOME/.runner-home:/home \
-        build bash -c \
-        "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG deploys $SOURCE_SHA new --env $STAGE"
+    # sentry: set deployment
+    - docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
+    - docker-compose -f .gitlab/build/docker-compose.yml run --rm
+      --user `id -u`:`id -g`
+      --volume $HOME/.runner-home:/home
+      build bash -c
+      "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG deploys $CI_COMMIT_SHA new --env $STAGE"
 
   after_script:
     - source .gitlab/helper_script.sh
@@ -299,12 +282,10 @@ deploy-real:
     - curl -kso .gitlab/helper_script.sh ${HELPER_SCRIPT_URL}
     - source .gitlab/helper_script.sh
 
+    # sentry: set versi
     - |
-      REMOTE=`git remote`
-      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
-
       echo "
-      SENTRY_RELEASE=$SOURCE_SHA" >> .env
+      SENTRY_RELEASE=$CI_COMMIT_SHA" >> backend/.env
 
     # persiapan deploy
     - start_ssh_agent $CI_COMMIT_SHA
@@ -349,7 +330,7 @@ deploy-real:
         ( ssh -o ConnectTimeout=2 -o ServerAliveInterval=2 -o ServerAliveCountMax=2 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
             ${SERVER_LOGIN} \
             "/usr/bin/php ${SERVER_PATH}/artisan lighthouse:clear-cache \
-            && /usr/bin/php ${SERVER_PATH}/artisan lighthouse:cache" 2>&1 | sed -e "s/^/${LOGIN_HOST}:\ /"
+            && /usr/bin/php ${SERVER_PATH}/artisan lighthouse:cache" 2>&1 | sed -e "s/^/${LOGIN_HOST}-backend:\ /"
         ) &
         PIDS+=($!)
       done
@@ -417,16 +398,13 @@ deploy-real:
         [[ ${st} == 0 ]]
       done
 
-    - |
-      REMOTE=`git remote`
-      SOURCE_SHA=`git rev-parse ${REMOTE}/${CI_COMMIT_REF_NAME}^2`
-
-      docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
-      docker-compose -f .gitlab/build/docker-compose.yml run --rm \
-      --user `id -u`:`id -g` \
-      --volume $HOME/.runner-home:/home \
-      build bash -c \
-      "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG deploys $SOURCE_SHA new --env $STAGE"
+    # sentry: set deployment
+    - docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
+    - docker-compose -f .gitlab/build/docker-compose.yml run --rm
+      --user `id -u`:`id -g`
+      --volume $HOME/.runner-home:/home
+      build bash -c
+      "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG deploys $CI_COMMIT_SHA new --env $STAGE"
 
   after_script:
     - source .gitlab/helper_script.sh
