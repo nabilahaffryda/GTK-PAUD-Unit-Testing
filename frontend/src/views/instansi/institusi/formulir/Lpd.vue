@@ -100,7 +100,7 @@ export default {
     schema() {
       const mPengajar = [];
 
-      for (let i = 4; i <= 8; i++) {
+      for (let i = 2; i <= 8; i++) {
         mPengajar.push({ value: i, text: i });
       }
 
@@ -257,7 +257,7 @@ export default {
 
       // Set default nilai pengaturan petugas diklat
       this.$set(this.form, 'ratio_pengajar_tambahan', 40);
-      this.$set(this.form, 'jml_pembimbing', 4);
+      this.$set(this.form, 'jml_pembimbing', 2);
     },
 
     initForm(value) {
