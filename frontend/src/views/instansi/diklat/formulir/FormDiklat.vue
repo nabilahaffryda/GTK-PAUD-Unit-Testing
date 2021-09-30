@@ -12,6 +12,7 @@
 </template>
 <script>
 import BaseFormGenerator from '@components/base/BaseFormGenerator';
+import { mapState } from 'vuex';
 export default {
   components: { BaseFormGenerator },
   props: {
@@ -46,6 +47,11 @@ export default {
     };
   },
   computed: {
+    ...mapState('preferensi', {
+      lpd: (state) => (state.data && state.data.paud_instansi) || {},
+      instansi: (state) => (state.data && state.data.instansi) || {},
+    }),
+
     mPeriode() {
       return this.$arrToObj(this.periodes, 'paud_periode_id');
     },
@@ -54,9 +60,39 @@ export default {
       return this.$arrToObj(this.periodes, 'paud_mapel_kelas_id');
     },
 
+    kLpd() {
+      return Number(this.lpd && this.lpd.k_lpd_paud);
+    },
+
+    filterPropinsi() {
+      const M_PROPINSI = this.$mapForMaster(this.masters.m_propinsi || {}).filter(
+        (key) => key.value === Number(this.instansi && this.instansi.k_propinsi)
+      );
+
+      let result = {};
+      M_PROPINSI.forEach((item) => {
+        result[item.value] = item.text;
+      });
+
+      return result;
+    },
+
+    filterKota() {
+      const M_KOTA = this.$mapForMaster(this.masters.m_kota || {}).filter(
+        (key) => key.value === Number(this.instansi && this.instansi.k_kota)
+      );
+
+      let result = {};
+      M_KOTA.forEach((item) => {
+        result[item.value] = item.text;
+      });
+
+      return result;
+    },
+
     configs() {
-      const M_PROPINSI = this.masters.m_propinsi || {};
-      const M_KOTA = this.masters.m_kota || {};
+      const M_PROPINSI = Number(this.kLpd) > 1 ? this.filterPropinsi : this.masters.m_propinsi || {};
+      const M_KOTA = Number(this.kLpd) === 3 ? this.filterKota : this.masters.m_kota || {};
       const M_KECAMATAN = this.masters.m_kecamatan || {};
       const M_KELURAHAN = this.masters.m_kelurahan || {};
       return {

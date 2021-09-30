@@ -22,6 +22,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class MLpdPaud extends Eloquent
 {
+    public const LPD_PUSAT          = 1;
+    public const LPD_PROVINSI       = 2;
+    public const LPD_KOTA_KABUPATEN = 3;
+
     /**
      * The table associated with the model.
      *
