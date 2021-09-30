@@ -35,7 +35,9 @@ class KelasService
     public function queryPesertaKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, int $kJenjang = null, int $kSumber = null)
     {
         return Ptk::query()
-            ->whereNotNull('dapodik_ptk_id')
+            ->when($kSumber != 9, function (Builder $query) use ($kSumber) {
+                $query->whereNotNull('dapodik_ptk_id');
+            })
             ->when($kJenjang !== null, function (Builder $query) use ($kJenjang) {
                 $query->whereExists(function ($query) use ($kJenjang) {
                     $query->selectRaw(1)
