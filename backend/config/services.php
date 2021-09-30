@@ -59,4 +59,9 @@ return [
         'username' => env('SIMPATIKA_USERNAME', ''),
         'password' => env('SIMPATIKA_PASSWORD', ''),
     ],
+
+    'elearning-api' => [
+        'base-url'    => env('ELEARNING_API_BASEURL', 'https://api-elearning-ppgpaud.dev.simpkb.id/api/v1'),
+        'log-request' => env('ELEARNING_API_LOG_REQUEST', true),
+    ],
 ];
