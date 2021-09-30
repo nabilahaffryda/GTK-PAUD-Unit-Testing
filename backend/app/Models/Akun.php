@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * App\Models\Akun
+ * @mixin Eloquent
  *
  * @property string $akun_id
  * @property null|string $nip
