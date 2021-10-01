@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $updated_at
  * @property null|string $created_by
  * @property null|string $updated_by
+ * @property null|int $lms_mapel_id
  *
  * @property-read Collection|PaudKelas[] $paudKelases
  *
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudMapelKelas whereUpdatedAt($value)
  * @method static Builder|PaudMapelKelas whereCreatedBy($value)
  * @method static Builder|PaudMapelKelas whereUpdatedBy($value)
+ * @method static Builder|PaudMapelKelas whereLmsMapelId($value)
  */
 class PaudMapelKelas extends Eloquent
 {
@@ -51,12 +53,13 @@ class PaudMapelKelas extends Eloquent
      * @var array
      */
     protected $casts = [
-        'nama'       => 'string',
-        'is_aktif'   => 'string',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'created_by' => 'string',
-        'updated_by' => 'string',
+        'nama'         => 'string',
+        'is_aktif'     => 'string',
+        'created_at'   => 'datetime',
+        'updated_at'   => 'datetime',
+        'created_by'   => 'string',
+        'updated_by'   => 'string',
+        'lms_mapel_id' => 'int',
     ];
 
     /**
@@ -70,6 +73,7 @@ class PaudMapelKelas extends Eloquent
         'is_aktif',
         'created_by',
         'updated_by',
+        'lms_mapel_id',
     ];
 
     /**
