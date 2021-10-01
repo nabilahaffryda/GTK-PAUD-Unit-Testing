@@ -14,7 +14,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama'                => ['required', 'string'],
+            'nama'                => ['required', 'string', 'max:100'],
             'deskripsi'           => ['nullable', 'string'],
             'paud_mapel_kelas_id' => ['required', 'integer', 'exists:paud_mapel_kelas,paud_mapel_kelas_id'],
             'k_propinsi'          => ['required', 'integer', 'exists:m_propinsi,k_propinsi'],
