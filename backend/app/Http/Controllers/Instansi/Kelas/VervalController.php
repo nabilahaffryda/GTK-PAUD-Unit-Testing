@@ -71,7 +71,7 @@ class VervalController extends Controller
         $q = $kelas->paudKelasPetugases()
             ->where([
                 'k_petugas_paud'    => $request->get('k_petugas_paud'),
-                'k_konfirmasi_paud' => MKonfirmasiPaud::BERSEDIA,
+                // 'k_konfirmasi_paud' => MKonfirmasiPaud::BERSEDIA,
             ])
             ->with([
                 'akun',
