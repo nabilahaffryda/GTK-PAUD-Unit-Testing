@@ -61,9 +61,10 @@ class SimpatikaRemote
     /**
      * @throws GuzzleException
      */
-    public function searchGuruRA(string $keyword = '', int $page = 1, int $count = 10)
+    public function searchGuruRA(?int $kKota, string $keyword = '', int $page = 1, int $count = 10)
     {
         $request = new Request('GET', '/ptk/guru-ra/search?' . http_build_query([
+                'k_kota'  => $kKota,
                 'keyword' => $keyword,
                 'page'    => $page,
                 'count'   => $count,

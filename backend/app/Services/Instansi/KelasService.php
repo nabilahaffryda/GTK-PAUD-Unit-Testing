@@ -243,9 +243,12 @@ class KelasService
     {
         $this->validateKelas($paudDiklat, $kelas);
 
+        $mKota = $paudDiklat->mKota;
+
         try {
             $result = app(SimpatikaRemote::class)
                 ->searchGuruRA(
+                    $mKota->k_kota_simpatika,
                     $params['keyword'] ?? '',
                     $params['page'] ?? 1,
                     $params['count'] ?? 10,
