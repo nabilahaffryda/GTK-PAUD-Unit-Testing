@@ -37,14 +37,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $updated_at
  * @property null|string $created_by
  * @property null|string $updated_by
+ * @property null|int $lms_kelas_id
  *
  * @property-read null|string $url_jadwal
  *
+ * @property-read MKecamatan $mKecamatan
+ * @property-read MKelurahan $mKelurahan
  * @property-read MVervalPaud $mVervalPaud
  * @property-read PaudDiklat $paudDiklat
  * @property-read PaudMapelKelas $paudMapelKelas
- * @property-read MKecamatan $mKecamatan
- * @property-read MKelurahan $mKelurahan
  * @property-read Collection|PaudKelasPeserta[] $paudKelasPesertas
  * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
  *
@@ -120,6 +121,7 @@ class PaudKelas extends Eloquent
         'updated_at'          => 'datetime',
         'created_by'          => 'string',
         'updated_by'          => 'string',
+        'lms_kelas_id'        => 'int',
     ];
 
     /**
@@ -160,6 +162,7 @@ class PaudKelas extends Eloquent
         'wkt_verval',
         'created_by',
         'updated_by',
+        'lms_kelas_id',
     ];
 
     /**
