@@ -3,19 +3,27 @@
 namespace App\Remotes;
 
 use App\Models\RemoteLog;
+use App\Remotes\ElearningRemote\DiklatKelasCreateParam;
+use App\Remotes\ElearningRemote\KelasEnrollParam;
+use App\Remotes\ElearningRemote\KelasUnenrollParam;
+use App\Remotes\ElearningRemote\UserSyncParam;
+use App\Remotes\ElearningRemote\UserUnsyncParam;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use Http;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Client\PendingRequest;
 
-class Elearning
+class ElearningRemote
 {
     public function getClient(): PendingRequest
     {
         $http = Http::baseUrl(config('services.elearning-api.base-url'))
             ->withOptions([
                 'verify' => false,
+            ])
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . config('services.elearning-api.token'),
             ]);
 
         if (config('services.elearning-api.log-request')) {
@@ -68,11 +76,11 @@ class Elearning
             ->json();
     }
 
-    public function diklatKelasCreate(int $diklatId, array $data): ?array
+    public function diklatKelasCreate(int $diklatId, DiklatKelasCreateParam $data): ?array
     {
         return $this
             ->getClient()
-            ->post("diklat/{$diklatId}/kelas", $data)
+            ->post("diklat/{$diklatId}/kelas", $data->toArray())
             ->json();
     }
 
@@ -84,35 +92,35 @@ class Elearning
             ->json();
     }
 
-    public function kelasEnroll(int $kelasId, array $data): ?array
+    public function kelasEnroll(int $kelasId, KelasEnrollParam $data): ?array
     {
         return $this
             ->getClient()
-            ->post("kelas/{$kelasId}", $data)
+            ->post("kelas/{$kelasId}", $data->toArray())
             ->json();
     }
 
-    public function kelasUnenroll(int $kelasId, array $data): ?array
+    public function kelasUnenroll(int $kelasId, KelasUnenrollParam $data): ?array
     {
         return $this
             ->getClient()
-            ->post("kelas/{$kelasId}", $data)
+            ->post("kelas/{$kelasId}", $data->toArray())
             ->json();
     }
 
-    public function userSync(array $data): ?array
+    public function userSync(UserSyncParam $data): ?array
     {
         return $this
             ->getClient()
-            ->post("user/sync", $data)
+            ->post("user/sync", $data->toArray())
             ->json();
     }
 
-    public function userUnsync(array $data): ?array
+    public function userUnsync(UserUnsyncParam $data): ?array
     {
         return $this
             ->getClient()
-            ->post("user/unsync", $data)
+            ->post("user/unsync", $data->toArray())
             ->json();
     }
 }

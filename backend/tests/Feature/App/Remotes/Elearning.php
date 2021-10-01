@@ -27,7 +27,7 @@ class Elearning extends TestCase
             'instansi' => Http::response($data),
         ]);
 
-        $response = app(\App\Remotes\Elearning::class)->instansiList();
+        $response = app(\App\Remotes\ElearningRemote::class)->instansiList();
 
         $this->assertEquals($data, $response);
     }
