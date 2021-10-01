@@ -2,10 +2,11 @@
 
 namespace App\Remotes;
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 
 class SimpatikaRemote
@@ -28,6 +29,14 @@ class SimpatikaRemote
 
             foreach ($this->handlers as $handler) {
                 $handlerStack->push(...$handler);
+            }
+
+            if (config('app.debug')) {
+                $logger    = app()->make('log');
+                $formatter = new MessageFormatter('{method} {uri}' . PHP_EOL . '> {req_body}' . PHP_EOL . '< {res_body}');
+                $level     = env('LOG_LEVEL', 'debug');
+
+                $handlerStack->push(Middleware::log($logger, $formatter, $level));
             }
 
             $this->client = new Client([
