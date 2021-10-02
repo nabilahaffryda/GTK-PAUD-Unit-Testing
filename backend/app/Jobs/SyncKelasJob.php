@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\PaudKelas;
 use App\Services\Instansi\KelasService;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -41,6 +42,7 @@ class SyncKelasJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
