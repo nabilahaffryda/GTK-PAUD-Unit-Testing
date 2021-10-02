@@ -6,6 +6,7 @@ namespace App\Services\Instansi;
 
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
+use App\Jobs\SyncKelasJob;
 use App\Models\Akun;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MKota;
@@ -669,6 +670,12 @@ class KelasService
 
         if (!$kelas->save()) {
             throw new FlowException('Proses simpan status verval tidak berhasil');
+        }
+
+        if ($kelas->k_verval_paud == MVervalPaud::DISETUJUI) {
+            if (config('paud.elearning.sync')) {
+                SyncKelasJob::dispatch($kelas);
+            }
         }
 
         return $kelas;
