@@ -19,12 +19,8 @@ class ElearningRemote
     public function getClient(): PendingRequest
     {
         $http = Http::baseUrl(config('services.elearning-api.base-url'))
-            ->withOptions([
-                'verify' => false,
-            ])
-            ->withHeaders([
-                'Authorization' => 'Bearer ' . config('services.elearning-api.token'),
-            ]);
+            ->withoutVerifying()
+            ->withToken(config('services.elearning-api.token'));
 
         if (config('services.elearning-api.log-request')) {
             $http->withMiddleware(RemoteLog::guzzleMiddleware(static::class));
