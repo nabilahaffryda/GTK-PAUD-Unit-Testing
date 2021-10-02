@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands\Kelas;
 
+use App\Jobs\SyncKelasJob;
+use App\Models\MVervalPaud;
 use App\Models\PaudKelas;
-use App\Services\Instansi\KelasService;
 use Illuminate\Console\Command;
 
 class SyncCommand extends Command
@@ -42,8 +43,12 @@ class SyncCommand extends Command
         $id = $this->argument('id');
 
         $kelas = PaudKelas::findOrFail($id);
+        if ($kelas->k_verval_paud != MVervalPaud::DISETUJUI) {
+            $this->error("Kelas {$id}:'{$kelas->nama}' belum disetujui");
+            return 1;
+        }
 
-        app(KelasService::class)->sync($kelas);
+        SyncKelasJob::dispatch($kelas);
 
         return 0;
     }
