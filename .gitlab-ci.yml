@@ -134,13 +134,14 @@ release-sentry:
     - real
 
   script:
+    - PARENT_SHA=`git rev-list --first-parent --max-count=1 --skip=1 $CI_COMMIT_SHA`
     - docker-compose -f .gitlab/build/docker-compose.yml pull --quiet
     - docker-compose -f .gitlab/build/docker-compose.yml run --rm
       --user `id -u`:`id -g`
       --volume $HOME/.runner-home:/home
       build bash -c
         "/sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG new --project=$SENTRY_PROJECT $CI_COMMIT_SHA
-        && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG set-commits --auto $CI_COMMIT_SHA
+        && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG set-commits --commit '${SENTRY_REPO}@${PARENT_SHA}..$CI_COMMIT_SHA' $CI_COMMIT_SHA
         && /sentry-cli --auth-token=$SENTRY_AUTH_TOKEN --url=$SENTRY_URL releases --org=$SENTRY_ORG finalize $CI_COMMIT_SHA"
 
 deploy-devel:

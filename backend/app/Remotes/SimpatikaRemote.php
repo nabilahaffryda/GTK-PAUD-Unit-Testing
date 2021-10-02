@@ -2,10 +2,11 @@
 
 namespace App\Remotes;
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 
 class SimpatikaRemote
@@ -30,6 +31,14 @@ class SimpatikaRemote
                 $handlerStack->push(...$handler);
             }
 
+            if (config('app.debug')) {
+                $logger    = app()->make('log');
+                $formatter = new MessageFormatter('{method} {uri}' . PHP_EOL . '> {req_body}' . PHP_EOL . '< {res_body}');
+                $level     = env('LOG_LEVEL', 'debug');
+
+                $handlerStack->push(Middleware::log($logger, $formatter, $level));
+            }
+
             $this->client = new Client([
                 'base_uri' => config('services.simpatika.baseurl'),
                 'handler'  => $handlerStack,
@@ -45,7 +54,7 @@ class SimpatikaRemote
     }
 
     /**
-     * @throws Exception|GuzzleException
+     * @throws GuzzleException
      */
     public function request(Request $request)
     {
@@ -59,11 +68,12 @@ class SimpatikaRemote
     }
 
     /**
-     * @throws Exception|GuzzleException
+     * @throws GuzzleException
      */
-    public function searchGuruRA(string $keyword = '', int $page = 1, int $count = 10)
+    public function searchGuruRA(?int $kKota, string $keyword = '', int $page = 1, int $count = 10)
     {
         $request = new Request('GET', '/ptk/guru-ra/search?' . http_build_query([
+                'k_kota'  => $kKota,
                 'keyword' => $keyword,
                 'page'    => $page,
                 'count'   => $count,
@@ -74,7 +84,7 @@ class SimpatikaRemote
     }
 
     /**
-     * @throws Exception|GuzzleException
+     * @throws GuzzleException
      */
     public function fetchGuruRA(array $ptkIds)
     {

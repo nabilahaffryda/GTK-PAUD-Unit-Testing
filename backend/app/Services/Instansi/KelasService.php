@@ -35,7 +35,9 @@ class KelasService
     public function queryPesertaKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, int $kJenjang = null, int $kSumber = null)
     {
         return Ptk::query()
-            ->whereNotNull('dapodik_ptk_id')
+            ->when($kSumber != 9, function (Builder $query) use ($kSumber) {
+                $query->whereNotNull('dapodik_ptk_id');
+            })
             ->when($kJenjang !== null, function (Builder $query) use ($kJenjang) {
                 $query->whereExists(function ($query) use ($kJenjang) {
                     $query->selectRaw(1)
@@ -76,7 +78,6 @@ class KelasService
                             // PPTM inti yang ditambahkan oleh GTK bisa dipilih oleh LPD yang berada satu wilayah kota/kab dengan PPTM nya
                             ->orWhere(function (Builder $query) use ($paudDiklat) {
                                 $query->where('paud_petugas.instansi_id', '=', 800006)
-                                    ->where('paud_petugas.is_inti', '=', 1)
                                     ->whereHas('akun', function (Builder $query) use ($paudDiklat) {
                                         $query->where('akun.k_kota', '=', $paudDiklat->k_kota);
                                     });
@@ -237,18 +238,24 @@ class KelasService
 
     /**
      * @throws FlowException
-     * @throws GuzzleException
      */
     public function indexPesertaKandidatSimpatika(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params)
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        $result = app(SimpatikaRemote::class)
-            ->searchGuruRA(
-                $params['keyword'] ?? '',
-                $params['page'] ?? 1,
-                $params['count'] ?? 10,
-            );
+        $mKota = $paudDiklat->mKota;
+
+        try {
+            $result = app(SimpatikaRemote::class)
+                ->searchGuruRA(
+                    $mKota->k_kota_simpatika,
+                    $params['keyword'] ?? '',
+                    $params['page'] ?? 1,
+                    $params['count'] ?? 10,
+                );
+        } catch (GuzzleException $e) {
+            throw new FlowException('Gagal membaca data dari sistem SIMPATIKA, silakan dicoba beberapa saat lagi', previous: $e);
+        }
 
         $data   = collect($result['data'] ?? []);
         $ptkIds = $data->pluck('ptk_id')->unique();
@@ -341,8 +348,7 @@ class KelasService
     }
 
     /**
-     * @throws FlowException
-     * @throws GuzzleException
+     * @throws FlowException|GuzzleException
      */
     public function createPesertaSimpatika(PaudDiklat $paudDiklat, PaudKelas $kelas, array $params): Collection
     {
@@ -357,7 +363,11 @@ class KelasService
 
         $newPtkIds = array_diff($ptkIds, $ptks->keys()->all());
         if ($newPtkIds) {
-            $ptks = app(SimpatikaRemote::class)->fetchGuruRA($newPtkIds);
+            try {
+                $ptks = app(SimpatikaRemote::class)->fetchGuruRA($newPtkIds);
+            } catch (GuzzleException $e) {
+                throw new FlowException('Gagal membaca data dari sistem SIMPATIKA, silakan dicoba beberapa saat lagi', previous: $e);
+            }
 
             // simpan ke paspor
             $ptkIds   = [];
@@ -574,7 +584,7 @@ class KelasService
         $batasan = [
             MPetugasPaud::PENGAJAR           => [$minPengajar, $kelas->jml_pengajar],
             MPetugasPaud::PENGAJAR_TAMBAHAN  => [0, $maxPengajarTambahan],
-            MPetugasPaud::PEMBIMBING_PRAKTIK => [min(4, $paudInstansi->jml_pembimbing), $paudInstansi->jml_pembimbing],
+            MPetugasPaud::PEMBIMBING_PRAKTIK => [min(2, $paudInstansi->jml_pembimbing), $paudInstansi->jml_pembimbing],
             MPetugasPaud::ADMIN_KELAS        => [1, 1],
         ];
 

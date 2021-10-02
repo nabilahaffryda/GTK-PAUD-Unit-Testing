@@ -8,7 +8,7 @@ import { mask } from 'vue-the-mask';
 import VueAnalytics from 'vue-analytics';
 import BaseModalFull from '@components/base/BaseModalFull';
 import './plugins/vee-validate';
-import './sentry';
+// import './sentry';
 // css
 import 'roboto-fontface/css/roboto/roboto-fontface.css';
 import '@mdi/font/css/materialdesignicons.css';
