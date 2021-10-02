@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $created_by
  * @property null|string $updated_by
  * @property null|int $lms_kelas_id
+ * @property null|string $lms_url
  *
  * @property-read null|string $url_jadwal
  *
