@@ -96,7 +96,7 @@ class ElearningRemote
     {
         return $this
             ->getClient()
-            ->post("kelas/{$kelasId}", $data->toArray())
+            ->post("kelas/{$kelasId}/enroll", $data->toArray())
             ->json();
     }
 
@@ -104,7 +104,7 @@ class ElearningRemote
     {
         return $this
             ->getClient()
-            ->post("kelas/{$kelasId}", $data->toArray())
+            ->post("kelas/{$kelasId}/unenroll", $data->toArray())
             ->json();
     }
 
