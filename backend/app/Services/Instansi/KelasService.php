@@ -584,7 +584,7 @@ class KelasService
         $batasan = [
             MPetugasPaud::PENGAJAR           => [$minPengajar, $kelas->jml_pengajar],
             MPetugasPaud::PENGAJAR_TAMBAHAN  => [0, $maxPengajarTambahan],
-            MPetugasPaud::PEMBIMBING_PRAKTIK => [min(4, $paudInstansi->jml_pembimbing), $paudInstansi->jml_pembimbing],
+            MPetugasPaud::PEMBIMBING_PRAKTIK => [min(2, $paudInstansi->jml_pembimbing), $paudInstansi->jml_pembimbing],
             MPetugasPaud::ADMIN_KELAS        => [1, 1],
         ];
 
