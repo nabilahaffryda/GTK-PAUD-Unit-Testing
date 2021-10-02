@@ -17,6 +17,8 @@ use App\Models\PaudKelasPeserta;
 use App\Models\PaudKelasPetugas;
 use App\Models\PaudPetugas;
 use App\Models\Ptk;
+use App\Remotes\ElearningRemote;
+use App\Remotes\ElearningRemote\DiklatKelasCreateParam;
 use App\Remotes\Paspor\User;
 use App\Remotes\SimpatikaRemote;
 use Arr;
@@ -727,5 +729,87 @@ class KelasService
         // old file TIDAK DIHAPUS untuk digunakan sebagai backup
 
         return $filename;
+    }
+
+    public function sync(PaudKelas $kelas)
+    {
+        $instansiIds    = config('paud.elearning.instansi-id');
+        $jenisDiklatIds = config('paud.elearning.jenis-diklat-id');
+        $diklatIds      = config('paud.elearning.diklat-id');
+
+        $index = $kelas->paud_diklat_id % count($instansiIds);
+
+        $instansiId    = $instansiIds[$index];
+        $jenisDiklatId = $jenisDiklatIds[$index];
+        $diklatId      = $diklatIds[$index];
+
+        $grupIdPetugas = config('paud.elearning.group-id-petugas');
+        $grupIdPeserta = config('paud.elearning.group-id-peserta');
+
+        $petugases = $kelas->paudKelasPetugases->load('akun');
+        $pesertas  = $kelas->paudKelasPesertas->load('ptk');
+
+        $userSyncItems    = [];
+        $kelasEnrollItems = [];
+
+        $jmlPetugases = collect();
+        foreach ($petugases as $petugas) {
+            $jmlPetugases[$petugas->k_petugas_paud] = ($jmlPetugases[$petugas->k_petugas_paud] ?? 1) + 1;
+
+            $grupId = $grupIdPetugas[$petugas->k_petugas_paud];
+
+            $userSyncItems[] = new ElearningRemote\UserSyncParamItem(
+                $petugas->akun->paspor_id,
+                $petugas->akun->nama,
+                $petugas->akun->email,
+                $grupId,
+                $jenisDiklatId,
+                $instansiId,
+            );
+
+            $kelasEnrollItems[] = new ElearningRemote\KelasEnrollParamItem(
+                $petugas->akun->paspor_id,
+                $grupId,
+            );
+        }
+
+        foreach ($pesertas as $peserta) {
+            $userSyncItems[] = new ElearningRemote\UserSyncParamItem(
+                $peserta->ptk->paspor_id,
+                $peserta->ptk->nama,
+                $peserta->ptk->email,
+                $grupIdPeserta,
+                $jenisDiklatId,
+                $instansiId,
+            );
+
+            $kelasEnrollItems[] = new ElearningRemote\KelasEnrollParamItem(
+                $peserta->ptk->paspor_id,
+                $grupIdPeserta,
+            );
+        }
+
+        $userSyncParam    = new ElearningRemote\UserSyncParam(...$userSyncItems);
+        $kelasEnrollParam = new ElearningRemote\KelasEnrollParam(...$kelasEnrollItems);
+
+        if (!$kelas->lms_kelas_id) {
+            $res = app(ElearningRemote::class)->diklatKelasCreate($diklatId, new DiklatKelasCreateParam(
+                $kelas->nama,
+                $kelas->paudMapelKelas->lms_mapel_id,
+                $kelas->paudDiklat->paudPeriode->tgl_diklat_mulai,
+                $kelas->paudDiklat->paudPeriode->tgl_diklat_selesai,
+                $jmlPetugases->get(MPetugasPaud::PENGAJAR, 0),
+                $jmlPetugases->get(MPetugasPaud::ADMIN_KELAS, 0),
+                $jmlPetugases->get(MPetugasPaud::PENGAJAR_TAMBAHAN, 0),
+                $jmlPetugases->get(MPetugasPaud::PEMBIMBING_PRAKTIK, 0),
+                $pesertas->count(),
+            ));
+
+            $kelas->lms_kelas_id = $res['id'];
+            $kelas->save();
+        }
+
+        app(ElearningRemote::class)->userSync($userSyncParam);
+        app(ElearningRemote::class)->kelasEnroll($kelas->lms_kelas_id, $kelasEnrollParam);
     }
 }
