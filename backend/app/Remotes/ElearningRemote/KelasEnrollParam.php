@@ -2,12 +2,10 @@
 
 namespace App\Remotes\ElearningRemote;
 
-use Illuminate\Support\Collection;
-
-class KelasEnrollParam extends Collection
+class KelasEnrollParam extends CollectionParam
 {
     public function __construct(KelasEnrollParamItem ...$data)
     {
-        parent::__construct($data);
+        $this->data = collect($data);
     }
 }

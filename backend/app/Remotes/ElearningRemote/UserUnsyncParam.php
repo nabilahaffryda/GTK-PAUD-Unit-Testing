@@ -2,12 +2,10 @@
 
 namespace App\Remotes\ElearningRemote;
 
-use Illuminate\Support\Collection;
-
-class UserUnsyncParam extends Collection
+class UserUnsyncParam extends CollectionParam
 {
     public function __construct(UserUnsyncParamItem ...$data)
     {
-        parent::__construct($data);
+        $this->data = collect($data);
     }
 }
