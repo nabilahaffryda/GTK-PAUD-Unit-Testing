@@ -738,6 +738,9 @@ class KelasService
         return $filename;
     }
 
+    /**
+     * @throws Exception
+     */
     public function sync(PaudKelas $kelas)
     {
         $instansiIds    = config('paud.elearning.instansi-id');
@@ -799,8 +802,15 @@ class KelasService
         $userSyncParam    = new ElearningRemote\UserSyncParam(...$userSyncItems);
         $kelasEnrollParam = new ElearningRemote\KelasEnrollParam(...$kelasEnrollItems);
 
-        if (!$kelas->lms_kelas_id) {
-            $res = app(ElearningRemote::class)->diklatKelasCreate($diklatId, new DiklatKelasCreateParam(
+        if ($kelas->lms_kelas_id) {
+            $lmsKelas = app(ElearningRemote::class)->kelasFetch($kelas->lms_kelas_id);
+            if (!isset($lmsKelas['data'])) {
+                throw new Exception('Gagal baca data kelas dari LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : ''), previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
+            }
+            $lmsKelas = $lmsKelas['data'];
+
+        } else {
+            $lmsKelas = app(ElearningRemote::class)->diklatKelasCreate($diklatId, new DiklatKelasCreateParam(
                 $kelas->nama,
                 $kelas->paudMapelKelas->lms_mapel_id,
                 $kelas->paudDiklat->paudPeriode->tgl_diklat_mulai,
@@ -811,12 +821,26 @@ class KelasService
                 $jmlPetugases->get(MPetugasPaud::PEMBIMBING_PRAKTIK, 0),
                 $pesertas->count(),
             ));
+            if (!isset($lmsKelas['id'])) {
+                throw new Exception('Gagal simpan kelas ke LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : ''), previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
+            }
 
-            $kelas->lms_kelas_id = $res['id'];
+            $kelas->lms_kelas_id = $lmsKelas['id'];
             $kelas->save();
         }
 
-        app(ElearningRemote::class)->userSync($userSyncParam);
-        app(ElearningRemote::class)->kelasEnroll($kelas->lms_kelas_id, $kelasEnrollParam);
+        $res = app(ElearningRemote::class)->userSync($userSyncParam);
+        if (($res['status'] ?? 200) != 200) {
+            throw new Exception('Error get sync user ke LMS' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : ''), previous: new Exception($res['title']));
+        }
+
+        $res = app(ElearningRemote::class)->kelasEnroll($kelas->lms_kelas_id, $kelasEnrollParam);
+        if (($res['status'] ?? 200) != 200) {
+            throw new Exception('Error enroll user ke kelas' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : ''), previous: new Exception($res['title']));
+        }
+
+        // jika semua ok, simpan link ke lms
+        $kelas->lms_url = $lmsKelas['link'];
+        $kelas->save();
     }
 }
