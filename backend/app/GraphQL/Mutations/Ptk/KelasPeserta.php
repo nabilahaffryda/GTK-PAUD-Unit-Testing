@@ -2,17 +2,17 @@
 
 namespace App\GraphQL\Mutations\Ptk;
 
+use App\Exceptions\FlowException;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudKelasPeserta;
-use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class KelasPeserta
 {
     /**
-     * @throws Exception
+     * @throws FlowException
      */
     public function konfirmasiSetuju($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
@@ -20,11 +20,11 @@ class KelasPeserta
 
         $kelasPeserta = PaudKelasPeserta::findOrFail($kelasPesertaId);
         if ($kelasPeserta->paudKelas->k_verval_paud != MVervalPaud::KANDIDAT) {
-            throw new Exception('Masa konfirmasi telah berakhir');
+            throw new FlowException('Konfirmasi sudah dikunci karena kelas sudah diajukan/diproses');
         }
 
         if ($kelasPeserta->k_konfirmasi_paud && $kelasPeserta->k_konfirmasi_paud != MKonfirmasiPaud::BELUM_KONFIRMASI) {
-            throw new Exception('Anda telah melakukan konfirmasi');
+            throw new FlowException('Anda telah melakukan konfirmasi');
         }
 
         $kelasPeserta->k_konfirmasi_paud = MKonfirmasiPaud::BERSEDIA;
@@ -34,7 +34,7 @@ class KelasPeserta
     }
 
     /**
-     * @throws Exception
+     * @throws FlowException
      */
     public function konfirmasiTolak($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
@@ -42,11 +42,11 @@ class KelasPeserta
 
         $kelasPeserta = PaudKelasPeserta::findOrFail($kelasPesertaId);
         if ($kelasPeserta->paudKelas->k_verval_paud != MVervalPaud::KANDIDAT) {
-            throw new Exception('Masa konfirmasi telah berakhir');
+            throw new FlowException('Konfirmasi sudah dikunci karena kelas sudah diajukan/diproses');
         }
 
         if ($kelasPeserta->k_konfirmasi_paud && $kelasPeserta->k_konfirmasi_paud != MKonfirmasiPaud::BELUM_KONFIRMASI) {
-            throw new Exception('Anda telah melakukan konfirmasi');
+            throw new FlowException('Anda telah melakukan konfirmasi');
         }
 
         $kelasPeserta->k_konfirmasi_paud = MKonfirmasiPaud::TIDAK_BERSEDIA;
@@ -56,7 +56,7 @@ class KelasPeserta
     }
 
     /**
-     * @throws Exception
+     * @throws FlowException
      */
     public function konfirmasiBatal($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
@@ -64,11 +64,11 @@ class KelasPeserta
 
         $kelasPeserta = PaudKelasPeserta::findOrFail($kelasPesertaId);
         if ($kelasPeserta->paudKelas->k_verval_paud != MVervalPaud::KANDIDAT) {
-            throw new Exception('Masa konfirmasi telah berakhir');
+            throw new FlowException('Konfirmasi sudah dikunci karena kelas sudah diajukan/diproses');
         }
 
         if ($kelasPeserta->k_konfirmasi_paud && !in_array($kelasPeserta->k_konfirmasi_paud, [MKonfirmasiPaud::BERSEDIA, MKonfirmasiPaud::TIDAK_BERSEDIA])) {
-            throw new Exception('Anda belum melakukan konfirmasi');
+            throw new FlowException('Anda belum melakukan konfirmasi');
         }
 
         $kelasPeserta->k_konfirmasi_paud = MKonfirmasiPaud::BELUM_KONFIRMASI;
