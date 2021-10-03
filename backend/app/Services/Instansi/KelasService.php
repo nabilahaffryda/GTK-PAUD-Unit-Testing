@@ -694,6 +694,10 @@ class KelasService
             throw new FlowException('Kelas belum diverval');
         }
 
+        if ($kelas->lms_kelas_id) {
+            throw new FlowException('Kelas tidak bisa dibatalkan karena telah disinkronkan');
+        }
+
         $kelas->k_verval_paud  = MVervalPaud::DIAJUKAN;
         $kelas->wkt_verval     = Carbon::now();
         $kelas->akun_id_verval = $akun->akun_id;
