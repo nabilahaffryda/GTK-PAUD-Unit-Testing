@@ -111,7 +111,16 @@
                         <v-list-item-content>
                           <div class="label--text">Aksi Selanjutnya</div>
                           <template v-if="Number(item.k_verval_paud) === 6">
-                            <v-btn color="blue" disabled small>Menuju LMS</v-btn>
+                            <v-btn
+                              color="success"
+                              small
+                              dark
+                              :disabled="!$getDeepObj(item, 'lms_url')"
+                              @click="onLms($getDeepObj(item, 'lms_url'))"
+                            >
+                              <v-icon left>mdi-link</v-icon>
+                              Menuju LMS
+                            </v-btn>
                           </template>
                           <template v-else-if="Number(item.k_verval_paud) === 5"> </template>
                           <template v-else>
@@ -298,6 +307,10 @@ export default {
       } else {
         this.$set(this.catatans, id, true);
       }
+    },
+
+    onLms(url) {
+      window.open(url, '_blank');
     },
   },
 };

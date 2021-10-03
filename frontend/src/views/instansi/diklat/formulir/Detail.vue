@@ -65,8 +65,15 @@
                 >
               </v-col>
             </v-row>
-            <div class="my-5" v-if="false">
-              <v-btn depressed link><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn>
+            <div class="my-5" v-if="Number(kelas.k_verval_paud) === 6">
+              <v-btn
+                color="success"
+                depressed
+                :disabled="!$getDeepObj(kelas, 'lms_url')"
+                small
+                @click="onLms($getDeepObj(kelas, 'lms_url'))"
+                ><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn
+              >
             </div>
           </v-col>
           <v-col cols="12" md="2" sm="12">
@@ -537,6 +544,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.filepopup.open();
       });
+    },
+
+    onLms(url) {
+      window.open(url, '_blank');
     },
   },
   watch: {
