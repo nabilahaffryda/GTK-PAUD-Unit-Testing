@@ -808,7 +808,7 @@ class KelasService
 
         if ($kelas->lms_kelas_id) {
             $lmsKelas = app(ElearningRemote::class)->kelasFetch($kelas->lms_kelas_id);
-            if (!isset($lmsKelas['id'])) {
+            if (!$lmsKelas || !isset($lmsKelas['id'])) {
                 $message = 'Gagal baca data kelas dari LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : '');
 
                 $kelas->sync_status = $message;
@@ -830,7 +830,7 @@ class KelasService
                 $jmlPetugases->get(MPetugasPaud::PEMBIMBING_PRAKTIK, 0),
                 $pesertas->count(),
             ));
-            if (!isset($lmsKelas['id'])) {
+            if (!$lmsKelas || !isset($lmsKelas['id'])) {
                 $message = 'Gagal simpan kelas ke LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : '');
 
                 $kelas->sync_status = $message;
@@ -845,7 +845,7 @@ class KelasService
         }
 
         $res = app(ElearningRemote::class)->userSync($userSyncParam);
-        if (($res['status'] ?? 200) != 200) {
+        if (!$res || ($res['status'] ?? 200) != 200) {
             $message = 'Error get sync user ke LMS' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : '');
 
             $kelas->sync_status = $message;
@@ -856,7 +856,7 @@ class KelasService
         }
 
         $res = app(ElearningRemote::class)->kelasEnroll($kelas->lms_kelas_id, $kelasEnrollParam);
-        if (($res['status'] ?? 200) != 200) {
+        if (!$res || ($res['status'] ?? 200) != 200) {
             $message = 'Error enroll user ke kelas' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : '');
 
             $kelas->sync_status = $message;
