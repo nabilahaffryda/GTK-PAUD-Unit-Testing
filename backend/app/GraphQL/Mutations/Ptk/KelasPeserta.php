@@ -3,6 +3,7 @@
 namespace App\GraphQL\Mutations\Ptk;
 
 use App\Models\MKonfirmasiPaud;
+use App\Models\MVervalPaud;
 use App\Models\PaudKelasPeserta;
 use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -18,6 +19,9 @@ class KelasPeserta
         $kelasPesertaId = $args['kelasPesertaId'];
 
         $kelasPeserta = PaudKelasPeserta::findOrFail($kelasPesertaId);
+        if ($kelasPeserta->paudKelas->k_verval_paud != MVervalPaud::KANDIDAT) {
+            throw new Exception('Masa konfirmasi telah berakhir');
+        }
 
         if ($kelasPeserta->k_konfirmasi_paud && $kelasPeserta->k_konfirmasi_paud != MKonfirmasiPaud::BELUM_KONFIRMASI) {
             throw new Exception('Anda telah melakukan konfirmasi');
@@ -37,6 +41,9 @@ class KelasPeserta
         $kelasPesertaId = $args['kelasPesertaId'];
 
         $kelasPeserta = PaudKelasPeserta::findOrFail($kelasPesertaId);
+        if ($kelasPeserta->paudKelas->k_verval_paud != MVervalPaud::KANDIDAT) {
+            throw new Exception('Masa konfirmasi telah berakhir');
+        }
 
         if ($kelasPeserta->k_konfirmasi_paud && $kelasPeserta->k_konfirmasi_paud != MKonfirmasiPaud::BELUM_KONFIRMASI) {
             throw new Exception('Anda telah melakukan konfirmasi');
@@ -56,6 +63,9 @@ class KelasPeserta
         $kelasPesertaId = $args['kelasPesertaId'];
 
         $kelasPeserta = PaudKelasPeserta::findOrFail($kelasPesertaId);
+        if ($kelasPeserta->paudKelas->k_verval_paud != MVervalPaud::KANDIDAT) {
+            throw new Exception('Masa konfirmasi telah berakhir');
+        }
 
         if ($kelasPeserta->k_konfirmasi_paud && !in_array($kelasPeserta->k_konfirmasi_paud, [MKonfirmasiPaud::BERSEDIA, MKonfirmasiPaud::TIDAK_BERSEDIA])) {
             throw new Exception('Anda belum melakukan konfirmasi');
