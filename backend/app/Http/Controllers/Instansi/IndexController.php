@@ -54,6 +54,7 @@ class IndexController extends Controller
             'aktivasi' => $aktivasi,
             'konfig'   => [
                 'simpkb' => $simpkb,
+                'paud'   => config('paud'),
             ],
 
             'konfirmasi_kesediaan' => $konfirmasi,
