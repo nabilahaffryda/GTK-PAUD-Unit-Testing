@@ -6,6 +6,7 @@ namespace App\Services\Instansi;
 
 use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
+use App\Jobs\SyncKelasJob;
 use App\Models\Akun;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MKota;
@@ -17,6 +18,8 @@ use App\Models\PaudKelasPeserta;
 use App\Models\PaudKelasPetugas;
 use App\Models\PaudPetugas;
 use App\Models\Ptk;
+use App\Remotes\ElearningRemote;
+use App\Remotes\ElearningRemote\DiklatKelasCreateParam;
 use App\Remotes\Paspor\User;
 use App\Remotes\SimpatikaRemote;
 use Arr;
@@ -679,6 +682,12 @@ class KelasService
             throw new FlowException('Proses simpan status verval tidak berhasil');
         }
 
+        if ($kelas->k_verval_paud == MVervalPaud::DISETUJUI) {
+            if (config('paud.elearning.sync')) {
+                SyncKelasJob::dispatch($kelas);
+            }
+        }
+
         return $kelas;
     }
 
@@ -693,6 +702,10 @@ class KelasService
 
         if (!in_array($kelas->k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
             throw new FlowException('Kelas belum diverval');
+        }
+
+        if ($kelas->lms_kelas_id) {
+            throw new FlowException('Kelas tidak bisa dibatalkan karena telah disinkronkan');
         }
 
         $kelas->k_verval_paud  = MVervalPaud::DIAJUKAN;
@@ -737,5 +750,136 @@ class KelasService
         // old file TIDAK DIHAPUS untuk digunakan sebagai backup
 
         return $filename;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function sync(PaudKelas $kelas)
+    {
+        $instansiIds    = config('paud.elearning.instansi-id');
+        $jenisDiklatIds = config('paud.elearning.jenis-diklat-id');
+        $diklatIds      = config('paud.elearning.diklat-id');
+
+        $index = $kelas->paud_diklat_id % count($instansiIds);
+
+        $instansiId    = $instansiIds[$index];
+        $jenisDiklatId = $jenisDiklatIds[$index];
+        $diklatId      = $diklatIds[$index];
+
+        $grupIdPetugas = config('paud.elearning.group-id-petugas');
+        $grupIdPeserta = config('paud.elearning.group-id-peserta');
+
+        $petugases = $kelas->paudKelasPetugases->load('akun');
+        $pesertas  = $kelas->paudKelasPesertas->load('ptk');
+
+        $userSyncItems    = [];
+        $kelasEnrollItems = [];
+
+        $jmlPetugases = collect();
+        foreach ($petugases as $petugas) {
+            $jmlPetugases[$petugas->k_petugas_paud] = ($jmlPetugases[$petugas->k_petugas_paud] ?? 1) + 1;
+
+            $grupId = $grupIdPetugas[$petugas->k_petugas_paud];
+
+            $userSyncItems[] = new ElearningRemote\UserSyncParamItem(
+                $petugas->akun->paspor_id,
+                $petugas->akun->nama,
+                $petugas->akun->email,
+                $grupId,
+                $jenisDiklatId,
+                $instansiId,
+            );
+
+            $kelasEnrollItems[] = new ElearningRemote\KelasEnrollParamItem(
+                $petugas->akun->paspor_id,
+                $grupId,
+            );
+        }
+
+        foreach ($pesertas as $peserta) {
+            $userSyncItems[] = new ElearningRemote\UserSyncParamItem(
+                $peserta->ptk->paspor_id,
+                $peserta->ptk->nama,
+                $peserta->ptk->email,
+                $grupIdPeserta,
+                $jenisDiklatId,
+                $instansiId,
+            );
+
+            $kelasEnrollItems[] = new ElearningRemote\KelasEnrollParamItem(
+                $peserta->ptk->paspor_id,
+                $grupIdPeserta,
+            );
+        }
+
+        $userSyncParam    = new ElearningRemote\UserSyncParam(...$userSyncItems);
+        $kelasEnrollParam = new ElearningRemote\KelasEnrollParam(...$kelasEnrollItems);
+
+        if ($kelas->lms_kelas_id) {
+            $lmsKelas = app(ElearningRemote::class)->kelasFetch($kelas->lms_kelas_id);
+            if (!$lmsKelas || !isset($lmsKelas['id'])) {
+                $message = 'Gagal baca data kelas dari LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : '');
+
+                $kelas->sync_status = $message;
+                $kelas->wkt_sync    = Carbon::now();
+                $kelas->save();
+
+                throw new Exception($message, previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
+            }
+
+        } else {
+            $lmsKelas = app(ElearningRemote::class)->diklatKelasCreate($diklatId, new DiklatKelasCreateParam(
+                $kelas->nama,
+                $kelas->paudMapelKelas->lms_mapel_id,
+                $kelas->paudDiklat->paudPeriode->tgl_diklat_mulai,
+                $kelas->paudDiklat->paudPeriode->tgl_diklat_selesai,
+                $jmlPetugases->get(MPetugasPaud::PENGAJAR, 0),
+                $jmlPetugases->get(MPetugasPaud::ADMIN_KELAS, 0),
+                $jmlPetugases->get(MPetugasPaud::PENGAJAR_TAMBAHAN, 0),
+                $jmlPetugases->get(MPetugasPaud::PEMBIMBING_PRAKTIK, 0),
+                $pesertas->count(),
+            ));
+            if (!$lmsKelas || !isset($lmsKelas['id'])) {
+                $message = 'Gagal simpan kelas ke LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : '');
+
+                $kelas->sync_status = $message;
+                $kelas->wkt_sync    = Carbon::now();
+                $kelas->save();
+
+                throw new Exception($message, previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
+            }
+
+            $kelas->lms_kelas_id = $lmsKelas['id'];
+            $kelas->save();
+        }
+
+        $res = app(ElearningRemote::class)->userSync($userSyncParam);
+        if (!$res || ($res['status'] ?? 200) != 200) {
+            $message = 'Error get sync user ke LMS' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : '');
+
+            $kelas->sync_status = $message;
+            $kelas->wkt_sync    = Carbon::now();
+            $kelas->save();
+
+            throw new Exception($message, previous: isset($res['title']) ? new Exception($res['title']) : null);
+        }
+
+        $res = app(ElearningRemote::class)->kelasEnroll($kelas->lms_kelas_id, $kelasEnrollParam);
+        if (!$res || ($res['status'] ?? 200) != 200) {
+            $message = 'Error enroll user ke kelas' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : '');
+
+            $kelas->sync_status = $message;
+            $kelas->wkt_sync    = Carbon::now();
+            $kelas->save();
+
+            throw new Exception($message, previous: isset($res['title']) ? new Exception($res['title']) : null);
+        }
+
+        // jika semua ok, simpan link ke lms
+        $kelas->lms_url     = $lmsKelas['link'];
+        $kelas->sync_status = null;
+        $kelas->wkt_sync    = Carbon::now();
+        $kelas->save();
     }
 }

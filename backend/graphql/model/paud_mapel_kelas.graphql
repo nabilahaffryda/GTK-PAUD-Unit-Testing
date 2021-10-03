@@ -6,4 +6,5 @@ type PaudMapelKelas {
     updated_at: DateTime
     created_by: String
     updated_by: String
+    lms_mapel_id: Int
 }

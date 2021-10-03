@@ -71,6 +71,7 @@ const KELAS = gql`
       }
       data {
         nama
+        lms_url
         paud_diklat {
           paud_periode {
             tgl_diklat_mulai

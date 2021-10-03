@@ -37,14 +37,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $updated_at
  * @property null|string $created_by
  * @property null|string $updated_by
+ * @property null|int $lms_kelas_id
+ * @property null|string $lms_url
+ * @property null|string $sync_status
+ * @property null|Carbon $wkt_sync
  *
  * @property-read null|string $url_jadwal
  *
+ * @property-read MKecamatan $mKecamatan
+ * @property-read MKelurahan $mKelurahan
  * @property-read MVervalPaud $mVervalPaud
  * @property-read PaudDiklat $paudDiklat
  * @property-read PaudMapelKelas $paudMapelKelas
- * @property-read MKecamatan $mKecamatan
- * @property-read MKelurahan $mKelurahan
  * @property-read Collection|PaudKelasPeserta[] $paudKelasPesertas
  * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
  *
@@ -73,6 +77,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudKelas whereUpdatedAt($value)
  * @method static Builder|PaudKelas whereCreatedBy($value)
  * @method static Builder|PaudKelas whereUpdatedBy($value)
+ * @method static Builder|PaudKelas whereLmsKelasId($value)
+ * @method static Builder|PaudKelas whereLmsUrl($value)
+ * @method static Builder|PaudKelas whereSyncStatus($value)
+ * @method static Builder|PaudKelas whereWktSync($value)
  */
 class PaudKelas extends Eloquent
 {
@@ -120,6 +128,10 @@ class PaudKelas extends Eloquent
         'updated_at'          => 'datetime',
         'created_by'          => 'string',
         'updated_by'          => 'string',
+        'lms_kelas_id'        => 'int',
+        'lms_url'             => 'string',
+        'sync_status'         => 'string',
+        'wkt_sync'            => 'datetime',
     ];
 
     /**
@@ -160,6 +172,10 @@ class PaudKelas extends Eloquent
         'wkt_verval',
         'created_by',
         'updated_by',
+        'lms_kelas_id',
+        'lms_url',
+        'sync_status',
+        'wkt_sync',
     ];
 
     /**

@@ -67,7 +67,12 @@
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <v-btn disabled>
+                          <v-btn
+                            color="success"
+                            small
+                            :disabled="!$getDeepObj(item, 'lms_url')"
+                            @click="onLms($getDeepObj(item, 'lms_url'))"
+                          >
                             <v-icon left>mdi-link</v-icon>
                             Menuju LMS
                           </v-btn>
@@ -131,6 +136,10 @@ export default {
           break;
       }
       return disabled;
+    },
+
+    onLms(url) {
+      window.open(url, '_blank');
     },
   },
 };
