@@ -808,7 +808,7 @@ class KelasService
 
         if ($kelas->lms_kelas_id) {
             $lmsKelas = app(ElearningRemote::class)->kelasFetch($kelas->lms_kelas_id);
-            if (!isset($lmsKelas['data'])) {
+            if (!isset($lmsKelas['id'])) {
                 $message = 'Gagal baca data kelas dari LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : '');
 
                 $kelas->sync_status = $message;
@@ -817,7 +817,6 @@ class KelasService
 
                 throw new Exception($message, previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
             }
-            $lmsKelas = $lmsKelas['data'];
 
         } else {
             $lmsKelas = app(ElearningRemote::class)->diklatKelasCreate($diklatId, new DiklatKelasCreateParam(
