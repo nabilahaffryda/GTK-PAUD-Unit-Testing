@@ -805,7 +805,13 @@ class KelasService
         if ($kelas->lms_kelas_id) {
             $lmsKelas = app(ElearningRemote::class)->kelasFetch($kelas->lms_kelas_id);
             if (!isset($lmsKelas['data'])) {
-                throw new Exception('Gagal baca data kelas dari LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : ''), previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
+                $message = 'Gagal baca data kelas dari LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : '');
+
+                $kelas->sync_status = $message;
+                $kelas->wkt_sync    = Carbon::now();
+                $kelas->save();
+
+                throw new Exception($message, previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
             }
             $lmsKelas = $lmsKelas['data'];
 
@@ -822,7 +828,13 @@ class KelasService
                 $pesertas->count(),
             ));
             if (!isset($lmsKelas['id'])) {
-                throw new Exception('Gagal simpan kelas ke LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : ''), previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
+                $message = 'Gagal simpan kelas ke LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : '');
+
+                $kelas->sync_status = $message;
+                $kelas->wkt_sync    = Carbon::now();
+                $kelas->save();
+
+                throw new Exception($message, previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
             }
 
             $kelas->lms_kelas_id = $lmsKelas['id'];
@@ -831,16 +843,30 @@ class KelasService
 
         $res = app(ElearningRemote::class)->userSync($userSyncParam);
         if (($res['status'] ?? 200) != 200) {
-            throw new Exception('Error get sync user ke LMS' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : ''), previous: new Exception($res['title']));
+            $message = 'Error get sync user ke LMS' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : '');
+
+            $kelas->sync_status = $message;
+            $kelas->wkt_sync    = Carbon::now();
+            $kelas->save();
+
+            throw new Exception($message, previous: isset($res['title']) ? new Exception($res['title']) : null);
         }
 
         $res = app(ElearningRemote::class)->kelasEnroll($kelas->lms_kelas_id, $kelasEnrollParam);
         if (($res['status'] ?? 200) != 200) {
-            throw new Exception('Error enroll user ke kelas' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : ''), previous: new Exception($res['title']));
+            $message = 'Error enroll user ke kelas' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : '');
+
+            $kelas->sync_status = $message;
+            $kelas->wkt_sync    = Carbon::now();
+            $kelas->save();
+
+            throw new Exception($message, previous: isset($res['title']) ? new Exception($res['title']) : null);
         }
 
         // jika semua ok, simpan link ke lms
-        $kelas->lms_url = $lmsKelas['link'];
+        $kelas->lms_url     = $lmsKelas['link'];
+        $kelas->sync_status = null;
+        $kelas->wkt_sync    = Carbon::now();
         $kelas->save();
     }
 }
