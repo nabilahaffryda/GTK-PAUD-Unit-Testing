@@ -77,7 +77,14 @@
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
-                          <v-btn :disabled="true" color="primary" depressed small>
+                          <v-btn
+                            :disabled="!$getDeepObj(item, 'lms_url') && Number(item.k_verval_paud) < 6"
+                            color="primary"
+                            depressed
+                            small
+                            block
+                            @click="toLms($getDeepObj(item, 'lms_url'))"
+                          >
                             <v-icon left> mdi-link </v-icon>
                             Tautan LMS
                           </v-btn>
@@ -199,6 +206,9 @@ export default {
           break;
       }
       return disabled;
+    },
+    toLms(url) {
+      window.open(url, '_blank');
     },
   },
 };
