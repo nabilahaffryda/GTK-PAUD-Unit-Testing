@@ -78,7 +78,7 @@
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
                           <v-btn
-                            :disabled="!$getDeepObj(item, 'lms_url') && Number(item.k_verval_paud) < 6"
+                            :disabled="!$getDeepObj(item, 'lms_url') || Number(item.k_verval_paud) < 6"
                             color="primary"
                             depressed
                             small
