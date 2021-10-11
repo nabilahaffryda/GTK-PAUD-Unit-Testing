@@ -152,4 +152,13 @@ class PengajarController extends AkunController
 
         return $this->service->downloadAktivasiFull(instansi(), $params);
     }
+
+    public function downloadPengajar(Request $request)
+    {
+        $params = array_merge($request->input('filter', []), [
+            'k_group' => [$this->kGroup, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD],
+        ]);
+
+        return $this->service->downloadPengajar(instansi(), $params);
+    }
 }

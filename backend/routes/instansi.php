@@ -185,6 +185,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('', [Akun\PengajarController::class, 'index']);
         Route::get('download', [Akun\PengajarController::class, 'download']);
         Route::get('download-aktivasi', [Akun\PengajarController::class, 'downloadAktivasi']);
+        Route::get('download-pengajar', [Akun\PengajarController::class, 'downloadPengajar']);
         Route::get('template', [Akun\PengajarController::class, 'template']);
         Route::post('create', [Akun\PengajarController::class, 'create']);
         Route::post('upload', [Akun\PengajarController::class, 'upload']);
