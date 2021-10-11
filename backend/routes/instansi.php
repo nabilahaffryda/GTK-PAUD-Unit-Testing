@@ -219,6 +219,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('', [Akun\PembimbingPraktikController::class, 'index']);
         Route::get('download', [Akun\PembimbingPraktikController::class, 'download']);
         Route::get('download-aktivasi', [Akun\PembimbingPraktikController::class, 'downloadAktivasi']);
+        Route::get('download-pembimbing', [Akun\PembimbingPraktikController::class, 'downloadPembimbing']);
         Route::get('template', [Akun\PembimbingPraktikController::class, 'template']);
         Route::post('create', [Akun\PembimbingPraktikController::class, 'create']);
         Route::post('upload', [Akun\PembimbingPraktikController::class, 'upload']);

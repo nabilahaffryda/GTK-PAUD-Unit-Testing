@@ -151,4 +151,13 @@ class PembimbingPraktikController extends AkunController
 
         return $this->service->downloadAktivasi(instansi(), $params);
     }
+
+    public function downloadPembimbing(Request $request)
+    {
+        $params = array_merge($request->input('filter', []), [
+            'k_group' => $this->kGroup,
+        ]);
+
+        return $this->service->downloadPembimbingPraktik(instansi(), $params);
+    }
 }

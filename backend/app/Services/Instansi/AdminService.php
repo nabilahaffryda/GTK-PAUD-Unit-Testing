@@ -432,6 +432,94 @@ class AdminService
         $writer->close();
     }
 
+    public function downloadPembimbingPraktik(Instansi $instansi, $params = [])
+    {
+        $query = $this
+            ->query($instansi, $params)
+            ->with(['akun.paudPetugases' => function ($query) {
+                $query
+                    ->where([
+                        'tahun'    => config('paud.tahun'),
+                        'angkatan' => config('paud.angkatan'),
+                    ])
+                    ->whereIn('k_petugas_paud', [MPetugasPaud::PEMBIMBING_PRAKTIK]);
+            }]);
+
+        if (Arr::get($params, 'format') == 'json') {
+            return $query->paginate(10);
+        }
+
+        $header = [
+            'NO',
+            'EMAIL',
+            'NAMA',
+            'JENIS KELAMIN',
+            'TEMPAT LAHIR',
+            'TANGGAL LAHIR',
+            'INSTANSI',
+            'PROVINSI',
+            'KAB/KOTA',
+            'NIP',
+            'NOMOR TELEPON',
+            'NOMOR HP',
+            'GRUP',
+            'PERAN',
+            'STATUS BIMTEK',
+            'STATUS',
+        ];
+
+        $date     = Carbon::now()->format('dmYHi');
+        $filename = "Laporan-PembimbingPraktik-{$date}.xlsx";
+
+        $defaultStyle = (new StyleBuilder())
+            ->setFontName('Calibri')
+            ->setFontSize(11)
+            ->setShouldWrapText(false)
+            ->build();
+        $headerStyle  = clone $defaultStyle;
+        $headerStyle->setFontBold();
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($filename);
+        $writer->setDefaultRowStyle($defaultStyle);
+
+        $writer->addRow(WriterEntityFactory::createRowFromArray($header, $headerStyle));
+
+        $i = 1;
+        $query->chunk(1000, function ($paudAdmins) use ($writer, &$i) {
+            foreach ($paudAdmins as $paudAdmin) {
+                /** @var PaudAdmin $paudAdmin */
+                $akun = $paudAdmin->akun;
+
+                /** @var PaudPetugas $paudPetugas */
+                $paudPetugas = $akun->paudPetugases->first();
+
+                $row = [
+                    $i++,
+                    $akun->email,
+                    $akun->nama,
+                    $akun->kelamin,
+                    $akun->tmp_lahir,
+                    $akun->tgl_lahir?->format('Y-m-d'),
+                    $paudAdmin->instansi->nama,
+                    $akun->mPropinsi?->keterangan,
+                    $akun->mKota?->keterangan,
+                    $akun->nip,
+                    $akun->no_telpon,
+                    $akun->no_hp,
+                    $paudAdmin->mGroup->keterangan,
+                    $paudPetugas?->is_inti ? ($paudAdmin->mGroup->keterangan . ' Inti') : '',
+                    $paudPetugas?->is_refreshment ? 'Lulus Bimtek' : '',
+                    $paudAdmin->is_aktif ? 'Aktif' : 'Tidak Aktif',
+                ];
+
+                $writer->addRow(WriterEntityFactory::createRowFromArray($row));
+            }
+        });
+
+        $writer->close();
+    }
+
     /**
      * @param Instansi $instansi
      * @param array $params
