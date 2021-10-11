@@ -238,6 +238,7 @@ export default {
     },
 
     onDownload() {
+      const route = this.akses === 'pembimbing-praktik' ? 'pembimbing' : this.akses;
       const M_LAPORAN =
         this.akses === 'kelas'
           ? [
@@ -257,6 +258,11 @@ export default {
                 key: 'download-aktivasi',
                 label: `Daftar Aktivasi ${this.$titleCase(this.title)}`,
                 acl: this.$allow(`akun-${this.akses}.download-aktivasi`),
+              },
+              {
+                key: `download-${route}`,
+                label: `Data ${this.$titleCase(this.title)}`,
+                acl: this.$allow(`akun-${this.akses}.download-${route}`),
               },
             ];
 
