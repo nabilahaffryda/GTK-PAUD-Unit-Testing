@@ -153,6 +153,16 @@ export default [
         link: 'profil-operator',
         to: { name: 'profil-operator' },
       },
+      {
+        icon: 'mdi-account-cog',
+        title: 'Petugas Kelas',
+        desc: 'Daftar Petugas kelas',
+        color: 'red',
+        deepColor: 'darken-4',
+        akses: 'petugas.index',
+        link: 'petugas',
+        to: { name: 'petugas' },
+      },
     ],
   },
   {

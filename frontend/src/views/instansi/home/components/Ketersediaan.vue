@@ -40,7 +40,9 @@
                   </div>
                   <div v-if="$getDeepObj(item, 'paud_kelas.data.url_jadwal')" class="blue--text caption">
                     <v-icon left small>mdi-file</v-icon>
-                    <a class="blue--text" :href="$getDeepObj(item, 'paud_kelas.data.url_jadwal')" target="_blank">Dokumen Jadwal Diklat</a>
+                    <a class="blue--text" :href="$getDeepObj(item, 'paud_kelas.data.url_jadwal')" target="_blank"
+                      >Dokumen Jadwal Diklat</a
+                    >
                   </div>
                 </v-list-item-content>
               </v-list-item>
@@ -234,7 +236,7 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapActions('petugas', ['getDetail', 'actions']),
+    ...mapActions('petugasKonfirmasi', ['getDetail', 'actions']),
 
     close() {
       this.dialog = false;

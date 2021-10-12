@@ -101,7 +101,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('petugas', ['fetch']),
+    ...mapActions('petugasKonfirmasi', ['fetch']),
 
     onAction({ action }) {
       switch (action) {
