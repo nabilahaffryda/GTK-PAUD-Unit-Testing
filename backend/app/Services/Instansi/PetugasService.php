@@ -143,6 +143,22 @@ class PetugasService
                     'paudPetugasPerans.akunVerval:akun_id,nama,email,no_telpon,no_hp']);
     }
 
+    public function listPetugas(array $params)
+    {
+        return PaudPetugas::query()
+            ->where([
+                'tahun'    => Arr::get($params, 'tahun', config('paud.tahun')),
+                'angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
+            ])
+            ->whereIn('k_petugas_paud', (array)($params['k_petugas_paud'] ?? []))
+            ->where('is_refreshment', '=', 1)
+            ->with([
+                'akun',
+                'instansi',
+                'mPetugasPaud',
+            ]);
+    }
+
     public function fetch(PaudPetugas $petugas)
     {
         return $petugas->loadMissing([
