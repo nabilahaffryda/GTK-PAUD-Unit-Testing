@@ -202,6 +202,10 @@ class LpdService
 
     public function upload(PaudInstansi $paudInstansi, int $kBerkasLpdPaud, UploadedFile $file)
     {
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
+            throw new FlowException('Profil LPD sudah diajukan/diproses');
+        }
+
         $mBerkasLpdPaud = MBerkasLpdPaud::findOrFail($kBerkasLpdPaud);
         $deleteBerkas   = null;
 
@@ -231,6 +235,11 @@ class LpdService
 
     public function berkasDelete(PaudInstansiBerkas $berkas)
     {
+        $paudInstansi = $berkas->paudInstansi;
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
+            throw new FlowException('Profil LPD sudah diajukan/diproses');
+        }
+
         $oldFile = $berkas->file;
 
         $berkas->delete();
@@ -267,6 +276,10 @@ class LpdService
      */
     public function updateProfil(PaudInstansi $paudInstansi, array $data, ?string $foto, ?string $ext)
     {
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
+            throw new FlowException('Profil LPD sudah diajukan/diproses');
+        }
+
         $instansi = $paudInstansi->instansi;
 
         $oldFoto = $instansi->foto ? $instansi->getOriginal('foto') : null;
@@ -300,6 +313,10 @@ class LpdService
 
     public function ajuanCreate(PaudInstansi $paudInstansi)
     {
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
+            throw new FlowException('Profil LPD sudah diajukan/diproses');
+        }
+
         $paudInstansi->wkt_ajuan     = Carbon::now();
         $paudInstansi->k_verval_paud = MVervalPaud::DIAJUKAN;
 
@@ -346,6 +363,10 @@ class LpdService
 
     public function vervalUpdate(Akun $akun, PaudInstansi $paudInstansi, array $params)
     {
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::DIAJUKAN])) {
+            throw new FlowException("Berkas ajuan sudah diverval");
+        }
+
         $paudInstansi->k_verval_paud  = $params['k_verval_paud'];
         $paudInstansi->wkt_verval     = Carbon::now();
         $paudInstansi->akun_id_verval = $akun->akun_id;
