@@ -30,6 +30,26 @@
               />
             </template>
           </template>
+          <template v-else-if="i === 'sertifikat'">
+            <div class="mb-4">
+              <div class="subtitle-1 font-weight-bold">Berkas Kelengkapan Sertifikat</div>
+            </div>
+            <template v-for="(item, b) in sertifikats">
+              <berkas
+                :key="b"
+                :berkas="item"
+                :type="item.type"
+                :valid="item.valid"
+                :with-action="item.withAction"
+                :value="item.value || {}"
+                :optional="item.optional"
+                :useDelete="$allow(`${jenis}-profil-berkas.delete`) && item.optional && !isAjuan"
+                @detil="onDetil"
+                @upload="$emit('upload', item.type)"
+                @delete="$emit('delete', item.type)"
+              />
+            </template>
+          </template>
           <template v-else-if="i === 'diklat'">
             <v-list-item class="px-0">
               <v-list-item-content>
@@ -104,6 +124,10 @@ export default {
       default: () => [],
     },
     diklats: {
+      type: Array,
+      default: () => [],
+    },
+    sertifikats: {
       type: Array,
       default: () => [],
     },

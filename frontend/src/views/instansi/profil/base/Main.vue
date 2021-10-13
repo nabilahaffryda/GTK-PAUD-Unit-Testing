@@ -147,6 +147,7 @@
         v-if="masters && $isObject(masters)"
         :contents="contents"
         :berkases="berkases[jenis]"
+        :sertifikats="berkases.sertifikat"
         :diklats="diklat"
         :detail="detail"
         :masters="masters"

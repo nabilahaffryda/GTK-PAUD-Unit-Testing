@@ -92,6 +92,14 @@ export default {
                 max: 10,
                 optional: true,
               },
+              sertifikat: {
+                component: 'Berkas',
+                form: 'FormUnggah',
+                title: 'Berkas Sertifikat',
+                deskripsi: '',
+                max: 10,
+                optional: true,
+              },
             }
           : {
               profil: {
@@ -311,6 +319,35 @@ export default {
             withAction: withAction,
             kBerkas: 4,
             value: mBerkas['4'] || {},
+          },
+        ],
+        sertifikat: [
+          {
+            title: 'Logo LPD',
+            pesan: `* File direkomendasikan PNG Transparent`,
+            valid: false,
+            type: 'logo',
+            withAction: true,
+            kBerkas: 1,
+            value: {},
+          },
+          {
+            title: 'Tanda Tangan Penanggung Jawab LPD',
+            pesan: `* File direkomendasikan PNG Transparent`,
+            valid: false,
+            type: 'penanggung_jawab',
+            withAction: true,
+            kBerkas: 2,
+            value: {},
+          },
+          {
+            title: 'Stempel LPD',
+            pesan: `* File direkomendasikan PNG Transparent`,
+            valid: false,
+            type: 'stempel',
+            withAction: true,
+            kBerkas: 3,
+            value: {},
           },
         ],
       };
