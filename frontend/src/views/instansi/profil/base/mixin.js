@@ -455,6 +455,7 @@ export default {
       this.$set(this.formulir, 'mode', 'upload');
       this.$set(this.formulir, 'init', null);
       this.$set(this.formulir, 'max', 1500);
+      this.$set(this.formulir, 'min', jenis === 'sertifikat' ? 10 : 20);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();

@@ -168,6 +168,7 @@
         :items="formulir.items"
         :type="formulir.type"
         :max="formulir.max"
+        :min="formulir.min"
         :format="formulir.format"
         :rules="formulir.rules"
         :accept="formulir.accept"
