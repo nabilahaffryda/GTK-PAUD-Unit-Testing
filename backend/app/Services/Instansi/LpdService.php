@@ -218,10 +218,15 @@ class LpdService
         ];
     }
 
+    /**
+     * @throws FlowException
+     */
     public function upload(PaudInstansi $paudInstansi, int $kBerkasLpdPaud, UploadedFile $file)
     {
         if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
-            throw new FlowException('Profil LPD sudah diajukan/diproses');
+            if (in_array($kBerkasLpdPaud, static::BERKAS_VERVAL)) {
+                throw new FlowException('Profil LPD sudah diajukan/diproses');
+            }
         }
 
         $mBerkasLpdPaud = MBerkasLpdPaud::findOrFail($kBerkasLpdPaud);
@@ -251,11 +256,16 @@ class LpdService
         return $berkas;
     }
 
+    /**
+     * @throws FlowException
+     */
     public function berkasDelete(PaudInstansiBerkas $berkas)
     {
         $paudInstansi = $berkas->paudInstansi;
         if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
-            throw new FlowException('Profil LPD sudah diajukan/diproses');
+            if (in_array($berkas->k_berkas_lpd_paud, static::BERKAS_VERVAL)) {
+                throw new FlowException('Profil LPD sudah diajukan/diproses');
+            }
         }
 
         $oldFile = $berkas->file;
