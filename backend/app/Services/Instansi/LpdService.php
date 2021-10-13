@@ -391,7 +391,7 @@ class LpdService
 
     public function vervalUpdate(Akun $akun, PaudInstansi $paudInstansi, array $params)
     {
-        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::DIAJUKAN])) {
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::DIPROSES])) {
             throw new FlowException("Berkas ajuan sudah diverval");
         }
 
