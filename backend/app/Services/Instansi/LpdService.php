@@ -25,6 +25,32 @@ use Illuminate\Support\Facades\Storage;
 
 class LpdService
 {
+    public const BERKAS_VERVAL = [
+        MBerkasLpdPaud::AKTA_LEMBAGA,
+        MBerkasLpdPaud::PROFIL_LEMBAGA,
+        MBerkasLpdPaud::NPWP,
+        MBerkasLpdPaud::SK_PELATIHAN,
+        MBerkasLpdPaud::SK_KEPENGURUSAN,
+        MBerkasLpdPaud::PAKTA_INTEGRITAS,
+        MBerkasLpdPaud::BUKU_REKENING,
+    ];
+
+    public const BERKAS_VERVAL_WAJIB = [
+        MBerkasLpdPaud::AKTA_LEMBAGA,
+        // MBerkasLpdPaud::PROFIL_LEMBAGA,
+        MBerkasLpdPaud::NPWP,
+        // MBerkasLpdPaud::SK_PELATIHAN,
+        MBerkasLpdPaud::SK_KEPENGURUSAN,
+        MBerkasLpdPaud::PAKTA_INTEGRITAS,
+        // MBerkasLpdPaud::BUKU_REKENING,
+    ];
+
+    public const BERKAS_SERTIFIKAT = [
+        MBerkasLpdPaud::LOGO,
+        MBerkasLpdPaud::TANDA_TANGAN,
+        MBerkasLpdPaud::STEMPEL,
+    ];
+
     /**
      * @param array $params
      * @return Builder
@@ -177,15 +203,7 @@ class LpdService
             $paudInstansi->telp_sekretaris && $paudInstansi->telp_bendahara && $paudInstansi->diklat &&
             is_array($paudInstansi->diklat) && (count($paudInstansi->diklat) >= 1);
 
-        $kBerkases = [
-            MBerkasLpdPaud::AKTA_LEMBAGA     => true,
-            // MBerkasLpdPaud::PROFIL_LEMBAGA   => true,
-            MBerkasLpdPaud::NPWP             => true,
-            // MBerkasLpdPaud::SK_PELATIHAN     => true,
-            MBerkasLpdPaud::SK_KEPENGURUSAN  => true,
-            MBerkasLpdPaud::PAKTA_INTEGRITAS => true,
-            // MBerkasLpdPaud::BUKU_REKENING    => true,
-        ];
+        $kBerkases = array_flip(static::BERKAS_VERVAL_WAJIB);
 
         foreach ($paudInstansi->paudInstansiBerkases as $paudInstansiBerkas) {
             if (isset($kBerkases[$paudInstansiBerkas->k_berkas_lpd_paud])) {
