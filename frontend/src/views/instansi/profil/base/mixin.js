@@ -324,30 +324,30 @@ export default {
         sertifikat: [
           {
             title: 'Logo LPD',
-            pesan: `* File direkomendasikan PNG Transparent`,
-            valid: false,
+            pesan: `<i>* File direkomendasikan PNG Transparent</i>`,
+            valid: !!mBerkas['8'],
             type: 'logo',
-            withAction: true,
-            kBerkas: 1,
-            value: {},
+            withAction: withAction,
+            kBerkas: 8,
+            value: mBerkas['8'] || {},
           },
           {
             title: 'Tanda Tangan Penanggung Jawab LPD',
-            pesan: `* File direkomendasikan PNG Transparent`,
-            valid: false,
+            pesan: `<i>* File direkomendasikan PNG Transparent</i>`,
+            valid: !!mBerkas['9'],
             type: 'penanggung_jawab',
-            withAction: true,
-            kBerkas: 2,
-            value: {},
+            withAction: withAction,
+            kBerkas: 9,
+            value: mBerkas['9'] || {},
           },
           {
             title: 'Stempel LPD',
-            pesan: `* File direkomendasikan PNG Transparent`,
-            valid: false,
+            pesan: `<i>* File direkomendasikan PNG Transparent</i>`,
+            valid: !!mBerkas['10'],
             type: 'stempel',
-            withAction: true,
-            kBerkas: 3,
-            value: {},
+            withAction: withAction,
+            kBerkas: 10,
+            value: mBerkas['10'] || {},
           },
         ],
       };
@@ -412,7 +412,7 @@ export default {
     },
 
     upload(type) {
-      if (this.isAjuan) {
+      if (this.isAjuan && !['logo', 'penanggung_jawab', 'stempel'].includes(type)) {
         const msg = `<p class="title mb-2">Mohon maaf! Anda sudah mengajukan Berkas untuk diperiksa Tim Verval`;
         this.$info(msg, `Perubahan data tidak diperbolehkan`, {
           tipe: 'warning',
@@ -422,6 +422,7 @@ export default {
       }
 
       const defRules = 'PDF/JPEG/JPG/PNG';
+      const jenis = ['logo', 'penanggung_jawab', 'stempel'].includes(type) ? 'sertifikat' : this.jenis;
 
       const rules = {
         integritas: { format: defRules, required: true },
@@ -436,11 +437,14 @@ export default {
         skpelatihan: { format: defRules, required: true },
         skpengurusan: { format: defRules, required: true },
         bukurekening: { format: defRules, required: true },
+        logo: { format: 'PNG', required: true },
+        penanggung_jawab: { format: 'PNG', required: true },
+        stempel: { format: 'PNG', required: true },
       };
 
       this.action = 'upload';
 
-      const mBerkas = this.$arrToObj(this.berkases[this.jenis], 'type');
+      const mBerkas = this.$arrToObj(this.berkases[jenis], 'type');
 
       this.$set(this.formulir, 'form', 'FormUnggah');
       this.$set(this.formulir, 'title', `${mBerkas[type]['title']}`);

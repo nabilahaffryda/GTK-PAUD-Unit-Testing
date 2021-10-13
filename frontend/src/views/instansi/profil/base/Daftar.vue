@@ -44,9 +44,11 @@
                 :value="item.value || {}"
                 :optional="item.optional"
                 :useDelete="$allow(`${jenis}-profil-berkas.delete`) && item.optional && !isAjuan"
+                use-panduan
                 @detil="onDetil"
                 @upload="$emit('upload', item.type)"
                 @delete="$emit('delete', item.type)"
+                @panduan="onPanduan"
               />
             </template>
           </template>
@@ -106,6 +108,24 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
+    <v-dialog v-model="panduan" max-width="800" :scrollable="false" @keydown.esc="panduan = false">
+      <v-card>
+        <v-toolbar flat>
+          <v-toolbar-title>Informasi Kelengkapan Sertifikat</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="panduan = false"><v-icon>mdi-close</v-icon></v-btn>
+        </v-toolbar>
+        <v-divider></v-divider>
+        <v-card-text class="black--text">
+          <v-img class="ma-5" :src="img"> </v-img>
+          <div class="body-1 font-weight-medium mt-2">Keterangan</div>
+          <ol>
+            <li>Logo LPD yang Anda Unggah</li>
+            <li>Tanda Tangan dan stempel yang Anda Unggah</li>
+          </ol>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -153,6 +173,8 @@ export default {
     return {
       panel: [0, 1],
       preview: {},
+      panduan: false,
+      img: '',
     };
   },
   methods: {
@@ -171,6 +193,17 @@ export default {
       this.$nextTick(() => {
         this.$refs.popup.open();
       });
+    },
+    onPanduan({ type }) {
+      const imgUrl = {
+        logo:
+          'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_logo.png',
+        lainnya:
+          'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_ttd_stempel.png',
+      };
+
+      this.img = imgUrl[type] || imgUrl['lainnya'];
+      this.panduan = true;
     },
   },
 };

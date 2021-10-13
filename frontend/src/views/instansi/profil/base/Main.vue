@@ -170,6 +170,7 @@
         :max="formulir.max"
         :format="formulir.format"
         :rules="formulir.rules"
+        :accept="formulir.accept"
         :detail="detail"
         :jenis="jenis"
         uimodel="card"
