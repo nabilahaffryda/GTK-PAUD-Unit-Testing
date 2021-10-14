@@ -229,6 +229,16 @@ export default [
         link: 'kelas',
         to: { name: 'kelas' },
       },
+      {
+        icon: 'mdi-account-cog',
+        title: 'PPM dan PPTM',
+        desc: 'Daftar PPM dan PPTM',
+        color: 'red',
+        deepColor: 'darken-4',
+        akses: 'petugas.index',
+        link: 'petugas',
+        to: { name: 'petugas' },
+      },
     ],
   },
   {

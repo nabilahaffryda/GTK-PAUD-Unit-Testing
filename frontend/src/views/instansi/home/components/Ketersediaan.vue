@@ -236,7 +236,7 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapActions('petugas', ['getDetail', 'actions']),
+    ...mapActions('petugasKonfirmasi', ['getDetail', 'actions']),
 
     close() {
       this.dialog = false;

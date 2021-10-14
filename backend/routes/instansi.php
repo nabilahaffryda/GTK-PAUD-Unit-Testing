@@ -9,6 +9,7 @@ use App\Http\Controllers\Instansi\Kelas;
 use App\Http\Controllers\Instansi\Lpd;
 use App\Http\Controllers\Instansi\LpdController;
 use App\Http\Controllers\Instansi\Petugas;
+use App\Http\Controllers\Instansi\PetugasController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -247,6 +248,11 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/non-aktif', [Akun\AdminKelasController::class, 'nonAktif']);
         Route::post('{paudAdmin}/delete', [Akun\AdminKelasController::class, 'delete']);
         Route::post('{paudAdmin}/reset', [Akun\AdminKelasController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'petugas'], function () {
+        Route::get('', [PetugasController::class, 'index']);
+        Route::get('{petugas}', [PetugasController::class, 'fetch']);
     });
 
     Route::group(['prefix' => 'petugas/konfirmasi'], function () {
