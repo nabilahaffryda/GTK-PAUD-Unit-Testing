@@ -151,7 +151,6 @@ class PetugasService
                 'angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
             ])
             ->whereIn('k_petugas_paud', (array)($params['k_petugas_paud'] ?? []))
-            ->where('is_refreshment', '=', 1)
             ->with([
                 'akun',
                 'instansi',
