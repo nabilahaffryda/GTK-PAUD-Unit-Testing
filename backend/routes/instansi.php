@@ -250,11 +250,6 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{paudAdmin}/reset', [Akun\AdminKelasController::class, 'reset']);
     });
 
-    Route::group(['prefix' => 'petugas'], function () {
-        Route::get('', [PetugasController::class, 'index']);
-        Route::get('{petugas}', [PetugasController::class, 'fetch']);
-    });
-
     Route::group(['prefix' => 'petugas/konfirmasi'], function () {
         Route::get('', [Petugas\KonfirmasiController::class, 'index']);
         Route::get('{kelasPetugas}', [Petugas\KonfirmasiController::class, 'fetch']);
@@ -283,6 +278,11 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::post('{petugas}/berkas/create', [Petugas\Profil\BerkasController::class, 'create']);
 
         Route::post('berkas/{berkas}/delete', [Petugas\Profil\BerkasController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'petugas'], function () {
+        Route::get('', [PetugasController::class, 'index']);
+        Route::get('{petugas}', [PetugasController::class, 'fetch']);
     });
 
     Route::group(['prefix' => 'admin-kelas/profil'], function () {
