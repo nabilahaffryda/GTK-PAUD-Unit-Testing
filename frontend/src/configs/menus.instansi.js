@@ -231,8 +231,8 @@ export default [
       },
       {
         icon: 'mdi-account-cog',
-        title: 'PPT dan PPTM',
-        desc: 'Daftar PPT dan PPTM',
+        title: 'PPM dan PPTM',
+        desc: 'Daftar PPM dan PPTM',
         color: 'red',
         deepColor: 'darken-4',
         akses: 'petugas.index',
