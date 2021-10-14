@@ -95,7 +95,7 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col class="py-0" cols="12" md="2">
+                      <v-col class="py-0" cols="12" md="2" v-if="Number(item.is_inti) === 1">
                         <v-list-item class="px-0">
                           <v-list-item-content>
                             <span class="caption">Peran</span>
