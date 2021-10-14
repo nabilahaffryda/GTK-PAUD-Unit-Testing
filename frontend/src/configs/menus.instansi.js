@@ -145,8 +145,8 @@ export default [
       },
       {
         icon: 'mdi-account-voice',
-        title: 'Pengajuan Lembaga',
-        desc: 'Pengajuan dan Profil LPD',
+        title: 'Profil Lembaga',
+        desc: 'Pengajuan dan Detail Profil LPD',
         color: 'yellow',
         deepColor: 'darken-1',
         akses: 'lpd-profil.index',
