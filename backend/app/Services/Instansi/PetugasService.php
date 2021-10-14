@@ -151,6 +151,14 @@ class PetugasService
                 'angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
             ])
             ->whereIn('k_petugas_paud', (array)($params['k_petugas_paud'] ?? []))
+            ->when($params['keyword'] ?? null, function ($query, $value) {
+                $query->whereHas('akun', function ($query) use ($value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->orWhere('nama', 'like', '%' . $value . '%')
+                            ->orWhere('email', 'like', '%' . $value . '%');
+                    });
+                });
+            })
             ->with([
                 'akun',
                 'instansi',
