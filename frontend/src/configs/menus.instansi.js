@@ -231,8 +231,8 @@ export default [
       },
       {
         icon: 'mdi-account-cog',
-        title: 'Petugas Kelas',
-        desc: 'Daftar Petugas kelas',
+        title: 'PPT dan PPTM',
+        desc: 'Daftar PPT dan PPTM',
         color: 'red',
         deepColor: 'darken-4',
         akses: 'petugas.index',

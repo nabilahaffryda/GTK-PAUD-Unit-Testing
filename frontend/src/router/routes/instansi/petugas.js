@@ -5,7 +5,7 @@ export default [
     name: 'petugas',
     component: () => lazyLoadView(import('@views/instansi/petugas/Index')),
     meta: {
-      title: 'Daftar Petugas Kelas',
+      title: 'Daftar PPT dan PPTM',
     },
   },
 ];

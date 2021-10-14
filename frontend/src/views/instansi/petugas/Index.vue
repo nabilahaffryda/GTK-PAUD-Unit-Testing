@@ -7,7 +7,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline black--text" v-html="`Daftar Petugas Kelas`"></h1>
+            <h1 class="headline black--text" v-html="`Daftar PPT dan PPTM`"></h1>
             <p v-html="desc"></p>
           </v-col>
         </v-row>
@@ -39,8 +39,8 @@ export default {
       desc: '',
       tab: null,
       items: [
-        { tab: 'Pengajar', params: { k_petugas_paud: 1 }, jenis: 'pengajar' },
-        { tab: 'Pembimbing Praktik', params: { k_petugas_paud: 3 }, jenis: 'pembimbing' },
+        { tab: 'PPT ', params: { k_petugas_paud: 1 }, jenis: 'pengajar' },
+        { tab: 'PPTM', params: { k_petugas_paud: 3 }, jenis: 'pengajar' },
       ],
     };
   },
