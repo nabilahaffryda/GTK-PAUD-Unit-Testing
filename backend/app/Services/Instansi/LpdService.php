@@ -25,6 +25,32 @@ use Illuminate\Support\Facades\Storage;
 
 class LpdService
 {
+    public const BERKAS_VERVAL = [
+        MBerkasLpdPaud::AKTA_LEMBAGA,
+        MBerkasLpdPaud::PROFIL_LEMBAGA,
+        MBerkasLpdPaud::NPWP,
+        MBerkasLpdPaud::SK_PELATIHAN,
+        MBerkasLpdPaud::SK_KEPENGURUSAN,
+        MBerkasLpdPaud::PAKTA_INTEGRITAS,
+        MBerkasLpdPaud::BUKU_REKENING,
+    ];
+
+    public const BERKAS_VERVAL_WAJIB = [
+        MBerkasLpdPaud::AKTA_LEMBAGA,
+        // MBerkasLpdPaud::PROFIL_LEMBAGA,
+        MBerkasLpdPaud::NPWP,
+        // MBerkasLpdPaud::SK_PELATIHAN,
+        MBerkasLpdPaud::SK_KEPENGURUSAN,
+        MBerkasLpdPaud::PAKTA_INTEGRITAS,
+        // MBerkasLpdPaud::BUKU_REKENING,
+    ];
+
+    public const BERKAS_SERTIFIKAT = [
+        MBerkasLpdPaud::LOGO,
+        MBerkasLpdPaud::TANDA_TANGAN,
+        MBerkasLpdPaud::STEMPEL,
+    ];
+
     /**
      * @param array $params
      * @return Builder
@@ -177,15 +203,7 @@ class LpdService
             $paudInstansi->telp_sekretaris && $paudInstansi->telp_bendahara && $paudInstansi->diklat &&
             is_array($paudInstansi->diklat) && (count($paudInstansi->diklat) >= 1);
 
-        $kBerkases = [
-            MBerkasLpdPaud::AKTA_LEMBAGA     => true,
-            // MBerkasLpdPaud::PROFIL_LEMBAGA   => true,
-            MBerkasLpdPaud::NPWP             => true,
-            // MBerkasLpdPaud::SK_PELATIHAN     => true,
-            MBerkasLpdPaud::SK_KEPENGURUSAN  => true,
-            MBerkasLpdPaud::PAKTA_INTEGRITAS => true,
-            // MBerkasLpdPaud::BUKU_REKENING    => true,
-        ];
+        $kBerkases = array_flip(static::BERKAS_VERVAL_WAJIB);
 
         foreach ($paudInstansi->paudInstansiBerkases as $paudInstansiBerkas) {
             if (isset($kBerkases[$paudInstansiBerkas->k_berkas_lpd_paud])) {
@@ -200,8 +218,17 @@ class LpdService
         ];
     }
 
+    /**
+     * @throws FlowException
+     */
     public function upload(PaudInstansi $paudInstansi, int $kBerkasLpdPaud, UploadedFile $file)
     {
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
+            if (in_array($kBerkasLpdPaud, static::BERKAS_VERVAL)) {
+                throw new FlowException('Profil LPD sudah diajukan/diproses');
+            }
+        }
+
         $mBerkasLpdPaud = MBerkasLpdPaud::findOrFail($kBerkasLpdPaud);
         $deleteBerkas   = null;
 
@@ -229,8 +256,18 @@ class LpdService
         return $berkas;
     }
 
+    /**
+     * @throws FlowException
+     */
     public function berkasDelete(PaudInstansiBerkas $berkas)
     {
+        $paudInstansi = $berkas->paudInstansi;
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
+            if (in_array($berkas->k_berkas_lpd_paud, static::BERKAS_VERVAL)) {
+                throw new FlowException('Profil LPD sudah diajukan/diproses');
+            }
+        }
+
         $oldFile = $berkas->file;
 
         $berkas->delete();
@@ -267,6 +304,10 @@ class LpdService
      */
     public function updateProfil(PaudInstansi $paudInstansi, array $data, ?string $foto, ?string $ext)
     {
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
+            throw new FlowException('Profil LPD sudah diajukan/diproses');
+        }
+
         $instansi = $paudInstansi->instansi;
 
         $oldFoto = $instansi->foto ? $instansi->getOriginal('foto') : null;
@@ -300,6 +341,10 @@ class LpdService
 
     public function ajuanCreate(PaudInstansi $paudInstansi)
     {
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::KANDIDAT, MVervalPaud::REVISI])) {
+            throw new FlowException('Profil LPD sudah diajukan/diproses');
+        }
+
         $paudInstansi->wkt_ajuan     = Carbon::now();
         $paudInstansi->k_verval_paud = MVervalPaud::DIAJUKAN;
 
@@ -346,6 +391,10 @@ class LpdService
 
     public function vervalUpdate(Akun $akun, PaudInstansi $paudInstansi, array $params)
     {
+        if (!in_array($paudInstansi->k_verval_paud, [MVervalPaud::DIPROSES])) {
+            throw new FlowException("Berkas ajuan sudah diverval");
+        }
+
         $paudInstansi->k_verval_paud  = $params['k_verval_paud'];
         $paudInstansi->wkt_verval     = Carbon::now();
         $paudInstansi->akun_id_verval = $akun->akun_id;

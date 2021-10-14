@@ -38,4 +38,28 @@ class BerkasCreateRequest extends FormRequest
             'file'     => array_merge(['required', 'file'], explode('|', $mBerkas->validasi)),
         ];
     }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'file.mimes' => 'Jenis file yang diunggah harus bertipe :values.',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'file' => 'file unggahan',
+        ];
+    }
 }

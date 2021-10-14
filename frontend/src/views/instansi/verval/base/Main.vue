@@ -353,6 +353,12 @@ export default {
             val: 2,
           },
         },
+        1: {
+          k_berkas_lpd_paud: {
+            op: '<',
+            val: 8,
+          },
+        },
       },
     });
   },
