@@ -13,7 +13,7 @@ module.exports = {
     '^src/components': '<rootDir>/src/components',
     'assets/(.*)': '<rootDir>/src/assets',
     '^@/(.*)$': '<rootDir>/src/$1',
-    "~(.*)$": "<rootDir>/$1"
+    '^~/(.*)$': '<rootDir>/$1',
   },
   transformIgnorePatterns: ['/node_modules/(?!lib-to-transform|other-lib)']
 }
