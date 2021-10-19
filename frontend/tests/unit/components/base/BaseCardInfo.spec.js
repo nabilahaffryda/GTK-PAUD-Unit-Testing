@@ -25,11 +25,5 @@ describe('BaseCardInfo.vue', () => {
             }
         });
         expect(wrapper).toMatchSnapshot();
-        // mount(BaseCardInfo, {
-        //     stubs: {
-        //         VCard
-        //     }
-        // })
-        // expect(true).toBe(true);
     })
 })

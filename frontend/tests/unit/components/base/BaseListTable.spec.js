@@ -9,11 +9,11 @@ describe('BaseListTable.vue', () => {
             template: '<div><slot :item="items[0]" name="item.name" /></div>'
         }
 
-        mount(BaseListTable, {
+        const wrapper = mount(BaseListTable, {
             stubs: {
                 VDataTable
             }
         })
-        expect(true).toBe(true);
+        expect(wrapper).toMatchSnapshot();
     })
 })
