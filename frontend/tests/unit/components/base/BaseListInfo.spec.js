@@ -11,7 +11,7 @@ describe('BaseListInfo.vue', () => {
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-    test('should show form radio', () => {
+    test('render list info', () => {
         const wrapper = mount(BaseListInfo, {
             localVue,
             vuetify,
