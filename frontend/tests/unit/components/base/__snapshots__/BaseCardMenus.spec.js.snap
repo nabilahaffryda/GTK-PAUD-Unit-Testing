@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseCardMenus.vue should show card menus 1`] = `<div outlined="" tile=""></div>`;

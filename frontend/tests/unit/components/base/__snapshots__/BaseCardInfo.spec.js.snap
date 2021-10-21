@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseCardInfo.vue should show card info 1`] = `
+<div flat="" outlined="" class="my-2">
+  <div tabindex="-1" class="v-list-item theme--light">
+    <div class="v-avatar v-list-item__avatar primary" style="height: 28px; min-width: 28px; width: 28px;"></div>
+    <div class="v-list-item__content">
+      <div class="v-list-item__title"></div>
+    </div>
+  </div>
+  <div class="v-card__text pt-0"><span class="ml-12 headline blue--text"></span> </div>
+</div>
+`;

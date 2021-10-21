@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseListMap.vue render list map 1`] = `
+<div class="container px-4 container--fluid">
+  <div class="v-card v-card--flat v-sheet theme--light"></div>
+</div>
+`;

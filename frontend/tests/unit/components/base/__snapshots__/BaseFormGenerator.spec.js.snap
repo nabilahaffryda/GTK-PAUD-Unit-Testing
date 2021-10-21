@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseFormGenerator.vue render form generator 1`] = `
+<form>
+  <div class="row"></div>
+</form>
+`;

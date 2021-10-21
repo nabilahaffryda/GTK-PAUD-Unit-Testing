@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BasePhotoProfil.vue render photo profil 1`] = `
+<div class="box-card">
+  <!---->
+  <div class="v-image v-responsive theme--light">
+    <div class="v-responsive__sizer" style="padding-bottom: 150%;"></div>
+    <div class="v-responsive__content"></div>
+  </div>
+  <!---->
+</div>
+`;

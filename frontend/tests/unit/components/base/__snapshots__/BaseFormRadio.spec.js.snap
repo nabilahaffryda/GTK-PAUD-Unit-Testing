@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseFormRadio.vue should show form radio 1`] = `
+<div>
+  <div class="v-subheader theme--light px-0 body-2 undefined--text" style="height: 24px;"><span></span>
+  </div>
+  <div class="v-input theme--light v-input--selection-controls v-input--radio-group v-input--radio-group--row mt-0">
+    <div class="v-input__control">
+      <div class="v-input__slot" style="height: auto;">
+        <div role="radiogroup" aria-labelledby="input-3" class="v-input--radio-group__input"></div>
+      </div>
+      <div class="v-messages theme--light">
+        <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+      </div>
+    </div>
+  </div>
+</div>
+`;

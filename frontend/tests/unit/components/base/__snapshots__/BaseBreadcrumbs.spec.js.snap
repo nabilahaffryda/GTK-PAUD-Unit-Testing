@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseBreadcrumbs.vue should show breadcrumbs 1`] = `<div large="" divider="/"></div>`;

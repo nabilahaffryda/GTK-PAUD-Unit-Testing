@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseTimePicker.vue render time picker 1`] = `
+<div class="row no-gutters row--dense">
+  <div class="col-sm-6 col-md-4 col-12">
+    <div placeholder="jam" items="01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23" required="required"></div>
+  </div>
+  <div class="mx-md-1 col-sm-6 col-md-4 col-12">
+    <div placeholder="menit" items="00,05,10,15,20,25,30,35,40,45,50,55" required="required"></div>
+  </div>
+  <div class="mt-3 mx-2 col-sm-2 col-md-2 col-12"> WIB </div>
+</div>
+`;
