@@ -53,6 +53,16 @@ class KelasService
             ->when($kSumber !== null, function (Builder $query) use ($kSumber) {
                 $query->where('k_sumber', '=', $kSumber);
             })
+            ->where(function (Builder $query) use ($paudDiklat) {
+                $query
+                    ->orWhere([
+                        'k_kota' => $paudDiklat->k_kota,
+                    ])
+                    ->orWhereHas('ptkSekolahs', function ($query) use ($paudDiklat) {
+                        $query->join('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
+                            ->where('sekolah.k_kota', '=', $paudDiklat->k_kota);
+                    });
+            })
             ->where('k_kota', '=', $paudDiklat->k_kota)
             ->whereDoesntHave('paudKelasPesertas', function (Builder $query) {
                 $query->where([
@@ -84,7 +94,8 @@ class KelasService
                                     ->whereHas('akun', function (Builder $query) use ($paudDiklat) {
                                         $query->where('akun.k_kota', '=', $paudDiklat->k_kota);
                                     });
-                            });
+                            })
+                            ->orWhere('paud_petugas.instansi_k_kota', '=', $paudDiklat->k_kota);
                     });
             })
             ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($paudDiklat) {
