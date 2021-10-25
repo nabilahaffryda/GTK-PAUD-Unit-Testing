@@ -453,9 +453,14 @@ class KelasService
                 $mKotas = collect();
             }
 
+            $mKota = $paudDiklat->mKota;
+
             // simpan ptk dengan paspor_id
             foreach ($ptks as $ptk) {
                 $kKota = $ptk['ptk_profils'][0]['k_kota'] ?? null;
+                if ($mKota->k_kota_simpatika != $kKota) {
+                    $kKota = $ptk['instansi']['k_kota'] ?? null;
+                }
 
                 $ptk = new Ptk($ptk);
                 unset($ptk->instansi);
