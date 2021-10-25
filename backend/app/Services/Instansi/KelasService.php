@@ -63,7 +63,6 @@ class KelasService
                             ->where('sekolah.k_kota', '=', $paudDiklat->k_kota);
                     });
             })
-            ->where('k_kota', '=', $paudDiklat->k_kota)
             ->whereDoesntHave('paudKelasPesertas', function (Builder $query) {
                 $query->where([
                     'paud_kelas_peserta.tahun'    => config('paud.tahun'),
