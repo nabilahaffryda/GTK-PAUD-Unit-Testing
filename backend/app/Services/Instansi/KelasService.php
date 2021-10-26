@@ -406,6 +406,10 @@ class KelasService
                 if (isset($ptk['ptk_profils'][0]['k_kota'])) {
                     $kKotaSimpatikas[] = $ptk['ptk_profils'][0]['k_kota'];
                 }
+
+                if (isset($ptk['instansi']['k_kota'])) {
+                    $kKotaSimpatikas[] = $ptk['instansi']['k_kota'];
+                }
             }
 
             // cek user yang telah terdaftar dipaspor
