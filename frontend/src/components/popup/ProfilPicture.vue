@@ -5,7 +5,7 @@
     :trigger="trigger"
     :upload-form-name="nama"
     :upload-url="useBase64 ? '' : uploadUrl"
-    :upload-handler="useBase64 ? onUpload : false"
+    :upload-handler="onUpload"
     @uploaded="onUploaded"
     @changed="onChange"
   />
