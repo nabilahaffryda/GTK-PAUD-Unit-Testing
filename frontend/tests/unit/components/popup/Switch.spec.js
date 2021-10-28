@@ -14,25 +14,29 @@ describe('Switch.vue', () => {
     beforeEach(() => {
         vuetify = new Vuetify()
     })
+    const wrapper = mount(Switch, {
+        localVue,
+        vuetify,
+        router,
+    });
 
-    test('render popup switch methods', () => {
-        const wrapper = mount(Switch, {
-            localVue,
-            vuetify,
-            router,
-        });
+    test('call open method', () => {
         wrapper.vm.open = jest.fn();
         wrapper.vm.open();
         expect(wrapper.vm.open.mock.calls.length).toBe(1);
+    })
 
+    test('call select method', () => {
         wrapper.vm.select = jest.fn();
         wrapper.vm.select();
         expect(wrapper.vm.select.mock.calls.length).toBe(1);
+    })
 
+    test('call fetchData function', () => {
         wrapper.vm.fetchData = jest.fn();
         wrapper.vm.fetchData();
         expect(wrapper.vm.fetchData.mock.calls.length).toBe(1);
-
-        expect(wrapper).toMatchSnapshot();
     })
+
+    expect(wrapper).toMatchSnapshot();
 })
