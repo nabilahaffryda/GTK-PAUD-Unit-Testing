@@ -2,7 +2,6 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import ProfilPicture from "@/components/popup/ProfilPicture.vue";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
-// import { onUpload } from "@/components/popup/ProfilPicture.vue";
 import AvatarCropper from 'vue-avatar-cropper';
 
 Vue.use(Vuetify)
@@ -32,20 +31,7 @@ describe('ProfilPicture.vue', () => {
             props: {
                 useBase64: true
             },
-            // methods: {
-            //     onUpload
-            // }
-            // scopedSlots: {
-            //     uploadHandler: function (props) {
-            //         return this.$createElement('div', props.index)
-            //     }
-            // }
         });
-        // const mockMethod = jest.spyOn(ProfilPicture.methods, 'onUpload')
         expect(wrapper).toMatchSnapshot();
-        // const clickMethodStub = jest.stub()
-
-        // wrapper.setMethods({ onUpload: clickMethodStub })
-        // expect(mockMethod).toHaveBeenCalled(1)
     })
 })
