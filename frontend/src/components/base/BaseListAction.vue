@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-menu bottom left v-if="$allow(actions.map((item) => item.akses).join('|'), data.policies)">
+    <v-menu bottom left v-if="$allow((actions || []).map((item) => item.akses).join('|'), data && data.policies)">
       <template v-slot:activator="{ on, attrs }">
         <v-btn v-bind="attrs" v-on="on" icon>
           <v-icon :color="`${menuColor} lighten-1`">mdi-dots-vertical</v-icon>
