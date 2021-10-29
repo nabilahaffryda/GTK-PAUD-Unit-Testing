@@ -15,8 +15,8 @@ describe('Unggah.vue', () => {
         vuetify = new Vuetify()
     })
 
-    test('call onCheck method', () => {
-        const wrapper = mount(Unggah, {
+    function wrapperFactory({ } = {}) {
+        return mount(Unggah, {
             localVue,
             vuetify,
             router,
@@ -29,82 +29,38 @@ describe('Unggah.vue', () => {
                 }
             }
         });
+    }
+
+    test('call onCheck method', () => {
+        const wrapper = wrapperFactory();
         wrapper.vm.onCheck = jest.fn();
         wrapper.vm.onCheck();
         expect(wrapper.vm.onCheck.mock.calls.length).toBe(1);
     })
 
     test('call initForm method', () => {
-        const wrapper = mount(Unggah, {
-            localVue,
-            vuetify,
-            router,
-            computed: {
-                accept() {
-                    return true
-                },
-                data() {
-                    return true
-                }
-            }
-        });
+        const wrapper = wrapperFactory();
         wrapper.vm.initForm = jest.fn();
         wrapper.vm.initForm();
         expect(wrapper.vm.initForm.mock.calls.length).toBe(1);
     })
 
     test('call reset methods', () => {
-        const wrapper = mount(Unggah, {
-            localVue,
-            vuetify,
-            router,
-            computed: {
-                accept() {
-                    return true
-                },
-                data() {
-                    return true
-                }
-            }
-        });
+        const wrapper = wrapperFactory();
         wrapper.vm.reset = jest.fn();
         wrapper.vm.reset();
         expect(wrapper.vm.reset.mock.calls.length).toBe(1);
     })
 
     test('call onRemoveFile methods', () => {
-        const wrapper = mount(Unggah, {
-            localVue,
-            vuetify,
-            router,
-            computed: {
-                accept() {
-                    return true
-                },
-                data() {
-                    return true
-                }
-            }
-        });
+        const wrapper = wrapperFactory();
         wrapper.vm.onRemoveFile = jest.fn();
         wrapper.vm.onRemoveFile();
         expect(wrapper.vm.onRemoveFile.mock.calls.length).toBe(1);
     })
 
     test('call roundDecimal methods', () => {
-        const wrapper = mount(Unggah, {
-            localVue,
-            vuetify,
-            router,
-            computed: {
-                accept() {
-                    return true
-                },
-                data() {
-                    return true
-                }
-            }
-        });
+        const wrapper = wrapperFactory();
         wrapper.vm.roundDecimal = jest.fn();
         wrapper.vm.roundDecimal();
         expect(wrapper.vm.roundDecimal.mock.calls.length).toBe(1);
