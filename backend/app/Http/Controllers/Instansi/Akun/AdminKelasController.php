@@ -9,6 +9,7 @@ use App\Http\Requests\Instansi\Admin\CreateRequest;
 use App\Http\Resources\BaseResource;
 use App\Models\MGroup;
 use App\Models\MPetugasPaud;
+use App\Models\PaudAdmin;
 use App\Services\Instansi\PetugasService;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -34,5 +35,11 @@ class AdminKelasController extends AkunController
             'k_petugas_paud' => MPetugasPaud::ADMIN_KELAS,
         ]);
         return BaseResource::make($paudAdmin);
+    }
+
+    public function delete(PaudAdmin $paudAdmin)
+    {
+        app(PetugasService::class)->delete($paudAdmin);
+        parent::delete($paudAdmin);
     }
 }
