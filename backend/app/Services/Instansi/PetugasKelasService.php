@@ -43,6 +43,35 @@ class PetugasKelasService
         }
     }
 
+    /**
+     * @throws FlowException
+     */
+    public function validateSatuKonfirmasi(PaudKelasPetugas $kelasPetugas)
+    {
+        $periodeId = $kelasPetugas->paudKelas->paudDiklat->paud_periode_id;
+
+        /** @var PaudKelas $kelas */
+        $kelas = PaudKelas::query()
+            ->join('paud_diklat', 'paud_diklat.paud_diklat_id', '=', 'paud_kelas.paud_diklat_id')
+            ->where('paud_diklat.paud_periode_id', '=', $periodeId)
+            ->whereHas('paudKelasPetugases', function (Builder $query) use ($kelasPetugas) {
+                $query
+                    ->where('paud_kelas_petugas.paud_petugas_id', '=', $kelasPetugas->paud_petugas_id)
+                    ->where('paud_kelas_petugas.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA)
+                    ->when($kelasPetugas->k_petugas_paud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasPetugas) {
+                        $query->where('paud_kelas_petugas.k_petugas_paud', '=', MPetugasPaud::ADMIN_KELAS)
+                            ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelasPetugas->paud_kelas_id);
+                    }, function ($query) {
+                        $query->where('paud_kelas_petugas.k_petugas_paud', '<>', MPetugasPaud::ADMIN_KELAS);
+                    });
+            })
+            ->first();
+
+        if ($kelas) {
+            throw new FlowException('Anda telah mengkonfirmasi kelas ' . $kelas->nama);
+        }
+    }
+
     public function listKonfirmasiKesediaan(int $akunId): Builder
     {
         return PaudKelasPetugas::query()
@@ -79,6 +108,7 @@ class PetugasKelasService
     {
         $this->validateBelumKonfirmasi($kelasPetugas);
         $this->validateVervalKelasBaru($kelasPetugas);
+        $this->validateSatuKonfirmasi($kelasPetugas);
 
         $kelasPetugas->k_konfirmasi_paud = MKonfirmasiPaud::BERSEDIA;
         $kelasPetugas->save();
