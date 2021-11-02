@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`GotoModul.vue render GotoModul 1`] = `
-<div role="dialog" class="v-dialog__container">
-  <!---->
-</div>
-`;

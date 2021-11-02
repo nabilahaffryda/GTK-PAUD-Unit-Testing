@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`ProfilPicture.vue render popup profil picture 1`] = `
-<div class="avatar-cropper">
-  <!----><input accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon" type="file" class="avatar-cropper-img-input">
-</div>
-`;

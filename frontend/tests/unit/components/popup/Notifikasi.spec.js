@@ -2,32 +2,42 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import Notifikasi from "@/components/popup/Notifikasi.vue";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 
 Vue.use(Vuetify)
 const localVue = createLocalVue();
+localVue.use(VueRouter)
+const router = new VueRouter();
 
 describe('Notifikasi.vue', () => {
     let vuetify
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-
-    test('render popup notification', () => {
-        const VNotif = {
-            props: ['notif'],
-            template: '<div><slot :notif="notif" /></div>'
-        }
-        const wrapper = mount(Notifikasi, {
+    function wrapperFactory({ } = {}) {
+        return mount(Notifikasi, {
             localVue,
             vuetify,
-            stubs: {
-                VNotif
-            }
+            router,
         });
-        expect(wrapper).toMatchSnapshot();
+    }
+
+    test('call open method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.open = jest.fn();
+        wrapper.vm.open();
+        expect(wrapper.vm.open.mock.calls.length).toBe(1);
     })
-    test('triggers options onAction click', async () => {
-        const wrapper = mount(Notifikasi)
-        await wrapper.trigger('click', { onAction: 0 })
+    test('call onClose method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.onClose = jest.fn();
+        wrapper.vm.onClose();
+        expect(wrapper.vm.onClose.mock.calls.length).toBe(1);
+    })
+    test('call onAction method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.onAction = jest.fn();
+        wrapper.vm.onAction();
+        expect(wrapper.vm.onAction.mock.calls.length).toBe(1);
     })
 })
