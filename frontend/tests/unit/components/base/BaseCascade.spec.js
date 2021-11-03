@@ -1,41 +1,64 @@
-import { mount, createLocalVue } from "@vue/test-utils";
+import { createLocalVue, mount } from "@vue/test-utils";
 import BaseCascade from "@/components/base/BaseCascade.vue";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
-// import mixins from "@/mixins/global"
-import * as getDeepObj from '@/mixins/global';
+import VueRouter from 'vue-router';
+import { getDeepObj } from '@utils/format';
 
 Vue.use(Vuetify)
 const localVue = createLocalVue();
 
-getDeepObj.getAll = jest.fn()
+localVue.use(VueRouter)
+const router = new VueRouter();
+
+localVue.mixin({
+    methods: {
+        $getDeepObj(obj, desc) {
+            return getDeepObj(obj, desc);
+        },
+    }
+})
 
 describe('BaseCascade.vue', () => {
     let vuetify
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-    test('render cascade', () => {
-        const VCascade = {
-            props: [
-                'value',
-                'configs',
-                'labelColor'],
-            template: '<div><slot :items="items[field]" /></div>'
-        }
-        resetAll();
-        const wrapper = mount(BaseCascade, {
+    function wrapperFactory({ } = {}) {
+        return mount(BaseCascade, {
             localVue,
             vuetify,
-            stubs: {
-                VCascade
+            router,
+            propsData: {
+                configs: {
+                    selector: ['k_propinsi', 'k_kota'],
+                    required: [],
+                    label: ['Provinsi', 'Kota/Kabupaten'],
+                    options: [[], []],
+                    grid: [{ cols: 6 }, { cols: 6 }],
+                }
             },
-            getDeepObj
-            // mixins: [
-            //     mixins
-            // ],
-
         });
-        expect(wrapper).toMatchSnapshot();
+    }
+
+    test('call resetAll method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.resetAll = jest.fn();
+        wrapper.vm.resetAll();
+        expect(wrapper.vm.resetAll.mock.calls.length).toBe(1);
+    })
+
+    test('call resetField method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.resetField = jest.fn();
+        wrapper.vm.resetField();
+        expect(wrapper.vm.resetField.mock.calls.length).toBe(1);
+    })
+
+    test('call update function', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.update = jest.fn();
+        wrapper.vm.update();
+        expect(wrapper.vm.update.mock.calls.length).toBe(1);
     })
 })
