@@ -2,54 +2,41 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import BaseConfirmation from "@/components/base/BaseConfirmation.vue";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 
 Vue.use(Vuetify)
 const localVue = createLocalVue();
+localVue.use(VueRouter)
+const router = new VueRouter();
 
 describe('BaseConfirmation.vue', () => {
     let vuetify
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-    test('render confirmation', () => {
-        const wrapper = mount(BaseConfirmation, {
+    function wrapperFactory({ } = {}) {
+        return mount(BaseConfirmation, {
             localVue,
             vuetify,
-            data() {
-                return {
-                    title: null,
-                    desc: null,
-                    tipe: 'warning',
-                    lblCancelButton: 'Tidak',
-                    lblConfirmButton: 'Ya',
-                    lblConfirmColor: 'blue darken-1',
-                    lblCancelColor: 'grey darken-1',
-                    items: [],
-                    form: '',
-                    resolve: null,
-                    reject: null,
-                    modal: false,
-                    confirmation: true,
-                    invert: false,
-                    icon: '',
-                    myIcons: {
-                        warning: 'mdi-alert',
-                        error: 'mdi-close-circle',
-                        info: 'mdi-information',
-                        success: 'mdi-check-circle',
-                        secondary: 'mdi-alert',
-                    },
-                    myClass: {
-                        warning: '',
-                        error: 'white--text',
-                        info: ' white--text',
-                        success: ' white--text',
-                        secondary: 'white--text',
-                    },
-                }
-            }
+            router,
         });
-        wrapper.findAll('#data').exists();
-        expect(wrapper).toMatchSnapshot();
+    }
+    test('call open method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.open = jest.fn();
+        wrapper.vm.open();
+        expect(wrapper.vm.open.mock.calls.length).toBe(1);
+    })
+    test('call agree method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.agree = jest.fn();
+        wrapper.vm.agree();
+        expect(wrapper.vm.agree.mock.calls.length).toBe(1);
+    })
+    test('call cancel method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.cancel = jest.fn();
+        wrapper.vm.cancel();
+        expect(wrapper.vm.cancel.mock.calls.length).toBe(1);
     })
 })

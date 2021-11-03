@@ -2,40 +2,35 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import BaseFormCheckbox from "@/components/base/BaseFormCheckbox.vue";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 
 Vue.use(Vuetify)
 const localVue = createLocalVue();
+localVue.use(VueRouter)
+const router = new VueRouter();
 
 describe('BaseFormCheckbox.vue', () => {
     let vuetify
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-    test('render form checkbox', () => {
-        const VCheckBox = {
-            props: [
-                'label',
-                'labelColor',
-                'required',
-                'items',
-                'value',
-                'disabled',
-                'row',
-                'margin',
-                'fontSize',
-                'weight',
-                'errorMessages',
-                'itemGrid'],
-            template: '<div><slot :label="item.text" /></div>'
-        }
-
-        const wrapper = mount(BaseFormCheckbox, {
+    function wrapperFactory({ } = {}) {
+        return mount(BaseFormCheckbox, {
             localVue,
             vuetify,
-            stubs: {
-                VCheckBox
-            }
+            router,
         });
-        expect(wrapper).toMatchSnapshot();
+    }
+    test('call mutate method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.mutate = jest.fn();
+        wrapper.vm.mutate();
+        expect(wrapper.vm.mutate.mock.calls.length).toBe(1);
+    })
+    test('call setForm method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.setForm = jest.fn();
+        wrapper.vm.setForm();
+        expect(wrapper.vm.setForm.mock.calls.length).toBe(1);
     })
 })

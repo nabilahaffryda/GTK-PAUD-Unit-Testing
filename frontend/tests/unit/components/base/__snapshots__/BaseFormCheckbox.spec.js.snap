@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`BaseFormCheckbox.vue render form checkbox 1`] = `
-<div>
-  <div class="v-subheader theme--light px-0 body-2 undefined--text" style="height: 24px;"><span></span>
-  </div>
-</div>
-`;

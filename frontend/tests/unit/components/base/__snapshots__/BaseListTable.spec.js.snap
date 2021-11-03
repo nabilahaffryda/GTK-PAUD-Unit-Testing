@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`BaseListTable.vue should show data in list 1`] = `<div options="[object Object]" items-per-page="10" server-items-length="0" disable-sort="" footer-props="[object Object]"></div>`;

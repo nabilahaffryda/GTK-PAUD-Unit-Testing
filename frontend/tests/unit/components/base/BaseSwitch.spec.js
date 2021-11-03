@@ -2,28 +2,36 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import BaseSwitch from "@/components/base/BaseSwitch.vue";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 
 Vue.use(Vuetify)
 const localVue = createLocalVue();
+localVue.use(VueRouter)
+const router = new VueRouter();
 
 describe('BaseSwitch.vue', () => {
     let vuetify
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-    test('render switch', () => {
-        const VSwitch = {
-            props: ['value', 'isAktif', 'isTutup'],
-            template: '<div><slot :disabled="isTutup" /></div>'
-        }
 
-        const wrapper = mount(BaseSwitch, {
+    function wrapperFactory({ } = {}) {
+        return mount(BaseSwitch, {
             localVue,
             vuetify,
-            stubs: {
-                VSwitch
-            }
+            router,
         });
-        expect(wrapper).toMatchSnapshot();
+    }
+    test('call mutate method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.mutate = jest.fn();
+        wrapper.vm.mutate();
+        expect(wrapper.vm.mutate.mock.calls.length).toBe(1);
+    })
+    test('call select method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.select = jest.fn();
+        wrapper.vm.select();
+        expect(wrapper.vm.select.mock.calls.length).toBe(1);
     })
 })

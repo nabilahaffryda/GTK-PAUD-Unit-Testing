@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`BaseListInfo.vue render list info 1`] = `
-<div tabindex="-1" class="v-list-item theme--light">
-  <div class="v-list-item__content">
-    <div class="container pa-0"></div>
-  </div>
-</div>
-`;

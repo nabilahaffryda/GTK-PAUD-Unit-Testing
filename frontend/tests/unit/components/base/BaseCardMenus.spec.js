@@ -2,37 +2,35 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import BaseCardMenus from "@/components/base/BaseCardMenus.vue";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 
 Vue.use(Vuetify)
 const localVue = createLocalVue();
+localVue.use(VueRouter)
+const router = new VueRouter();
 
 describe('BaseCardMenus.vue', () => {
     let vuetify
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-    test('should show card menus', () => {
-        const VCard = {
-            props: ['subtitle',
-                'icon',
-                'akses', 'disable', 'to',
-                'href', 'target', 'action'],
-            template: '<div><slot name="content" /></div>'
-        }
-
-        const wrapper = mount(BaseCardMenus, {
+    function wrapperFactory({ } = {}) {
+        return mount(BaseCardMenus, {
             localVue,
             vuetify,
-            stubs: {
-                VCard
-            },
+            router,
             propsData: {
-                title: 'String',
+                title: 'Paud',
                 desc: 'SIM Paud',
                 color: '#000000',
                 deepColor: '#111111'
             }
         });
-        expect(wrapper).toMatchSnapshot();
+    }
+    test('call onAction method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.onAction = jest.fn();
+        wrapper.vm.onAction();
+        expect(wrapper.vm.onAction.mock.calls.length).toBe(1);
     })
 })

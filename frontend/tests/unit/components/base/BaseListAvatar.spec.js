@@ -2,40 +2,32 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import BaseListAvatar from "@/components/base/BaseListAvatar.vue";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 
 Vue.use(Vuetify)
 const localVue = createLocalVue();
+localVue.use(VueRouter)
+const router = new VueRouter();
 
 describe('BaseListAvatar.vue', () => {
     let vuetify
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-    test('render list avatar', () => {
-        const VAvatar = {
-            props: [
-                'size',
-                'tile',
-                'useAction',
-                'color',
-                'caption',
-                'title',
-                'subtitle',
-                'detail'
-            ],
-            template: '<div><slot :tile="tile" /></div>'
-        }
-
-        const wrapper = mount(BaseListAvatar, {
+    function wrapperFactory({ } = {}) {
+        return mount(BaseListAvatar, {
             localVue,
             vuetify,
-            stubs: {
-                VAvatar
-            },
-            propsData: {
+            router,
+            props: {
                 title: 'avatar'
             }
         });
-        expect(wrapper).toMatchSnapshot();
+    }
+    test('call onDetail method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.onDetail = jest.fn();
+        wrapper.vm.onDetail();
+        expect(wrapper.vm.onDetail.mock.calls.length).toBe(1);
     })
 })

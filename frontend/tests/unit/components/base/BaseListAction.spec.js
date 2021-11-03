@@ -22,7 +22,7 @@ localVue.mixin({
                     if (allow) return;
                     if (!allow && policy) {
                         allow =
-                          !path || path === 'true' || ((akseses || []).filter((item) => item === path).length > 0 && policy[path]);
+                            !path || path === 'true' || ((akseses || []).filter((item) => item === path).length > 0 && policy[path]);
                     } else if (!allow && !policy) {
                         allow = !path || path === 'true' || (akseses || []).filter((item) => item === path).length > 0;
                     }
@@ -61,10 +61,6 @@ describe('BaseListAction.vue', () => {
     })
 
     test('render list action', () => {
-        const VMenu = {
-            props: ['data', 'id', 'actions', 'allow', 'menuColor'],
-            template: '<div><slot :item="item" /></div>'
-        }
         const wrapper = mount(BaseListAction, {
             localVue,
             vuetify,
@@ -78,19 +74,9 @@ describe('BaseListAction.vue', () => {
                     }
                 ]
             },
-            // stubs: {
-            //     VMenu,
-            // },
         });
 
-        console.log(wrapper.html());
+        // console.log(wrapper.html());
         expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
-
-
-        // expect(wrapper).toMatchSnapshot();
-        // wrapper.vm.title('Edit Institusi')
-        // expect(axios.get).toHaveBeenCalledTimes(1)
-        // expect(axios.get).toBeCalledWith(expect.stringMatching(/Edit Institusi/))
-
     })
 })

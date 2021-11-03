@@ -14,27 +14,41 @@ describe('BaseListPopup.vue', () => {
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-    test('render list popup', () => {
-        const VPopup = {
-            props: [
-                'api', 'title', 'id', 'multiselect'
-            ],
-            template: '<div><slot :pageTotal="pageTotal" /></div>'
-        }
-        const wrapper = mount(BaseListPopup, {
+
+    function wrapperFactory({ } = {}) {
+        return mount(BaseListPopup, {
             localVue,
             vuetify,
             router,
-            stubs: {
-                VPopup,
-            },
             computed: {
                 selected() {
                     return true
                 }
             },
         });
-
-        expect(wrapper).toMatchSnapshot();
+    }
+    test('call fetchData method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.fetchData = jest.fn();
+        wrapper.vm.fetchData();
+        expect(wrapper.vm.fetchData.mock.calls.length).toBe(1);
+    })
+    test('call open method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.open = jest.fn();
+        wrapper.vm.open();
+        expect(wrapper.vm.open.mock.calls.length).toBe(1);
+    })
+    test('call onSelect method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.onSelect = jest.fn();
+        wrapper.vm.onSelect();
+        expect(wrapper.vm.onSelect.mock.calls.length).toBe(1);
+    })
+    test('call onSaveSelection method', () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.onSaveSelection = jest.fn();
+        wrapper.vm.onSaveSelection();
+        expect(wrapper.vm.onSaveSelection.mock.calls.length).toBe(1);
     })
 })
