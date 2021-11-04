@@ -28,6 +28,7 @@ use DB;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use League\Flysystem\Util;
@@ -38,35 +39,27 @@ class KelasService
     public function queryPesertaKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, int $kJenjang = null, int $kSumber = null)
     {
         return Ptk::query()
+            ->select('ptk.*')
+            ->join('ptk_sekolah', 'ptk_sekolah.ptk_id', '=', 'ptk.ptk_id')
+            ->join('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
+            ->leftJoin('paud_kelas_peserta', function (JoinClause $query) {
+                $query->on('paud_kelas_peserta.ptk_id', '=', 'ptk.ptk_id')
+                    ->where('paud_kelas_peserta.tahun', '=', (int)config('paud.tahun'))
+                    ->where('paud_kelas_peserta.angkatan', '=', (int)config('paud.angkatan'));
+            })
             ->when($kSumber != 9, function (Builder $query) use ($kSumber) {
                 $query->whereNotNull('dapodik_ptk_id');
             })
             ->when($kJenjang !== null, function (Builder $query) use ($kJenjang) {
-                $query->whereExists(function ($query) use ($kJenjang) {
-                    $query->selectRaw(1)
-                        ->from('ptk_sekolah')
-                        ->join('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
-                        ->whereColumn('ptk_sekolah.ptk_id', '=', 'ptk.ptk_id')
-                        ->where('sekolah.k_jenjang', '=', $kJenjang);
-                });
+                $query->where('sekolah.k_jenjang', '=', (int)$kJenjang);
             })
             ->when($kSumber !== null, function (Builder $query) use ($kSumber) {
                 $query->where('k_sumber', '=', $kSumber);
             })
             ->where(function (Builder $query) use ($paudDiklat) {
-                $query
-                    ->orWhere([
-                        'k_kota' => $paudDiklat->k_kota,
-                    ])
-                    ->orWhereHas('ptkSekolahs', function ($query) use ($paudDiklat) {
-                        $query->join('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
-                            ->where('sekolah.k_kota', '=', $paudDiklat->k_kota);
-                    });
-            })
-            ->whereDoesntHave('paudKelasPesertas', function (Builder $query) {
-                $query->where([
-                    'paud_kelas_peserta.tahun'    => config('paud.tahun'),
-                    'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
+                $query->orWhere([
+                    'ptk.k_kota'     => (int)$paudDiklat->k_kota,
+                    'sekolah.k_kota' => (int)$paudDiklat->k_kota,
                 ]);
             });
     }
