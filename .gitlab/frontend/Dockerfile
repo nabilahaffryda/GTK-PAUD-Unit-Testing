@@ -4,7 +4,7 @@ FROM centos:7
 RUN yum install -y \
         http://mirror.telkomuniversity.ac.id/epel/epel-release-latest-7.noarch.rpm \
     && yum install -y \
-        nginx-1.20.1-2.el7 \
+        nginx-1.20.1 \
     && rm -rf \
         /var/cache/yum \
         /var/tmp/yum-*
