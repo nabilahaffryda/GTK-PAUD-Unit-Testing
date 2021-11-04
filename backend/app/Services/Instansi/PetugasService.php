@@ -184,12 +184,13 @@ class PetugasService
      * @throws SaveException
      * @throws FlowException
      */
-    public function create(PaudAdmin $admin, array $params)
+    public function create(PaudAdmin $admin, int $kPetugasPaud, array $params = [])
     {
         $petugas = PaudPetugas::firstOrNew([
-            'akun_id'  => $admin->akun_id,
-            'tahun'    => $admin->tahun,
-            'angkatan' => $admin->angkatan,
+            'akun_id'        => $admin->akun_id,
+            'tahun'          => $admin->tahun,
+            'angkatan'       => $admin->angkatan,
+            'k_petugas_paud' => $kPetugasPaud,
         ], $params);
 
         if ($petugas->exists) {

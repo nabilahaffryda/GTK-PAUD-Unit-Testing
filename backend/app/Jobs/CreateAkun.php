@@ -57,28 +57,21 @@ class CreateAkun implements ShouldQueue
 
         switch ($this->kGroup) {
             case MGroup::PENGAJAR_DIKLAT_PAUD:
-                app(PetugasService::class)->create($paudAdmin, [
-                    'k_petugas_paud' => MPetugasPaud::PENGAJAR,
-                ]);
+                app(PetugasService::class)->create($paudAdmin, MPetugasPaud::PENGAJAR);
                 break;
 
             case MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD:
-                app(PetugasService::class)->create($paudAdmin, [
-                    'k_petugas_paud'        => MPetugasPaud::PENGAJAR_TAMBAHAN,
+                app(PetugasService::class)->create($paudAdmin, MPetugasPaud::PENGAJAR_TAMBAHAN, [
                     'k_unsur_pengajar_paud' => $this->data['k_unsur_pengajar_paud'] ?? MUnsurPengajarPaud::UNSUR_GURU,
                 ]);
                 break;
 
             case MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD:
-                app(PetugasService::class)->create($paudAdmin, [
-                    'k_petugas_paud' => MPetugasPaud::PEMBIMBING_PRAKTIK,
-                ]);
+                app(PetugasService::class)->create($paudAdmin, MPetugasPaud::PEMBIMBING_PRAKTIK);
                 break;
 
             case MGroup::ADM_KELAS_DIKLAT_PAUD:
-                app(PetugasService::class)->create($paudAdmin, [
-                    'k_petugas_paud' => MPetugasPaud::ADMIN_KELAS,
-                ]);
+                app(PetugasService::class)->create($paudAdmin, MPetugasPaud::ADMIN_KELAS);
                 break;
         }
     }

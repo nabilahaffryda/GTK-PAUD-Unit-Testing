@@ -31,9 +31,7 @@ class AdminKelasController extends AkunController
         ]);
 
         $paudAdmin = $this->service->create(instansi(), $params);
-        app(PetugasService::class)->create($paudAdmin, [
-            'k_petugas_paud' => MPetugasPaud::ADMIN_KELAS,
-        ]);
+        app(PetugasService::class)->create($paudAdmin, MPetugasPaud::ADMIN_KELAS);
         return BaseResource::make($paudAdmin);
     }
 
