@@ -26,10 +26,10 @@
                 <v-btn small icon @click="download" v-if="btnDownload">
                   <v-icon color="secondary">mdi-download</v-icon>
                 </v-btn>
-                <v-btn small icon @click="filter" v-if="btnFilter">
+                <v-btn small icon @click="filter" data-testid="filterbtn" v-if="btnFilter">
                   <v-icon color="secondary">mdi-filter-variant</v-icon>
                 </v-btn>
-                <v-btn small icon @click="reload" v-if="btnReload">
+                <v-btn small icon @click="reload" data-testid="addbtn" v-if="btnReload">
                   <v-icon color="secondary">mdi-reload</v-icon>
                 </v-btn>
               </v-toolbar>
@@ -43,6 +43,7 @@
               v-model="keyword"
               :label="searchLabel"
               dense
+              data-testid="search"
               single-line
               outlined
               hide-details
@@ -62,6 +63,7 @@
                 :label="searchLabel"
                 dense
                 single-line
+                data-testid="search"
                 outlined
                 hide-details
                 class="my-auto mr-1"
@@ -100,6 +102,7 @@
                       width="40px"
                       height="40px"
                       v-bind="attrs"
+                      data-testid="filterbtn"
                       v-on="on"
                       @click="filter"
                       v-if="btnFilter"
@@ -157,6 +160,7 @@
                       height="40px"
                       v-bind="attrs"
                       v-on="on"
+                      data-testid="addbtn"
                       @click="add"
                       v-if="btnAdd"
                     >

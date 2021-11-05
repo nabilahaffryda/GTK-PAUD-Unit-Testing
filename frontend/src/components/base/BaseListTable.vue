@@ -4,6 +4,7 @@
     :items="item || []"
     :options.sync="options"
     :items-per-page="limit"
+    data-testid="list-table"
     :server-items-length="total"
     :loading="loading"
     disable-sort
