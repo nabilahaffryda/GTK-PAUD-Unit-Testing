@@ -98,6 +98,7 @@ class KelasService
                     ->join('paud_kelas', 'paud_kelas.paud_kelas_id', '=', 'paud_kelas_petugas.paud_kelas_id')
                     ->join('paud_diklat', 'paud_diklat.paud_diklat_id', '=', 'paud_kelas.paud_diklat_id')
                     ->where('paud_diklat.paud_periode_id', '=', $paudDiklat->paud_periode_id)
+                    ->where('paud_kelas_petugas.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA)
                     ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelas, $kPetugasPaud) {
                         $query->where('paud_kelas_petugas.k_petugas_paud', '=', $kPetugasPaud)
                             ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelas->paud_kelas_id);
