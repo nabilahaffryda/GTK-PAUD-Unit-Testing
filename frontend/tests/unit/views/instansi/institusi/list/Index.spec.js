@@ -101,22 +101,19 @@ localVue.mixin({
         },
     }
 })
+
 jest.mock('axios');
+
 describe('Index.vue', () => {
     let vuetify;
     beforeEach(() => {
         vuetify = new Vuetify()
         const responseGet = {
             data: {
-                policies: [
-                    {
-                        icon: 'mdi-pencil',
-                        title: 'Edit Institusi',
-                        event: 'onEdit',
-                        akses: 'lpd.update'
-                    }
-                ]
-            }
+                policies: {
+                    'lpd.update': true
+                }
+            },
         }
         axios.get.mockResolvedValue(responseGet);
     })
@@ -124,6 +121,7 @@ describe('Index.vue', () => {
         jest.resetModules()
         jest.clearAllMocks()
     })
+
     function wrapperFactory({ } = {}) {
         return mount(Index, {
             localVue,
@@ -131,11 +129,10 @@ describe('Index.vue', () => {
             router,
             store,
             stubs: {
-                BaseModalFull,
-                BaseFormGenerator,
-                BaseListTable,
-                BaseListFilter,
-                BaseListAction
+                BaseModalFull: true,
+                FormLpd: true,
+                BaseFormGenerator: true,
+                Akun: true,
             },
             data() {
                 return {
@@ -143,18 +140,16 @@ describe('Index.vue', () => {
                     reload: false,
                     add: false,
                     dialog: false,
+                    actions: [
+                        {
+                            icon: 'mdi-pencil',
+                            title: 'Edit Institusi',
+                            event: 'onEdit',
+                            akses: 'lpd.update'
+                        }
+                    ]
                 };
             },
-            // props: {
-            //     actions: [
-            //         {
-            //             icon: 'mdi-pencil',
-            //             title: 'Edit Institusi',
-            //             event: 'onEdit',
-            //             akses: 'lpd.update'
-            //         }
-            //     ]
-            // },
         });
     }
 
@@ -233,8 +228,43 @@ describe('Index.vue', () => {
 
     test('call onAction when button is clicked', async () => {
         const wrapper = wrapperFactory();
-        wrapper.vm.onAction = jest.fn()
-        wrapper.vm.onAction()
+        wrapper.vm.onAction = jest.fn();
+        wrapper.vm.onAction();
+        wrapper.setData({
+            data: [
+                {
+                    instansi_id: 600001,
+                    is_aktif: 1,
+                    instansi:  {
+                        data: {
+                            instansi_id: 600001,
+                            nama: "Universitas Brawijaya Malang Melintang",
+                            alamat: "Jl. Veteran No. 15",
+                            email: "ub@ub.ac.id"
+                        }
+                    },
+                    jml_admin_program: 3,
+                    jml_operator: 4,
+                    jml_pembimbing: 4,
+                    nama_bendahara: "Katrina",
+                    nama_penanggung_jawab: "Bruno",
+                    nama_sekretaris: "Valir",
+                    telp_bendahara: "085246985217",
+                    telp_penanggung_jawab: "081287634287",
+                    telp_sekretaris: "08145725631"
+                }
+                 ],
+            total: 1,
+            actions: [
+                {
+                    icon: 'mdi-pencil',
+                    title: 'Edit Institusi',
+                    event: 'onEdit',
+                    akses: true
+                }
+            ]
+        });
+
         await wrapper.vm.$nextTick()
         expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
     })
