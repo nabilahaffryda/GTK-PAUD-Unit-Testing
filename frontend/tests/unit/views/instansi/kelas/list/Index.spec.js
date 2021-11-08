@@ -162,7 +162,7 @@ describe('Index.vue', () => {
     })
     test('Enter search text and check the value of keyword', async () => {
         const wrapper = wrapperFactory();
-        wrapper.find('[data-testid="search"]')
+        wrapper.find('.mdi-magnify')
         wrapper.setData({ keyword: 'Kelas A' })
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.keyword).toBe('Kelas A')
@@ -170,7 +170,7 @@ describe('Index.vue', () => {
     test('click search button and clear input', () => {
         const wrapper = wrapperFactory();
         wrapper.find('.mdi-magnify').trigger("click");
-        const textInput = wrapper.find('[data-testid="search"]')
+        const textInput = wrapper.find('.mdi-magnify')
         expect(textInput.text()).toMatch('')
         expect(wrapper.vm.keyword).toBe('')
     })
