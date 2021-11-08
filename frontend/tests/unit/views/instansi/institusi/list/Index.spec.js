@@ -3,6 +3,7 @@ import Vuetify from 'vuetify';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuex from "vuex";
+import axios from 'axios';
 import BaseListTable from "@/components/base/BaseListTable.vue";
 import BaseFormGenerator from "@/components/base/BaseFormGenerator.vue";
 import BaseModalFull from "@/components/base/BaseModalFull.vue";
@@ -37,16 +38,7 @@ const store = new Vuex.Store({
             }
         }
     },
-    state: {
-        actions: [
-            {
-                icon: 'mdi-pencil',
-                title: 'Edit Institusi',
-                event: 'onEdit',
-                akses: 'lpd.update'
-            },
-        ],
-    }
+
 })
 localVue.mixin({
     methods: {
@@ -109,10 +101,28 @@ localVue.mixin({
         },
     }
 })
+jest.mock('axios');
 describe('Index.vue', () => {
     let vuetify;
     beforeEach(() => {
         vuetify = new Vuetify()
+        const responseGet = {
+            data: {
+                policies: [
+                    {
+                        icon: 'mdi-pencil',
+                        title: 'Edit Institusi',
+                        event: 'onEdit',
+                        akses: 'lpd.update'
+                    }
+                ]
+            }
+        }
+        axios.get.mockResolvedValue(responseGet);
+    })
+    afterEach(() => {
+        jest.resetModules()
+        jest.clearAllMocks()
     })
     function wrapperFactory({ } = {}) {
         return mount(Index, {
@@ -135,6 +145,16 @@ describe('Index.vue', () => {
                     dialog: false,
                 };
             },
+            // props: {
+            //     actions: [
+            //         {
+            //             icon: 'mdi-pencil',
+            //             title: 'Edit Institusi',
+            //             event: 'onEdit',
+            //             akses: 'lpd.update'
+            //         }
+            //     ]
+            // },
         });
     }
 
@@ -198,7 +218,7 @@ describe('Index.vue', () => {
     test('click search button and clear input', () => {
         const wrapper = wrapperFactory();
         wrapper.find('.mdi-magnify').trigger("click");
-        var textInput = wrapper.find('[data-testid="search"]')
+        const textInput = wrapper.find('[data-testid="search"]')
         expect(textInput.text()).toMatch('')
         expect(wrapper.vm.keyword).toBe('')
     })
@@ -211,16 +231,12 @@ describe('Index.vue', () => {
         expect(wrapper.vm.total).toBe(22)
     })
 
-    // test('calls onAction when button is clicked', async () => {
-    //     const wrapper = wrapperFactory();
-    //     wrapper.setData({ actions: [] });
-    //     wrapper.vm.onAction = jest.fn();
-    //     wrapper.vm.onAction();
-    //     await wrapper.vm.$nextTick();
-    //     expect(wrapper.find('[data-testid="action-list"]').exists()).toBe(true);
-    //     const button = wrapper.find('[data-testid="actions"]')
-    //     button.trigger('click')
-    //     expect(wrapper.vm.onAction.mock.calls.length).toBe(1);
-    // })
+    test('call onAction when button is clicked', async () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.onAction = jest.fn()
+        wrapper.vm.onAction()
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
+    })
 
 })
