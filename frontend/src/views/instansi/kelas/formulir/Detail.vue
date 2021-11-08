@@ -57,6 +57,7 @@
             <v-text-field
               v-model="search"
               dense
+              data-testid="search-detail"
               placeholder="Pencarian Data"
               append-icon="mdi-magnify"
               @keyup.enter="fetch"
@@ -69,6 +70,7 @@
               :headers="headers"
               :items="items"
               :options.sync="options"
+              data-testid="detail-data"
               :server-items-length="totalItems"
               :loading="loading"
               :no-data-text="`Daftar Peserta Diklat belum ditemukan`"
