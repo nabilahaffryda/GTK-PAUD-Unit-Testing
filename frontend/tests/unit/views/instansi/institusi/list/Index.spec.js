@@ -4,12 +4,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuex from "vuex";
 import axios from 'axios';
-import BaseListTable from "@/components/base/BaseListTable.vue";
-import BaseFormGenerator from "@/components/base/BaseFormGenerator.vue";
-import BaseModalFull from "@/components/base/BaseModalFull.vue";
-import BaseListFilter from "@/components/base/BaseListFilter.vue";
 import Index from "@/views/instansi/institusi/list/Index.vue";
-import BaseListAction from "@/components/base/BaseListAction.vue";
 import { getDeepObj, isObject, assetsUrl, localDate, isArray } from '@utils/format';
 
 Vue.use(Vuetify)
@@ -34,7 +29,28 @@ const store = new Vuex.Store({
             actions: {
                 fetch() {
                     return true
-                }
+                },
+                create() {
+                    return true
+                },
+                update() {
+                    return true
+                },
+                listGroups() {
+                    return true
+                },
+                lookup() {
+                    return true
+                },
+                getDetail() {
+                    return true
+                },
+                fetch() {
+                    return true
+                },
+                downloadList() {
+                    return true
+                },
             }
         }
     },
@@ -48,28 +64,8 @@ localVue.mixin({
         $isArray(data) {
             return isArray(data);
         },
-        $allow(akses, policy) {
-            // cek jika tidak ada akses
-            if (!akses || (akses && typeof akses === 'boolean')) return typeof akses === 'boolean' ? akses : true;
-
-            // jika ada ambil preferensi akses
-            const akseses = store.getters['preferensi/akseses'] || [];
-
-            let allow = false;
-            const pathAkses = akses && typeof akses === 'string' && akses.split('|');
-            if (pathAkses.length) {
-                pathAkses.forEach((path) => {
-                    if (allow) return;
-                    if (!allow && policy) {
-                        allow =
-                            !path || path === 'true' || ((akseses || []).filter((item) => item === path).length > 0 && policy[path]);
-                    } else if (!allow && !policy) {
-                        allow = !path || path === 'true' || (akseses || []).filter((item) => item === path).length > 0;
-                    }
-                });
-            }
-
-            return allow;
+        $allow() {
+            return true;
         },
         $isObject(data) {
             return isObject(data || {});
@@ -111,7 +107,8 @@ describe('Index.vue', () => {
         const responseGet = {
             data: {
                 policies: {
-                    'lpd.update': true
+                    'lpd.update': true,
+                    'akun-admin-program-lpd.create': true
                 }
             },
         }
@@ -138,15 +135,13 @@ describe('Index.vue', () => {
                 return {
                     Datatables: false,
                     reload: false,
-                    add: false,
-                    dialog: false,
                     actions: [
                         {
                             icon: 'mdi-pencil',
                             title: 'Edit Institusi',
                             event: 'onEdit',
                             akses: 'lpd.update'
-                        }
+                        },
                     ]
                 };
             },
@@ -176,35 +171,39 @@ describe('Index.vue', () => {
         expect(wrapper.find('.mdi-reload').exists()).toBe(true);
         const btn = wrapper.find('.mdi-reload')
         btn.trigger('click')
-        expect(wrapper.vm.onReload.mock.calls.length).toBe(1);
-        // expect(wrapper.find('.mdi-reload').trigger("click"));
     })
 
     test('calls onFilter when button is clicked', async () => {
         const wrapper = wrapperFactory();
-        wrapper.setData({ dialog: true });
         wrapper.vm.onFilter = jest.fn();
         wrapper.vm.onFilter();
+        wrapper.setData({
+            data: [
+                {
+                    is_aktif: {
+                        0: "Tidak Aktif",
+                        1: "Aktif"
+                    },
+                    k_kota: {
+                        1101: "Kab. Aceh Besar",
+                        1102: "Kab. Pidie"
+                    },
+                    k_propinsi: {
+                        11: "Aceh",
+                        12: "Sumatera Utara"
+                    }
+                }
+            ]
+        });
         await wrapper.vm.$nextTick();
-        expect(wrapper.find('[data-testid="filterbtn"]').exists()).toBe(true);
-        // const btn = wrapper.find('[data-testid="filterbtn"]')
-        // btn.trigger('click')
-        expect(wrapper.vm.onFilter.mock.calls.length).toBe(1);
-    })
-    test('calls onAdd when button is clicked', async () => {
-        const wrapper = wrapperFactory();
-        wrapper.setData({ add: true });
-        wrapper.vm.onAdd = jest.fn();
-        wrapper.vm.onAdd();
-        await wrapper.vm.$nextTick();
-        expect(wrapper.find('[data-testid="addbtn"]').exists()).toBe(true);
-        const button = wrapper.find('[data-testid="addbtn"]')
+        expect(wrapper.find('.mdi-filter-variant').exists()).toBe(true);
+        const button = wrapper.find('.mdi-filter-variant')
         button.trigger('click')
-        expect(wrapper.vm.onAdd.mock.calls.length).toBe(1);
     })
+
     test('Enter search text and check the value of keyword', async () => {
         const wrapper = wrapperFactory();
-        wrapper.find('[data-testid="search"]')
+        wrapper.find('.mdi-magnify')
         wrapper.setData({ keyword: 'UMM' })
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.keyword).toBe('UMM')
@@ -213,7 +212,7 @@ describe('Index.vue', () => {
     test('click search button and clear input', () => {
         const wrapper = wrapperFactory();
         wrapper.find('.mdi-magnify').trigger("click");
-        const textInput = wrapper.find('[data-testid="search"]')
+        const textInput = wrapper.find('.mdi-magnify')
         expect(textInput.text()).toMatch('')
         expect(wrapper.vm.keyword).toBe('')
     })
@@ -235,7 +234,7 @@ describe('Index.vue', () => {
                 {
                     instansi_id: 600001,
                     is_aktif: 1,
-                    instansi:  {
+                    instansi: {
                         data: {
                             instansi_id: 600001,
                             nama: "Universitas Brawijaya Malang Melintang",
@@ -253,7 +252,7 @@ describe('Index.vue', () => {
                     telp_penanggung_jawab: "081287634287",
                     telp_sekretaris: "08145725631"
                 }
-                 ],
+            ],
             total: 1,
             actions: [
                 {
@@ -267,6 +266,40 @@ describe('Index.vue', () => {
 
         await wrapper.vm.$nextTick()
         expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
+        const button = wrapper.find('.mdi-dots-vertical')
+        button.trigger('click')
     })
 
+    test('calls onAdd when button is clicked', async () => {
+        const wrapper = wrapperFactory();
+        wrapper.vm.onAdd = jest.fn();
+        wrapper.vm.onAdd();
+        wrapper.setData({
+            data: [
+                {
+                    instansi_id: 600001,
+                    instansi: {
+                        data: {
+                            instansi_id: 600001,
+                            nama: "Universitas Brawijaya Malang Melintang",
+                            alamat: "Jl. Veteran No. 15",
+                            email: "ub@ub.ac.id"
+                        }
+                    },
+                    k_kota: "Kota Malang",
+                    k_propinsi: "Jawa Timur",
+                    jml_pembimbing: 4,
+                    kodepos: 314618,
+                    k_lpd_paud: "LPD Provinsi",
+                    ratio_pengajar_tambahan: 40,
+                    nama_penanggung_jawab: "Bruno",
+                    telp_penanggung_jawab: "081287634287",
+                }
+            ],
+        })
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('.mdi-plus').exists()).toBe(true);
+        const button = wrapper.find('.mdi-plus')
+        button.trigger('click')
+    })
 })
