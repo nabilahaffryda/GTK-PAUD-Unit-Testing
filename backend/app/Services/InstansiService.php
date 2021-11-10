@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Exceptions\FlowException;
 use App\Models\Instansi;
+use App\Models\PaudInstansi;
 use Illuminate\Support\Facades\Storage;
 
 class InstansiService
@@ -31,4 +32,13 @@ class InstansiService
         $delete  = sprintf("%s/%s", $ftpPath, $filename);
         return Storage::disk('instansi-foto')->delete($delete);
     }
+
+    public function getPaudInstansi(Instansi $instansi)
+    {
+        return PaudInstansi::whereInstansiId($instansi->instansi_id)
+            ->where('angkatan', config('paud.angkatan'))
+            ->where('tahun', config('paud.tahun'))
+            ->first();
+    }
+
 }

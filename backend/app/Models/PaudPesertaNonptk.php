@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
 /**
  * App\Models\PaudPesertaNonptk
  *
@@ -36,6 +37,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $updated_at
  * @property null|string $created_by
  * @property null|string $updated_by
+ *
+ * @property-read null|string $sertifikat_url
+ * @property-read null|string $ktp_url
  *
  * @property-read Instansi $instansi
  * @property-read MDiklatPaud $mDiklatPaud
@@ -118,6 +122,16 @@ class PaudPesertaNonptk extends Eloquent
         'updated_at' => 'datetime',
         'created_by' => 'string',
         'updated_by' => 'string',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'sertifikat_url',
+        'ktp_url',
     ];
 
     /**
@@ -213,5 +227,15 @@ class PaudPesertaNonptk extends Eloquent
     public function paudKelasPesertaLurings()
     {
         return $this->hasMany('App\Models\PaudKelasPesertaLuring', 'paud_peserta_nonptk_id', 'paud_peserta_nonptk_id');
+    }
+
+    public function getSertifikatUrlAttribute()
+    {
+        return $this->sertifikat_file ? sprintf("%s/%s", config('filesystems.disks.peserta-nonptk.url'), $this->sertifikat_file) : null;
+    }
+
+    public function getKtpUrlAttribute()
+    {
+        return $this->ktp_file ? sprintf("%s/%s", config('filesystems.disks.peserta-nonptk.url'), $this->ktp_file) : null;
     }
 }

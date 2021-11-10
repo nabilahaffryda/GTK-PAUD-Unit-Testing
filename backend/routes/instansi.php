@@ -289,4 +289,12 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('', [AdminKelas\ProfilController::class, 'index']);
         Route::post('{admin}/update', [AdminKelas\ProfilController::class, 'update']);
     });
+
+    Route::group(['prefix' => 'peserta/nonptk'], function () {
+        Route::get('', [Lpd\Peserta\NonPtkController::class, 'index']);
+        Route::get('{peserta}', [Lpd\Peserta\NonPtkController::class, 'fetch']);
+        Route::post('create', [Lpd\Peserta\NonPtkController::class, 'create']);
+        Route::post('{peserta}/update', [Lpd\Peserta\NonPtkController::class, 'update']);
+        Route::post('{peserta}/delete', [Lpd\Peserta\NonPtkController::class, 'delete']);
+    });
 });

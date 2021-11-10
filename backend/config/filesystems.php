@@ -102,6 +102,15 @@ return [
             'url'      => env('KELAS_JADWAL_URL', 'https://upload.dev.siap.id/gpo/paud/kelas-jadwal'),
         ],
 
+        'peserta-nonptk' => [
+            'driver'   => 'ftp',
+            'passive'  => env('PESERTA_NONPTK_PASSIVE', env('FTP_PASSIVE', true)),
+            'host'     => env('PESERTA_NONPTK_HOST', env('FTP_HOST', '172.17.1.20')),
+            'username' => env('PESERTA_NONPTK_USER', env('FTP_USER', 'webmaster')),
+            'password' => env('PESERTA_NONPTK_PASS', env('FTP_PASS', 'w3bmaster')),
+            'path'     => env('PESERTA_NONPTK_PATH', '/upload/gpo/paud/peserta-nonptk'),
+            'url'      => env('PESERTA_NONPTK_URL', 'https://upload.dev.siap.id/gpo/paud/peserta-nonptk'),
+        ],
     ],
 
     /*
