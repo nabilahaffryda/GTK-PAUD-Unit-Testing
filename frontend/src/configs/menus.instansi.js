@@ -239,6 +239,16 @@ export default [
         link: 'petugas',
         to: { name: 'petugas' },
       },
+      {
+        icon: 'mdi-account-cog',
+        title: 'Peserta Non Dapodik',
+        desc: 'Daftar Peserta non dapodik',
+        color: 'purple',
+        deepColor: 'darken-5',
+        akses: true,
+        link: 'peserta',
+        to: { name: 'peserta' },
+      },
     ],
   },
   {
