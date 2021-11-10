@@ -98,6 +98,12 @@ describe('Index.vue', () => {
                         }
                     ],
                 }
+            },
+
+            methods: {
+                fetchData() {
+                    return true
+                }
             }
         })
     }
@@ -161,13 +167,10 @@ describe('Index.vue', () => {
         expect(wrapper.find('.mdi-plus').exists()).toBe(true);
         const button = wrapper.find('.mdi-plus')
         button.trigger('click')
-        console.log(wrapper.html())
+
     })
     test('call onAction when button is clicked', async () => {
         const wrapper = wrapperFactory();
-        wrapper.vm.onAction = jest.fn();
-        wrapper.vm.onAction();
-        await wrapper.vm.$nextTick()
         wrapper.setData({
             data: [
                 {
@@ -186,10 +189,13 @@ describe('Index.vue', () => {
                 }
             ]
         });
-
-        // expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
-        // const button = wrapper.find('.mdi-dots-vertical')
-        // button.trigger('click')
+        // console.log(wrapper.html())
+        // wrapper.vm.onAction = jest.fn();
+        // wrapper.vm.onAction();
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
+        const button = wrapper.find('.mdi-dots-vertical')
+        button.trigger('click')
     })
 
 })
