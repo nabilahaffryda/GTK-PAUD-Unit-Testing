@@ -47,6 +47,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read MKelurahan $mKelurahan
  * @property-read MPetugasPaud $mPetugasPaud
  * @property-read MUnsurPengajarPaud $mUnsurPengajarPaud
+ * @property-read Collection|PaudKelasPetugasLuring[] $paudKelasPetugasLurings
  * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
  * @property-read Collection|PaudPetugasBerkas[] $paudPetugasBerkases
  * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
@@ -223,6 +224,14 @@ class PaudPetugas extends Eloquent
     public function mUnsurPengajarPaud()
     {
         return $this->belongsTo('App\Models\MUnsurPengajarPaud', 'k_unsur_pengajar_paud', 'k_unsur_pengajar_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasPetugasLurings()
+    {
+        return $this->hasMany('App\Models\PaudKelasPetugasLuring', 'paud_petugas_id', 'paud_petugas_id');
     }
 
     /**

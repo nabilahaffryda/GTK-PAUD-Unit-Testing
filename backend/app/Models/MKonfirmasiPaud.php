@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $singkat
  * @property null|string $keterangan
  *
+ * @property-read Collection|PaudKelasPesertaLuring[] $paudKelasPesertaLurings
+ * @property-read Collection|PaudKelasPeserta[] $paudKelasPesertas
+ * @property-read Collection|PaudKelasPetugasLuring[] $paudKelasPetugasLurings
  * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
  *
  * @method static Builder|MKonfirmasiPaud whereKKonfirmasiPaud($value)
@@ -76,6 +79,30 @@ class MKonfirmasiPaud extends Eloquent
         'singkat',
         'keterangan',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasPesertaLurings()
+    {
+        return $this->hasMany('App\Models\PaudKelasPesertaLuring', 'k_konfirmasi_paud', 'k_konfirmasi_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasPesertas()
+    {
+        return $this->hasMany('App\Models\PaudKelasPeserta', 'k_konfirmasi_paud', 'k_konfirmasi_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasPetugasLurings()
+    {
+        return $this->hasMany('App\Models\PaudKelasPetugasLuring', 'k_konfirmasi_paud', 'k_konfirmasi_paud');
+    }
 
     /**
      * @return HasMany

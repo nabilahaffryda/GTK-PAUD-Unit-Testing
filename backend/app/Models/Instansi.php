@@ -36,9 +36,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read MPropinsi $mPropinsi
  * @property-read Collection|AkunInstansi[] $akunInstansis
  * @property-read Collection|PaudAdmin[] $paudAdmins
+ * @property-read Collection|PaudDiklatLuring[] $paudDiklatLurings
  * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
  * @property-read Collection|PaudInstansi[] $paudInstansis
+ * @property-read Collection|PaudPesertaNonptk[] $paudPesertaNonptks
  * @property-read Collection|PaudPetugas[] $paudPetugases
  *
  * @method static Builder|Instansi whereInstansiId($value)
@@ -196,6 +198,14 @@ class Instansi extends Eloquent
     /**
      * @return HasMany
      */
+    public function paudDiklatLurings()
+    {
+        return $this->hasMany('App\Models\PaudDiklatLuring', 'instansi_id', 'instansi_id');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function paudDiklats()
     {
         return $this->hasMany('App\Models\PaudDiklat', 'instansi_id', 'instansi_id');
@@ -215,6 +225,14 @@ class Instansi extends Eloquent
     public function paudInstansis()
     {
         return $this->hasMany('App\Models\PaudInstansi', 'instansi_id', 'instansi_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPesertaNonptks()
+    {
+        return $this->hasMany('App\Models\PaudPesertaNonptk', 'instansi_id', 'instansi_id');
     }
 
     /**

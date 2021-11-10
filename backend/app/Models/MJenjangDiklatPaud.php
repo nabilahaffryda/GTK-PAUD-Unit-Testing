@@ -6,44 +6,35 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
 /**
- * App\Models\MDiklatPaud
+ * App\Models\MJenjangDiklatPaud
  *
- * @property int $k_diklat_paud
+ * @property int $k_jenjang_diklat_paud
  * @property null|string $singkat
  * @property null|string $keterangan
- * @property null|int $is_luring
  *
  * @property-read Collection|PaudDiklatLuring[] $paudDiklatLurings
  * @property-read Collection|PaudPesertaNonptk[] $paudPesertaNonptks
- * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
  *
- * @method static Builder|MDiklatPaud whereKDiklatPaud($value)
- * @method static Builder|MDiklatPaud whereSingkat($value)
- * @method static Builder|MDiklatPaud whereKeterangan($value)
- * @method static Builder|MDiklatPaud whereIsLuring($value)
+ * @method static Builder|MJenjangDiklatPaud whereKJenjangDiklatPaud($value)
+ * @method static Builder|MJenjangDiklatPaud whereSingkat($value)
+ * @method static Builder|MJenjangDiklatPaud whereKeterangan($value)
  */
-class MDiklatPaud extends Eloquent
+class MJenjangDiklatPaud extends Eloquent
 {
-    public const DIKLAT_BERJENJANG = 1;
-    public const DIKLAT_PCP        = 2;
-    public const DIKLAT_MOT        = 3;
-    public const DIKLAT_LAINNYA    = 4;
-
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'm_diklat_paud';
+    protected $table = 'm_jenjang_diklat_paud';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'k_diklat_paud';
+    protected $primaryKey = 'k_jenjang_diklat_paud';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -58,9 +49,8 @@ class MDiklatPaud extends Eloquent
      * @var array
      */
     protected $casts = [
-        'singkat'    => 'string',
+        'singkat' => 'string',
         'keterangan' => 'string',
-        'is_luring' => 'int',
     ];
 
     /**
@@ -76,10 +66,9 @@ class MDiklatPaud extends Eloquent
      * @var string[]
      */
     protected $fillable = [
-        'k_diklat_paud',
+        'k_jenjang_diklat_paud',
         'singkat',
         'keterangan',
-        'is_luring',
     ];
 
     /**
@@ -87,7 +76,7 @@ class MDiklatPaud extends Eloquent
      */
     public function paudDiklatLurings()
     {
-        return $this->hasMany('App\Models\PaudDiklatLuring', 'k_diklat_paud', 'k_diklat_paud');
+        return $this->hasMany('App\Models\PaudDiklatLuring', 'k_jenjang_diklat_paud', 'k_jenjang_diklat_paud');
     }
 
     /**
@@ -95,14 +84,6 @@ class MDiklatPaud extends Eloquent
      */
     public function paudPesertaNonptks()
     {
-        return $this->hasMany('App\Models\PaudPesertaNonptk', 'k_diklat_paud', 'k_diklat_paud');
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function paudPetugasDiklats()
-    {
-        return $this->hasMany('App\Models\PaudPetugasDiklat', 'k_diklat_paud', 'k_diklat_paud');
+        return $this->hasMany('App\Models\PaudPesertaNonptk', 'k_jenjang_diklat_paud', 'k_jenjang_diklat_paud');
     }
 }

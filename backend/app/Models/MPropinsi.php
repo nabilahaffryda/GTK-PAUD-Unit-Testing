@@ -23,7 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Collection|PaudPetugas[] $instansiPetugases
  * @property-read Collection|Instansi[] $instansis
  * @property-read Collection|MKota[] $mKotas
+ * @property-read Collection|PaudDiklatLuring[] $paudDiklatLurings
  * @property-read Collection|PaudDiklat[] $paudDiklats
+ * @property-read Collection|PaudPesertaNonptk[] $paudPesertaNonptks
  * @property-read Collection|Ptk[] $ptks
  *
  * @method static Builder|MPropinsi whereKPropinsi($value)
@@ -136,9 +138,25 @@ class MPropinsi extends Eloquent
     /**
      * @return HasMany
      */
+    public function paudDiklatLurings()
+    {
+        return $this->hasMany('App\Models\PaudDiklatLuring', 'k_propinsi', 'k_propinsi');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function paudDiklats()
     {
         return $this->hasMany('App\Models\PaudDiklat', 'k_propinsi', 'k_propinsi');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPesertaNonptks()
+    {
+        return $this->hasMany('App\Models\PaudPesertaNonptk', 'k_propinsi', 'k_propinsi');
     }
 
     /**

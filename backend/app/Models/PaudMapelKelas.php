@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $updated_by
  * @property null|int $lms_mapel_id
  *
+ * @property-read Collection|PaudKelasLuring[] $paudKelasLurings
  * @property-read Collection|PaudKelas[] $paudKelases
  *
  * @method static Builder|PaudMapelKelas wherePaudMapelKelasId($value)
@@ -75,6 +76,14 @@ class PaudMapelKelas extends Eloquent
         'updated_by',
         'lms_mapel_id',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasLurings()
+    {
+        return $this->hasMany('App\Models\PaudKelasLuring', 'paud_mapel_kelas_id', 'paud_mapel_kelas_id');
+    }
 
     /**
      * @return HasMany

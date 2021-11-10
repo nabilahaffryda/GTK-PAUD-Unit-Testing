@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|PaudInstansi[] $paudInstansis
+ * @property-read Collection|PaudKelasLuring[] $paudKelasLurings
  * @property-read Collection|PaudKelas[] $paudKelases
  * @property-read Collection|PaudPetugasPeran[] $paudPetugasPerans
  *
@@ -95,6 +96,14 @@ class MVervalPaud extends Eloquent
     public function paudInstansis()
     {
         return $this->hasMany('App\Models\PaudInstansi', 'k_verval_paud', 'k_verval_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasLurings()
+    {
+        return $this->hasMany('App\Models\PaudKelasLuring', 'k_verval_paud', 'k_verval_paud');
     }
 
     /**
