@@ -28,6 +28,82 @@
           </template>
         </base-table-header>
       </v-card-title>
+      <v-card-text class="pa-0">
+        <base-list-table
+          :hideHeader="true"
+          :loading="loading"
+          :item="data"
+          :total="total"
+          :usePaging="false"
+          @fetch="fetchData"
+        >
+          <template slot-scope="{ item }">
+            <td>
+              <slot :item="item">
+                <v-list-item dense class="px-0">
+                  <v-list-item-content>
+                    <v-row>
+                      <v-col class="py-0" cols="12" md="3">
+                        <v-list-item class="px-0">
+                          <v-list-item-avatar color="primary">
+                            <v-icon dark>mdi-account-circle</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content class="py-0 mt-3">
+                            <span class="caption">Nama</span>
+                            <div class="body-1 black--text">
+                              <strong>{{ $getDeepObj(item, 'nama') || '-' }}</strong>
+                            </div>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col class="py-0" cols="12" md="3">
+                        <v-list-item class="px-0">
+                          <v-list-item-content class="py-0 mt-3">
+                            <span class="caption">NIK</span>
+                            <div class="body-1">
+                              {{ $getDeepObj(item, 'nik') || '-' }}
+                            </div>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col class="py-0" cols="12" md="3">
+                        <v-list-item class="px-0">
+                          <v-list-item-content class="py-0 mt-3">
+                            <span class="caption">Jenis Diklat</span>
+                            <div class="body-1">
+                              {{ item['k_diklat_paud'] ? masters['m_diklat_paud'][item['k_diklat_paud']] : '' }}
+                            </div>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col class="py-0" cols="12" md="3">
+                        <v-list-item class="px-0">
+                          <v-list-item-content>
+                            <span class="caption">Jenjang Diklat</span>
+                            <div class="body-1">
+                              {{
+                                item['k_jenjang_diklat_paud']
+                                  ? masters['m_jenjang_diklat_paud'][item['k_jenjang_diklat_paud']]
+                                  : ''
+                              }}
+                            </div>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                    </v-row>
+                  </v-list-item-content>
+                  <v-list-item-action-text>
+                    <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
+                  </v-list-item-action-text>
+                </v-list-item>
+              </slot>
+            </td>
+          </template>
+        </base-list-table>
+      </v-card-text>
+      <v-card-actions>
+        <base-table-footer :pageTotal="pageTotal" @changePage="onChangePage"></base-table-footer>
+      </v-card-actions>
     </v-card>
 
     <base-modal-full
@@ -44,6 +120,12 @@
         :isEdit="formulir.isEdit"
         :initValue="formulir.init"
         :masters="masters"
+        @validate="onValidate"
+        @reset="
+          () => {
+            formulir.isValid = false;
+          }
+        "
       />
     </base-modal-full>
   </div>
@@ -63,7 +145,7 @@ export default {
   },
   created() {
     this.getMasters({
-      name: ['m_propinsi', 'm_kota', 'm_kualifikasi', 'm_golongan'].join(';'),
+      name: ['m_propinsi', 'm_kota', 'm_kualifikasi', 'm_golongan', 'm_diklat_paud', 'm_jenjang_diklat_paud'].join(';'),
       filter: {
         0: {
           k_propinsi: {
@@ -79,6 +161,7 @@ export default {
   },
   methods: {
     ...mapActions('master', ['getMasters']),
+    ...mapActions('peserta', ['fetch', 'getDetail', 'create', 'update', 'delete']),
 
     onAdd() {
       this.$set(this.formulir, 'title', 'Tambah Peserta Non Dapodik');
@@ -90,7 +173,30 @@ export default {
       });
     },
 
-    onSave() {}
+    onValidate() {
+      this.$refs.modal.onValidate().then((valid) => {
+        this.$set(this.formulir, 'isValid', valid);
+        if (valid) this.$refs.formulir.next(valid);
+      });
+    },
+
+    onSave() {
+      const form = this.$refs.formulir.form || {};
+      const formData = new FormData();
+      const id = this.$refs.formulir.id || null;
+
+      Object.keys(form).forEach((key) => {
+        if (form[key]) {
+          formData.append(key, form[key]);
+        }
+      });
+
+      this[id ? 'update' : 'create']({ id: id, params: formData }).then(() => {
+        this.$success(`Data peserta berhasil ${id ? 'Di ubah' : 'Ditambahkan'}`);
+        this.$refs.modal.close();
+        this.onReload();
+      });
+    },
   },
 };
 </script>
