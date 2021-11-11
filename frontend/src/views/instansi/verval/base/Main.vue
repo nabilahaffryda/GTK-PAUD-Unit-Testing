@@ -26,10 +26,13 @@
           :paramsFilter="filters"
           @save="filterSave"
         />
+        {{ data }}
+        {{ total }}
         <base-list-table
           :hideHeader="true"
           :loading="loading"
           :item="data"
+          data-testid="list-table-verval-main"
           :total="total"
           :usePaging="false"
           @fetch="fetchData"
@@ -153,6 +156,7 @@
                               v-else-if="$allow(`${jenis}-verval-kunci.update`) && [2].includes(getKVerval(item))"
                               color="secondary"
                               small
+                              data-testid="kunci-btn"
                               block
                               @click="onKunci(item)"
                             >
@@ -382,6 +386,7 @@ export default {
           return;
         }
       });
+      console.log(this.data);
       return status;
     },
 
@@ -408,6 +413,7 @@ export default {
           allow = this.$allow(action.akses);
           break;
       }
+      // console.log(this.data);
       return allow;
     },
 
