@@ -28,7 +28,9 @@
                       <v-col cols="12" md="6" sm="12">
                         <span :class="[`px-0 body-2 secondary--text`]" style="height: 24px">
                           Unggah Sertifikat/Ijazah *
-                          <v-icon v-if="false" small right color="orange">mdi-information</v-icon>
+                          <v-icon small right color="orange" @click="panduan = true" style="cursor: pointer">
+                            mdi-information
+                          </v-icon>
                         </span>
                         <template v-if="files && files.sertifikat">
                           <div class="mt-2">
@@ -60,6 +62,7 @@
                               outlined
                               dense
                               single-line
+                              @change="checkFile"
                             ></v-file-input>
                           </validation-provider>
                         </template>
@@ -154,6 +157,47 @@
         </v-stepper>
       </v-container>
     </v-card-text>
+    <v-dialog v-model="panduan" max-width="800" :scrollable="false" @keydown.esc="panduan = false">
+      <v-card>
+        <v-toolbar flat>
+          <v-toolbar-title>Unggah Sertifikat / Ijazah Terakhir</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="panduan = false"><v-icon>mdi-close</v-icon></v-btn>
+        </v-toolbar>
+        <v-divider></v-divider>
+        <v-card-text class="black--text">
+          <v-row class="pa-2">
+            <v-col cols="12" md="3" sm="12">
+              <v-img
+                class="ma-5"
+                src="https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/icon_keterangan_certification.png"
+              >
+              </v-img>
+            </v-col>
+            <v-col cols="12" md="9" sm="12">
+              <div class="body-1 font-weight-medium mt-2">Ketentuan Unggah Sertifikat</div>
+              <table>
+                <tr>
+                  <td><v-icon left color="success">mdi-check-circle</v-icon></td>
+                  <td
+                    >Peserta yang mau mengikuti
+                    <b>Diklat Dasar harus mengunggah Ijazah Terakhir (mininmal SMA sederajat)</b></td
+                  >
+                </tr>
+                <tr>
+                  <td><v-icon left color="success">mdi-check-circle</v-icon></td>
+                  <td>Peserta yang mau mengikuti <b>Diklat Lanjut harus mengunggah sertifikat Diklat Dasar</b></td>
+                </tr>
+                <tr>
+                  <td><v-icon left color="success">mdi-check-circle</v-icon></td>
+                  <td>Peserta yang mau mengikuti <b>Diklat Mahir harus mengunggah sertifikat Diklat Lanjut</b></td>
+                </tr>
+              </table>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 <script>
@@ -183,6 +227,8 @@ export default {
       step: null,
       form: {},
       files: {},
+      url_file: null,
+      panduan: false,
     };
   },
   computed: {
@@ -257,7 +303,11 @@ export default {
           {
             key: 'alamat',
             label: 'Alamat',
-            value: this.$getDeepObj(this.form, 'alamat') || '-',
+            value: [
+              this.$getDeepObj(this.form, 'alamat') || '-',
+              this.$getDeepObj(this.masters, `m_propinsi.${Number(this.form.k_propinsi)}`) || '-',
+              this.$getDeepObj(this.masters, `m_kota.${Number(this.form.k_kota)}`) || '-',
+            ].join(',<br/>'),
           },
           {
             key: 'jenjang_diklat',
@@ -452,6 +502,7 @@ export default {
     reset() {
       this.form = {};
       this.files = {};
+      this.url_file = null;
       this.step = 1;
     },
 
@@ -500,8 +551,13 @@ export default {
     },
 
     onView(tipe) {
-      const url = this.$getDeepObj(this.initValue, `${tipe}_url`);
+      const url = this.$getDeepObj(this, 'url_file') || this.$getDeepObj(this.initValue, `${tipe}_url`);
       window.open(url, '_blank');
+    },
+
+    checkFile(file) {
+      let blob = new Blob([file], { type: `${file.type}` });
+      this.url_file = URL.createObjectURL(blob);
     },
   },
   watch: {

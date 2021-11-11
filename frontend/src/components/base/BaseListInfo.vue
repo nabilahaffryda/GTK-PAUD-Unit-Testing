@@ -50,8 +50,8 @@ export default {
       required: true,
     },
     tipe: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: '',
     },
   },
 };

@@ -77,7 +77,11 @@
                           <v-list-item-content class="py-0 mt-3">
                             <span class="caption">Jenis Diklat</span>
                             <div class="body-1">
-                              {{ item['k_diklat_paud'] ? masters['m_diklat_paud'][item['k_diklat_paud']] : '' }}
+                              {{
+                                item['k_diklat_paud'] && masters['m_diklat_paud']
+                                  ? masters['m_diklat_paud'][item['k_diklat_paud']]
+                                  : ''
+                              }}
                             </div>
                           </v-list-item-content>
                         </v-list-item>
@@ -88,7 +92,7 @@
                             <span class="caption">Jenjang Diklat</span>
                             <div class="body-1">
                               {{
-                                item['k_jenjang_diklat_paud']
+                                item['k_jenjang_diklat_paud'] && masters['m_jenjang_diklat_paud']
                                   ? masters['m_jenjang_diklat_paud'][item['k_jenjang_diklat_paud']]
                                   : ''
                               }}
@@ -139,12 +143,13 @@
 <script>
 import list from '@mixins/list';
 import FormPeserta from './formulir/Peserta';
+import FormInfo from './formulir/InfoPeserta';
 import { mapActions, mapState } from 'vuex';
 import actions from './actions';
 
 export default {
   mixins: [list],
-  components: { FormPeserta },
+  components: { FormPeserta, FormInfo },
   data() {
     return {
       formulir: {},
@@ -173,6 +178,7 @@ export default {
 
     onAdd() {
       this.$set(this.formulir, 'title', 'Tambah Peserta Non Dapodik');
+      this.$set(this.formulir, 'component', 'FormPeserta');
       this.$set(this.formulir, 'isEdit', false);
       this.$set(this.formulir, 'isValid', false);
       this.$set(this.formulir, 'id', null);
@@ -189,6 +195,7 @@ export default {
         ({ data }) => data
       );
       this.$set(this.formulir, 'title', 'Ubah Peserta Non Dapodik');
+      this.$set(this.formulir, 'component', 'FormPeserta');
       this.$set(this.formulir, 'isEdit', true);
       this.$set(this.formulir, 'isValid', false);
       this.$set(this.formulir, 'id', this.$getDeepObj(data, 'paud_peserta_nonptk_id'));
@@ -197,6 +204,20 @@ export default {
         this.$refs.formulir.reset();
         this.$set(this.formulir, 'initValue', resp);
       });
+    },
+
+    async onDetil(data) {
+      const resp = await this.getDetail({ id: this.$getDeepObj(data, 'paud_peserta_nonptk_id') }).then(
+        ({ data }) => data
+      );
+      console.log(data);
+
+      this.$set(this.formulir, 'title', 'Data Profil');
+      this.$set(this.formulir, 'component', 'FormInfo');
+      this.$set(this.formulir, 'isEdit', false);
+      this.$set(this.formulir, 'isValid', false);
+      this.$set(this.formulir, 'initValue', resp);
+      this.$refs.modal.open();
     },
 
     onValidate() {
