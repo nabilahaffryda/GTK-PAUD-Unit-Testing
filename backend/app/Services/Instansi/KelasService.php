@@ -567,10 +567,7 @@ class KelasService
      */
     public function ajuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
-        $wktTutup = config('paud.diklat.wkt-tutup-ajuan');
-        if ($wktTutup && Carbon::parse($wktTutup)->isPast()) {
-            throw new FlowException('Pengajuan kelas telah ditutup pada ' . Carbon::parse($wktTutup)->formatLocalized('%A, %e %b %Y %H:%M'));
-        }
+        app(PeriodeService::class)->validateWktAjuanAktif($paudDiklat->paudPeriode);
 
         $this->validateKelas($paudDiklat, $kelas);
         $this->validateKelasBaru($kelas);
@@ -660,10 +657,7 @@ class KelasService
 
     public function batalAjuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
-        $wktTutup = config('paud.diklat.wkt-tutup-ajuan');
-        if ($wktTutup && Carbon::parse($wktTutup)->isPast()) {
-            throw new FlowException('Pengajuan kelas telah ditutup pada ' . Carbon::parse($wktTutup)->formatLocalized('%A, %e %b %Y %H:%M'));
-        }
+        app(PeriodeService::class)->validateWktAjuanAktif($paudDiklat->paudPeriode);
 
         $this->validateKelas($paudDiklat, $kelas);
         $this->validateKelasAjuan($kelas);
