@@ -13,7 +13,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "http-build-query": "^0.7.0",
-    "kitsu": "^10.0.0-alpha.9",
+    "kitsu": "^10.0.0-alpha.17",
     "lodash.debounce": "^4.0.8",
     "pdfobject": "^2.2.4",
     "printd": "^1.4.2",
