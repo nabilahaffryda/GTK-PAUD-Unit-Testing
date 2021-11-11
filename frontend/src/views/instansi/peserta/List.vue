@@ -210,7 +210,6 @@ export default {
       const resp = await this.getDetail({ id: this.$getDeepObj(data, 'paud_peserta_nonptk_id') }).then(
         ({ data }) => data
       );
-      console.log(data);
 
       this.$set(this.formulir, 'title', 'Data Profil');
       this.$set(this.formulir, 'component', 'FormInfo');
