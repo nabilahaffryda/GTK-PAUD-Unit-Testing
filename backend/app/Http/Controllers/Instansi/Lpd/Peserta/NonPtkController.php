@@ -64,6 +64,8 @@ class NonPtkController extends Controller
             $peserta->load([
                 'mDiklatPaud',
                 'mJenjangDiklatPaud',
+                'mPropinsi',
+                'mKota',
             ])
         );
     }
