@@ -15,52 +15,73 @@
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
                   <div class="my-5">
-                    <div class="text-h5 black--text my-4">Data Peserta</div>
+                    <div class="text-h6 black--text my-4">Data Peserta</div>
                     <base-form-generator :schema="schema.umum" v-model="form" />
                   </div>
                   <div class="my-3">
-                    <div class="text-h5 black--text my-4">Data Diklat</div>
+                    <div class="text-h6 black--text my-4">Data Diklat</div>
                     <base-form-generator :schema="schema.diklat" v-model="form" />
                   </div>
                   <div class="my-3">
-                    <div class="text-h5 black--text my-4">Data Unggahan</div>
+                    <div class="text-h6 black--text my-4">Data Unggahan</div>
                     <v-row>
                       <v-col cols="12" md="6" sm="12">
                         <span :class="[`px-0 body-2 secondary--text`]" style="height: 24px">
                           Unggah Sertifikat/Ijazah *
                           <v-icon v-if="false" small right color="orange">mdi-information</v-icon>
                         </span>
-                        <validation-provider name="Sertifikat Diklat" rules="required" v-slot="{ errors }">
-                          <v-file-input
-                            v-model="form.file_sertifikat"
-                            :error-messages="errors"
-                            label="Pindaian Berkas Sertifikat (20 KB - 1,5 MB)"
-                            append-icon="mdi-paperclip"
-                            prepend-icon=""
-                            accept="image/*,.pdf"
-                            hint=""
-                            :rules="[
-                              (value) =>
-                                (value && value.size < roundDecimal(1500 * 1000)) ||
-                                'Berkas yang Anda upload melebihi kapasitas maksimum!',
-                            ]"
-                            persistent-hint
-                            show-size
-                            outlined
-                            dense
-                            single-line
-                          ></v-file-input>
-                        </validation-provider>
+                        <template v-if="files && files.sertifikat">
+                          <div class="mt-2">
+                            <v-btn color="secondary" depressed small @click="onView('sertifikat')">
+                              <v-icon left>mdi-eye</v-icon> Preview
+                            </v-btn>
+                            <v-btn class="mx-2" color="primary" depressed small @click="onDelete('sertifikat')">
+                              <v-icon left>mdi-pencil</v-icon> Ubah Berkas
+                            </v-btn>
+                          </div>
+                        </template>
+                        <template v-else>
+                          <validation-provider name="Sertifikat Diklat" rules="required" v-slot="{ errors }">
+                            <v-file-input
+                              v-model="form.file_sertifikat"
+                              :error-messages="errors"
+                              label="Pindaian Berkas Sertifikat (20 KB - 1,5 MB)"
+                              append-icon="mdi-paperclip"
+                              prepend-icon=""
+                              accept="image/*,.pdf"
+                              hint=""
+                              :rules="[
+                                (value) =>
+                                  (value && value.size < roundDecimal(1500 * 1000)) ||
+                                  'Berkas yang Anda upload melebihi kapasitas maksimum!',
+                              ]"
+                              persistent-hint
+                              show-size
+                              outlined
+                              dense
+                              single-line
+                            ></v-file-input>
+                          </validation-provider>
+                        </template>
                       </v-col>
                       <v-col cols="12" md="6" sm="12">
                         <span :class="[`px-0 body-2 secondary--text`]" style="height: 24px">
-                          Unggah Sertifikat/Ijazah *
+                          Unggah Scan KTP
                           <v-icon v-if="false" small right color="orange">mdi-information</v-icon>
                         </span>
-                        <validation-provider name="Sertifikat Diklat" rules="required" v-slot="{ errors }">
+                        <template v-if="files && files.ktp">
+                          <div class="mt-2">
+                            <v-btn color="secondary" depressed small @click="onView('ktp')">
+                              <v-icon left>mdi-eye</v-icon> Preview
+                            </v-btn>
+                            <v-btn class="mx-2" color="primary" depressed small @click="onDelete('ktp')">
+                              <v-icon left>mdi-pencil</v-icon> Ubah Berkas
+                            </v-btn>
+                          </div>
+                        </template>
+                        <template v-else>
                           <v-file-input
                             v-model="form.file_ktp"
-                            :error-messages="errors"
                             label="File scan KTP (20 KB - 1,5 MB)"
                             append-icon="mdi-paperclip"
                             prepend-icon=""
@@ -77,7 +98,7 @@
                             dense
                             single-line
                           ></v-file-input>
-                        </validation-provider>
+                        </template>
                       </v-col>
                     </v-row>
                   </div>
@@ -94,7 +115,7 @@
             <v-stepper-content step="2" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
-                  <h2 class="secondary--text">Konfirmasi Tambah Peserta</h2>
+                  <h2 class="secondary--text">Konfirmasi {{ isEdit ? 'Ubah' : 'Tambah' }} Peserta</h2>
                   <v-row class="my-2">
                     <v-col cols="12" md="2" sm="12">
                       <v-avatar color="primary" size="100">
@@ -102,7 +123,13 @@
                       </v-avatar>
                     </v-col>
                     <v-col cols="12" md="10" sm="12" class="px-0">
-                      <base-list-info class="px-0" :info="info"></base-list-info>
+                      <base-list-info class="px-0" tipe="row" :info="info"></base-list-info>
+                      <div>
+                        <span class="caption">File Sertifikat : </span>
+                        <v-btn class="mx-2" color="blue" outlined small depressed @click="onView('sertifikat')">
+                          Lihat Sertifikat
+                        </v-btn>
+                      </div>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -155,6 +182,7 @@ export default {
     return {
       step: null,
       form: {},
+      files: {},
     };
   },
   computed: {
@@ -233,7 +261,7 @@ export default {
           },
           {
             key: 'jenjang_diklat',
-            label: 'Unit Kerja',
+            label: 'Jenis Diklat',
             value: [
               this.form['k_diklat_paud'] ? this.masters['m_diklat_paud'][Number(this.form['k_diklat_paud'])] : '',
               this.form['k_jenjang_diklat_paud']
@@ -423,7 +451,32 @@ export default {
   methods: {
     reset() {
       this.form = {};
+      this.files = {};
       this.step = 1;
+    },
+
+    initForm(value) {
+      if (!value) return;
+      console.log(value);
+      const formulir = [
+        ...(this.schema.umum || []),
+        ...(this.schema.diklat || []),
+        { name: 'k_propinsi' },
+        { name: 'k_kota' },
+      ];
+      for (const item of formulir) {
+        if (item.name) {
+          this.$set(this.form, item.name, this.$getDeepObj(value, item.name) || '');
+        }
+      }
+
+      const urls = ['sertifikat', 'ktp'];
+
+      urls.forEach((key) => {
+        if (value[`${key}_url`]) {
+          this.$set(this.files, key, value[`${key}_url`]);
+        }
+      });
     },
 
     onValidate() {
@@ -441,6 +494,18 @@ export default {
     roundDecimal(value) {
       return roundDecimal(value);
     },
+
+    onDelete(tipe) {
+      this.$delete(this.files, tipe);
+    },
+
+    onView(tipe) {
+      const url = this.$getDeepObj(this.initValue, `${tipe}_url`);
+      window.open(url, '_blank');
+    },
+  },
+  watch: {
+    initValue: 'initForm',
   },
 };
 </script>

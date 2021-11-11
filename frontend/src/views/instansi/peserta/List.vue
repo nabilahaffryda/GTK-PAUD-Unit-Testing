@@ -20,7 +20,13 @@
 
     <v-card>
       <v-card-title class="pa-0">
-        <base-table-header @search="onSearch" :btnAdd="true" @add="onAdd" @reload="onReload" @download="onDownload">
+        <base-table-header
+          @search="onSearch"
+          :btnAdd="$allow('lpd-peserta-non-ptk.create')"
+          @add="onAdd"
+          @reload="onReload"
+          @download="onDownload"
+        >
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text">
               Daftar Peserta Luring <b>{{ total }} </b>
@@ -118,10 +124,10 @@
         ref="formulir"
         :is="formulir.component || 'FormPeserta'"
         :isEdit="formulir.isEdit"
-        :initValue="formulir.init"
+        :initValue="formulir.initValue"
         :masters="masters"
         @validate="onValidate"
-        @reset="
+        @onStep="
           () => {
             formulir.isValid = false;
           }
@@ -134,6 +140,7 @@
 import list from '@mixins/list';
 import FormPeserta from './formulir/Peserta';
 import { mapActions, mapState } from 'vuex';
+import actions from './actions';
 
 export default {
   mixins: [list],
@@ -141,6 +148,7 @@ export default {
   data() {
     return {
       formulir: {},
+      actions: actions,
     };
   },
   created() {
@@ -167,9 +175,27 @@ export default {
       this.$set(this.formulir, 'title', 'Tambah Peserta Non Dapodik');
       this.$set(this.formulir, 'isEdit', false);
       this.$set(this.formulir, 'isValid', false);
+      this.$set(this.formulir, 'id', null);
+
+      this.$set(this.formulir, 'initValue', null);
       this.$refs.modal.open();
       this.$nextTick(() => {
         this.$refs.formulir.reset();
+      });
+    },
+
+    async onEdit(data) {
+      const resp = await this.getDetail({ id: this.$getDeepObj(data, 'paud_peserta_nonptk_id') }).then(
+        ({ data }) => data
+      );
+      this.$set(this.formulir, 'title', 'Ubah Peserta Non Dapodik');
+      this.$set(this.formulir, 'isEdit', true);
+      this.$set(this.formulir, 'isValid', false);
+      this.$set(this.formulir, 'id', this.$getDeepObj(data, 'paud_peserta_nonptk_id'));
+      this.$refs.modal.open();
+      this.$nextTick(() => {
+        this.$refs.formulir.reset();
+        this.$set(this.formulir, 'initValue', resp);
       });
     },
 
@@ -183,7 +209,7 @@ export default {
     onSave() {
       const form = this.$refs.formulir.form || {};
       const formData = new FormData();
-      const id = this.$refs.formulir.id || null;
+      const id = this.formulir.id || null;
 
       Object.keys(form).forEach((key) => {
         if (form[key]) {
@@ -195,6 +221,18 @@ export default {
         this.$success(`Data peserta berhasil ${id ? 'Di ubah' : 'Ditambahkan'}`);
         this.$refs.modal.close();
         this.onReload();
+      });
+    },
+
+    onDelete(data) {
+      this.$confirm(`Apakan anda ingin menghapus peserta ${data.nama} berikut ?`, `Hapus Peserta`, {
+        tipe: 'error',
+        data: [],
+      }).then(() => {
+        this.delete({ id: this.$getDeepObj(data, 'paud_peserta_nonptk_id') }).then(() => {
+          this.$success(`Peserta berhasil dihapus`);
+          this.fetchData();
+        });
       });
     },
   },

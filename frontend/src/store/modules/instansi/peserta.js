@@ -31,4 +31,22 @@ export const actions = {
       })
       .then(({ data }) => data);
   },
+
+  update({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const url = `/i/${id}/peserta/nonptk/${payload.id}/update`;
+    return http
+      .post(url, payload.params, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(({ data }) => data);
+  },
+
+  delete({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const url = `/i/${id}/peserta/nonptk/${payload.id}/delete`;
+    return http.post(url, payload.params).then(({ data }) => data);
+  },
 };

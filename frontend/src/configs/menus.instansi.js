@@ -245,7 +245,7 @@ export default [
         desc: 'Daftar Peserta non dapodik',
         color: 'purple',
         deepColor: 'darken-5',
-        akses: true,
+        akses: 'lpd-peserta-non-ptk.index',
         link: 'peserta',
         to: { name: 'peserta' },
       },
