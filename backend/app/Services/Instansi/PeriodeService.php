@@ -5,6 +5,7 @@ namespace App\Services\Instansi;
 use App\Exceptions\FlowException;
 use App\Models\PaudPeriode;
 use Arr;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class PeriodeService
@@ -87,5 +88,27 @@ class PeriodeService
     {
         $periode->delete();
         return $periode;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateWktAjuanAktif(PaudPeriode $periode)
+    {
+        if (!$periode->wkt_ajuan_buka) {
+            throw new FlowException("Pengajuan Diklat {$periode->nama} belum dibuka");
+        }
+
+        if ($periode->wkt_ajuan_buka->isFuture()) {
+            throw new FlowException("Pengajuan Diklat {$periode->nama} akan dibuka pada " . Carbon::parse($periode->wkt_ajuan_buka)->formatLocalized('%A, %e %b %Y %H:%M'));
+        }
+
+        if ($periode->wkt_ajuan_tutup?->isPast()) {
+            throw new FlowException("Pengajuan Diklat {$periode->nama} telah ditutup pada " . Carbon::parse($periode->wkt_ajuan_tutup)->formatLocalized('%A, %e %b %Y %H:%M'));
+        }
+
+        if (!$periode->is_aktif) {
+            throw new FlowException("Pengajuan Diklat {$periode->nama} dinonaktifkan");
+        }
     }
 }
