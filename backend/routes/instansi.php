@@ -119,6 +119,16 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         });
     });
 
+    Route::group(['prefix' => 'luring/diklat'], function () {
+        Route::get('mapel-kelas', [Lpd\Luring\Diklat\MapelKelasController::class, 'index']);
+
+        Route::get('', [Lpd\Luring\DiklatController::class, 'index']);
+        Route::post('create', [Lpd\Luring\DiklatController::class, 'create']);
+        Route::get('{diklat}', [Lpd\Luring\DiklatController::class, 'fetch']);
+        Route::post('{diklat}/update', [Lpd\Luring\DiklatController::class, 'update']);
+        Route::post('{diklat}/delete', [Lpd\Luring\DiklatController::class, 'delete']);
+    });
+
     Route::group(['prefix' => 'akun/admin-program'], function () {
         Route::get('', [Akun\AdminProgramController::class, 'index']);
         Route::get('download', [Akun\AdminProgramController::class, 'download']);
