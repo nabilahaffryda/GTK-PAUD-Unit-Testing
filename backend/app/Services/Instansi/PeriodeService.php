@@ -95,7 +95,11 @@ class PeriodeService
      */
     public function validateWktAjuanAktif(PaudPeriode $periode)
     {
-        if ($periode->wkt_ajuan_buka?->isFuture()) {
+        if (!$periode->wkt_ajuan_buka) {
+            throw new FlowException("Pengajuan Diklat {$periode->nama} belum dibuka");
+        }
+
+        if ($periode->wkt_ajuan_buka->isFuture()) {
             throw new FlowException("Pengajuan Diklat {$periode->nama} akan dibuka pada " . Carbon::parse($periode->wkt_ajuan_buka)->formatLocalized('%A, %e %b %Y %H:%M'));
         }
 
