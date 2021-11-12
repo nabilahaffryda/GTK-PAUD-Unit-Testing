@@ -24,6 +24,8 @@
                 <div class="body-1">
                   {{
                     [
+                      $getDeepObj(kelas, `m_kelurahan.data.keterangan`) || '-',
+                      $getDeepObj(kelas, `m_kecamatan.data.keterangan`) || '-',
                       $getDeepObj(detail, `m_kota.data.keterangan`) || '',
                       $getDeepObj(detail, `m_propinsi.data.keterangan`) || '',
                     ].join(', ')
