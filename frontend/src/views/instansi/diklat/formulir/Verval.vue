@@ -272,7 +272,6 @@ export default {
   },
   computed: {
     headers() {
-      console.log(this.detail);
       let temp = [
         {
           text: 'Nama Lengkap',
