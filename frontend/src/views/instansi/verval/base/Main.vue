@@ -26,8 +26,6 @@
           :paramsFilter="filters"
           @save="filterSave"
         />
-        {{ data }}
-        {{ total }}
         <base-list-table
           :hideHeader="true"
           :loading="loading"
@@ -156,13 +154,14 @@
                               v-else-if="$allow(`${jenis}-verval-kunci.update`) && [2].includes(getKVerval(item))"
                               color="secondary"
                               small
-                              data-testid="kunci-btn"
                               block
                               @click="onKunci(item)"
                             >
                               <v-icon left>mdi-account-arrow-left</v-icon> Kunci Verval
                             </v-btn>
-                            <v-btn v-else small block color="primary" @click="onVerval(item)"> Detail </v-btn>
+                            <v-btn v-else data-testid="detail-btn" small block color="primary" @click="onVerval(item)">
+                              Detail
+                            </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -386,7 +385,6 @@ export default {
           return;
         }
       });
-      console.log(this.data);
       return status;
     },
 
@@ -413,7 +411,6 @@ export default {
           allow = this.$allow(action.akses);
           break;
       }
-      // console.log(this.data);
       return allow;
     },
 

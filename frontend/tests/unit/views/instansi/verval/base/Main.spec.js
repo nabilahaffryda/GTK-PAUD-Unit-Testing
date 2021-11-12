@@ -1,4 +1,4 @@
-import { createLocalVue, mount } from "@vue/test-utils";
+import { createLocalVue, mount, config } from "@vue/test-utils";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import Main from "@/views/instansi/verval/base/Main.vue";
 import { getDeepObj, isObject, isArray, arrayToObject, } from '@utils/format';
 
+config.showDeprecationWarnings = false;
 Vue.use(Vuetify)
 const localVue = createLocalVue();
 
@@ -124,28 +125,92 @@ describe('Index.vue', () => {
                 paramsTipe: {},
                 actions: []
             },
+            methods: {
+                allowMenu() {
+                    return true
+                }
+            },
             stubs: {
                 BaseModalFull: true,
                 PopupPreviewDetail: true,
-                // BaseTableHeader: true,
-                // BaseTableFooter: true,
-                // FormBerkas: true
             },
             data() {
                 return {
                     reload: false,
-                    // Datatables: false
                 }
             },
         })
     }
 
-    // test('render list table', async () => {
-    //     const wrapper = wrapperFactory();
-    //     wrapper.setData({ Datatables: true });
-    //     await wrapper.vm.$nextTick();
-    //     expect(wrapper.find('[ data-testid="list-table-verval-main"]').exists()).toBe(true);
-    // })
+    test('render list table', async () => {
+        const wrapper = wrapperFactory();
+        wrapper.setData({
+            data: [
+                {
+                    0: {
+                        instansi: {
+                            data: {
+                                email: "jayakarta@gmail.com",
+                                id: 720003,
+                                nama: "Universitas Jayakarta",
+                                no_telpon: "324232423",
+                                k_jenis_instansi: 23
+                            }
+                        },
+                        m_verval_paud: {
+                            data: {
+                                id: 2,
+                                k_verval_paud: 2,
+                                keterangan: "Diajukan",
+                                singkat: "Diajukan",
+                                type: "m_verval_paud"
+                            }
+                        },
+                        instansi_id: 720003,
+                        is_aktif: 1,
+                        jml_admin_program: 4,
+                        k_lpd_paud: 3,
+                        k_verval_paud: 2,
+                        kodepos: "12330",
+                        type: "paud_instansi",
+                        id: 5
+                    },
+                    1: {
+                        akun_id_verval: "10002877",
+                        akun_verval: {
+                            data: {
+                                akun_id: "10002877",
+                                email: "yaumil@jayantara.co.id",
+                                id: "10002877",
+                                nama: "Yaumil Akhir",
+                                no_hp: "09876543212",
+                                no_telpon: "12312321321",
+                                type: "akun"
+                            }
+                        },
+                        diklat: {
+                            0: {
+                                nama: "Diklat Pengkelasan Mandiri",
+                                tahun: "2020"
+                            }
+                        },
+                        instansi: {
+                            data: {
+                                alamat: "Jl. jayakarta",
+                                email: "lpdsatu@gmail.com",
+                                nama: "Lembaga Penyelenggara Diklat 1",
+                                id: 720004,
+                                instansi_id: 720004
+                            }
+                        }
+                    }
+                }
+            ],
+            total: 2
+        });
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find('[ data-testid="list-table-verval-main"]').exists()).toBe(true);
+    })
     test('test total data from data tables ', async () => {
         const wrapper = wrapperFactory();
         wrapper.find('[data-testid="list-table-verval-main"]')
@@ -170,9 +235,9 @@ describe('Index.vue', () => {
     test('calls onReload when button is clicked', async () => {
         const wrapper = wrapperFactory();
         wrapper.setData({ reload: true });
+        await wrapper.vm.$nextTick();
         wrapper.vm.onReload = jest.fn();
         wrapper.vm.onReload();
-        await wrapper.vm.$nextTick();
         expect(wrapper.find('.mdi-reload').exists()).toBe(true);
         const btn = wrapper.find('.mdi-reload')
         btn.trigger('click')
@@ -210,8 +275,6 @@ describe('Index.vue', () => {
     })
     test('call onKunci when button is clicked', async () => {
         const wrapper = wrapperFactory();
-        wrapper.vm.allowMenu = jest.fn();
-        wrapper.vm.allowMenu()
         wrapper.setData({
             data: [
                 {
@@ -276,12 +339,157 @@ describe('Index.vue', () => {
             ],
             total: 2
         })
-        console.log(wrapper.html())
-        // wrapper.vm.onKunci = jest.fn();
-        // wrapper.vm.onKunci();
-        // await wrapper.vm.$nextTick()
-        // expect(wrapper.find('[data-testid="kunci-btn"]').exists()).toBe(true);
-        // const button = wrapper.find('.mdi-account-arrow-left')
-        // button.trigger('click')
+        await wrapper.vm.$nextTick()
+        wrapper.vm.onKunci = jest.fn();
+        wrapper.vm.onKunci();
+        expect(wrapper.find('.mdi-account-arrow-left').exists()).toBe(true);
+        const button = wrapper.find('.mdi-account-arrow-left')
+        button.trigger('click')
+    })
+    test('call onAction when button is clicked', async () => {
+        const wrapper = wrapperFactory();
+        wrapper.setData({
+            data: [
+                {
+                    0: {
+                        instansi: {
+                            data: {
+                                email: "jayakarta@gmail.com",
+                                id: 720003,
+                                nama: "Universitas Jayakarta",
+                                no_telpon: "324232423",
+                                k_jenis_instansi: 23
+                            }
+                        },
+                        m_verval_paud: {
+                            data: {
+                                id: 2,
+                                k_verval_paud: 2,
+                                keterangan: "Diajukan",
+                                singkat: "Diajukan",
+                                type: "m_verval_paud"
+                            }
+                        },
+                        instansi_id: 720003,
+                        is_aktif: 1,
+                        jml_admin_program: 4,
+                        k_lpd_paud: 3,
+                        k_verval_paud: 2,
+                        kodepos: "12330",
+                        type: "paud_instansi",
+                        id: 5
+                    },
+                    1: {
+                        akun_id_verval: "10002877",
+                        akun_verval: {
+                            data: {
+                                akun_id: "10002877",
+                                email: "yaumil@jayantara.co.id",
+                                id: "10002877",
+                                nama: "Yaumil Akhir",
+                                no_hp: "09876543212",
+                                no_telpon: "12312321321",
+                                type: "akun"
+                            }
+                        },
+                        diklat: {
+                            0: {
+                                nama: "Diklat Pengkelasan Mandiri",
+                                tahun: "2020"
+                            }
+                        },
+                        instansi: {
+                            data: {
+                                alamat: "Jl. jayakarta",
+                                email: "lpdsatu@gmail.com",
+                                nama: "Lembaga Penyelenggara Diklat 1",
+                                id: 720004,
+                                instansi_id: 720004
+                            }
+                        }
+                    }
+                }
+            ],
+            total: 2
+        })
+        await wrapper.vm.$nextTick()
+        wrapper.vm.onAction = jest.fn();
+        wrapper.vm.onAction();
+        expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
+        const button = wrapper.find('.mdi-dots-vertical')
+        button.trigger('click')
+    })
+    test('call onVerval when detail button is clicked', async () => {
+        const wrapper = wrapperFactory();
+        wrapper.setData({
+            data: [
+                {
+                    0: {
+                        instansi: {
+                            data: {
+                                email: "jayakarta@gmail.com",
+                                id: 720003,
+                                nama: "Universitas Jayakarta",
+                                no_telpon: "324232423",
+                                k_jenis_instansi: 23
+                            }
+                        },
+                        m_verval_paud: {
+                            data: {
+                                id: 2,
+                                k_verval_paud: 2,
+                                keterangan: "Diajukan",
+                                singkat: "Diajukan",
+                                type: "m_verval_paud"
+                            }
+                        },
+                        instansi_id: 720003,
+                        is_aktif: 1,
+                        jml_admin_program: 4,
+                        k_lpd_paud: 3,
+                        k_verval_paud: 2,
+                        kodepos: "12330",
+                        type: "paud_instansi",
+                        id: 5
+                    },
+                    1: {
+                        akun_id_verval: "10002877",
+                        akun_verval: {
+                            data: {
+                                akun_id: "10002877",
+                                email: "yaumil@jayantara.co.id",
+                                id: "10002877",
+                                nama: "Yaumil Akhir",
+                                no_hp: "09876543212",
+                                no_telpon: "12312321321",
+                                type: "akun"
+                            }
+                        },
+                        diklat: {
+                            0: {
+                                nama: "Diklat Pengkelasan Mandiri",
+                                tahun: "2020"
+                            }
+                        },
+                        instansi: {
+                            data: {
+                                alamat: "Jl. jayakarta",
+                                email: "lpdsatu@gmail.com",
+                                nama: "Lembaga Penyelenggara Diklat 1",
+                                id: 720004,
+                                instansi_id: 720004
+                            }
+                        }
+                    }
+                }
+            ],
+            total: 2
+        })
+        await wrapper.vm.$nextTick()
+        wrapper.vm.onVerval = jest.fn();
+        wrapper.vm.onVerval();
+        expect(wrapper.find('[data-testid="detail-btn"]').exists()).toBe(true);
+        const button = wrapper.find('[data-testid="detail-btn"]')
+        button.trigger('click')
     })
 })
