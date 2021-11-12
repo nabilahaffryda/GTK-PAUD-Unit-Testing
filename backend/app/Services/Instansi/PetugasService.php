@@ -701,6 +701,21 @@ class PetugasService
                         ->when($kelasId && $kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasId, $kPetugasPaud) {
                             $query->where('paud_kelas_petugas.k_petugas_paud', '=', $kPetugasPaud)
                                 ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelasId);
+                        })
+                        ->when($kelasId, function ($query) use ($kelasId, $kPetugasPaud) {
+                            $query
+                                ->where(function ($query) use ($kelasId) {
+                                    $query
+                                        ->orWhere('paud_kelas_petugas.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA)
+                                        ->orWhere('paud_kelas_petugas.paud_kelas_id', '=', $kelasId);
+                                })
+                                ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasId, $kPetugasPaud) {
+                                    $query
+                                        ->where('paud_kelas_petugas.k_petugas_paud', '=', $kPetugasPaud)
+                                        ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelasId);
+                                });
+                        }, function ($query) {
+                            $query->where('paud_kelas_petugas.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA);
                         });
                 });
             })
@@ -711,10 +726,20 @@ class PetugasService
                         ->join('paud_diklat_luring', 'paud_diklat_luring.paud_diklat_luring_id', '=', 'paud_kelas_luring.paud_diklat_luring_id')
                         ->where('paud_diklat_luring.tgl_mulai', '<=', $tglSelesai)
                         ->where('paud_diklat_luring.tgl_selesai', '>=', $tglMulai)
-                        ->where('paud_kelas_petugas_luring.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA)
-                        ->when($kelasLuringId && $kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasLuringId, $kPetugasPaud) {
-                            $query->where('paud_kelas_petugas_luring.k_petugas_paud', '=', $kPetugasPaud)
-                                ->where('paud_kelas_petugas_luring.paud_kelas_id', '=', $kelasLuringId);
+                        ->when($kelasLuringId, function ($query) use ($kelasLuringId, $kPetugasPaud) {
+                            $query
+                                ->where(function ($query) use ($kelasLuringId) {
+                                    $query
+                                        ->orWhere('paud_kelas_petugas_luring.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA)
+                                        ->orWhere('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', $kelasLuringId);
+                                })
+                                ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasLuringId, $kPetugasPaud) {
+                                    $query
+                                        ->where('paud_kelas_petugas_luring.k_petugas_paud', '=', $kPetugasPaud)
+                                        ->where('paud_kelas_petugas_luring.paud_kelas_id', '=', $kelasLuringId);
+                                });
+                        }, function ($query) {
+                            $query->Where('paud_kelas_petugas_luring.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA);
                         });
                 });
             })
