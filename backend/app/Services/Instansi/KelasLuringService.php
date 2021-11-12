@@ -255,7 +255,7 @@ class KelasLuringService
         $this->validateKelas($diklat, $kelas);
         $this->validateKelasBaru($kelas);
 
-        $ptks = app(PesertaService::class)->queryKandidat($diklat->k_kota, kJenjang: $kJenjang, kSumber: $kSumber)
+        $ptks = app(PesertaService::class)->queryKandidat($diklat->k_kota, kJenjang: $kJenjang, kSumber: $kSumber, kelasLuringId: $kelas->paud_kelas_luring_id)
             ->whereIn('ptk.ptk_id', $params['ptk_id'])
             ->get();
 
@@ -268,16 +268,17 @@ class KelasLuringService
         $existing = PaudKelasPesertaLuring::query()
             ->where([
                 'paud_kelas_luring_id' => $kelas->paud_kelas_luring_id,
-                'is_nonptk'            => '1',
+                'is_nonptk'            => '0',
             ])
-            ->pluck('paud_kelas_peserta_luring_id', 'ptk_id');
+            ->get()
+            ->keyBy('ptk_id');
 
         $jmlPeserta = $existing->count() + count($params['ptk_id']);
         if ($jmlPeserta > 40) {
             throw new FlowException("Jumlah peserta maksimal 40 orang");
         }
 
-        $result = collect();
+        $result = [];
         /** @var Ptk $ptk */
         foreach ($ptks as $ptk) {
             if ($existing->has($ptk->ptk_id)) {
@@ -302,7 +303,7 @@ class KelasLuringService
             $result[] = $peserta;
         }
 
-        return $result;
+        return PaudKelasPesertaLuring::newModelInstance()->newCollection($result);
     }
 
     /**
@@ -348,14 +349,15 @@ class KelasLuringService
                 'paud_kelas_luring_id' => $kelas->paud_kelas_luring_id,
                 'is_nonptk'            => '1',
             ])
-            ->pluck('paud_kelas_peserta_luring_id', 'paud_peserta_nonptk_id');
+            ->get()
+            ->keyBy('paud_peserta_nonptk_id');
 
         $jmlPeserta = $existing->count() + count($params['paud_peserta_nonptk_id']);
         if ($jmlPeserta > 40) {
             throw new FlowException("Jumlah peserta maksimal 40 orang");
         }
 
-        $result = collect();
+        $result = [];
         foreach ($nonPtks as $nonPtk) {
             if ($existing->has($nonPtk->paud_peserta_nonptk_id)) {
                 $result[] = $existing->get($nonPtk->paud_peserta_nonptk_id);
@@ -379,7 +381,7 @@ class KelasLuringService
             $result[] = $peserta;
         }
 
-        return $result;
+        return PaudKelasPesertaLuring::newModelInstance()->newCollection($result);
     }
 
     /**
