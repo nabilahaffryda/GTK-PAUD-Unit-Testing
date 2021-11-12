@@ -205,6 +205,12 @@ export default {
         result.push('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       }
 
+      if (/doc|DOC|docx|DOCX/.test(this.rules && this.rules.format)) {
+        result.push(
+          'application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        );
+      }
+
       return result;
     },
   },

@@ -190,6 +190,7 @@
         :detail="detail"
         :masters="masters"
         :initValue="formulir.init"
+        :jenis="jenis"
         @reload="onDetail"
       ></component>
     </base-modal-full>
