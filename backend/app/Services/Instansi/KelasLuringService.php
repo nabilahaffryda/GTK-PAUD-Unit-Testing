@@ -265,19 +265,26 @@ class KelasLuringService
             throw new FlowException("Peserta dengan PTK_ID {$ptkIds} tidak ditemukan");
         }
 
-        $jmlPeserta = PaudKelasPesertaLuring::query()
+        $existing = PaudKelasPesertaLuring::query()
             ->where([
-                'paud_kelas_peserta_luring.paud_kelas_luring_id' => $kelas->paud_kelas_luring_id,
+                'paud_kelas_luring_id' => $kelas->paud_kelas_luring_id,
+                'is_nonptk'            => '1',
             ])
-            ->count();
+            ->pluck('paud_kelas_peserta_luring_id', 'ptk_id');
 
-        $jmlPeserta += count($params['ptk_id']);
+        $jmlPeserta = $existing->count() + count($params['ptk_id']);
         if ($jmlPeserta > 40) {
             throw new FlowException("Jumlah peserta maksimal 40 orang");
         }
 
+        $result = collect();
         /** @var Ptk $ptk */
         foreach ($ptks as $ptk) {
+            if ($existing->has($ptk->ptk_id)) {
+                $result[] = $existing->get($ptk->ptk_id);
+                continue;
+            }
+
             $peserta = new PaudKelasPesertaLuring();
             $peserta->fill($params);
             $peserta->paud_kelas_luring_id = $kelas->paud_kelas_luring_id;
@@ -291,9 +298,11 @@ class KelasLuringService
             if (!$peserta->save()) {
                 throw new FlowException("Peserta tidak berhasil disimpan");
             }
+
+            $result[] = $peserta;
         }
 
-        return $ptks;
+        return $result;
     }
 
     /**
@@ -334,18 +343,25 @@ class KelasLuringService
             throw new Exception(count($diff) . " peserta non dapodik tidak ditemukan");
         }
 
-        $jmlPeserta = PaudKelasPesertaLuring::query()
+        $existing = PaudKelasPesertaLuring::query()
             ->where([
-                'paud_kelas_peserta_luring.paud_kelas_id' => $kelas->paud_kelas_luring_id,
+                'paud_kelas_luring_id' => $kelas->paud_kelas_luring_id,
+                'is_nonptk'            => '1',
             ])
-            ->count();
+            ->pluck('paud_kelas_peserta_luring_id', 'paud_peserta_nonptk_id');
 
-        $jmlPeserta += count($params['ptk_id']);
+        $jmlPeserta = $existing->count() + count($params['paud_peserta_nonptk_id']);
         if ($jmlPeserta > 40) {
             throw new FlowException("Jumlah peserta maksimal 40 orang");
         }
 
+        $result = collect();
         foreach ($nonPtks as $nonPtk) {
+            if ($existing->has($nonPtk->paud_peserta_nonptk_id)) {
+                $result[] = $existing->get($nonPtk->paud_peserta_nonptk_id);
+                continue;
+            }
+
             $peserta = new PaudKelasPesertaLuring();
             $peserta->fill($params);
             $peserta->paud_kelas_luring_id   = $kelas->paud_kelas_luring_id;
@@ -359,9 +375,11 @@ class KelasLuringService
             if (!$peserta->save()) {
                 throw new FlowException("Peserta tidak berhasil disimpan");
             }
+
+            $result[] = $peserta;
         }
 
-        return $nonPtks;
+        return $result;
     }
 
     /**
