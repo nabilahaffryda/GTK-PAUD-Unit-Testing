@@ -132,6 +132,6 @@ class PesertaController extends Controller
 
         $peserta->delete();
 
-        return true;
+        return $peserta;
     }
 }
