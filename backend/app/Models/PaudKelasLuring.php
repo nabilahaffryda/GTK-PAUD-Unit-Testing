@@ -34,6 +34,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $created_by
  * @property null|string $updated_by
  *
+ * @property-read null|string $url_jadwal
+ *
  * @property-read MKecamatan $mKecamatan
  * @property-read MKelurahan $mKelurahan
  * @property-read MVervalPaud $mVervalPaud
@@ -108,6 +110,15 @@ class PaudKelasLuring extends Eloquent
         'updated_at' => 'datetime',
         'created_by' => 'string',
         'updated_by' => 'string',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url_jadwal',
     ];
 
     /**
@@ -192,5 +203,10 @@ class PaudKelasLuring extends Eloquent
     public function paudMapelKelas()
     {
         return $this->belongsTo('App\Models\PaudMapelKelas', 'paud_mapel_kelas_id', 'paud_mapel_kelas_id');
+    }
+
+    public function getUrlJadwalAttribute()
+    {
+        return $this->file_jadwal ? sprintf("%s/%s", config('filesystems.disks.kelas-jadwal.url'), $this->file_jadwal) : null;
     }
 }

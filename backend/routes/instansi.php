@@ -127,6 +127,33 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('{diklat}', [Lpd\Luring\DiklatController::class, 'fetch']);
         Route::post('{diklat}/update', [Lpd\Luring\DiklatController::class, 'update']);
         Route::post('{diklat}/delete', [Lpd\Luring\DiklatController::class, 'delete']);
+
+        Route::group(['prefix' => '{diklat}'], function () {
+            Route::get('kelas', [Lpd\Luring\KelasController::class, 'index']);
+            Route::post('kelas/create', [Lpd\Luring\KelasController::class, 'create']);
+            Route::get('kelas/{kelas}', [Lpd\Luring\KelasController::class, 'fetch']);
+            Route::post('kelas/{kelas}/update', [Lpd\Luring\KelasController::class, 'update']);
+            Route::post('kelas/{kelas}/upload-jadwal', [Lpd\Luring\KelasController::class, 'uploadJadwal']);
+
+            Route::post('kelas/{kelas}/ajuan/create', [Lpd\Luring\Kelas\AjuanController::class, 'create']);
+            Route::post('kelas/{kelas}/ajuan/delete', [Lpd\Luring\Kelas\AjuanController::class, 'delete']);
+
+            Route::get('kelas/{kelas}/peserta', [Lpd\Luring\Kelas\PesertaController::class, 'index']);
+            Route::get('kelas/{kelas}/peserta/kandidat', [Lpd\Luring\Kelas\PesertaController::class, 'candidate']);
+            Route::get('kelas/{kelas}/peserta/kandidat-simpatika', [Lpd\Luring\Kelas\PesertaController::class, 'candidateSimpatika']);
+            Route::get('kelas/{kelas}/peserta/kandidat-sd', [Lpd\Luring\Kelas\PesertaController::class, 'candidateSd']);
+            Route::get('kelas/{kelas}/peserta/kandidat-nonptk', [Lpd\Luring\Kelas\PesertaController::class, 'candidateNonPtk']);
+            Route::post('kelas/{kelas}/peserta/create', [Lpd\Luring\Kelas\PesertaController::class, 'create']);
+            Route::post('kelas/{kelas}/peserta/create-simpatika', [Lpd\Luring\Kelas\PesertaController::class, 'createSimpatika']);
+            Route::post('kelas/{kelas}/peserta/create-sd', [Lpd\Luring\Kelas\PesertaController::class, 'createSd']);
+            Route::post('kelas/{kelas}/peserta/create-nonptk', [Lpd\Luring\Kelas\PesertaController::class, 'createNonPtk']);
+            Route::post('kelas/{kelas}/peserta/{peserta}/delete', [Lpd\Luring\Kelas\PesertaController::class, 'delete']);
+
+            Route::get('kelas/{kelas}/petugas', [Lpd\Luring\Kelas\PetugasController::class, 'index']);
+            Route::get('kelas/{kelas}/petugas/kandidat', [Lpd\Luring\Kelas\PetugasController::class, 'candidate']);
+            Route::post('kelas/{kelas}/petugas/create', [Lpd\Luring\Kelas\PetugasController::class, 'create']);
+            Route::get('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Luring\Kelas\PetugasController::class, 'delete']);
+        });
     });
 
     Route::group(['prefix' => 'akun/admin-program'], function () {

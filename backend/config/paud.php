@@ -20,4 +20,8 @@ return [
 
         'group-id-peserta' => 8,
     ],
+
+    'kelas-jadwal' => [
+        'hapus-file-lama' => false,
+    ],
 ];
