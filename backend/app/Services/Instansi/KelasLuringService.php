@@ -84,7 +84,7 @@ class KelasLuringService
     {
         $this->validateKelas($diklat, $kelas);
 
-        return $kelas->load(['mVervalPaud', 'paudDiklatLuring.instansi', 'paudDiklatLuring.paudInstansi', 'paudMapelKelas']);
+        return $kelas->load(['mVervalPaud', 'mKecamatan', 'mKelurahan', 'paudDiklatLuring.instansi', 'paudDiklatLuring.paudInstansi', 'paudMapelKelas']);
     }
 
     /**
