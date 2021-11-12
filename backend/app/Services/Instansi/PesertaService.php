@@ -15,10 +15,11 @@ use Illuminate\Database\Query\JoinClause;
 
 class PesertaService
 {
-    public function queryKandidat(int $kKota, int $kJenjang = null, int $kSumber = null)
+    public function queryKandidat(int $kKota, int $kJenjang = null, int $kSumber = null, int $kelasid = null, int $kelasLuringId = null)
     {
         return Ptk::query()
             ->select('ptk.*')
+            ->distinct()
             ->leftJoin('ptk_sekolah', 'ptk_sekolah.ptk_id', '=', 'ptk.ptk_id')
             ->leftJoin('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
             ->leftJoin('paud_kelas_peserta', function (JoinClause $query) {
@@ -46,8 +47,18 @@ class PesertaService
                     'sekolah.k_kota' => $kKota,
                 ]);
             })
-            ->whereNull('paud_kelas_peserta.paud_kelas_peserta_id')
-            ->whereNull('paud_kelas_peserta_luring.paud_kelas_peserta_luring_id');
+            ->where(function ($query) use ($kelasid) {
+                $query->orWhereNull('paud_kelas_peserta.paud_kelas_peserta_id')
+                    ->when($kelasid, function ($query, $value) {
+                        $query->orWhere('paud_kelas_peserta.paud_kelas_id', '=', $value);
+                    });
+            })
+            ->where(function ($query) use ($kelasLuringId) {
+                $query->orWhereNull('paud_kelas_peserta_luring.paud_kelas_peserta_luring_id')
+                    ->when($kelasLuringId, function ($query, $value) {
+                        $query->orWhere('paud_kelas_peserta_luring.paud_kelas_luring_id', '=', $value);
+                    });
+            });;
     }
 
     /**
