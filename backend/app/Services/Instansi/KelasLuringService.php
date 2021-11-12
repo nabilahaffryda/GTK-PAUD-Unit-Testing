@@ -130,7 +130,11 @@ class KelasLuringService
 
         $query = PaudKelasPesertaLuring::query()
             ->where('paud_kelas_peserta_luring.paud_kelas_luring_id', '=', $kelas->paud_kelas_luring_id)
-            ->with(['ptk:ptk_id,nama,email', 'mKonfirmasiPaud']);
+            ->with([
+                'ptk:ptk_id,nama,email',
+                'paudPesertaNonptk:paud_peserta_nonptk_id,nama,email',
+                'mKonfirmasiPaud',
+            ]);
 
         if ($keyword = Arr::get($params, 'keyword')) {
             $query->join('ptk', 'ptk.ptk_id', '=', 'paud_kelas_peserta_luring.ptk_id')
