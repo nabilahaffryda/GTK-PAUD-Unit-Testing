@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|string $created_by
  * @property null|string $updated_by
  *
+ * @property-read Akun $akun
  * @property-read MKonfirmasiPaud $mKonfirmasiPaud
  * @property-read MPetugasPaud $mPetugasPaud
  * @property-read PaudKelasLuring $paudKelasLuring
@@ -96,6 +97,14 @@ class PaudKelasPetugasLuring extends Eloquent
         'created_by',
         'updated_by',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function akun()
+    {
+        return $this->belongsTo('App\Models\Akun', 'akun_id', 'akun_id');
+    }
 
     /**
      * @return BelongsTo
