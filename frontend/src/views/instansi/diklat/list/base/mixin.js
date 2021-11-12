@@ -123,11 +123,15 @@ export default {
             iconSize: 30,
             iconColor: 'secondary',
             title: `${this.$getDeepObj(item, 'nama')}`,
-            subtitles: [`<span>Email: ${this.$getDeepObj(item, 'singkatan')}</span>`],
+            subtitles: [],
           },
         ],
       }).then(() => {
-        this.action({ id: item.paud_diklat_id, type: 'delete', name: this.attr.tipe }).then(() => {
+        this.action({
+          id: this.$getDeepObj(item, this.isDaring ? 'paud_diklat_id' : 'paud_diklat_luring_id'),
+          type: 'delete',
+          name: this.attr.tipe,
+        }).then(() => {
           this.$success(`Data diklat berhasil di hapus`);
           this.fetchData();
         });
