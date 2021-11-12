@@ -1,4 +1,4 @@
-import { createLocalVue, mount } from "@vue/test-utils";
+import { createLocalVue, mount, config } from "@vue/test-utils";
 import Vuetify from 'vuetify';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -6,6 +6,8 @@ import Vuex from "vuex";
 import axios from 'axios';
 import Index from "@/views/instansi/diklat/list/jadwal/Index.vue";
 import { getDeepObj, isObject, duration, } from '@utils/format';
+
+config.showDeprecationWarnings = false;
 
 Vue.use(Vuetify)
 const localVue = createLocalVue();
@@ -54,7 +56,6 @@ localVue.mixin({
         },
     }
 })
-
 jest.mock('axios');
 
 describe('Index.vue', () => {
@@ -86,6 +87,11 @@ describe('Index.vue', () => {
                 BaseModalFull: true,
                 FormJadwal: true,
             },
+            methods: {
+                fetchData() {
+                    return true
+                }
+            },
             data() {
                 return {
                     reload: false,
@@ -99,20 +105,8 @@ describe('Index.vue', () => {
                     ],
                 }
             },
-
-            methods: {
-                fetchData() {
-                    return true
-                }
-            }
         })
     }
-    test('call fetchData method', () => {
-        const wrapper = wrapperFactory();
-        wrapper.vm.fetchData = jest.fn();
-        wrapper.vm.fetchData();
-        expect(wrapper.vm.fetchData.mock.calls.length).toBe(1);
-    })
     test('call onSave method', () => {
         const wrapper = wrapperFactory();
         wrapper.vm.onSave = jest.fn();
@@ -157,29 +151,75 @@ describe('Index.vue', () => {
         wrapper.setData({
             data: [
                 {
-                    nama: "Tahap 2",
-                    tgl_mulai: "2021-12-30",
-                    tgl_selesai: "2022-01-03"
+                    0: {
+                        angkatan: 1,
+                        id: 1,
+                        is_aktif: 1,
+                        nama: "Angkatan 1",
+                        paud_periode_id: 1,
+                        tahun: 2021,
+                        tgl_daftar_mulai: "2021-02-15",
+                        tgl_daftar_selesai: "2021-02-26",
+                        tgl_diklat_mulai: "2021-02-15",
+                        tgl_diklat_selesai: "2021-02-26",
+                        type: "paud_periode"
+                    },
+                    1: {
+                        angkatan: 1,
+                        id: 2,
+                        is_aktif: 1,
+                        nama: "Angkatan 2",
+                        paud_periode_id: 2,
+                        tahun: 2021,
+                        tgl_daftar_mulai: "2021-12-30",
+                        tgl_daftar_selesai: "2022-01-03",
+                        tgl_diklat_mulai: "2021-12-30",
+                        tgl_diklat_selesai: "2022-01-03",
+                        type: "paud_periode"
+                    }
                 }
             ],
+            total: 2
         })
         await wrapper.vm.$nextTick()
         expect(wrapper.find('.mdi-plus').exists()).toBe(true);
         const button = wrapper.find('.mdi-plus')
         button.trigger('click')
-
     })
     test('call onAction when button is clicked', async () => {
         const wrapper = wrapperFactory();
         wrapper.setData({
             data: [
                 {
-                    nama: "Angkatan 2",
-                    tgl_mulai: "2021-02-15",
-                    tgl_selesai: "2021-02-26"
+                    0: {
+                        angkatan: 1,
+                        id: 1,
+                        is_aktif: 1,
+                        nama: "Angkatan 1",
+                        paud_periode_id: 1,
+                        tahun: 2021,
+                        tgl_daftar_mulai: "2021-02-15",
+                        tgl_daftar_selesai: "2021-02-26",
+                        tgl_diklat_mulai: "2021-02-15",
+                        tgl_diklat_selesai: "2021-02-26",
+                        type: "paud_periode"
+                    },
+                    1: {
+                        angkatan: 1,
+                        id: 2,
+                        is_aktif: 1,
+                        nama: "Angkatan 2",
+                        paud_periode_id: 2,
+                        tahun: 2021,
+                        tgl_daftar_mulai: "2021-12-30",
+                        tgl_daftar_selesai: "2022-01-03",
+                        tgl_diklat_mulai: "2021-12-30",
+                        tgl_diklat_selesai: "2022-01-03",
+                        type: "paud_periode"
+                    }
                 }
             ],
-            total: 1,
+            total: 2,
             actions: [
                 {
                     icon: 'mdi-pencil',
@@ -189,13 +229,11 @@ describe('Index.vue', () => {
                 }
             ]
         });
-        // console.log(wrapper.html())
-        // wrapper.vm.onAction = jest.fn();
-        // wrapper.vm.onAction();
         await wrapper.vm.$nextTick()
+        wrapper.vm.onAction = jest.fn();
+        wrapper.vm.onAction();
         expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
-        const button = wrapper.find('.mdi-dots-vertical')
-        button.trigger('click')
+        // const button = wrapper.find('.mdi-dots-vertical')
+        // button.trigger('click')
     })
-
 })

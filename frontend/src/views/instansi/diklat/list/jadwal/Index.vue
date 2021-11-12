@@ -124,6 +124,7 @@ export default {
         this.$refs.formulir.reset();
         this.$set(this.formulir, 'init', null);
       });
+      console.log(this.data);
     },
 
     async onEdit(item) {
@@ -137,6 +138,7 @@ export default {
         this.$refs.formulir.reset();
         this.$set(this.formulir, 'init', resp);
       });
+      console.log(this.data);
     },
 
     onSave() {
