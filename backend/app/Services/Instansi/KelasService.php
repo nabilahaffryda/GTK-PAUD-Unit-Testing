@@ -40,8 +40,8 @@ class KelasService
     {
         return Ptk::query()
             ->select('ptk.*')
-            ->join('ptk_sekolah', 'ptk_sekolah.ptk_id', '=', 'ptk.ptk_id')
-            ->join('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
+            ->leftJoin('ptk_sekolah', 'ptk_sekolah.ptk_id', '=', 'ptk.ptk_id')
+            ->leftJoin('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
             ->leftJoin('paud_kelas_peserta', function (JoinClause $query) {
                 $query->on('paud_kelas_peserta.ptk_id', '=', 'ptk.ptk_id')
                     ->where('paud_kelas_peserta.tahun', '=', (int)config('paud.tahun'))
@@ -61,7 +61,8 @@ class KelasService
                     'ptk.k_kota'     => (int)$paudDiklat->k_kota,
                     'sekolah.k_kota' => (int)$paudDiklat->k_kota,
                 ]);
-            });
+            })
+            ->whereNull('paud_kelas_peserta.paud_kelas_peserta_id');
     }
 
     public function queryPetugasKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, int $kPetugasPaud)
@@ -566,10 +567,7 @@ class KelasService
      */
     public function ajuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
-        $wktTutup = config('paud.diklat.wkt-tutup-ajuan');
-        if ($wktTutup && Carbon::parse($wktTutup)->isPast()) {
-            throw new FlowException('Pengajuan kelas telah ditutup pada ' . Carbon::parse($wktTutup)->formatLocalized('%A, %e %b %Y %H:%M'));
-        }
+        app(PeriodeService::class)->validateWktAjuanAktif($paudDiklat->paudPeriode);
 
         $this->validateKelas($paudDiklat, $kelas);
         $this->validateKelasBaru($kelas);
@@ -659,10 +657,7 @@ class KelasService
 
     public function batalAjuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
-        $wktTutup = config('paud.diklat.wkt-tutup-ajuan');
-        if ($wktTutup && Carbon::parse($wktTutup)->isPast()) {
-            throw new FlowException('Pengajuan kelas telah ditutup pada ' . Carbon::parse($wktTutup)->formatLocalized('%A, %e %b %Y %H:%M'));
-        }
+        app(PeriodeService::class)->validateWktAjuanAktif($paudDiklat->paudPeriode);
 
         $this->validateKelas($paudDiklat, $kelas);
         $this->validateKelasAjuan($kelas);

@@ -110,17 +110,44 @@
                 </template>
                 <v-col cols="12" sm="12" md="12">
                   <h2 class="title">Data Unggahan</h2>
-                  <berkas-collection
-                    v-for="(berkas, b) in berkases"
-                    :key="b"
-                    :berkas="berkas"
-                    :type="berkas.type"
-                    :valid="berkas.valid"
-                    :with-action="false"
-                    :value="berkas.value || {}"
-                    :optional="berkas.optional"
-                    @detil="onDetil"
-                  />
+                  <v-expansion-panels multiple tile>
+                    <v-expansion-panel>
+                      <v-expansion-panel-header>
+                        <span class="body-1">Berkas Persyaratan</span>
+                      </v-expansion-panel-header>
+                      <v-expansion-panel-content>
+                        <berkas-collection
+                          v-for="(berkas, b) in berkases"
+                          :key="b"
+                          :berkas="berkas"
+                          :type="berkas.type"
+                          :valid="berkas.valid"
+                          :with-action="false"
+                          :value="berkas.value || {}"
+                          :optional="berkas.optional"
+                          @detil="onDetil"
+                        />
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                    <v-expansion-panel v-if="jenis === 'lpd'">
+                      <v-expansion-panel-header>
+                        <span class="body-1">Berkas Kelengkapan Sertifikat</span>
+                      </v-expansion-panel-header>
+                      <v-expansion-panel-content>
+                        <berkas-collection
+                          v-for="(berkas, b) in sertifikats"
+                          :key="b"
+                          :berkas="berkas"
+                          :type="berkas.type"
+                          :valid="berkas.valid"
+                          :with-action="false"
+                          :value="berkas.value || {}"
+                          :optional="berkas.optional"
+                          @detil="onDetil"
+                        />
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
                 </v-col>
               </v-row>
             </v-container>
@@ -364,6 +391,10 @@ export default {
         masters = masters.filter((item) => item.value < 5);
       }
 
+      if (this.jenis === 'lpd') {
+        masters = masters.filter((item) => item.value < 8);
+      }
+
       let temp = [];
       masters.forEach((key) => {
         temp.push({
@@ -377,6 +408,29 @@ export default {
           optional: [2, 4, 7].includes(Number(key.value)) && this.jenis === 'lpd',
         });
       });
+      return temp;
+    },
+
+    sertifikats() {
+      const berkas = this.berkas || [];
+      let masters = this.$mapForMaster(this.$getDeepObj(this, `masters.m_berkas_${this.jenis}_paud`)) || [];
+      const mBerkas = this.$arrToObj(berkas, `k_berkas_${this.jenis}_paud`);
+
+      let temp = [];
+      masters
+        .filter((item) => item.value > 7)
+        .forEach((key) => {
+          temp.push({
+            title: key.text,
+            pesan: ``,
+            valid: !!mBerkas[key.value],
+            type: 'pelatihan',
+            withAction: false,
+            kBerkas: key.value,
+            value: mBerkas[key.value],
+            optional: [2, 4, 7].includes(Number(key.value)) && this.jenis === 'lpd',
+          });
+        });
       return temp;
     },
 

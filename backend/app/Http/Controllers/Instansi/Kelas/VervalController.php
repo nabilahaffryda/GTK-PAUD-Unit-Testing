@@ -49,7 +49,11 @@ class VervalController extends Controller
             'paudDiklat.Instansi',
             'paudDiklat.paudInstansi',
             'paudDiklat.paudPeriode',
+            'paudDiklat.mPropinsi',
+            'paudDiklat.mKota',
             'paudMapelKelas',
+            'mKecamatan',
+            'mKelurahan',
         ]);
 
         return BaseResource::make($kelas);
