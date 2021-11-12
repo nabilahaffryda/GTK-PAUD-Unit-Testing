@@ -290,8 +290,16 @@ export default {
     items() {
       return (this.pesertas || []).map((item) => {
         return {
-          nama: this.$getDeepObj(item, 'ptk.data.nama') || this.$getDeepObj(item, 'akun.data.nama') || '-',
-          email: this.$getDeepObj(item, 'ptk.data.email') || this.$getDeepObj(item, 'akun.data.email') || '-',
+          nama:
+            this.$getDeepObj(item, 'ptk.data.nama') ||
+            this.$getDeepObj(item, 'akun.data.nama') ||
+            this.$getDeepObj(item, 'paud_peserta_non_ptk.data.nama') ||
+            '-',
+          email:
+            this.$getDeepObj(item, 'ptk.data.email') ||
+            this.$getDeepObj(item, 'akun.data.email') ||
+            this.$getDeepObj(item, 'paud_peserta_non_ptk.data.email') ||
+            '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
           k_konfirmasi_paud: (item && item.k_konfirmasi_paud) || 1,
           paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
