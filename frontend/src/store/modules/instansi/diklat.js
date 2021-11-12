@@ -27,10 +27,14 @@ export const actions = {
     return await $ajax.get('/', { params: payload.params });
   },
 
-  async getDetail({ rootState, state }, payload) {
+  async getDetail({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
+    const tipe = {
+      luring: 'luring/',
+      daring: '',
+    };
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${state.jenis}diklat`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${tipe[payload.jenis]}diklat`,
     });
     return await $ajax.get(`/${payload.id}`);
   },

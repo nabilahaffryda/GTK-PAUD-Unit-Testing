@@ -13,8 +13,14 @@
             <div class="headline">{{ $getDeepObj(detail, 'nama') || '' }}</div>
             <div class="body-1">
               <v-icon small left>mdi-clock</v-icon>
-              {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) }} s/d
-              {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) }}
+              <template v-if="isDaring">
+                {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) }} s/d
+                {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) }}
+              </template>
+              <template v-else>
+                {{ $localDate($getDeepObj(detail, 'tgl_mulai')) }} s/d
+                {{ $localDate($getDeepObj(detail, 'tgl_selesai')) }}
+              </template>
             </div>
           </v-col>
         </v-row>
@@ -214,6 +220,14 @@ export default {
       masters: (state) => Object.assign({}, state.masters),
     }),
 
+    jenis() {
+      return this.$route.meta.tipe || 'daring';
+    },
+
+    isDaring() {
+      return this.jenis === 'daring';
+    },
+
     breadcrumbs() {
       return [{ text: 'Daftar Diklat', to: 'kelola-diklat' }, { text: this.$getDeepObj(this, 'detail.nama') }];
     },
@@ -260,6 +274,7 @@ export default {
     },
   },
   created() {
+    Object.assign(this.attr, { jenis: this.jenis });
     this.getMasters({
       name: ['m_propinsi', 'm_kota'].join(';'),
       filter: {

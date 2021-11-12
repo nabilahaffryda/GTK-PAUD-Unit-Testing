@@ -52,7 +52,6 @@ export default {
         const attr = Object.assign({}, this.attr);
         this.fetch({ params, attr }).then(({ data, meta }) => {
           this.data = data || [];
-          console.log(data);
           this.total = meta?.total || data.length || 0;
           this.pageTotal = meta?.last_page || 1;
           this.statistik = meta?.statistik || {};
