@@ -267,7 +267,7 @@ class KelasLuringService
 
         $jmlPeserta = PaudKelasPesertaLuring::query()
             ->where([
-                'paud_kelas_peserta_luring.paud_kelas_id' => $kelas->paud_kelas_luring_id,
+                'paud_kelas_peserta_luring.paud_kelas_luring_id' => $kelas->paud_kelas_luring_id,
             ])
             ->count();
 
