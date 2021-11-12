@@ -64,6 +64,6 @@ class PetugasController extends Controller
 
         $petugas->delete();
 
-        return true;
+        return $petugas;
     }
 }

@@ -152,7 +152,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
             Route::get('kelas/{kelas}/petugas', [Lpd\Luring\Kelas\PetugasController::class, 'index']);
             Route::get('kelas/{kelas}/petugas/kandidat', [Lpd\Luring\Kelas\PetugasController::class, 'candidate']);
             Route::post('kelas/{kelas}/petugas/create', [Lpd\Luring\Kelas\PetugasController::class, 'create']);
-            Route::get('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Luring\Kelas\PetugasController::class, 'delete']);
+            Route::post('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Luring\Kelas\PetugasController::class, 'delete']);
         });
     });
 

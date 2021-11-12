@@ -14,6 +14,7 @@ use App\Models\PaudDiklatLuring;
 use App\Models\PaudKelasLuring;
 use App\Models\PaudKelasPesertaLuring;
 use App\Models\PaudKelasPetugasLuring;
+use App\Models\PaudPeriode;
 use App\Models\PaudPesertaNonptk;
 use App\Models\PaudPetugas;
 use App\Models\Ptk;
@@ -398,7 +399,7 @@ class KelasLuringService
 
         $jmlPetugas = PaudKelasPetugasLuring::query()
             ->where([
-                'paud_kelas_petugas_luring.paud_kelas_id' => $kelas->paud_kelas_id,
+                'paud_kelas_petugas_luring.paud_kelas_luring_id' => $kelas->paud_kelas_luring_id,
             ])
             ->whereIn('paud_kelas_petugas_luring.k_petugas_paud', [$params['k_petugas_paud']])
             ->count();

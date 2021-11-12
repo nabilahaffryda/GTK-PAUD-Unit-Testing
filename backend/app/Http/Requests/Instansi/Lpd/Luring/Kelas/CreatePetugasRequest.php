@@ -15,7 +15,8 @@ class CreatePetugasRequest extends FormRequest
     {
         return [
             'k_petugas_paud' => ['required', 'integer', 'exists:m_petugas_paud,k_petugas_paud'],
-            'akun_id'        => ['required', 'array'],
+            'akun_id'        => ['required', 'min:1', 'array'],
+            'akun_id.*'      => ['required', 'int'],
         ];
     }
 
