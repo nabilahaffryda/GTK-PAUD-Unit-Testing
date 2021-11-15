@@ -62,7 +62,7 @@
                   </v-col>
                 </v-row>
               </v-list-item-content>
-              <v-list-item-action-text>
+              <v-list-item-action-text data-app>
                 <template v-if="$allow('diklat-periode.update') || $allow('diklat-periode.delete')">
                   <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
                 </template>

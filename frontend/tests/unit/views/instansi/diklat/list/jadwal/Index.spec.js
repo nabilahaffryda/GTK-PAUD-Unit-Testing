@@ -8,9 +8,9 @@ import Index from "@/views/instansi/diklat/list/jadwal/Index.vue";
 import { getDeepObj, isObject, duration, } from '@utils/format';
 
 config.showDeprecationWarnings = false;
-
 Vue.use(Vuetify)
 const localVue = createLocalVue();
+document.body.setAttribute('data-app', true)
 
 localVue.use(VueRouter)
 const router = new VueRouter();
@@ -37,7 +37,7 @@ const store = new Vuex.Store({
                     return true
                 },
             }
-        }
+        },
     },
 })
 localVue.mixin({
@@ -48,11 +48,11 @@ localVue.mixin({
         $allow() {
             return true;
         },
-        $durasi(start, end, options) {
-            return duration(start, end, options);
-        },
         $isObject(data) {
             return isObject(data || {});
+        },
+        $durasi(start, end, options) {
+            return duration(start, end, options);
         },
     }
 })
@@ -66,10 +66,9 @@ describe('Index.vue', () => {
             data: {
                 policies: {
                     'diklat-periode.update': true,
-                    'diklat-periode.create': true,
-                    'diklat-periode.delete': true
+                    'diklat-periode.create': true
                 }
-            },
+            }
         }
         axios.get.mockResolvedValue(responseGet);
     })
@@ -78,6 +77,7 @@ describe('Index.vue', () => {
         jest.clearAllMocks()
     })
     function wrapperFactory({ } = {}) {
+
         return mount(Index, {
             localVue,
             vuetify,
@@ -107,12 +107,6 @@ describe('Index.vue', () => {
             },
         })
     }
-    test('call onSave method', () => {
-        const wrapper = wrapperFactory();
-        wrapper.vm.onSave = jest.fn();
-        wrapper.vm.onSave();
-        expect(wrapper.vm.onSave.mock.calls.length).toBe(1);
-    })
     test('test total data', async () => {
         const wrapper = wrapperFactory();
         wrapper.setData({ total: 10 });
@@ -126,7 +120,6 @@ describe('Index.vue', () => {
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.keyword).toBe('Tahap 2')
     })
-
     test('click search button and clear input', () => {
         const wrapper = wrapperFactory();
         wrapper.find('.mdi-magnify').trigger("click");
@@ -233,7 +226,7 @@ describe('Index.vue', () => {
         wrapper.vm.onAction = jest.fn();
         wrapper.vm.onAction();
         expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
-        // const button = wrapper.find('.mdi-dots-vertical')
-        // button.trigger('click')
+        const button = wrapper.find('.mdi-dots-vertical')
+        button.trigger('click')
     })
 })
