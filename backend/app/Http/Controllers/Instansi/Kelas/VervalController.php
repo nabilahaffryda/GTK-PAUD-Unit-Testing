@@ -9,6 +9,7 @@ use App\Http\Resources\BaseResource;
 use App\Models\MVervalPaud;
 use App\Models\PaudKelas;
 use App\Services\Instansi\KelasService;
+use App\Services\Instansi\PeriodeService;
 use Arr;
 use Illuminate\Http\Request;
 
@@ -53,6 +54,11 @@ class VervalController extends Controller
             ]);
 
         return BaseCollection::make($q->paginate((int)$request->get('count', 10)));
+    }
+
+    public function periode()
+    {
+        return BaseCollection::make(app(PeriodeService::class)->index()->get());
     }
 
     public function fetch(PaudKelas $kelas)
