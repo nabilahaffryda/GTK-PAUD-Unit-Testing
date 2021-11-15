@@ -6,7 +6,6 @@ use App\Exceptions\FlowException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
-use App\Models\MKonfirmasiPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudKelas;
 use App\Services\Instansi\KelasService;
@@ -30,6 +29,20 @@ class VervalController extends Controller
                 'paud_kelas.tahun'    => Arr::get($params, 'tahun', config('paud.tahun')),
                 'paud_kelas.angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
             ])
+            ->when($request->keyword, function ($query, $value) {
+                $query->where(function ($query) use ($value) {
+                    $query
+                        ->orWhere('paud_kelas.nama', 'like', "%$value%")
+                        ->orWhereHas('paudDiklat', function ($query) use ($value) {
+                            $query
+                                ->join('instansi', 'instansi.instansi_id', '=', 'paud_diklat.instansi_id')
+                                ->where([
+                                    ['paud_diklat.nama', 'like', "%$value%", 'or'],
+                                    ['instansi.nama', 'like', "%$value%", 'or'],
+                                ]);
+                        });
+                });
+            })
             ->whereNotIn('paud_kelas.k_verval_paud', [MVervalPaud::KANDIDAT])
             ->with([
                 'mVervalPaud',
@@ -74,7 +87,7 @@ class VervalController extends Controller
     {
         $q = $kelas->paudKelasPetugases()
             ->where([
-                'k_petugas_paud'    => $request->get('k_petugas_paud'),
+                'k_petugas_paud' => $request->get('k_petugas_paud'),
                 // 'k_konfirmasi_paud' => MKonfirmasiPaud::BERSEDIA,
             ])
             ->with([
