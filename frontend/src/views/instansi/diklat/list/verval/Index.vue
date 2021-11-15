@@ -116,7 +116,9 @@
                             >
                               Verval Ajuan
                             </v-btn>
-                            <v-btn v-else small block color="primary" @click="onVerval(item)"> Detail </v-btn>
+                            <v-btn v-else small data-testid="btn-detail" block color="primary" @click="onVerval(item)">
+                              Detail
+                            </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
