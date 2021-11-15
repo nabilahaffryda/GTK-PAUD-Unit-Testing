@@ -30,6 +30,16 @@ class VervalController extends Controller
                 'paud_kelas.tahun'    => Arr::get($params, 'tahun', config('paud.tahun')),
                 'paud_kelas.angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
             ])
+            ->when($params['filter']['k_verval_paud'] ?? null, function ($query, $value) {
+                $query->whereIn('paud_kelas.k_verval_paud', (array)$value);
+            }, function ($query) {
+                $query->whereNotIn('paud_kelas.k_verval_paud', [MVervalPaud::KANDIDAT]);
+            })
+            ->when($params['filter']['paud_periode_id'] ?? null, function ($query, $value) {
+                $query->whereHas('paudDiklat', function ($query) use ($value) {
+                    $query->where('paud_periode_id', '=', $value);
+                });
+            })
             ->when($request->keyword, function ($query, $value) {
                 $query->where(function ($query) use ($value) {
                     $query
@@ -44,7 +54,6 @@ class VervalController extends Controller
                         });
                 });
             })
-            ->whereNotIn('paud_kelas.k_verval_paud', [MVervalPaud::KANDIDAT])
             ->with([
                 'mVervalPaud',
                 'paudDiklat.Instansi',
