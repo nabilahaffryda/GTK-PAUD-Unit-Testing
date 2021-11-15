@@ -736,7 +736,7 @@ class PetugasService
                                 ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasLuringId, $kPetugasPaud) {
                                     $query
                                         ->where('paud_kelas_petugas_luring.k_petugas_paud', '=', $kPetugasPaud)
-                                        ->where('paud_kelas_petugas_luring.paud_kelas_id', '=', $kelasLuringId);
+                                        ->where('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', $kelasLuringId);
                                 });
                         }, function ($query) {
                             $query->Where('paud_kelas_petugas_luring.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA);
