@@ -293,12 +293,12 @@ export default {
           nama:
             this.$getDeepObj(item, 'ptk.data.nama') ||
             this.$getDeepObj(item, 'akun.data.nama') ||
-            this.$getDeepObj(item, 'paud_peserta_non_ptk.data.nama') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.nama') ||
             '-',
           email:
             this.$getDeepObj(item, 'ptk.data.email') ||
             this.$getDeepObj(item, 'akun.data.email') ||
-            this.$getDeepObj(item, 'paud_peserta_non_ptk.data.email') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
             '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
           k_konfirmasi_paud: (item && item.k_konfirmasi_paud) || 1,
@@ -460,6 +460,7 @@ export default {
         params: {
           k_petugas_paud: this.tabItems[+this.tab]['kPetugas'],
         },
+        jenis: this.jenis,
       };
 
       this.$refs.popup.open(fields[this.tab === 0 ? 'kandidat' : 'petugas'], params).then((data) => {
@@ -495,17 +496,22 @@ export default {
         0: 'peserta/create',
         1: 'peserta/create-sd',
         2: 'peserta/create-simpatika',
+        3: 'peserta/create-nonptk',
       };
       const petugas = this.petugas;
       const jenis = mAksi[Number(this.$refs.popup.tab)];
+      let params = {};
+      if (Number(this.$refs.popup.tab) === 3) {
+        params = { paud_peserta_nonptk_id: petugas };
+      } else {
+        params = { ptk_id: petugas };
+      }
 
       this.action({
         id: this.$getDeepObj(this.kelas, 'id'),
         diklat_id: this.$getDeepObj(this.detail, 'id'),
         type: jenis,
-        params: {
-          ptk_id: petugas,
-        },
+        params: params,
       }).then(() => {
         this.$success(`Data peserta berhasil ditambahkan`);
         this.onReload();
