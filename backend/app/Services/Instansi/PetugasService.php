@@ -7,6 +7,7 @@ use App\Exceptions\SaveException;
 use App\Models\Akun;
 use App\Models\MBerkasPetugasPaud;
 use App\Models\MDiklatPaud;
+use App\Models\MGroup;
 use App\Models\MPetugasPaud;
 use App\Models\MUnsurPengajarPaud;
 use App\Models\MVervalPaud;
@@ -55,6 +56,17 @@ class PetugasService
 
         $path = sprintf("%s/%s", $ftpPath, $filename);
         return Storage::disk('petugas-berkas')->delete($path);
+    }
+
+    public function getKPetugasAdmin(PaudAdmin $admin): ?int
+    {
+        return match ($admin->k_group) {
+            MGroup::PENGAJAR_DIKLAT_PAUD           => MPetugasPaud::PENGAJAR,
+            MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD  => MPetugasPaud::PENGAJAR_TAMBAHAN,
+            MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD => MPetugasPaud::PEMBIMBING_PRAKTIK,
+            MGroup::ADM_KELAS_DIKLAT_PAUD          => MPetugasPaud::ADMIN_KELAS,
+            default                                => null,
+        };
     }
 
     /**
@@ -266,9 +278,10 @@ class PetugasService
     public function delete(PaudAdmin $admin)
     {
         $petugas = PaudPetugas::firstWhere([
-            'akun_id'  => $admin->akun_id,
-            'tahun'    => $admin->tahun,
-            'angkatan' => $admin->angkatan,
+            'akun_id'        => $admin->akun_id,
+            'tahun'          => $admin->tahun,
+            'angkatan'       => $admin->angkatan,
+            'k_petugas_paud' => $this->getKPetugasAdmin($admin),
         ]);
 
         if (!$petugas) {
