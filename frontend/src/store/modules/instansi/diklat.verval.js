@@ -21,6 +21,14 @@ export const actions = {
     return await $ajax.get('/');
   },
 
+  async getPeriode({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    $ajax = kitsu({
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/kelas/periode`,
+    });
+    return await $ajax.get('/', { params: payload.params });
+  },
+
   action({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     const url = `/i/${id}/kelas/${payload.id}${payload && payload.type ? '/' + payload.type : ''}`;
