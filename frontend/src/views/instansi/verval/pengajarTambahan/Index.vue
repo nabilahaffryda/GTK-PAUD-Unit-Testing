@@ -13,7 +13,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <v-tabs v-model="tab" color="secondary">
+    <v-tabs v-model="tab" color="secondary" data-testid="tab-item">
       <v-tab v-for="item in items" :key="item.tab">
         {{ item.tab }}
       </v-tab>
