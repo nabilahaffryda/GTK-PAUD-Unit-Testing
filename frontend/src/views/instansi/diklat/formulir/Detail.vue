@@ -302,8 +302,10 @@ export default {
             '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
           k_konfirmasi_paud: (item && item.k_konfirmasi_paud) || 1,
-          paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
-          paud_kelas_peserta_id: this.$getDeepObj(item, 'paud_kelas_peserta_id') || '',
+          paud_kelas_petugas_id:
+            this.$getDeepObj(item, 'paud_kelas_petugas_id') || this.$getDeepObj(item, 'paud_kelas_petugas_luring_id'),
+          paud_kelas_peserta_id:
+            this.$getDeepObj(item, 'paud_kelas_peserta_id') || this.$getDeepObj(item, 'paud_kelas_peserta_luring_id'),
           ptk_id: this.$getDeepObj(item, 'ptk_id') || '',
           propinsi: this.$getDeepObj(item, 'akun.data.m_propinsi.data.keterangan') || '-',
           kota: this.$getDeepObj(item, 'akun.data.m_kota.data.keterangan') || '-',
@@ -398,7 +400,7 @@ export default {
           id: this.$getDeepObj(this.kelas, 'id'),
           diklat_id: this.$getDeepObj(this.detail, 'id'),
           type: url,
-          method: this.isPeserta ? 'post' : 'get',
+          method: this.isPeserta ? 'post' : this.jenis === 'Daring' ? 'get' : 'post',
           params: this.isPeserta ? params : {},
         }).then(() => {
           this.$success(`${this.isPeserta ? 'Peserta' : 'Petugas'} berhasil dihapus`);
