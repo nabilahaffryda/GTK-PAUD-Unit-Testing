@@ -138,7 +138,6 @@ export default {
         this.$refs.formulir.reset();
         this.$set(this.formulir, 'init', resp);
       });
-      console.log(this.data);
     },
 
     onSave() {
