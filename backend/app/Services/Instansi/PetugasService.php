@@ -606,7 +606,7 @@ class PetugasService
                     $ext = '.' . $ext;
                 }
 
-                $diklat->nama_file = substr($fileInfo['filename'], 0, 100 - strlen($ext)) . $ext;
+                $diklat->nama_file = substr(preg_replace('/[[:^print:]]/', '', $fileInfo['filename']), 0, 100 - strlen($ext)) . $ext;
                 $diklat->file      = static::uploadBerkas($petugas, 'diklat', $diklat->k_diklat_paud, $file);
             }
         }
