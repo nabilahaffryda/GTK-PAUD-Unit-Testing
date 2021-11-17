@@ -14,7 +14,7 @@
           @filter="onFilter"
           @download="onDownload"
         >
-          <template v-slot:toolbar>
+          <template v-slot:toolbar data-app>
             <template v-if="akses === 'pembimbing-praktik' && $allow('akun-pembimbing-praktik.set-status')">
               <v-menu bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -37,7 +37,9 @@
             <template v-if="akses === 'pengajar'">
               <v-menu :close-on-content-click="false" :nudge-width="200" offset-x offset-y>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-bind="attrs" v-on="on" small color="info" class="ml-2 py-5"> Set Pengajar </v-btn>
+                  <v-btn v-bind="attrs" v-on="on" small color="info" id="set-pengajar" class="ml-2 py-5">
+                    Set Pengajar
+                  </v-btn>
                 </template>
                 <v-card>
                   <v-list>
