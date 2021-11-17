@@ -144,7 +144,7 @@ describe('Main.vue', () => {
                 return {
                     reload: false,
                 }
-            }
+            },
         })
     }
     test('calls onReload when button is clicked', async () => {
@@ -232,6 +232,64 @@ describe('Main.vue', () => {
         button.trigger('click')
         wrapper.vm.onAction();
     })
+    test('call onDetail when Data Profil button is clicked', async () => {
+        const wrapper = wrapperFactory()
+        wrapper.vm.onAction = jest.fn();
+        wrapper.setData({
+            data: [
+                {
+                    0: {
+                        akun_id: "17209679",
+                        id: 121,
+                        instansi_id: 800006,
+                        k_group: 174,
+                        paud_admin_id: 121,
+                        tahun: 2021,
+                        akun: {
+                            data: {
+                                alamat: "Kapuas Bengkulu Tengah Bengkulu",
+                                email: "pengajar1@gmail.com",
+                                nama: "Akun Pengajar 1",
+                                nik: "1107246808140002",
+                                nip: "1231231231111111",
+                                no_hp: "08123456782",
+                            }
+                        }
+                    },
+                }
+            ],
+            total: 1,
+        })
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('.mdi-dots-vertical').exists()).toBe(true);
+        const button = wrapper.find('.mdi-dots-vertical')
+        button.trigger('click')
+        wrapper.vm.onAction();
+        await wrapper.setProps({
+            actions: [
+                {
+                    event: "onDetail",
+                    icon: "mdi-account",
+                    title: "Data Profil",
+                }
+            ],
+        })
+        await wrapper.setData({
+            data: [
+                {
+                    0: {
+                        event: "onDetail",
+                        icon: "mdi-account",
+                        title: "Data Profil",
+                    },
+                }
+            ]
+        })
+        await wrapper.vm.$nextTick()
+        wrapper.findAll('.mdi-dots-vertical').at(0).trigger('click');
+        wrapper.vm.onDetail()
+    })
+
     test('calls onAdd when button is clicked', async () => {
         const wrapper = wrapperFactory();
         wrapper.vm.onAdd = jest.fn();
