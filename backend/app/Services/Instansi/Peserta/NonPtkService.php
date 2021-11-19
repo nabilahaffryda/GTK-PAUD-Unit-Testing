@@ -134,7 +134,7 @@ class NonPtkService
             $peserta->sertifikat_file = static::uploadBerkas($peserta, 'sertifikat', $params['file_sertifikat']);
         }
 
-        if (isset($params['file_sertifikat'])) {
+        if (isset($params['file_ktp'])) {
             $peserta->ktp_file = static::uploadBerkas($peserta, 'sertifikat', $params['file_ktp']);
             $peserta->ktp_nama = substr($params['file_ktp']->getClientOriginalName(), 0, 200);
         }
