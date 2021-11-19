@@ -46,7 +46,7 @@
                 </v-btn>
               </v-col>
               <v-col cols="12" md="4" class="mt-4" v-if="withAction">
-                <v-btn depressed small color="blue mr-2" dark @click="onUpload"> unggah file </v-btn>
+                <v-btn depressed small color="blue mr-2" id="unggah" dark @click="onUpload"> unggah file </v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -95,6 +95,7 @@ export default {
   methods: {
     onUpload(type) {
       this.$emit('upload', { type: type });
+      console.log(this.value);
     },
     onView() {
       this.$downloadFile(this.value && this.value.url);
