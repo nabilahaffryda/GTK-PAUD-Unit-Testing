@@ -9,12 +9,12 @@
               <v-row dense>
                 <v-col cols="12" md="8" sm="8">
                   Selamat Datang,
-                  <strong>
+                  <strong id="akun-nama">
                     {{ $getDeepObj(detail, 'akun.data.nama') || $getDeepObj(detail, 'instansi.data.nama') || '' }}
                   </strong>
                 </v-col>
                 <v-col cols="12" md="4" sm="4" class="text-right right-aligned">
-                  <v-chip color="error" dark>
+                  <v-chip color="error" dark id="akun-tipe">
                     {{
                       $titleCase(
                         ['pengajar', 'pembimbing'].includes(jenis)
