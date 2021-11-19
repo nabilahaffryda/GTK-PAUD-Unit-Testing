@@ -230,7 +230,10 @@ export default {
     },
 
     breadcrumbs() {
-      return [{ text: 'Daftar Diklat', to: 'kelola-diklat' }, { text: this.$getDeepObj(this, 'detail.nama') }];
+      return [
+        { text: 'Daftar Diklat', to: `kelola-diklat${this.isDaring ? '' : '-luring'}` },
+        { text: this.$getDeepObj(this, 'detail.nama') },
+      ];
     },
 
     configs() {

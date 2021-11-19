@@ -237,11 +237,15 @@ export default {
         }
       });
 
-      this[id ? 'update' : 'create']({ id: id, params: formData }).then(() => {
-        this.$success(`Data peserta berhasil ${id ? 'Di ubah' : 'Ditambahkan'}`);
-        this.$refs.modal.close();
-        this.onReload();
-      });
+      this[id ? 'update' : 'create']({ id: id, params: formData })
+        .then(() => {
+          this.$success(`Data peserta berhasil ${id ? 'Di ubah' : 'Ditambahkan'}`);
+          this.$refs.modal.close();
+          this.onReload();
+        })
+        .catch(() => {
+          this.$refs.modal.loading = false;
+        });
     },
 
     onDelete(data) {
