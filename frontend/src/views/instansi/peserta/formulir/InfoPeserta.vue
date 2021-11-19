@@ -129,8 +129,8 @@ export default {
               label: 'Alamat Sesuai KTP',
               value: [
                 this.$getDeepObj(this.initValue, 'alamat') || '-',
-                this.$getDeepObj(this.initValue, `m_propinsi.keterangan`) || '-',
-                this.$getDeepObj(this.initValue, `m_kota.keterangan`) || '-',
+                this.$getDeepObj(this.initValue, `m_propinsi.data.keterangan`) || '-',
+                this.$getDeepObj(this.initValue, `m_kota.data.keterangan`) || '-',
               ].join(', '),
             },
           ],
