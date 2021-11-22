@@ -10,6 +10,14 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PeriodeService
 {
+    public function getRentang(Carbon $tglMulai, Carbon $tglSelesai)
+    {
+        return PaudPeriode::where([
+            ['tgl_diklat_mulai', '<=', $tglSelesai],
+            ['tgl_diklat_selesai', '>=', $tglMulai],
+        ])->get();
+    }
+
     public function index(array $params = []): Builder
     {
         $query = PaudPeriode::query()

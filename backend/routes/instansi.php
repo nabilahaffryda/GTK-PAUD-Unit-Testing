@@ -301,6 +301,20 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('{kelas}/peserta', [Petugas\KelasController::class, 'peserta']);
     });
 
+    Route::group(['prefix' => 'petugas-luring/konfirmasi'], function () {
+        Route::get('', [Petugas\Luring\KonfirmasiController::class, 'index']);
+        Route::get('{kelasPetugas}', [Petugas\Luring\KonfirmasiController::class, 'fetch']);
+        Route::get('{kelasPetugas}/setuju', [Petugas\Luring\KonfirmasiController::class, 'setuju']);
+        Route::get('{kelasPetugas}/tidak-setuju', [Petugas\Luring\KonfirmasiController::class, 'tidakSetuju']);
+        Route::get('{kelasPetugas}/reset', [Petugas\Luring\KonfirmasiController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'petugas-luring/kelas'], function () {
+        Route::get('', [Petugas\Luring\KelasController::class, 'index']);
+        Route::get('{kelas}', [Petugas\Luring\KelasController::class, 'fetch']);
+        Route::get('{kelas}/peserta', [Petugas\Luring\KelasController::class, 'peserta']);
+    });
+
     Route::group(['prefix' => 'petugas/profil'], function () {
         Route::get('', [Petugas\ProfilController::class, 'index']);
         Route::post('{petugas}/update', [Petugas\ProfilController::class, 'update']);
