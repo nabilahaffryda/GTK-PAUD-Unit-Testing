@@ -130,7 +130,6 @@ export default {
     },
 
     items() {
-      console.log(this.pesertas);
       return (this.pesertas || []).map((item) => {
         return {
           nama:

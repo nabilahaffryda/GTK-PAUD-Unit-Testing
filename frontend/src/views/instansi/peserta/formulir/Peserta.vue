@@ -508,7 +508,6 @@ export default {
 
     initForm(value) {
       if (!value) return;
-      console.log(value);
       const formulir = [
         ...(this.schema.umum || []),
         ...(this.schema.diklat || []),
