@@ -20,7 +20,7 @@
     <v-alert v-if="is_kesediaan" class="my-4" prominent color="orange" text icon="mdi-information">
       <v-row>
         <v-col class="grow black--text">
-          <div class="font-weight-bold">KONFIRMASI KESEDIAAN</div>
+          <div class="font-weight-bold">KONFIRMASI KESEDIAAN DIKLAT DARING</div>
           <span>
             Anda telah ditambahkan di kelas sebagai
             <template v-if="filteredGroup.length">
@@ -35,7 +35,30 @@
           </span>
         </v-col>
         <v-col class="shrink">
-          <v-btn class="mt-4" color="orange" depressed dark @click="onKonfirmasi(true)">konfirmasi</v-btn>
+          <v-btn class="mt-4" color="orange" depressed dark @click="onKonfirmasi(true, 'daring')">konfirmasi</v-btn>
+        </v-col>
+      </v-row>
+    </v-alert>
+
+    <v-alert v-if="is_kesediaan_luring" class="my-4" prominent color="blue" text icon="mdi-information">
+      <v-row>
+        <v-col class="grow black--text">
+          <div class="font-weight-bold">KONFIRMASI KESEDIAAN DIKLAT LURING</div>
+          <span>
+            Anda telah ditambahkan di kelas sebagai
+            <template v-if="filteredGroup.length">
+              <b v-for="(group, g) in filteredGroup" :key="group.value">
+                {{ group.text }}
+                <span v-if="g + 1 !== filteredGroup.length">, </span>
+              </b>
+            </template>
+            <template v-else> (<b>Pengajar, Pengajar Tambahan atau Pembimbing Praktik</b>) </template>
+            <br />
+            Silakan untuk melakukan konfirmasi kesediaan
+          </span>
+        </v-col>
+        <v-col class="shrink">
+          <v-btn class="mt-4" color="blue" depressed dark @click="onKonfirmasi(true, 'luring')">konfirmasi</v-btn>
         </v-col>
       </v-row>
     </v-alert>
@@ -66,7 +89,7 @@
     </v-row>
 
     <base-modal-full ref="modal" title="Konfirmasi Kesediaan" :useSave="false">
-      <form-ketersediaan :items="data" ref="ketersediaan" @reload="onKonfirmasi(false)" />
+      <form-ketersediaan :items="data" :jenis="jenis" ref="ketersediaan" @reload="onKonfirmasi(false, jenis)" />
     </base-modal-full>
   </div>
 </template>
@@ -84,11 +107,13 @@ export default {
   data() {
     return {
       data: [],
+      jenis: '',
     };
   },
   computed: {
     ...mapState('preferensi', {
       is_kesediaan: (state) => state?.data.konfirmasi_kesediaan ?? false,
+      is_kesediaan_luring: (state) => state?.data.konfirmasi_kesediaan_luring ?? false,
       groups: (state) => state?.data?.groups ?? {},
     }),
 
@@ -110,9 +135,10 @@ export default {
       }
     },
 
-    async onKonfirmasi(status = false) {
-      const resp = await this.fetch().then(({ data }) => data);
+    async onKonfirmasi(status = false, jenis) {
+      const resp = await this.fetch(jenis).then(({ data }) => data);
       this.$set(this, 'data', resp || []);
+      this.$set(this, 'jenis', jenis);
       if (status) this.$refs.modal.open();
     },
   },
