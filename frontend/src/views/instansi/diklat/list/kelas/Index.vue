@@ -116,7 +116,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content>
                           <div class="label--text">Aksi Selanjutnya</div>
-                          <template v-if="Number(item.k_verval_paud) === 6">
+                          <template v-if="Number(item.k_verval_paud) === 6 && this.jenis === 'daring'">
                             <v-btn
                               color="success"
                               small

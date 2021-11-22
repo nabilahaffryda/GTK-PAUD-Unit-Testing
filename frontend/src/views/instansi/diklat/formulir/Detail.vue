@@ -82,7 +82,7 @@
                 >
               </v-col>
             </v-row>
-            <div class="my-5" v-if="Number(kelas.k_verval_paud) === 6">
+            <div class="my-5" v-if="Number(kelas.k_verval_paud) === 6 && jenis === 'daring'">
               <v-btn
                 color="success"
                 depressed
@@ -278,7 +278,10 @@ export default {
         temp.push({ text: 'Kota/Kabupaten', value: 'kota', sortable: false });
       }
 
-      if (this.tab !== 1) {
+      if (
+        (![0, 1].includes(this.tab) && this.jenis === 'luring') ||
+        (![1].includes(this.tab) && this.jenis === 'daring')
+      ) {
         temp.push({ text: 'Status', value: 'status', sortable: false });
       }
 
@@ -301,7 +304,8 @@ export default {
             this.$getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
             '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
-          k_konfirmasi_paud: (item && item.k_konfirmasi_paud) || 1,
+          k_konfirmasi_paud:
+            [0].includes(Number(this.tab)) && this.jenis === 'luring' ? 1 : (item && item.k_konfirmasi_paud) || 1,
           paud_kelas_petugas_id:
             this.$getDeepObj(item, 'paud_kelas_petugas_id') || this.$getDeepObj(item, 'paud_kelas_petugas_luring_id'),
           paud_kelas_peserta_id:
