@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-expansion-panels v-model="panel" multiple>
+    <v-expansion-panels v-model="panel" multiple ref="panel">
       <v-expansion-panel v-for="(item, i) in contents" :key="i">
         <v-expansion-panel-header>
           <span class="text-h6">{{ item.title }}</span>
