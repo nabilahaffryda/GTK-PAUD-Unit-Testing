@@ -7,13 +7,12 @@
       <v-alert v-if="deskripsi" text type="secondary" dense>
         <div v-html="deskripsi" />
       </v-alert>
-
-      <v-tabs v-model="tab" background-color="transparent" color="secondary" grow>
+      <v-tabs v-model="tab" background-color="transparent" color="secondary" data-testid="item-tab" grow>
         <v-tab v-for="item in tabs" :key="item.tab">
           {{ item.tab }}
         </v-tab>
       </v-tabs>
-      <v-tabs-items v-model="tab">
+      <v-tabs-items v-model="tab" ref="remove">
         <v-tab-item v-for="(item, i) in tabs" :key="i">
           <template v-for="(f, id) in forms[item.k_tipe]">
             <div :key="id" class="my-4">
@@ -95,6 +94,7 @@
             :color="max === (forms || []).length ? '' : 'secondary'"
             :class="max === (forms || []).length ? 'grey--text mt-3' : 'mt-3'"
             @click="add"
+            data-testid="add-tab"
           >
             Tambah Data Riwayat
           </v-btn>
