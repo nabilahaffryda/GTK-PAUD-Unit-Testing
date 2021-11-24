@@ -95,7 +95,6 @@ export default {
   methods: {
     onUpload(type) {
       this.$emit('upload', { type: type });
-      console.log(this.value);
     },
     onView() {
       this.$downloadFile(this.value && this.value.url);
