@@ -111,7 +111,7 @@ describe('FormCollection.vue', () => {
                         { tab: 'Diklat MOT', type: 'diklat', k_tipe: 3 },
                         { tab: 'Diklat Lainnya', type: 'diklat_lain', k_tipe: 4 },
                     ],
-                    data: this.form
+                    data: this.value,
                 }
             },
         })
@@ -178,81 +178,57 @@ describe('FormCollection.vue', () => {
         wrapper.setData({
             data: [
                 {
+                    0: {
+                        id: 34,
+                        k_diklat_paud: 3,
+                        nama: "Diklat MOT",
+                        nama_file: "chaerul yozi.pdf",
+                        tahun_diklat: 2010
+                    },
                     1: {
-                        0: {
-                            id: 41,
-                            k_diklat_paud: 1,
-                            nama: "Diklat Berjenjang",
-                            nama_file: "Belajar&Pembelajaran5.pdf"
-                        }
-                    },
-                    2: {
-                        0: {
-                            k_diklat_paud: 2
-                        }
-                    },
-                    3: {
-                        0: {
-                            id: 34,
-                            k_diklat_paud: 3,
-                            nama: "Diklat MOT",
-                            nama_file: "chaerul yozi.pdf"
-                        }
-                    },
-                    4: {
-                        0: {
-                            k_diklat_paud: 4
-                        }
+                        id: 41,
+                        k_diklat_paud: 1,
+                        nama: "Diklat Berjenjang",
+                        nama_file: "Belajar&Pembelajaran5.pdf",
+                        tahun_diklat: 2019
                     }
-                }
+                },
             ]
         })
         await wrapper.vm.$nextTick()
-        expect(wrapper.findComponent({ ref: 'remove' }).exists()).toBe(true)
-        const btn = wrapper.findComponent({ ref: 'remove' })
+        expect(wrapper.findComponent({ ref: 'tab' }).exists()).toBe(true)
+        const btn = wrapper.findComponent({ ref: 'tab' })
         btn.trigger('click')
         wrapper.vm.remove()
     })
-    // test('test tambah riwayat button', async () => {
-    //     const wrapper = wrapperFactory()
-    //     wrapper.vm.add = jest.fn()
-    //     wrapper.setData({
-    //         data: [
-    //             {
-    //                 1: {
-    //                     0: {
-    //                         id: 41,
-    //                         k_diklat_paud: 1,
-    //                         nama: "Diklat Berjenjang",
-    //                         nama_file: "Belajar&Pembelajaran5.pdf"
-    //                     }
-    //                 },
-    //                 2: {
-    //                     0: {
-    //                         k_diklat_paud: 2
-    //                     }
-    //                 },
-    //                 3: {
-    //                     0: {
-    //                         id: 34,
-    //                         k_diklat_paud: 3,
-    //                         nama: "Diklat MOT",
-    //                         nama_file: "chaerul yozi.pdf"
-    //                     }
-    //                 },
-    //                 4: {
-    //                     0: {
-    //                         k_diklat_paud: 4
-    //                     }
-    //                 }
-    //             }
-    //         ]
-    //     })
-    //     await wrapper.vm.$nextTick()
-    //     expect(wrapper.find('[data-testid="add-tab"]').exists()).toBe(true)
-    //     const btn = wrapper.find('[data-testid="add-tab"]')
-    //     btn.trigger('click')
-    //     wrapper.vm.add()
-    // })
+    test('test tambah riwayat button', async () => {
+        const wrapper = wrapperFactory()
+        wrapper.vm.add = jest.fn()
+        wrapper.setData({
+            data: [
+                {
+                    0: {
+                        id: 34,
+                        k_diklat_paud: 3,
+                        nama: "Diklat MOT",
+                        nama_file: "chaerul yozi.pdf",
+                        tahun_diklat: 2010
+                    },
+                    1: {
+                        id: 41,
+                        k_diklat_paud: 1,
+                        nama: "Diklat Berjenjang",
+                        nama_file: "Belajar&Pembelajaran5.pdf",
+                        tahun_diklat: 2019
+                    }
+                },
+            ],
+        })
+        await wrapper.vm.$nextTick()
+        expect(wrapper.findComponent({ ref: 'tab' }).exists()).toBe(true)
+        const button = wrapper.findComponent({ ref: 'tab' })
+        button.trigger('click')
+        wrapper.vm.add()
+    })
 
 })
