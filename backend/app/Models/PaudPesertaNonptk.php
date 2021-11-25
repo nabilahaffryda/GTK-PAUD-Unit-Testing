@@ -138,6 +138,7 @@ class PaudPesertaNonptk extends Eloquent
     protected $appends = [
         'sertifikat_url',
         'ktp_url',
+        'sk_instansi_url',
     ];
 
     /**
