@@ -294,8 +294,16 @@ class KelasService
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        $query = $this
-            ->queryPetugasKandidat($paudDiklat, $kelas, $params['k_petugas_paud'])
+        $query = app(PetugasService::class)
+            ->queryKandidat(
+                $paudDiklat->instansi_id,
+                $paudDiklat->k_kota,
+                $params['k_petugas_paud'],
+                periodeId: $paudDiklat->paud_periode_id,
+                kelasId: $kelas->paud_kelas_id,
+                tglMulai: $paudDiklat->paudPeriode->tgl_diklat_mulai,
+                tglSelesai: $paudDiklat->paudPeriode->tgl_diklat_selesai,
+            )
             ->with(['akun:akun_id,nama,email']);
 
         if ($keyword = Arr::get($params, 'keyword')) {
@@ -531,7 +539,16 @@ class KelasService
             }
         }
 
-        $paudPetugases = $this->queryPetugasKandidat($paudDiklat, $kelas, $params['k_petugas_paud'])
+        $paudPetugases = app(PetugasService::class)
+            ->queryKandidat(
+                $paudDiklat->instansi_id,
+                $paudDiklat->k_kota,
+                $params['k_petugas_paud'],
+                periodeId: $paudDiklat->paud_periode_id,
+                kelasId: $kelas->paud_kelas_id,
+                tglMulai: $paudDiklat->paudPeriode->tgl_diklat_mulai,
+                tglSelesai: $paudDiklat->paudPeriode->tgl_diklat_selesai,
+            )
             ->whereIn('akun_id', $params['akun_id'])
             ->get();
 
