@@ -229,20 +229,20 @@ export default {
             labelColor: 'secondary',
             suffix: '%',
           },
-          {
-            type: 'VSelect',
-            name: 'jml_pembimbing',
-            label: 'Jumlah Pembimbing Praktik',
-            hint: 'wajib diisi',
-            required: true,
-            hideDetails: false,
-            outlined: true,
-            dense: true,
-            singleLine: true,
-            items: mPengajar,
-            grid: { cols: 12, md: 6 },
-            labelColor: 'secondary',
-          },
+          // {
+          //   type: 'VSelect',
+          //   name: 'jml_pembimbing',
+          //   label: 'Jumlah Pembimbing Praktik',
+          //   hint: 'wajib diisi',
+          //   required: true,
+          //   hideDetails: false,
+          //   outlined: true,
+          //   dense: true,
+          //   singleLine: true,
+          //   items: mPengajar,
+          //   grid: { cols: 12, md: 6 },
+          //   labelColor: 'secondary',
+          // },
         ],
       };
     },
@@ -257,7 +257,7 @@ export default {
 
       // Set default nilai pengaturan petugas diklat
       this.$set(this.form, 'ratio_pengajar_tambahan', 40);
-      this.$set(this.form, 'jml_pembimbing', 2);
+      // this.$set(this.form, 'jml_pembimbing', 2);
     },
 
     initForm(value) {
@@ -362,11 +362,11 @@ export default {
             label: 'No. Telpon (Penanggung Jawab)',
             value: this.$getDeepObj(this.form, 'telp_penanggung_jawab') || '-',
           },
-          {
-            key: 'jml_pembimbing',
-            label: 'Jumlah Pembimbing Praktik',
-            value: this.$getDeepObj(this.form, 'jml_pembimbing') || '-',
-          },
+          // {
+          //   key: 'jml_pembimbing',
+          //   label: 'Jumlah Pembimbing Praktik',
+          //   value: this.$getDeepObj(this.form, 'jml_pembimbing') || '-',
+          // },
         ],
       ];
       this.step = 2;
