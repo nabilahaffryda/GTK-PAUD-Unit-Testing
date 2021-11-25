@@ -92,7 +92,7 @@
             <v-stepper-content step="2" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
-                  <base-form-generator :schema="schema.biodata[jenis]" v-model="form" />
+                  <base-form-generator :schema="(schema.biodata && schema.biodata[jenis] || [])" v-model="form" />
                   <template v-if="jenis === 'program'">
                     <v-row>
                       <v-col cols="12" md="6">
@@ -101,7 +101,7 @@
                         </span>
                         <v-autocomplete
                           v-model="form.instansi_id"
-                          :items="this.instansis ? this.$mapForMaster(this.instansis) : []"
+                          :items="this.instansis ? this.$mapForMaster(this.instansis || []) : []"
                           :search-input.sync="search"
                           item-text="text"
                           item-value="value"
@@ -141,7 +141,7 @@
                 <v-card-text class="pa-0 pt-7">
                   <h2 class="secondary--text">{{ title }}</h2>
                   <span>
-                    <i>{{ instansis[form.instansi_id] }}</i>
+                    <i>{{ instansis && instansis[form.instansi_id] }}</i>
                   </span>
                   <v-row class="my-2">
                     <v-col cols="12" md="2" sm="12">
@@ -162,9 +162,9 @@
                 <v-card-actions class="pa-0">
                   <v-spacer></v-spacer>
                   <v-btn
-                    right
-                    text
-                    @click="
+                      right
+                      text
+                      @click="
                       () => {
                         step--;
                         $emit('onStep');

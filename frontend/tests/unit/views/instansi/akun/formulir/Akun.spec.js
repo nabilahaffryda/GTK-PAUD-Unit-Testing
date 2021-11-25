@@ -4,14 +4,16 @@ import Vuetify from "vuetify";
 import VueRouter from "vue-router";
 import Vuex from "vuex";
 import Akun from "@/views/instansi/akun/formulir/Akun.vue";
+import BaseFormGenerator from "@/components/base/BaseFormGenerator.vue";
+import { VAutocomplete, VSelect, VTextarea, VTextField, VCheckbox, VFileInput } from 'vuetify/lib';
 import { getDeepObj, isObject, isArray } from '@utils/format';
+import { mask } from 'vue-the-mask';
+
 
 Vue.use(Vuetify)
 const localVue = createLocalVue()
-
 localVue.use(VueRouter)
 const router = new VueRouter()
-
 localVue.use(Vuex)
 const store = new Vuex.Store({
     modules: {
@@ -111,16 +113,22 @@ localVue.mixin({
 
 describe('Akun.vue', () => {
     let vuetify
+
     beforeEach(() => {
         vuetify = new Vuetify()
     })
+
     function wrapperFactory({ } = {}) {
         return mount(Akun, {
             localVue,
+            vuetify,
             router,
             store,
-            vuetify,
+            stubs: {
+                BaseFormGenerator: true
+            },
             propsData: {
+                useUpload: false,
                 jenis: 'pengajar',
                 masters: {
                     "m_propinsi": {
@@ -744,9 +752,10 @@ describe('Akun.vue', () => {
                         "-1": "PNS"
                     }
                 }
-            }
+            },
         })
     }
+
     test('test next button', async () => {
         const wrapper = wrapperFactory()
         console.log(wrapper.html())
