@@ -33,6 +33,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $sertifikat_file
  * @property null|string $ktp_nama
  * @property null|string $ktp_file
+ * @property null|string $sk_instansi_nama
+ * @property null|string $sk_instansi_file
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|string $created_by
@@ -71,6 +73,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudPesertaNonptk whereSertifikatFile($value)
  * @method static Builder|PaudPesertaNonptk whereKtpNama($value)
  * @method static Builder|PaudPesertaNonptk whereKtpFile($value)
+ * @method static Builder|PaudPesertaNonptk whereSkInstansiNama($value)
+ * @method static Builder|PaudPesertaNonptk whereSkInstansiFile($value)
  * @method static Builder|PaudPesertaNonptk whereCreatedAt($value)
  * @method static Builder|PaudPesertaNonptk whereUpdatedAt($value)
  * @method static Builder|PaudPesertaNonptk whereCreatedBy($value)
@@ -118,6 +122,8 @@ class PaudPesertaNonptk extends Eloquent
         'sertifikat_file' => 'string',
         'ktp_nama' => 'string',
         'ktp_file' => 'string',
+        'sk_instansi_nama' => 'string',
+        'sk_instansi_file' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'created_by' => 'string',
@@ -161,6 +167,8 @@ class PaudPesertaNonptk extends Eloquent
         'sertifikat_file',
         'ktp_nama',
         'ktp_file',
+        'sk_instansi_nama',
+        'sk_instansi_file',
         'created_by',
         'updated_by',
     ];
@@ -237,5 +245,10 @@ class PaudPesertaNonptk extends Eloquent
     public function getKtpUrlAttribute()
     {
         return $this->ktp_file ? sprintf("%s/%s", config('filesystems.disks.peserta-nonptk.url'), $this->ktp_file) : null;
+    }
+
+    public function getSkInstansiUrlAttribute()
+    {
+        return $this->sk_instansi_file ? sprintf("%s/%s", config('filesystems.disks.peserta-nonptk.url'), $this->sk_instansi_file) : null;
     }
 }

@@ -72,11 +72,13 @@ class NonPtkService
             'k_jenjang_diklat_paud' => $params['k_jenjang_diklat_paud'],
         ]);
 
-        $peserta->sertifikat_file = static::uploadBerkas($peserta, 'sertifikat', $params['file_sertifikat']);
-        $peserta->ktp_file        = static::uploadBerkas($peserta, 'sertifikat', $params['file_ktp']);
+        $peserta->sertifikat_file  = static::uploadBerkas($peserta, 'sertifikat', $params['file_sertifikat']);
+        $peserta->ktp_file         = static::uploadBerkas($peserta, 'ktp', $params['file_ktp']);
+        $peserta->sk_instansi_file = static::uploadBerkas($peserta, 'sk_instansi', $params['file_sk_instansi']);
 
-        $peserta->sertifikat_nama = substr($params['file_sertifikat']->getClientOriginalName(), 0, 200);
-        $peserta->ktp_nama        = substr($params['file_ktp']->getClientOriginalName(), 0, 200);
+        $peserta->sertifikat_nama  = substr($params['file_sertifikat']->getClientOriginalName(), 0, 200);
+        $peserta->ktp_nama         = substr($params['file_ktp']->getClientOriginalName(), 0, 200);
+        $peserta->sk_instansi_nama = substr($params['file_sk_instansi']->getClientOriginalName(), 0, 200);
 
         $peserta->save();
 
@@ -135,8 +137,13 @@ class NonPtkService
         }
 
         if (isset($params['file_ktp'])) {
-            $peserta->ktp_file = static::uploadBerkas($peserta, 'sertifikat', $params['file_ktp']);
+            $peserta->ktp_file = static::uploadBerkas($peserta, 'ktp', $params['file_ktp']);
             $peserta->ktp_nama = substr($params['file_ktp']->getClientOriginalName(), 0, 200);
+        }
+
+        if (isset($params['file_sk_instansi'])) {
+            $peserta->sk_instansi_file = static::uploadBerkas($peserta, 'sk_instansi', $params['file_sk_instansi']);
+            $peserta->sk_instansi_nama = substr($params['file_sk_instansi']->getClientOriginalName(), 0, 200);
         }
 
         $peserta->save();

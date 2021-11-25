@@ -22,7 +22,9 @@ use Illuminate\Http\UploadedFile;
  * @property-read string $unit_kerja
  * @property-read int $k_diklat_paud
  * @property-read int $k_jenjang_diklat_paud
- * @property-read UploadedFile $file_ijazah
+ * @property-read UploadedFile $file_sertifikat
+ * @property-read UploadedFile $file_ktp
+ * @property-read UploadedFile $file_sk_instansi
  */
 class CreateRequest extends FormRequest
 {
@@ -49,6 +51,7 @@ class CreateRequest extends FormRequest
             'k_jenjang_diklat_paud' => ['required', 'integer', 'exists:m_jenjang_diklat_paud,k_jenjang_diklat_paud'],
             'file_sertifikat'       => ['required', 'file', 'mimes:jpg,jpeg,png,gif', 'between:20,1536'],
             'file_ktp'              => ['nullable', 'file', 'mimes:jpg,jpeg,png,gif', 'between:20,1536'],
+            'file_sk_instansi'      => ['nullable', 'file', 'mimes:jpg,jpeg,png,gif', 'between:20,1536'],
         ];
     }
 }
