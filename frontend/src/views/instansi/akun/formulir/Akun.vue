@@ -76,7 +76,7 @@
                   <v-alert class="mb-4" type="error" v-if="errorEmail">
                     {{ errorEmail }}
                   </v-alert>
-                  <base-form-generator :schema="schema.unchecked" v-model="form" />
+                  <base-form-generator :schema="(schema && schema.unchecked) || []" v-model="form" />
                   <v-divider class="my-4" />
                 </v-card-text>
                 <v-card-actions class="pa-0">
@@ -341,8 +341,8 @@ export default {
   },
   computed: {
     configs() {
-      const M_PROPINSI = this.masters.m_propinsi || {};
-      const M_KOTA = this.masters.m_kota || {};
+      const M_PROPINSI = this.masters && this.masters.m_propinsi || {};
+      const M_KOTA = this.masters && this.masters.m_kota || {};
       return {
         selector: ['k_propinsi', 'k_kota'],
         required: this.jenis === 'kelas' ? [] : ['k_propinsi', 'k_kota'],
@@ -497,7 +497,7 @@ export default {
               name: 'k_golongan',
               label: 'Golongan',
               hint: 'wajib diisi',
-              items: this.$mapForMaster(this.masters.m_golongan),
+              items: this.$mapForMaster(this.masters  && this.masters.m_golongan || []),
               value: 'value',
               text: 'text',
               required: true,
@@ -619,7 +619,7 @@ export default {
               name: 'k_golongan',
               label: 'Golongan',
               hint: 'wajib diisi',
-              items: this.$mapForMaster(this.masters.m_golongan),
+              items: this.$mapForMaster(this.masters  && this.masters.m_golongan || []),
               value: 'value',
               text: 'text',
               required: true,
@@ -1074,7 +1074,7 @@ export default {
               name: 'k_golongan',
               label: 'Golongan',
               hint: 'wajib diisi',
-              items: this.$mapForMaster(this.masters.m_golongan),
+              items: this.$mapForMaster(this.masters && this.masters.m_golongan  || []),
               value: 'value',
               text: 'text',
               required: true,
@@ -1099,15 +1099,16 @@ export default {
       this.step = 1;
       this.stepUnggah = 1;
       this.info = [];
-      this.id = null;
       this.pilihan = null;
-      this.isPilih = null;
+      this.isPilih = '';
+      this.search = '';
+      this.keyword = '';
       this.file = null;
     },
 
     initForm(value) {
       const formulir = [
-        ...(this.schema.biodata[this.jenis] || []),
+        ...(this.schema && this.schema.biodata  && this.schema.biodata[this.jenis] || []),
         { name: 'email' },
         { name: 'k_propinsi' },
         { name: 'k_kota' },
@@ -1136,7 +1137,7 @@ export default {
       }
 
       keys = keys.concat(
-        (this.schema.biodata[this.jenis] || []).map((item) => {
+        (this.schema && this.schema.biodata && this.schema.biodata[this.jenis] || []).map((item) => {
           return item.name;
         })
       );
@@ -1150,7 +1151,7 @@ export default {
     },
 
     onCheck() {
-      if (!this.form.email) {
+      if (!(this.form && this.form.email)) {
         return;
       }
       this.$emit('check', this.form.email);
