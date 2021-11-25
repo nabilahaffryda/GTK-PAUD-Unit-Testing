@@ -103,6 +103,44 @@
                           ></v-file-input>
                         </template>
                       </v-col>
+                      <v-col cols="12" md="6" sm="12">
+                        <span :class="[`px-0 body-2 secondary--text`]" style="height: 24px">
+                          Unggah Surat Keterangan Instansi *
+                        </span>
+                        <template v-if="files && files.sk_instansi">
+                          <div class="mt-2">
+                            <v-btn color="secondary" depressed small @click="onView('sk_instansi')">
+                              <v-icon left>mdi-eye</v-icon> Preview
+                            </v-btn>
+                            <v-btn class="mx-2" color="primary" depressed small @click="onDelete('sk_instansi')">
+                              <v-icon left>mdi-pencil</v-icon> Ubah Berkas
+                            </v-btn>
+                          </div>
+                        </template>
+                        <template v-else>
+                          <validation-provider name="Surat Keterangan Instansi" rules="required" v-slot="{ errors }">
+                            <v-file-input
+                              v-model="form.file_sk_instansi"
+                              :error-messages="errors"
+                              label="File jpg.png.pdf (20 KB - 1,5 MB)"
+                              append-icon="mdi-paperclip"
+                              prepend-icon=""
+                              accept="image/*,.pdf"
+                              hint=""
+                              :rules="[
+                                (value) =>
+                                  (value && value.size < roundDecimal(1500 * 1000)) ||
+                                  'Berkas yang Anda upload melebihi kapasitas maksimum!',
+                              ]"
+                              persistent-hint
+                              show-size
+                              outlined
+                              dense
+                              single-line
+                            ></v-file-input>
+                          </validation-provider>
+                        </template>
+                      </v-col>
                     </v-row>
                   </div>
                   <v-divider class="my-2" />
@@ -520,7 +558,7 @@ export default {
         }
       }
 
-      const urls = ['sertifikat', 'ktp'];
+      const urls = ['sertifikat', 'ktp', 'sk_instansi'];
 
       urls.forEach((key) => {
         if (value[`${key}_url`]) {

@@ -158,6 +158,7 @@ export default {
       const mBerkas = [
         { title: 'Sertifikat / Ijazah', key: 'sertifikat' },
         { title: 'Scan Ktp', key: 'ktp' },
+        { title: 'Surat Keterangan Instansi', key: 'sk_instansi' },
       ];
 
       mBerkas.forEach((item, index) => {
