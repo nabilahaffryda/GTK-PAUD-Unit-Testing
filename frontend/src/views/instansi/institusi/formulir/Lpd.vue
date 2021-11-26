@@ -217,7 +217,7 @@ export default {
           {
             type: 'VTextField',
             name: 'ratio_pengajar_tambahan',
-            label: 'Pengajar Tambahan',
+            label: 'Persentase Pengajar Tambahan',
             hint: 'wajib diisi',
             required: true,
             hideDetails: false,
@@ -350,7 +350,7 @@ export default {
           },
           {
             key: 'ratio_pengajar_tambahan',
-            label: 'Pengajar Tambahan',
+            label: 'Persentase Pengajar Tambahan',
             value: this.$getDeepObj(this.form, 'ratio_pengajar_tambahan')
               ? `${this.$getDeepObj(this.form, 'ratio_pengajar_tambahan')}%`
               : '-',
