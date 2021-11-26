@@ -4,16 +4,15 @@ import Vuetify from "vuetify";
 import VueRouter from "vue-router";
 import Vuex from "vuex";
 import Akun from "@/views/instansi/akun/formulir/Akun.vue";
-import BaseFormGenerator from "@/components/base/BaseFormGenerator.vue";
-import { VAutocomplete, VSelect, VTextarea, VTextField, VCheckbox, VFileInput } from 'vuetify/lib';
 import { getDeepObj, isObject, isArray } from '@utils/format';
-import { mask } from 'vue-the-mask';
 
 
 Vue.use(Vuetify)
 const localVue = createLocalVue()
+
 localVue.use(VueRouter)
 const router = new VueRouter()
+
 localVue.use(Vuex)
 const store = new Vuex.Store({
     modules: {
@@ -113,7 +112,6 @@ localVue.mixin({
 
 describe('Akun.vue', () => {
     let vuetify
-
     beforeEach(() => {
         vuetify = new Vuetify()
     })
@@ -128,8 +126,8 @@ describe('Akun.vue', () => {
                 BaseFormGenerator: true
             },
             propsData: {
-                useUpload: false,
-                jenis: 'pengajar',
+                useUpload: true,
+                jenis: 'program',
                 masters: {
                     "m_propinsi": {
                         "11": "Aceh",
@@ -755,10 +753,193 @@ describe('Akun.vue', () => {
             },
         })
     }
-
-    test('test next button', async () => {
+    test('test add data using form input (manual)', async () => {
         const wrapper = wrapperFactory()
-        console.log(wrapper.html())
+        // Choose how to add data
+        expect(wrapper.find('input[type="radio"][value="manual"]').exists()).toBe(true)
+        const radioInput = wrapper.find('input[type="radio"][value="manual"]');
+        radioInput.setChecked();
+        expect(wrapper.find('[id="next"]').exists()).toBe(true)
+        const btnNext = wrapper.find('[id="next"]')
+        btnNext.trigger('click')
+        wrapper.vm.onPilih()
+        await wrapper.setData({ isPilih: 'manual' })
+        // Step 1 form
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('[id="email-input"]').exists()).toBe(true)
+        const emailInput = wrapper.find('[id="email-input"]')
+        emailInput.element.value = 'sehun@gmail.com'
+        emailInput.trigger('input')
+        expect(wrapper.find('[id="next-onCheck"]').exists()).toBe(true)
+        const btnNextOnCheck = wrapper.find('[id="next-onCheck"]')
+        btnNextOnCheck.trigger('click')
+        wrapper.vm.onCheck()
+        // Step 2 form
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('[id="biodata-input"]').exists()).toBe(true)
+        const namaInput = wrapper.find('[id="biodata-input"]')
+        namaInput.element.value = 'sehun'
+        namaInput.trigger('input')
+        wrapper.vm.onValidate = jest.fn()
+        expect(wrapper.find('[id="next-OnValidate"]').exists()).toBe(true)
+        const btnNextOnValidate = wrapper.find('[id="next-OnValidate"]')
+        btnNextOnValidate.trigger('click')
+        wrapper.vm.onValidate()
+        // Confirm page
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('[id="info"]').exists()).toBe(true)
     })
 
+    test('test add data using form input (manual) but back to step 1', async () => {
+        const wrapper = wrapperFactory()
+        // Choose how to add data
+        expect(wrapper.find('input[type="radio"][value="manual"]').exists()).toBe(true)
+        const radioInput = wrapper.find('input[type="radio"][value="manual"]');
+        radioInput.setChecked();
+        expect(wrapper.find('[id="next"]').exists()).toBe(true)
+        const btnNext = wrapper.find('[id="next"]')
+        btnNext.trigger('click')
+        wrapper.vm.onPilih()
+        await wrapper.setData({ isPilih: 'manual' })
+        // Step 1 form
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('[id="email-input"]').exists()).toBe(true)
+        const emailInput = wrapper.find('[id="email-input"]')
+        emailInput.element.value = 'sehun@gmail.com'
+        emailInput.trigger('input')
+        // Back 
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('[id="back-step1"]').exists()).toBe(true)
+        const btnBackonResetPilih = wrapper.find('[id="back-step1"]')
+        btnBackonResetPilih.trigger('click')
+        wrapper.vm.onResetPilih()
+    })
+
+    test('test add data using form input (manual) but back to step 2', async () => {
+        const wrapper = wrapperFactory()
+        // Choose how to add data
+        expect(wrapper.find('input[type="radio"][value="manual"]').exists()).toBe(true)
+        const radioInput = wrapper.find('input[type="radio"][value="manual"]');
+        radioInput.setChecked();
+        expect(wrapper.find('[id="next"]').exists()).toBe(true)
+        const btnNext = wrapper.find('[id="next"]')
+        btnNext.trigger('click')
+        wrapper.vm.onPilih()
+        await wrapper.setData({ isPilih: 'manual' })
+        // Step 1 form
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('[id="email-input"]').exists()).toBe(true)
+        const emailInput = wrapper.find('[id="email-input"]')
+        emailInput.element.value = 'sehun@gmail.com'
+        emailInput.trigger('input')
+        expect(wrapper.find('[id="next-onCheck"]').exists()).toBe(true)
+        const btnNextOnCheck = wrapper.find('[id="next-onCheck"]')
+        btnNextOnCheck.trigger('click')
+        wrapper.vm.onCheck()
+        // Step 2 form
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('[id="biodata-input"]').exists()).toBe(true)
+        const namaInput = wrapper.find('[id="biodata-input"]')
+        namaInput.element.value = 'sehun'
+        namaInput.trigger('input')
+        // Back
+        await wrapper.vm.$nextTick()
+        wrapper.vm.onStep = jest.fn()
+        expect(wrapper.find('[id="back-step2"]').exists()).toBe(true)
+        const btnBackonStep = wrapper.find('[id="back-step2"]')
+        btnBackonStep.trigger('click')
+        wrapper.vm.onStep()
+    })
+
+    test('test add data using excel', async () => {
+        const wrapper = wrapperFactory()
+        // Choose how to add data
+        expect(wrapper.find('input[type="radio"][value="excel"]').exists()).toBe(true)
+        const radioInput = wrapper.find('input[type="radio"][value="excel"]');
+        radioInput.setChecked();
+        expect(wrapper.find('[id="next"]').exists()).toBe(true)
+        const btnNext = wrapper.find('[id="next"]')
+        btnNext.trigger('click')
+        wrapper.vm.onPilih()
+        await wrapper.setData({ isPilih: 'excel' })
+        // Upload file
+        await wrapper.vm.$nextTick()
+        wrapper.vm.upload = jest.fn()
+        expect(wrapper.find('.mdi-upload').exists()).toBe(true)
+        const btnUpload = wrapper.find('.mdi-upload')
+        btnUpload.trigger('click')
+        wrapper.vm.upload()
+        // To next page
+        await wrapper.vm.$nextTick()
+        wrapper.vm.onValidate = jest.fn
+        expect(wrapper.find('[id="nextOnvalidate"]').exists()).toBe(true)
+        const btnnextOnvalidate = wrapper.find('[id="nextOnvalidate"]')
+        btnnextOnvalidate.trigger('click')
+        wrapper.vm.onValidate()
+        // Confirm page
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('.ml-n5').exists()).toBe(true)
+    })
+
+    test('test add data using excel but back to step 1', async () => {
+        const wrapper = wrapperFactory()
+        // Choose how to add data
+        expect(wrapper.find('input[type="radio"][value="excel"]').exists()).toBe(true)
+        const radioInput = wrapper.find('input[type="radio"][value="excel"]');
+        radioInput.setChecked();
+        expect(wrapper.find('[id="next"]').exists()).toBe(true)
+        const btnNext = wrapper.find('[id="next"]')
+        btnNext.trigger('click')
+        wrapper.vm.onPilih()
+        await wrapper.setData({ isPilih: 'excel' })
+        // Upload file
+        await wrapper.vm.$nextTick()
+        wrapper.vm.upload = jest.fn()
+        expect(wrapper.find('.mdi-upload').exists()).toBe(true)
+        const btnUpload = wrapper.find('.mdi-upload')
+        btnUpload.trigger('click')
+        wrapper.vm.upload()
+        // Back
+        expect(wrapper.find('[id="backStep1"]').exists()).toBe(true)
+        const btnBackonResetPilih = wrapper.find('[id="backStep1"]')
+        btnBackonResetPilih.trigger('click')
+        wrapper.vm.onResetPilih()
+    })
+
+    test('test add data using excel but back to step 2', async () => {
+        const wrapper = wrapperFactory()
+        // Choose how to add data
+        expect(wrapper.find('input[type="radio"][value="excel"]').exists()).toBe(true)
+        const radioInput = wrapper.find('input[type="radio"][value="excel"]');
+        radioInput.setChecked();
+        expect(wrapper.find('[id="next"]').exists()).toBe(true)
+        const btnNext = wrapper.find('[id="next"]')
+        btnNext.trigger('click')
+        wrapper.vm.onPilih()
+        await wrapper.setData({ isPilih: 'excel' })
+        // Upload file
+        await wrapper.vm.$nextTick()
+        wrapper.vm.upload = jest.fn()
+        expect(wrapper.find('.mdi-upload').exists()).toBe(true)
+        const btnUpload = wrapper.find('.mdi-upload')
+        btnUpload.trigger('click')
+        wrapper.vm.upload()
+        // To next page
+        await wrapper.vm.$nextTick()
+        wrapper.vm.onValidate = jest.fn
+        expect(wrapper.find('[id="nextOnvalidate"]').exists()).toBe(true)
+        const btnnextOnvalidate = wrapper.find('[id="nextOnvalidate"]')
+        btnnextOnvalidate.trigger('click')
+        wrapper.vm.onValidate()
+        // Confirm page
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('.ml-n5').exists()).toBe(true)
+        // Back
+        await wrapper.vm.$nextTick()
+        wrapper.vm.onStep = jest.fn()
+        expect(wrapper.find('[id="backStep2"]').exists()).toBe(true)
+        const btnBackonResetPilih = wrapper.find('[id="backStep2"]')
+        btnBackonResetPilih.trigger('click')
+        wrapper.vm.onStep()
+    })
 })

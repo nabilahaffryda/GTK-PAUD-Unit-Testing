@@ -53,7 +53,7 @@
         </v-radio-group>
         <v-divider class="my-2"></v-divider>
         <div class="text-md-right">
-          <v-btn right color="primary" :disabled="!pilihan" @click="onPilih"> Selanjutnya </v-btn>
+          <v-btn right color="primary" id="next" :disabled="!pilihan" @click="onPilih"> Selanjutnya </v-btn>
         </div>
       </template>
       <v-container v-if="!useUpload || isEdit ? true : isPilih === 'manual'">
@@ -76,23 +76,36 @@
                   <v-alert class="mb-4" type="error" v-if="errorEmail">
                     {{ errorEmail }}
                   </v-alert>
-                  <base-form-generator :schema="(schema && schema.unchecked) || []" v-model="form" />
+                  <base-form-generator id="email-input" :schema="(schema && schema.unchecked) || []" v-model="form" />
                   <v-divider class="my-4" />
                 </v-card-text>
                 <v-card-actions class="pa-0">
                   <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
                   <v-spacer></v-spacer>
-                  <v-btn v-if="useUpload || step !== 1" class="text-md-right" right text @click="onResetPilih">
+                  <v-btn
+                    id="back-step1"
+                    v-if="useUpload || step !== 1"
+                    class="text-md-right"
+                    right
+                    text
+                    @click="onResetPilih"
+                  >
                     Kembali
                   </v-btn>
-                  <v-btn class="text-md-right" right color="primary" @click="onCheck"> Selanjutnya </v-btn>
+                  <v-btn id="next-onCheck" class="text-md-right" right color="primary" @click="onCheck">
+                    Selanjutnya
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
             <v-stepper-content step="2" style="padding: 0">
               <v-card flat>
                 <v-card-text class="pa-0 pt-7">
-                  <base-form-generator :schema="(schema.biodata && schema.biodata[jenis] || [])" v-model="form" />
+                  <base-form-generator
+                    id="biodata-input"
+                    :schema="(schema.biodata && schema.biodata[jenis]) || []"
+                    v-model="form"
+                  />
                   <template v-if="jenis === 'program'">
                     <v-row>
                       <v-col cols="12" md="6">
@@ -123,6 +136,7 @@
                     v-if="!isEdit"
                     right
                     text
+                    id="back-step2"
                     @click="
                       () => {
                         step--;
@@ -132,7 +146,9 @@
                   >
                     Kembali
                   </v-btn>
-                  <v-btn class="text-md-right" right color="primary" @click="$emit('onValidate')"> Selanjutnya </v-btn>
+                  <v-btn id="next-OnValidate" class="text-md-right" right color="primary" @click="$emit('onValidate')">
+                    Selanjutnya
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
@@ -150,7 +166,7 @@
                       </v-avatar>
                     </v-col>
                     <v-col cols="12" md="10" sm="12" class="px-0">
-                      <base-list-info class="px-0" :info="info"></base-list-info>
+                      <base-list-info id="info" class="px-0" :info="info"></base-list-info>
                     </v-col>
                     <v-col cols="12" md="12" sm="12">
                       Silakan mengecek data <b>Akun Baru</b> yang akan <b>Ditambahkan</b>. Jika data sudah sesuai
@@ -162,9 +178,9 @@
                 <v-card-actions class="pa-0">
                   <v-spacer></v-spacer>
                   <v-btn
-                      right
-                      text
-                      @click="
+                    right
+                    text
+                    @click="
                       () => {
                         step--;
                         $emit('onStep');
@@ -217,8 +233,9 @@
                 </v-card-text>
                 <v-card-actions class="pa-0">
                   <v-spacer></v-spacer>
-                  <v-btn class="text-md-right" right text @click="onResetPilih"> Kembali </v-btn>
+                  <v-btn id="backStep1" class="text-md-right" right text @click="onResetPilih"> Kembali </v-btn>
                   <v-btn
+                    id="nextOnvalidate"
                     class="text-md-right"
                     :disabled="!file"
                     right
@@ -262,6 +279,7 @@
                 <v-card-actions class="pa-0">
                   <v-spacer></v-spacer>
                   <v-btn
+                    id="backStep2"
                     right
                     text
                     @click="
@@ -341,8 +359,8 @@ export default {
   },
   computed: {
     configs() {
-      const M_PROPINSI = this.masters && this.masters.m_propinsi || {};
-      const M_KOTA = this.masters && this.masters.m_kota || {};
+      const M_PROPINSI = (this.masters && this.masters.m_propinsi) || {};
+      const M_KOTA = (this.masters && this.masters.m_kota) || {};
       return {
         selector: ['k_propinsi', 'k_kota'],
         required: this.jenis === 'kelas' ? [] : ['k_propinsi', 'k_kota'],
@@ -497,7 +515,7 @@ export default {
               name: 'k_golongan',
               label: 'Golongan',
               hint: 'wajib diisi',
-              items: this.$mapForMaster(this.masters  && this.masters.m_golongan || []),
+              items: this.$mapForMaster((this.masters && this.masters.m_golongan) || []),
               value: 'value',
               text: 'text',
               required: true,
@@ -619,7 +637,7 @@ export default {
               name: 'k_golongan',
               label: 'Golongan',
               hint: 'wajib diisi',
-              items: this.$mapForMaster(this.masters  && this.masters.m_golongan || []),
+              items: this.$mapForMaster((this.masters && this.masters.m_golongan) || []),
               value: 'value',
               text: 'text',
               required: true,
@@ -1074,7 +1092,7 @@ export default {
               name: 'k_golongan',
               label: 'Golongan',
               hint: 'wajib diisi',
-              items: this.$mapForMaster(this.masters && this.masters.m_golongan  || []),
+              items: this.$mapForMaster((this.masters && this.masters.m_golongan) || []),
               value: 'value',
               text: 'text',
               required: true,
@@ -1108,7 +1126,7 @@ export default {
 
     initForm(value) {
       const formulir = [
-        ...(this.schema && this.schema.biodata  && this.schema.biodata[this.jenis] || []),
+        ...((this.schema && this.schema.biodata && this.schema.biodata[this.jenis]) || []),
         { name: 'email' },
         { name: 'k_propinsi' },
         { name: 'k_kota' },
@@ -1137,7 +1155,7 @@ export default {
       }
 
       keys = keys.concat(
-        (this.schema && this.schema.biodata && this.schema.biodata[this.jenis] || []).map((item) => {
+        ((this.schema && this.schema.biodata && this.schema.biodata[this.jenis]) || []).map((item) => {
           return item.name;
         })
       );
