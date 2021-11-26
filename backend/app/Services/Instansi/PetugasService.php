@@ -697,11 +697,6 @@ class PetugasService
                         ->join('paud_kelas', 'paud_kelas.paud_kelas_id', '=', 'paud_kelas_petugas.paud_kelas_id')
                         ->join('paud_diklat', 'paud_diklat.paud_diklat_id', '=', 'paud_kelas.paud_diklat_id')
                         ->where('paud_diklat.paud_periode_id', '=', $periodeId)
-                        ->where('paud_kelas_petugas.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA)
-                        ->when($kelasId && $kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasId, $kPetugasPaud) {
-                            $query->where('paud_kelas_petugas.k_petugas_paud', '=', $kPetugasPaud)
-                                ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelasId);
-                        })
                         ->when($kelasId, function ($query) use ($kelasId, $kPetugasPaud) {
                             $query
                                 ->where(function ($query) use ($kelasId) {
