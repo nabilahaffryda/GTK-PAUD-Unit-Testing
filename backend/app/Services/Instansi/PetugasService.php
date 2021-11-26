@@ -740,4 +740,96 @@ class PetugasService
             })
             ->where('paud_petugas.k_petugas_paud', '=', $kPetugasPaud);
     }
+
+    public function getBatasanPetugasKelas(int $jmlPeserta, int $maxPengajar, int $ratioPengajarTambahan)
+    {
+        $maxPengajarTambahan = floor($maxPengajar * $ratioPengajarTambahan / 100);
+        $minPengajar         = $maxPengajar - $maxPengajarTambahan;
+
+        return [
+            MPetugasPaud::PENGAJAR           => [$minPengajar, $maxPengajar],
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => [0, $maxPengajarTambahan],
+            MPetugasPaud::PEMBIMBING_PRAKTIK => [floor($jmlPeserta / 10), floor($jmlPeserta / 5)],
+            MPetugasPaud::ADMIN_KELAS        => [1, 1],
+        ];
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateNewPetugasKelas(
+        int      $kPetugasPaud,
+        int      $jmlPetugas,
+        int      $jmlPeserta,
+        int      $maxPengajar,
+        int      $ratioPengajarTambahan,
+        array    $akunIds,
+
+        callable $getJmlPetugasLain,
+        callable $queryKandidat,
+    )
+    {
+        $jmlPetugas += count($akunIds);
+
+        $batasan = $this->getBatasanPetugasKelas($jmlPeserta, $maxPengajar, $ratioPengajarTambahan);
+        if (isset($batasan[$kPetugasPaud][1]) && $jmlPetugas > $batasan[$kPetugasPaud][1]) {
+            throw new FlowException("Jumlah petugas maksimal adalah {$batasan[$kPetugasPaud][1]} orang");
+        }
+
+        if (in_array($kPetugasPaud, [MPetugasPaud::PENGAJAR, MPetugasPaud::PENGAJAR_TAMBAHAN])) {
+            $jmlPetugasLain = $getJmlPetugasLain($kPetugasPaud == MPetugasPaud::PENGAJAR ? MPetugasPaud::PENGAJAR_TAMBAHAN : MPetugasPaud::PENGAJAR);
+
+            $jmlPengajar = $jmlPetugasLain + $jmlPetugas;
+            if ($jmlPengajar > $maxPengajar) {
+                throw new FlowException("Jumlah pengajar dan pengajar tambahan maksimal adalah {$maxPengajar} orang");
+            }
+        }
+
+        $petugases = $queryKandidat()
+            ->whereIn('akun_id', $akunIds)
+            ->get();
+
+        if ($diff = array_diff($akunIds, $petugases->pluck('akun_id')->all())) {
+            $akuns = Akun::whereIn('akun_id', $diff)->pluck('email')->unique()->all();
+            $namas = implode(', ', $akuns);
+
+            throw new FlowException("Petugas dengan email {$namas} tidak ditemukan");
+        }
+
+        return $petugases;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validatePetugasKelas(
+        int   $jmlPeserta,
+        int   $maxPengajar,
+        int   $ratioPengajarTambahan,
+        array $jmlPetugases,
+    )
+    {
+        $batasan = $this->getBatasanPetugasKelas($jmlPeserta, $maxPengajar, $ratioPengajarTambahan);
+
+        foreach ($batasan as $kPetugasPaud => $jml) {
+            [$jmlMin, $jmlMax] = $jml;
+
+            $jmlPetugas = $jmlPetugases[$kPetugasPaud] ?? 0;
+            if ($jmlPetugas < $jmlMin) {
+                $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
+                throw new FlowException("Petugas {$mPetugasPaud->keterangan} minimal {$jmlMin} orang");
+            }
+
+            if ($jmlPetugas > $jmlMax) {
+                $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
+                throw new FlowException("Petugas {$mPetugasPaud->keterangan} maksimal {$jmlMin} orang");
+            }
+        }
+
+        $jmlPengajar = $jmlPetugases[MPetugasPaud::PENGAJAR] ?? 0;
+        $jmlTambahan = $jmlPetugases[MPetugasPaud::PENGAJAR_TAMBAHAN] ?? 0;
+        if (($jmlPengajar + $jmlTambahan) > $maxPengajar) {
+            throw new FlowException("Pengajar dan pengajar tambahan maksimal {$maxPengajar} orang");
+        }
+    }
 }
