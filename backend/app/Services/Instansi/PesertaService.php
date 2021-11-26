@@ -58,7 +58,7 @@ class PesertaService
                     ->when($kelasLuringId, function ($query, $value) {
                         $query->orWhere('paud_kelas_peserta_luring.paud_kelas_luring_id', '=', $value);
                     });
-            });;
+            });
     }
 
     /**
