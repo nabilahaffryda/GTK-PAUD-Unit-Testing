@@ -243,7 +243,7 @@ export default {
     },
 
     onKonfirmasi(status) {
-      if (![1].includes(Number(this.diklat?.k_verval_paud))) {
+      if (![1].includes(Number(this.diklat?.paud_kelas?.k_verval_paud))) {
         this.$error('Konfirmasi sudah dikunci karena kelas sudah diajukan atau diproses');
         return;
       }
