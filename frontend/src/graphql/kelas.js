@@ -71,6 +71,8 @@ const KELAS = gql`
       }
       data {
         nama
+        paud_kelas_id
+        angkatan
         lms_url
         paud_diklat {
           paud_periode {
