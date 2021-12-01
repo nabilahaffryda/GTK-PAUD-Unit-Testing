@@ -131,11 +131,13 @@ class PetugasKelasLuringService
             ->where('paud_diklat_luring.tgl_selesai', '>=', $tglMulai)
             ->where('paud_kelas_petugas_luring.paud_petugas_id', '=', $petugas->paud_petugas_id)
             ->where('paud_kelas_petugas_luring.k_konfirmasi_paud', '=', MKonfirmasiPaud::BELUM_KONFIRMASI)
-            ->when($kelasPetugas && $kelasPetugas->k_petugas_paud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasPetugas) {
-                $query->where('paud_kelas_petugas_luring.k_petugas_paud', '=', MPetugasPaud::ADMIN_KELAS)
-                    ->where('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', $kelasPetugas->paud_kelas_luring_id);
-            }, function ($query) {
-                $query->where('paud_kelas_petugas_luring.k_petugas_paud', '<>', MPetugasPaud::ADMIN_KELAS);
+            ->when($kelasPetugas, function ($query) use ($kelasPetugas) {
+                $query->when($kelasPetugas->k_petugas_paud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasPetugas) {
+                    $query->where('paud_kelas_petugas_luring.k_petugas_paud', '=', MPetugasPaud::ADMIN_KELAS)
+                        ->where('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', $kelasPetugas->paud_kelas_luring_id);
+                }, function ($query) {
+                    $query->where('paud_kelas_petugas_luring.k_petugas_paud', '<>', MPetugasPaud::ADMIN_KELAS);
+                });
             })
             ->get('paud_kelas_petugas_luring.*');
 
@@ -158,7 +160,6 @@ class PetugasKelasLuringService
         $kelasPetugas->save();
 
         $diklat = $kelasPetugas->paudKelasLuring->paudDiklatLuring;
-
         $this->setTidakBersedia($diklat->tgl_mulai, $diklat->tgl_selesai, $kelasPetugas->paudPetugas, $kelasPetugas);
 
         $periodes = app(PeriodeService::class)->getRentang($diklat->tgl_mulai, $diklat->tgl_selesai);

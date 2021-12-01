@@ -110,11 +110,13 @@ class PetugasKelasService
             ->where('paud_diklat.paud_periode_id', '=', $periodeId)
             ->where('paud_kelas_petugas.paud_petugas_id', '=', $petugas->paud_petugas_id)
             ->where('paud_kelas_petugas.k_konfirmasi_paud', '=', MKonfirmasiPaud::BELUM_KONFIRMASI)
-            ->when($kelasPetugas && $kelasPetugas->k_petugas_paud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasPetugas) {
-                $query->where('paud_kelas_petugas.k_petugas_paud', '=', MPetugasPaud::ADMIN_KELAS)
-                    ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelasPetugas->paud_kelas_id);
-            }, function ($query) {
-                $query->where('paud_kelas_petugas.k_petugas_paud', '<>', MPetugasPaud::ADMIN_KELAS);
+            ->when($kelasPetugas, function ($query) use ($kelasPetugas) {
+                $query->when($kelasPetugas->k_petugas_paud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasPetugas) {
+                    $query->where('paud_kelas_petugas.k_petugas_paud', '=', MPetugasPaud::ADMIN_KELAS)
+                        ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelasPetugas->paud_kelas_id);
+                }, function ($query) {
+                    $query->where('paud_kelas_petugas.k_petugas_paud', '<>', MPetugasPaud::ADMIN_KELAS);
+                });
             })
             ->get('paud_kelas_petugas.*');
 
