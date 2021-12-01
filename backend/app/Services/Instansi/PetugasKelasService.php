@@ -155,8 +155,10 @@ class PetugasKelasService
         $kelasPetugas->k_konfirmasi_paud = MKonfirmasiPaud::BERSEDIA;
         $kelasPetugas->save();
 
-        $periodeId = $kelasPetugas->paudKelas->paudDiklat->paud_periode_id;
-        $this->setTidakBersedia($periodeId, $kelasPetugas->paudPetugas, $kelasPetugas);
+        $periode = $kelasPetugas->paudKelas->paudDiklat->paudPeriode;
+        $this->setTidakBersedia($periode->paud_periode_id, $kelasPetugas->paudPetugas, $kelasPetugas);
+
+        app(PetugasKelasLuringService::class)->setTidakBersedia($periode->tgl_diklat_mulai, $periode->tgl_diklat_selesai, $kelasPetugas->paudPetugas);
 
         return $kelasPetugas;
     }
