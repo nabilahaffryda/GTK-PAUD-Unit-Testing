@@ -1,5 +1,5 @@
 <template>
-  <v-card tile flat>
+  <v-card tile flat data-app>
     <v-card-text>
       <template v-if="['pembimbing', 'pengajar'].includes(jenis)">
         <v-row class="my-5">
