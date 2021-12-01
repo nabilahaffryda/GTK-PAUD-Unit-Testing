@@ -70,7 +70,7 @@ class PetugasKelasService
             ->first();
 
         if ($kelas) {
-            throw new FlowException('Anda telah mengkonfirmasi kelas ' . $kelas->nama);
+            throw new FlowException('Anda telah mengkonfirmasi kelas daring ' . $kelas->nama);
         }
 
         /** @var PaudKelasLuring $kelas */
