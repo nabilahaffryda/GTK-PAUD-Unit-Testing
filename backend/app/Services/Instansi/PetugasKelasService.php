@@ -7,6 +7,7 @@ use App\Models\MKonfirmasiPaud;
 use App\Models\MPetugasPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudKelas;
+use App\Models\PaudKelasLuring;
 use App\Models\PaudKelasPetugas;
 use App\Models\PaudPetugas;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,12 +50,12 @@ class PetugasKelasService
      */
     public function validateSatuKonfirmasi(PaudKelasPetugas $kelasPetugas)
     {
-        $periodeId = $kelasPetugas->paudKelas->paudDiklat->paud_periode_id;
+        $periode = $kelasPetugas->paudKelas->paudDiklat->paudPeriode;
 
         /** @var PaudKelas $kelas */
         $kelas = PaudKelas::query()
             ->join('paud_diklat', 'paud_diklat.paud_diklat_id', '=', 'paud_kelas.paud_diklat_id')
-            ->where('paud_diklat.paud_periode_id', '=', $periodeId)
+            ->where('paud_diklat.paud_periode_id', '=', $periode->paud_periode_id)
             ->whereHas('paudKelasPetugases', function (Builder $query) use ($kelasPetugas) {
                 $query
                     ->where('paud_kelas_petugas.paud_petugas_id', '=', $kelasPetugas->paud_petugas_id)
@@ -70,6 +71,22 @@ class PetugasKelasService
 
         if ($kelas) {
             throw new FlowException('Anda telah mengkonfirmasi kelas ' . $kelas->nama);
+        }
+
+        /** @var PaudKelasLuring $kelas */
+        $kelas = PaudKelasLuring::query()
+            ->join('paud_diklat_luring', 'paud_diklat_luring.paud_diklat_luring_id', '=', 'paud_diklat_luring.paud_diklat_luring_id')
+            ->where('paud_diklat_luring.tgl_mulai', '<=', $periode->tgl_diklat_selesai)
+            ->where('paud_diklat_luring.tgl_selesai', '>=', $periode->tgl_diklat_mulai)
+            ->whereHas('paudKelasPetugasLurings', function (Builder $query) use ($kelasPetugas) {
+                $query
+                    ->where('paud_kelas_petugas_luring.paud_petugas_id', '=', $kelasPetugas->paud_petugas_id)
+                    ->where('paud_kelas_petugas_luring.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA);
+            })
+            ->first();
+
+        if ($kelas) {
+            throw new FlowException('Anda telah mengkonfirmasi kelas luring ' . $kelas->nama);
         }
     }
 
