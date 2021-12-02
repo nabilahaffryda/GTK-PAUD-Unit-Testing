@@ -6,6 +6,7 @@ use App\Exceptions\FlowException;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudKelasPeserta;
+use App\Models\Sekolah;
 use App\Remotes\Sertifikat as SertifikatRemote;
 use Carbon\Carbon;
 use DB;
@@ -158,6 +159,9 @@ class KelasPeserta
 
             $instansi = $diklat->instansi;
 
+            /** @var Sekolah $sekolah */
+            $sekolah = $ptk->ptkSekolahs->first()?->sekolah;
+
             $params = [
                 'k_sertifikat' => '213',
                 'angkatan'     => '1',
@@ -166,25 +170,26 @@ class KelasPeserta
 
                 'peran'       => 'Peserta',
                 'nama'        => $ptk->nama,
-                'nomor_surat' => '123456789/B3/GT.00.04/2021',
-                'instansi'    => $instansi->nama,
+                'nomor_surat' => '2611/B4/GT.00.04/2021',
+                'instansi'    => $sekolah->nama,
 
                 'tgl_mulai'   => $periode->tgl_diklat_mulai?->toDateString(),
                 'tgl_selesai' => $periode->tgl_diklat_selesai?->toDateString(),
-                'tgl_cetak'   => $kelasPeserta->wkt_download->toDateString(),
+                'tgl_cetak'   => $periode->tgl_diklat_selesai?->toDateString(),
                 'predikat'    => strtoupper($kelasPeserta->predikat),
 
                 'data' => [
-                    'kota'         => $diklat->mKota->keterangan,
-                    'propinsi'     => $diklat->mPropinsi->keterangan,
-                    'lokasi'       => $diklat,
                     'lpd_nama'     => $instansi->nama,
                     'lpd_pimpinan' => $paudInstansi->nama_penanggung_jawab,
-                    'lpd_lokasi'   => $instansi->mKota->keterangan . ', Provinsi ' . $instansi->mPropinsi->keterangan,
+                    'lpd_lokasi'   => $instansi->mKota->keterangan,
+
+                    'kota'     => $sekolah?->mKota?->keterangan,
+                    'propinsi' => $sekolah?->mPropinsi?->keterangan,
+                    'lokasi'   => $diklat->mKota->keterangan . ', Provinsi ' . $diklat->mPropinsi->keterangan,
 
                     'diklat_jenis'   => 'Diklat Berjenjang ',
                     'diklat_jenjang' => 'Tingkat Dasar',
-                    'diklat_moda'    => 'Daring Kombinasi',
+                    'diklat_moda'    => 'Moda Daring Kombinasi',
 
                     'lpd_url_logo'    => $berkases[8]->url,
                     'lpd_url_ttd'     => $berkases[9]->url,
@@ -203,6 +208,7 @@ class KelasPeserta
             }
 
             $kelasPeserta->url_download = $url;
+            $kelasPeserta->save();
         }
 
         return $kelasPeserta;
