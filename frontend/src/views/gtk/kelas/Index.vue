@@ -61,13 +61,25 @@
                               $getDeepObj(item, 'paud_diklat.paud_periode.tgl_diklat_selesai')
                             )
                           }}
+                          <div>
+                            <template v-if="item.is_selesai">
+                              <span class="green--text caption">
+                                <v-icon dark color="success" left x-small>mdi-check-circle</v-icon> Selesai
+                              </span>
+                            </template>
+                            <template v-else>
+                              <span class="grey--text caption">
+                                <v-icon color="grey" left x-small>mdi-timer-sand</v-icon> Sedang berjalan
+                              </span>
+                            </template>
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
-                          <v-btn color="success" depressed small block @click="toHasil(item)">
+                          <v-btn v-if="item.is_selesai" color="success" depressed small block @click="toHasil(item)">
                             <v-icon left>mdi-file-document-edit</v-icon>
                             Hasil Kelas
                           </v-btn>
@@ -117,6 +129,7 @@ export default {
   methods: {
     ...mapActions('diklat', {
       fetch: 'getListKelas',
+      getHasil: 'getHasil',
     }),
 
     fetchData: function () {
@@ -152,8 +165,14 @@ export default {
       window.open(url, '_blank');
     },
 
-    toHasil(item) {
-      console.log(item);
+    async toHasil(item) {
+      const { ptkValidateSurvey } = await this.getHasil(item && item.paud_kelas_id);
+
+      if (ptkValidateSurvey.kelasPeserta && ptkValidateSurvey.kelasPeserta.is_survey) {
+        this.$router.push({ name: 'kelas-detail', params: { id: item.paud_kelas_id } });
+        return;
+      }
+
       const title = `Kuesioner Diklat Berjenjang GTK Paud`;
       const message = `
       <h2>Evaluasi Penyelenggaraan Diklat Berjenjang Daring Kombinasi</h2>
@@ -168,7 +187,7 @@ export default {
         btnColor: '#37474F',
         btnLabel: 'Isi Kuesioner',
         action: () => {
-          this.$router.push({ name: 'kelas-detail', params: { id: item.paud_kelas_id } });
+          window.location.href = `${ptkValidateSurvey.urlSurvey}?${window.location.href}`;
         },
       });
     },

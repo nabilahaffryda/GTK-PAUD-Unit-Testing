@@ -74,6 +74,7 @@ const KELAS = gql`
         paud_kelas_id
         angkatan
         lms_url
+        is_selesai
         paud_diklat {
           paud_periode {
             tgl_diklat_mulai
@@ -81,6 +82,37 @@ const KELAS = gql`
           }
         }
       }
+    }
+  }
+`;
+
+const GET_HASIL = gql`
+  mutation GetHasil($kelasId: Int!) {
+    ptkValidateSurvey(kelasId: $kelasId) {
+      urlSurvey
+      kelasPeserta {
+        nilai
+        predikat
+        medali
+        angkatan
+        alasan
+        tahun
+        ptk_id
+        ptk {
+          nama
+          instansi
+        }
+        is_lulus
+        is_survey
+      }
+    }
+  }
+`;
+
+const GET_SERTIFIKAT = gql`
+  mutation GetSertifikat($kelasId: Int!) {
+    ptkValidateSertifikat(kelasId: $kelasId) {
+      url_download
     }
   }
 `;
@@ -133,4 +165,4 @@ const LIST_KONFIRMASI = gql`
   }
 `;
 
-export default { SETUJU, TOLAK, RESET, KELAS, DETAIL_KONFIRMASI, LIST_KONFIRMASI };
+export default { SETUJU, TOLAK, RESET, KELAS, DETAIL_KONFIRMASI, LIST_KONFIRMASI, GET_HASIL, GET_SERTIFIKAT };
