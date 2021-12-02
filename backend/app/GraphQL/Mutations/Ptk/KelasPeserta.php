@@ -153,7 +153,7 @@ class KelasPeserta
             $paudInstansi = $diklat->paudInstansi;
 
             $berkases = $paudInstansi->paudInstansiBerkases->keyBy('k_berkas_lpd_paud');
-            if (!$berkases->diffKeys([8, 9, 10])) {
+            if (!$berkases->has([8, 9, 10])) {
                 throw new FlowException('Berkas LPD belum lengkap');
             }
 
