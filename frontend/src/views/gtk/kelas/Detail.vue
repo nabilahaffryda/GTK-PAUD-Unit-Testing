@@ -65,7 +65,7 @@
                       >)</p
                     >
                     <h1 class="green--text py-2" style="font-size: 60px">
-                      <v-icon :color="medals[detail.medali]" style="font-size: 60px">mdi-trophy-variant</v-icon>
+                      <img :src="medals[(detail.medali || '').toLowerCase()]" width="50" />
                     </h1>
                   </v-card-text>
                 </v-card>
@@ -88,9 +88,9 @@ export default {
     return {
       detail: '',
       medals: {
-        Gold: '#FFA800',
-        Silver: '#C0C0C0',
-        Copper: '#E3BFA4',
+        gold: 'https://cdn.siap.id/s3/simpkb/asset%20img/sertifikat/badge-1.png',
+        silver: 'https://cdn.siap.id/s3/simpkb/asset%20img/sertifikat/badge-2.png',
+        bronze: 'https://cdn.siap.id/s3/simpkb/asset%20img/sertifikat/badge-3.png',
       },
     };
   },
