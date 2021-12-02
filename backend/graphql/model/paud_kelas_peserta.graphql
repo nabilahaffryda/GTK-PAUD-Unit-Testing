@@ -6,6 +6,16 @@ type PaudKelasPeserta {
     ptk_id: String
     k_konfirmasi_paud: Int
     alasan: String
+    is_survey: Int
+    wkt_survey: DateTime
+    is_lulus: Int
+    nilai: Float
+    predikat: String
+    medali: String
+    n_pendalaman_materi: Float
+    n_tugas_mandiri: Float
+    wkt_download: DateTime
+    url_download: String
     created_at: DateTime
     updated_at: DateTime
     created_by: String
