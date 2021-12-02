@@ -222,7 +222,7 @@ export default {
     }),
 
     jenis() {
-      return this.$route.meta.tipe || 'daring';
+      return (this.$route && this.$route.meta && this.$route.meta.tipe) || 'daring';
     },
 
     isDaring() {
