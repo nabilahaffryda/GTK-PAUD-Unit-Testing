@@ -15,7 +15,7 @@
               <v-card flat>
                 <v-card-text class="pa-0 pt-3">
                   <h1 class="title mb-3">Data Institusi LPD</h1>
-                  <base-form-generator :schema="schema.dasar" v-model="form" />
+                  <base-form-generator :schema="schema.dasar" id="email-input" v-model="form" />
                   <h1 class="title my-3">Pengaturan Petugas Diklat</h1>
                   <base-form-generator :schema="schema.petugas" v-model="form" />
                   <v-divider class="my-4" />
@@ -47,7 +47,7 @@
                   </v-row>
                 </v-card-text>
                 <v-card-actions class="pa-0">
-                  <v-btn right color="primary" @click="back"> Sebelumnya </v-btn>
+                  <v-btn right color="primary" id="back" @click="back"> Sebelumnya </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
