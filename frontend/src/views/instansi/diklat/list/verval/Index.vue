@@ -269,7 +269,7 @@ export default {
     },
 
     jenis() {
-      return this.$route.meta.tipe;
+      return this.$route.meta && this.$route.meta.tipe || 'kelas';
     },
   },
   created() {
@@ -546,7 +546,7 @@ export default {
       const M_LAPORAN = [
         {
           key: 'download',
-          label: `Daftar Verval`,
+          label: `Laporan Verval Kelas Diklat`,
           acl: `${this.jenis}-verval.download`,
         },
       ];
@@ -587,7 +587,7 @@ export default {
         }
 
         const params = Object.assign(this.params, this.$isObject(this.filters) ? this.filters : {});
-        this.downloadList({ params, url: url.dokumen, jenis: this.jenis, tipe: this.akses }).then((url) => {
+        this.downloadList({ params, url: url.dokumen, jenis: this.jenis }).then((url) => {
           this.$downloadFile(url);
         });
       });
