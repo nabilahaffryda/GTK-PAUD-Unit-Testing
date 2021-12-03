@@ -110,6 +110,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::group(['prefix' => 'kelas'], function () {
         Route::get('periode', [Kelas\VervalController::class, 'periode']);
         Route::get('', [Kelas\VervalController::class, 'index']);
+        Route::get('download', [Kelas\VervalController::class, 'download']);
 
         Route::group(['prefix' => '{kelas}'], function () {
             Route::get('', [Kelas\VervalController::class, 'fetch']);
