@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" flat>
+  <v-card class="mx-auto" flat data-app>
     <v-card-text>
       <v-container class="black--text">
         <div class="body-1 font-weight-medium">Info dan Detil Kelas</div>
@@ -60,7 +60,13 @@
                     @detil="onPreview"
                   />
                 </div>
-                <v-btn v-if="$allow('lpd-kelas.upload-jadwal')" color="secondary" small depressed @click="onUpload"
+                <v-btn
+                  id="unggah-jadwal"
+                  v-if="$allow('lpd-kelas.upload-jadwal')"
+                  color="secondary"
+                  small
+                  depressed
+                  @click="onUpload"
                   >Unggah Jadwal</v-btn
                 >
               </v-col>
@@ -86,7 +92,7 @@
             {{ item.text }}
           </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab" class="my-3">
+        <v-tabs-items id="tab-item" v-model="tab" class="my-3">
           <v-tab-item v-for="item in tabItems" :key="item.value">
             <v-toolbar flat>
               <v-toolbar-title class="body-2">Daftar {{ item.text }}</v-toolbar-title>
@@ -220,9 +226,9 @@ export default {
     return {
       kelas: {},
       pesertas: [],
-      peserta: null,
+      peserta: [],
       petugas: [],
-      tab: null,
+      tab: [],
       tabItems: [
         { value: 'peserta', kPetugas: 0, text: 'Peserta' },
         { value: 'admin', kPetugas: 4, text: 'Admin Kelas' },
