@@ -17,6 +17,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property null|string $ptk_id
  * @property null|int $k_konfirmasi_paud
  * @property null|string $alasan
+ * @property null|int $is_survey
+ * @property null|Carbon $wkt_survey
+ * @property null|int $is_lulus
+ * @property null|float $nilai
+ * @property null|string $predikat
+ * @property null|string $medali
+ * @property null|float $n_pendalaman_materi
+ * @property null|float $n_tugas_mandiri
+ * @property null|Carbon $wkt_download
+ * @property null|string $url_download
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|string $created_by
@@ -33,6 +43,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|PaudKelasPeserta wherePtkId($value)
  * @method static Builder|PaudKelasPeserta whereKKonfirmasiPaud($value)
  * @method static Builder|PaudKelasPeserta whereAlasan($value)
+ * @method static Builder|PaudKelasPeserta whereIsSurvey($value)
+ * @method static Builder|PaudKelasPeserta whereWktSurvey($value)
+ * @method static Builder|PaudKelasPeserta whereIsLulus($value)
+ * @method static Builder|PaudKelasPeserta whereNilai($value)
+ * @method static Builder|PaudKelasPeserta wherePredikat($value)
+ * @method static Builder|PaudKelasPeserta whereMedali($value)
+ * @method static Builder|PaudKelasPeserta whereNPendalamanMateri($value)
+ * @method static Builder|PaudKelasPeserta whereNTugasMandiri($value)
+ * @method static Builder|PaudKelasPeserta whereWktDownload($value)
+ * @method static Builder|PaudKelasPeserta whereUrlDownload($value)
  * @method static Builder|PaudKelasPeserta whereCreatedAt($value)
  * @method static Builder|PaudKelasPeserta whereUpdatedAt($value)
  * @method static Builder|PaudKelasPeserta whereCreatedBy($value)
@@ -60,16 +80,26 @@ class PaudKelasPeserta extends Eloquent
      * @var array
      */
     protected $casts = [
-        'paud_kelas_id' => 'int',
-        'tahun'         => 'int',
-        'angkatan'      => 'int',
-        'ptk_id'        => 'string',
-        'k_konfirmasi_paud' => 'int',
-        'alasan' => 'string',
-        'created_at'    => 'datetime',
-        'updated_at'    => 'datetime',
-        'created_by'    => 'string',
-        'updated_by'    => 'string',
+        'paud_kelas_id'       => 'int',
+        'tahun'               => 'int',
+        'angkatan'            => 'int',
+        'ptk_id'              => 'string',
+        'k_konfirmasi_paud'   => 'int',
+        'alasan'              => 'string',
+        'is_survey'           => 'int',
+        'wkt_survey'          => 'datetime',
+        'is_lulus'            => 'int',
+        'nilai'               => 'float',
+        'predikat'            => 'string',
+        'medali'              => 'string',
+        'n_pendalaman_materi' => 'float',
+        'n_tugas_mandiri'     => 'float',
+        'wkt_download'        => 'datetime',
+        'url_download'        => 'string',
+        'created_at'          => 'datetime',
+        'updated_at'          => 'datetime',
+        'created_by'          => 'string',
+        'updated_by'          => 'string',
     ];
 
     /**
@@ -85,6 +115,16 @@ class PaudKelasPeserta extends Eloquent
         'ptk_id',
         'k_konfirmasi_paud',
         'alasan',
+        'is_survey',
+        'wkt_survey',
+        'is_lulus',
+        'nilai',
+        'predikat',
+        'medali',
+        'n_pendalaman_materi',
+        'n_tugas_mandiri',
+        'wkt_download',
+        'url_download',
         'created_by',
         'updated_by',
     ];

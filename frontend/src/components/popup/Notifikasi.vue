@@ -40,7 +40,7 @@
             <v-btn :color="notif.color || '#26a69a'" dark @click="onAction" v-if="notif && notif.action">
               {{ notif.button }}
             </v-btn>
-            <v-btn class="ma-2" :color="options.btnColor || '#26a69a'" dark @click="onClose" v-else>
+            <v-btn class="ma-2" :color="options.btnColor || '#26a69a'" dark @click="onSubmit" v-else>
               {{ (options && options.btnLabel) || 'OK' }}
             </v-btn>
           </slot>
@@ -76,7 +76,10 @@ export default {
     },
     onClose() {
       this.dialog = false;
+    },
+    onSubmit() {
       if (this.options && this.options.action) this.options && this.options.action();
+      this.onClose();
     },
     onAction() {
       this.$nextTick(() => {

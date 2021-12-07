@@ -59,7 +59,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="2">
+                    <v-col class="py-0" cols="12" md="4">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Jadwal Pelaksanaan</div>

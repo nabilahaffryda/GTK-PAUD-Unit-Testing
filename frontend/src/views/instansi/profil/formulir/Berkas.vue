@@ -10,7 +10,7 @@
         <v-col cols="12" md="6" sm="12">
           <span class="subtitle-1">
             <b> {{ (berkas && berkas.title) || '-' }} </b>
-            <v-btn v-if="usePanduan" icon small @click="onPanduan">
+            <v-btn v-if="usePanduan" icon small @click="onPanduan(berkas)">
               <v-icon color="orange" small>mdi-information</v-icon>
             </v-btn>
           </span>
@@ -117,8 +117,8 @@ export default {
         this.$emit('delete', { type: type });
       });
     },
-    onPanduan() {
-      this.$emit('panduan', { type: this.type });
+    onPanduan(berkas) {
+      this.$emit('panduan', { type: this.type, berkas });
     },
   },
 };

@@ -54,6 +54,40 @@ export const actions = {
     return Promise.resolve(data ?? null);
   },
 
+  async getHasil({ rootState }, payload) {
+    rootState.loading = true;
+    const resp = await graphqlClient.mutate({
+      mutation: graphQuery['GET_HASIL'],
+      variables: {
+        kelasId: payload,
+      },
+    });
+
+    const { data } = resp;
+    rootState.loading = false;
+    return Promise.resolve(data ?? null);
+  },
+
+  async getSertifikat({ rootState }, payload) {
+    rootState.loading = true;
+    let resp;
+    try {
+      resp = await await graphqlClient.mutate({
+        mutation: graphQuery['GET_SERTIFIKAT'],
+        variables: {
+          kelasId: payload,
+        },
+      });
+      rootState.loading = false;
+      const { data } = resp;
+      return Promise.resolve(data ?? null);
+    } catch ({ graphQLErrors, networkError, message }) {
+      // error handler
+      rootState.loading = false;
+      return Promise.reject(message);
+    }
+  },
+
   // eslint-disable-next-line no-empty-pattern
   async actions({ state, commit, rootState }, payload) {
     rootState.loading = true;

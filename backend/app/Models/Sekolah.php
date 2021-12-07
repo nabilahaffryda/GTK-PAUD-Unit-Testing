@@ -7,6 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -35,7 +36,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $sektor_vokasi
  * @property null|Carbon $last_sync
  *
+ * @property-read MKecamatan $mKecamatan
+ * @property-read MKota $mKota
+ * @property-read MPropinsi $mPropinsi
  * @property-read Collection|PtkSekolah[] $ptkSekolahs
+ * @property-read Collection|Ptk[] $ptks
  *
  * @method static Builder|Sekolah whereSekolahId($value)
  * @method static Builder|Sekolah whereNama($value)
@@ -152,10 +157,42 @@ class Sekolah extends Eloquent
     ];
 
     /**
+     * @return BelongsTo
+     */
+    public function mKecamatan()
+    {
+        return $this->belongsTo('App\Models\MKecamatan', 'k_kecamatan', 'k_kecamatan');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mKota()
+    {
+        return $this->belongsTo('App\Models\MKota', 'k_kota', 'k_kota');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mPropinsi()
+    {
+        return $this->belongsTo('App\Models\MPropinsi', 'k_propinsi', 'k_propinsi');
+    }
+
+    /**
      * @return HasMany
      */
     public function ptkSekolahs()
     {
         return $this->hasMany('App\Models\PtkSekolah', 'sekolah_id', 'sekolah_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function ptks()
+    {
+        return $this->hasMany('App\Models\Ptk', 'sekolah_id', 'sekolah_id');
     }
 }

@@ -23,6 +23,8 @@ return [
         'paud_*',
         'ptk',
         'remote_log',
+        'ptk_sekolah',
+        'sekolah',
     ],
 
     /*

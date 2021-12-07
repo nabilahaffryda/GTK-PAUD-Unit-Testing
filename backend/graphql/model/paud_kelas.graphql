@@ -30,6 +30,7 @@ type PaudKelas {
     wkt_sync: DateTime
 
     url_jadwal: String
+    is_selesai: Boolean
 
     m_kecamatan: MKecamatan @belongsTo(relation: "mKecamatan")
     m_kelurahan: MKelurahan @belongsTo(relation: "mKelurahan")
