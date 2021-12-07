@@ -122,7 +122,6 @@
                               Menuju LMS
                             </v-btn>
                           </template>
-                          <template v-else-if="Number(item.k_verval_paud) === 5"> </template>
                           <template v-else>
                             <v-btn
                               :disabled="!item.is_siap_ajuan"

@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $updated_at
  * @property null|string $created_by
  * @property null|string $updated_by
+ * @property null|int $is_aktif
+ * @property null|Carbon $wkt_ajuan_buka
+ * @property null|Carbon $wkt_ajuan_tutup
  *
  * @property-read Collection|PaudDiklat[] $paudDiklats
  *
@@ -42,6 +45,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudPeriode whereUpdatedAt($value)
  * @method static Builder|PaudPeriode whereCreatedBy($value)
  * @method static Builder|PaudPeriode whereUpdatedBy($value)
+ * @method static Builder|PaudPeriode whereIsAktif($value)
+ * @method static Builder|PaudPeriode whereWktAjuanBuka($value)
+ * @method static Builder|PaudPeriode whereWktAjuanTutup($value)
  */
 class PaudPeriode extends Eloquent
 {
@@ -78,6 +84,9 @@ class PaudPeriode extends Eloquent
         'updated_at'         => 'datetime',
         'created_by'         => 'string',
         'updated_by'         => 'string',
+        'is_aktif'           => 'int',
+        'wkt_ajuan_buka'     => 'datetime',
+        'wkt_ajuan_tutup'    => 'datetime',
     ];
 
     /**
@@ -98,6 +107,9 @@ class PaudPeriode extends Eloquent
         'tgl_tugas_selesai',
         'created_by',
         'updated_by',
+        'is_aktif',
+        'wkt_ajuan_buka',
+        'wkt_ajuan_tutup',
     ];
 
     /**

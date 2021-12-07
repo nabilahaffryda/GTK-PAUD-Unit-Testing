@@ -28,6 +28,7 @@ use DB;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use League\Flysystem\Util;
@@ -38,28 +39,30 @@ class KelasService
     public function queryPesertaKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, int $kJenjang = null, int $kSumber = null)
     {
         return Ptk::query()
+            ->select('ptk.*')
+            ->leftJoin('ptk_sekolah', 'ptk_sekolah.ptk_id', '=', 'ptk.ptk_id')
+            ->leftJoin('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
+            ->leftJoin('paud_kelas_peserta', function (JoinClause $query) {
+                $query->on('paud_kelas_peserta.ptk_id', '=', 'ptk.ptk_id')
+                    ->where('paud_kelas_peserta.tahun', '=', (int)config('paud.tahun'))
+                    ->where('paud_kelas_peserta.angkatan', '=', (int)config('paud.angkatan'));
+            })
             ->when($kSumber != 9, function (Builder $query) use ($kSumber) {
                 $query->whereNotNull('dapodik_ptk_id');
             })
             ->when($kJenjang !== null, function (Builder $query) use ($kJenjang) {
-                $query->whereExists(function ($query) use ($kJenjang) {
-                    $query->selectRaw(1)
-                        ->from('ptk_sekolah')
-                        ->join('sekolah', 'sekolah.sekolah_id', '=', 'ptk_sekolah.sekolah_id')
-                        ->whereColumn('ptk_sekolah.ptk_id', '=', 'ptk.ptk_id')
-                        ->where('sekolah.k_jenjang', '=', $kJenjang);
-                });
+                $query->where('sekolah.k_jenjang', '=', (int)$kJenjang);
             })
             ->when($kSumber !== null, function (Builder $query) use ($kSumber) {
                 $query->where('k_sumber', '=', $kSumber);
             })
-            ->where('k_kota', '=', $paudDiklat->k_kota)
-            ->whereDoesntHave('paudKelasPesertas', function (Builder $query) {
-                $query->where([
-                    'paud_kelas_peserta.tahun'    => config('paud.tahun'),
-                    'paud_kelas_peserta.angkatan' => config('paud.angkatan'),
+            ->where(function (Builder $query) use ($paudDiklat) {
+                $query->orWhere([
+                    'ptk.k_kota'     => (int)$paudDiklat->k_kota,
+                    'sekolah.k_kota' => (int)$paudDiklat->k_kota,
                 ]);
-            });
+            })
+            ->whereNull('paud_kelas_peserta.paud_kelas_peserta_id');
     }
 
     public function queryPetugasKandidat(PaudDiklat $paudDiklat, PaudKelas $kelas, int $kPetugasPaud)
@@ -84,17 +87,23 @@ class KelasService
                                     ->whereHas('akun', function (Builder $query) use ($paudDiklat) {
                                         $query->where('akun.k_kota', '=', $paudDiklat->k_kota);
                                     });
-                            });
+                            })
+                            ->orWhere('paud_petugas.instansi_k_kota', '=', $paudDiklat->k_kota);
                     });
             })
             ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($paudDiklat) {
                 $query->where('paud_petugas.instansi_id', '=', $paudDiklat->instansi_id);
             })
             ->whereDoesntHave('paudKelasPetugases', function (Builder $query) use ($paudDiklat, $kelas, $kPetugasPaud) {
-                $query->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelas, $kPetugasPaud) {
-                    $query->where('k_petugas_paud', '=', $kPetugasPaud)
-                        ->where('paud_kelas_id', '=', $kelas->paud_kelas_id);
-                });
+                $query
+                    ->join('paud_kelas', 'paud_kelas.paud_kelas_id', '=', 'paud_kelas_petugas.paud_kelas_id')
+                    ->join('paud_diklat', 'paud_diklat.paud_diklat_id', '=', 'paud_kelas.paud_diklat_id')
+                    ->where('paud_diklat.paud_periode_id', '=', $paudDiklat->paud_periode_id)
+                    ->where('paud_kelas_petugas.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA)
+                    ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelas, $kPetugasPaud) {
+                        $query->where('paud_kelas_petugas.k_petugas_paud', '=', $kPetugasPaud)
+                            ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelas->paud_kelas_id);
+                    });
             })
             ->where('paud_petugas.k_petugas_paud', '=', $kPetugasPaud);
     }
@@ -311,7 +320,7 @@ class KelasService
 
         $ptks = $this
             ->queryPesertaKandidat($paudDiklat, $kelas, kJenjang: $kJenjang, kSumber: $kSumber)
-            ->whereIn('ptk_id', $params['ptk_id'])
+            ->whereIn('ptk.ptk_id', $params['ptk_id'])
             ->get();
 
         if ($diff = array_diff($params['ptk_id'], $ptks->pluck('ptk_id')->all())) {
@@ -392,6 +401,10 @@ class KelasService
                 if (isset($ptk['ptk_profils'][0]['k_kota'])) {
                     $kKotaSimpatikas[] = $ptk['ptk_profils'][0]['k_kota'];
                 }
+
+                if (isset($ptk['instansi']['k_kota'])) {
+                    $kKotaSimpatikas[] = $ptk['instansi']['k_kota'];
+                }
             }
 
             // cek user yang telah terdaftar dipaspor
@@ -439,9 +452,14 @@ class KelasService
                 $mKotas = collect();
             }
 
+            $mKota = $paudDiklat->mKota;
+
             // simpan ptk dengan paspor_id
             foreach ($ptks as $ptk) {
                 $kKota = $ptk['ptk_profils'][0]['k_kota'] ?? null;
+                if ($mKota->k_kota_simpatika != $kKota) {
+                    $kKota = $ptk['instansi']['k_kota'] ?? null;
+                }
 
                 $ptk = new Ptk($ptk);
                 unset($ptk->instansi);
@@ -549,10 +567,7 @@ class KelasService
      */
     public function ajuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
-        $wktTutup = config('paud.diklat.wkt-tutup-ajuan');
-        if ($wktTutup && Carbon::parse($wktTutup)->isPast()) {
-            throw new FlowException('Pengajuan kelas telah ditutup pada ' . Carbon::parse($wktTutup)->formatLocalized('%A, %e %b %Y %H:%M'));
-        }
+        app(PeriodeService::class)->validateWktAjuanAktif($paudDiklat->paudPeriode);
 
         $this->validateKelas($paudDiklat, $kelas);
         $this->validateKelasBaru($kelas);
@@ -642,10 +657,7 @@ class KelasService
 
     public function batalAjuan(PaudDiklat $paudDiklat, PaudKelas $kelas): PaudKelas
     {
-        $wktTutup = config('paud.diklat.wkt-tutup-ajuan');
-        if ($wktTutup && Carbon::parse($wktTutup)->isPast()) {
-            throw new FlowException('Pengajuan kelas telah ditutup pada ' . Carbon::parse($wktTutup)->formatLocalized('%A, %e %b %Y %H:%M'));
-        }
+        app(PeriodeService::class)->validateWktAjuanAktif($paudDiklat->paudPeriode);
 
         $this->validateKelas($paudDiklat, $kelas);
         $this->validateKelasAjuan($kelas);

@@ -29,7 +29,20 @@
                   </div>
                   <div class="my-5">
                     <div class="label--text">Deskripsi Kelas</div>
-                    <div class="body-1">{{ $getDeepObj(detail, 'deskripsi') || '-' }}</div>
+                    <div class="body-1"></div>
+                  </div>
+                  <div class="my-5">
+                    <div class="label--text">Lokasi</div>
+                    <div class="body-1">
+                      {{
+                        [
+                          $getDeepObj(detail, 'm_kelurahan.data.keterangan') || '',
+                          $getDeepObj(detail, 'm_kecamatan.data.keterangan') || '',
+                          $getDeepObj(detail, 'paud_diklat.data.m_kota.data.keterangan') || '',
+                          $getDeepObj(detail, 'paud_diklat.data.m_propinsi.data.keterangan') || '',
+                        ].join(', ')
+                      }}
+                    </div>
                   </div>
                   <v-row class="my-5">
                     <v-col>

@@ -21,6 +21,14 @@ export const actions = {
     return await $ajax.get('/');
   },
 
+  async getPeriode({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    $ajax = kitsu({
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/kelas/periode`,
+    });
+    return await $ajax.get('/', { params: payload.params });
+  },
+
   action({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     const url = `/i/${id}/kelas/${payload.id}${payload && payload.type ? '/' + payload.type : ''}`;
@@ -37,7 +45,7 @@ export const actions = {
 
   downloadList({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `${process.env.VUE_APP_API_URL}/i/${id}/verval/${payload.jenis}/${payload.url}?${queryString(
+    const url = `${process.env.VUE_APP_API_URL}/i/${id}/kelas/${payload.url}?${queryString(
       payload.params
     )}`;
     return Promise.resolve(url);

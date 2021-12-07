@@ -84,8 +84,7 @@ class PengajarTambahanController extends AkunController
         ]);
 
         $paudAdmin = $this->service->create(instansi(), $params);
-        app(PetugasService::class)->create($paudAdmin, [
-            'k_petugas_paud'        => MPetugasPaud::PENGAJAR_TAMBAHAN,
+        app(PetugasService::class)->create($paudAdmin, MPetugasPaud::PENGAJAR_TAMBAHAN, [
             'k_unsur_pengajar_paud' => $pengajarTambahanRequest->k_unsur_pengajar_paud,
         ]);
         return BaseResource::make($paudAdmin);

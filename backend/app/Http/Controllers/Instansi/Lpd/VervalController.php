@@ -32,7 +32,12 @@ class VervalController extends Controller
     public function fetch(PaudInstansi $paudInstansi)
     {
         return BaseResource::make($this->service->fetch($paudInstansi)
-            ->loadMissing(['mVervalPaud', 'paudInstansiBerkases']));
+            ->loadMissing([
+                'mVervalPaud',
+                'paudInstansiBerkases' => function ($query) {
+                    $query->whereIn('k_berkas_lpd_paud', array_merge(LpdService::BERKAS_VERVAL, LpdService::BERKAS_SERTIFIKAT));
+                },
+            ]));
     }
 
     /**

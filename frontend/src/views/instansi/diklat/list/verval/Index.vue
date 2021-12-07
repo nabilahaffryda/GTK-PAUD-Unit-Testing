@@ -73,16 +73,17 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <div class="label--text">Tanggal Pelaksanaan</div>
+                            <div class="label--text">Tanggal Pel aksanaan</div>
                           </v-list-item-title>
-                          <v-list-item-subtitle class="link black--text body-2">
+                          <div class="link black--text body-2">
+                            <div>{{ $getDeepObj(item, 'paud_diklat.data.paud_periode.data.nama') }}</div>
                             {{
                               $durasi(
                                 $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
                                 $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
                               )
                             }}
-                          </v-list-item-subtitle>
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -187,6 +188,7 @@ export default {
       listTimVerval: [],
       listLaporan: [],
       actions: actions,
+      mPeriode: {},
     };
   },
   components: { FormVerval },
@@ -234,19 +236,7 @@ export default {
     },
 
     formFilter() {
-      let master = Object.assign({}, this.masters[`m_berkas_${this.keyTipe}_paud`]);
-      // delete kandidat
-      delete master[1];
       return [
-        // {
-        //   label: 'Pilih Verifikator',
-        //   model: 'akun_id',
-        //   type: 'select',
-        //   props: ['attach'],
-        //   master: this.$mapForMaster(this.mapTimVerval),
-        //   labelColor: 'secondary',
-        //   grid: { cols: 12 },
-        // },
         {
           label: 'Pilih Status Verval',
           default: true,
@@ -255,23 +245,20 @@ export default {
           master: this.$mapForMaster(this.mapStatusVerval),
           props: ['attach', 'chips', 'deletable-chips', 'multiple', 'small-chips'],
         },
-        // {
-        //   label: 'Pilih Lokasi',
-        //   default: true,
-        //   type: 'cascade',
-        //   configs: this.configs,
-        //   labelColor: 'secondary',
-        //   grid: { cols: 12, md: 6 },
-        // },
+        {
+          label: 'Periode Diklat',
+          type: 'select',
+          model: 'paud_periode_id',
+          master: this.$mapForMaster(this.mPeriode),
+          props: ['attach'],
+        },
       ];
     },
 
     filtersMaster() {
       return {
         k_verval_paud: this.mapStatusVerval,
-        k_propinsi: this.masters && this.masters['propinsi'],
-        k_kota: this.masters && this.masters['kota'],
-        akun_id: this.mapTimVerval,
+        paud_periode_id: this.mPeriode,
       };
     },
 
@@ -284,12 +271,32 @@ export default {
     },
 
     jenis() {
-      return this.$route.meta.tipe;
+      return this.$route.meta && this.$route.meta.tipe || 'kelas';
     },
   },
-  created() {},
+  created() {
+    this.getMasters({
+      name: ['m_verval_paud'].join(';'),
+    });
+    this.getPeriode({}).then(({ data }) => {
+      this.mPeriode = {};
+      const items = data || [];
+
+      items.forEach((item) => {
+        this.$set(this.mPeriode, item.id, item.nama);
+      });
+    });
+  },
   methods: {
-    ...mapActions('diklatVerval', ['fetch', 'getDetail', 'action', 'downloadList', 'getKinerja', 'getTimVerval']),
+    ...mapActions('diklatVerval', [
+      'fetch',
+      'getDetail',
+      'action',
+      'downloadList',
+      'getKinerja',
+      'getTimVerval',
+      'getPeriode',
+    ]),
     ...mapActions('master', ['getMasters']),
 
     allowMenu(data) {
@@ -541,7 +548,7 @@ export default {
       const M_LAPORAN = [
         {
           key: 'download',
-          label: `Daftar Verval`,
+          label: `Laporan Verval Kelas Diklat`,
           acl: `${this.jenis}-verval.download`,
         },
       ];
@@ -582,7 +589,7 @@ export default {
         }
 
         const params = Object.assign(this.params, this.$isObject(this.filters) ? this.filters : {});
-        this.downloadList({ params, url: url.dokumen, jenis: this.jenis, tipe: this.akses }).then((url) => {
+        this.downloadList({ params, url: url.dokumen, jenis: this.jenis }).then((url) => {
           this.$downloadFile(url);
         });
       });

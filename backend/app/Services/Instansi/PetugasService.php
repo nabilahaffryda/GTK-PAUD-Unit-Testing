@@ -7,6 +7,7 @@ use App\Exceptions\SaveException;
 use App\Models\Akun;
 use App\Models\MBerkasPetugasPaud;
 use App\Models\MDiklatPaud;
+use App\Models\MGroup;
 use App\Models\MPetugasPaud;
 use App\Models\MUnsurPengajarPaud;
 use App\Models\MVervalPaud;
@@ -55,6 +56,17 @@ class PetugasService
 
         $path = sprintf("%s/%s", $ftpPath, $filename);
         return Storage::disk('petugas-berkas')->delete($path);
+    }
+
+    public function getKPetugasAdmin(PaudAdmin $admin): ?int
+    {
+        return match ($admin->k_group) {
+            MGroup::PENGAJAR_DIKLAT_PAUD           => MPetugasPaud::PENGAJAR,
+            MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD  => MPetugasPaud::PENGAJAR_TAMBAHAN,
+            MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD => MPetugasPaud::PEMBIMBING_PRAKTIK,
+            MGroup::ADM_KELAS_DIKLAT_PAUD          => MPetugasPaud::ADMIN_KELAS,
+            default                                => null,
+        };
     }
 
     /**
@@ -143,6 +155,29 @@ class PetugasService
                     'paudPetugasPerans.akunVerval:akun_id,nama,email,no_telpon,no_hp']);
     }
 
+    public function listPetugas(array $params)
+    {
+        return PaudPetugas::query()
+            ->where([
+                'tahun'    => Arr::get($params, 'tahun', config('paud.tahun')),
+                'angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
+            ])
+            ->whereIn('k_petugas_paud', (array)($params['k_petugas_paud'] ?? []))
+            ->when($params['keyword'] ?? null, function ($query, $value) {
+                $query->whereHas('akun', function ($query) use ($value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->orWhere('nama', 'like', '%' . $value . '%')
+                            ->orWhere('email', 'like', '%' . $value . '%');
+                    });
+                });
+            })
+            ->with([
+                'akun',
+                'instansi',
+                'mPetugasPaud',
+            ]);
+    }
+
     public function fetch(PaudPetugas $petugas)
     {
         return $petugas->loadMissing([
@@ -161,12 +196,13 @@ class PetugasService
      * @throws SaveException
      * @throws FlowException
      */
-    public function create(PaudAdmin $admin, array $params)
+    public function create(PaudAdmin $admin, int $kPetugasPaud, array $params = [])
     {
         $petugas = PaudPetugas::firstOrNew([
-            'akun_id'  => $admin->akun_id,
-            'tahun'    => $admin->tahun,
-            'angkatan' => $admin->angkatan,
+            'akun_id'        => $admin->akun_id,
+            'tahun'          => $admin->tahun,
+            'angkatan'       => $admin->angkatan,
+            'k_petugas_paud' => $kPetugasPaud,
         ], $params);
 
         if ($petugas->exists) {
@@ -242,9 +278,10 @@ class PetugasService
     public function delete(PaudAdmin $admin)
     {
         $petugas = PaudPetugas::firstWhere([
-            'akun_id'  => $admin->akun_id,
-            'tahun'    => $admin->tahun,
-            'angkatan' => $admin->angkatan,
+            'akun_id'        => $admin->akun_id,
+            'tahun'          => $admin->tahun,
+            'angkatan'       => $admin->angkatan,
+            'k_petugas_paud' => $this->getKPetugasAdmin($admin),
         ]);
 
         if (!$petugas) {
@@ -569,7 +606,7 @@ class PetugasService
                     $ext = '.' . $ext;
                 }
 
-                $diklat->nama_file = substr($fileInfo['filename'], 0, 100 - strlen($ext)) . $ext;
+                $diklat->nama_file = substr(preg_replace('/[[:^print:]]/', '', $fileInfo['filename']), 0, 100 - strlen($ext)) . $ext;
                 $diklat->file      = static::uploadBerkas($petugas, 'diklat', $diklat->k_diklat_paud, $file);
             }
         }

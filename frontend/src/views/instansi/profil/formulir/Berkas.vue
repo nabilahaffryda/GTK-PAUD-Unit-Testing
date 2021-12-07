@@ -10,6 +10,9 @@
         <v-col cols="12" md="6" sm="12">
           <span class="subtitle-1">
             <b> {{ (berkas && berkas.title) || '-' }} </b>
+            <v-btn v-if="usePanduan" icon small @click="onPanduan">
+              <v-icon color="orange" small>mdi-information</v-icon>
+            </v-btn>
           </span>
           <div class="body-2 grey--text text--darken-1" v-html="berkas && berkas.pesan" />
           <div v-if="optional" class="label--text warning--text"><i>* Tidak Wajib</i></div>
@@ -91,6 +94,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    usePanduan: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     onUpload(type) {
@@ -109,6 +116,9 @@ export default {
       }).then(() => {
         this.$emit('delete', { type: type });
       });
+    },
+    onPanduan() {
+      this.$emit('panduan', { type: this.type });
     },
   },
 };

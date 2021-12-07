@@ -193,8 +193,12 @@ export default {
         result.push('.pdf');
       }
 
-      if (/JPG|JPEG|PNG/.test(this.rules && this.rules.format)) {
+      if (/JPG|JPEG/.test(this.rules && this.rules.format)) {
         result.push('image/*');
+      }
+
+      if (/PNG|png/.test(this.rules && this.rules.format)) {
+        result.push('.png');
       }
 
       if (/xlxs|XLXS|XLS|xls/.test(this.rules && this.rules.format)) {

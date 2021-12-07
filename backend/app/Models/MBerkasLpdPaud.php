@@ -33,6 +33,9 @@ class MBerkasLpdPaud extends Eloquent
     public const SK_KEPENGURUSAN  = 5;
     public const PAKTA_INTEGRITAS = 6;
     public const BUKU_REKENING    = 7;
+    public const LOGO             = 8;
+    public const TANDA_TANGAN     = 9;
+    public const STEMPEL          = 10;
 
     /**
      * The table associated with the model.

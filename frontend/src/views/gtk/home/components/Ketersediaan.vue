@@ -243,6 +243,10 @@ export default {
     },
 
     onKonfirmasi(status) {
+      if (![1].includes(Number(this.diklat?.paud_kelas?.k_verval_paud))) {
+        this.$error('Konfirmasi sudah dikunci karena kelas sudah diajukan atau diproses');
+        return;
+      }
       this.actions({ id: this.$getDeepObj(this.diklat, 'paud_kelas_peserta_id'), name: status }).then(
         ({ kelas, data }) => {
           this.$set(this, 'diklat', {});

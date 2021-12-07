@@ -93,9 +93,7 @@ class PembimbingPraktikController extends AkunController
         ]);
 
         $paudAdmin = $this->service->create(instansi(), $params);
-        app(PetugasService::class)->create($paudAdmin, [
-            'k_petugas_paud' => MPetugasPaud::PEMBIMBING_PRAKTIK,
-        ]);
+        app(PetugasService::class)->create($paudAdmin, MPetugasPaud::PEMBIMBING_PRAKTIK);
         return BaseResource::make($paudAdmin);
     }
 
