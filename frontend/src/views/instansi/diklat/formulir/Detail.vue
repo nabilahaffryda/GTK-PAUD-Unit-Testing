@@ -53,7 +53,7 @@
                 <div>
                   <berkases
                     :berkas="berkas"
-                    :valid="$getDeepObj(berkas, 'url')"
+                    :valid="($getDeepObj(berkas, 'url') || '') !== ''"
                     :use-icon="false"
                     :value="berkas"
                     @upload="onUpload"

@@ -44,6 +44,22 @@ localVue.mixin({
         $allow() {
             return true;
         },
+        $downloadFile(sUrl) {
+            // Creating new link node.
+            const link = document.createElement('a');
+            link.href = sUrl;
+
+            // Dispatching click event.
+            // if (document.createEvent) {
+            //   const e = document.createEvent('MouseEvents')
+            //   e.initEvent('click', true, true)
+            //   link.dispatchEvent(e)
+            //   return true
+            // }
+            window.open(sUrl);
+            return true;
+        },
+
     }
 })
 
@@ -62,22 +78,16 @@ describe('Detail.vue', () => {
                 Viewer: true
             },
             components: {
-                BaseModalFull
+                BaseModalFull,
             },
-            propsData: {
-                detail:
-                {
-                    nama: "Diklat Berjenjang Tingkat Dasar Moda Daring Kombinasi - Jaksel",
-                    type: "paud_diklat",
-                    instansi: {
-                        data: {
-                            nama: "BPSDM Provinsi Jakarta",
-                            type: "instansi",
-                            id: 720009
-                        }
+            computed: {
+                berkas() {
+                    return {
+                        pesan: "<span class='grey--text'><i>* Silakan unduh template Jadwal dasar <a class=\"blue--text\" href=\"https://files1.simpkb.id/berkas/paud/Template_Jadwal Diklat_Dasar_Rev.docx\" target=\"_blank\">UNDUH DISINI</a> </i> </span>",
+                        title: "Jadwal Diklat Dasar",
+                        url: "https://upload.dev.siap.id/gpo/paud/kelas-jadwal/720003/7-210915041615-94397/sertif-cgp-angkatan1_tk_plb (2).pdf"
                     }
                 }
-
             },
             data() {
                 return {
@@ -90,7 +100,7 @@ describe('Detail.vue', () => {
                         { value: 'pengajar-tambahan', kPetugas: 2, text: 'Pengajar Tambahan' },
                     ],
                 }
-            }
+            },
         })
     }
 
@@ -173,4 +183,57 @@ describe('Detail.vue', () => {
         wrapper.vm.onUpload()
     })
 
+    test('test download button', () => {
+        const wrapper = wrapperFactory()
+        window.open = jest.fn();
+        expect(wrapper.find('.mdi-download').exists()).toBe(true)
+        wrapper.vm.$nextTick()
+        const download = wrapper.find('.mdi-download')
+        download.trigger('click')
+    })
+
+    test('test detail button', () => {
+        const wrapper = wrapperFactory()
+        wrapper.vm.onPreview = jest.fn()
+        expect(wrapper.find('.mdi-eye').exists()).toBe(true)
+        wrapper.vm.$nextTick()
+        const detail = wrapper.find('.mdi-eye')
+        detail.trigger('click')
+        wrapper.vm.onPreview()
+    })
+
+    test('test add button', () => {
+        const wrapper = wrapperFactory()
+        wrapper.vm.onAddPetugas = jest.fn()
+        expect(wrapper.findComponent({ ref: 'popup' }).exists()).toBe(true)
+        wrapper.vm.$nextTick()
+        const add = wrapper.findComponent({ ref: 'popup' })
+        add.trigger('click')
+        wrapper.vm.onAddPetugas()
+    })
+
+    // test('test trash button', () => {
+    //     const wrapper = wrapperFactory()
+    //     expect(wrapper.find('.mdi-trash-can').exists()).toBe(true)
+    //     wrapper.vm.$nextTick()
+    //     const trash = wrapper.find('.mdi-trash-can')
+    //     trash.trigger('click')
+    //     wrapper.vm.onDelete()
+    // })
+
+    // test('Input keyword and check the value of keyword', () => {
+    //     const wrapper = wrapperFactory()
+    //     expect(wrapper.find('.mdi-magnify').exists()).toBe(true);
+    //     wrapper.setData({ keyword: 'WITA' })
+    //     wrapper.find('.mdi-magnify').trigger("click");
+    //     wrapper.vm.onSearch();
+    //     expect(wrapper.vm.keyword).toBe('WITA')
+    // })
+
+    // test('Clear input after search button is clicked', () => {
+    //     const wrapper = wrapperFactory();
+    //     const textInput = wrapper.find('[id="search"]')
+    //     expect(textInput.text()).toMatch('')
+    //     expect(wrapper.vm.keyword).toBe('')
+    // })
 })
