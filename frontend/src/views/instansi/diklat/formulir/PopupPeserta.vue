@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="800" scrollable>
+  <v-dialog v-model="dialog" width="800" scrollable data-app>
     <v-card flat>
       <v-card-title class="pa-0">
         <v-toolbar color="secondary" dark>
@@ -9,7 +9,7 @@
         </v-toolbar>
       </v-card-title>
       <v-card-text class="pt-2">
-        <v-tabs v-model="tab" @change="fetchData">
+        <v-tabs v-model="tab" @change="fetchData" id="tab">
           <v-tabs-slider color="secondary"></v-tabs-slider>
 
           <v-tab v-for="item in items" :key="item.url">
@@ -65,7 +65,7 @@
       </v-card-actions>
       <div class="text-right pa-2">
         <v-btn text @click="dialog = false">Batal</v-btn>
-        <v-btn color="primary" :disabled="!selected.length" @click="onSaveSelection">Simpan</v-btn>
+        <v-btn id="save" color="primary" :disabled="!selected.length" @click="onSaveSelection">Simpan</v-btn>
       </div>
     </v-card>
   </v-dialog>
@@ -100,7 +100,7 @@ export default {
       reject: null,
       fields: [],
       select: {},
-      tab: null,
+      tab: [],
       items: [
         {
           url: 'peserta/kandidat',
