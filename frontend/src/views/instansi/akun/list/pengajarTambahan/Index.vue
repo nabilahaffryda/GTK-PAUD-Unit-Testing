@@ -19,7 +19,7 @@
       </v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab">
+    <v-tabs-items v-model="tab" id="tab">
       <v-tab-item v-for="item in items" :key="item.tab">
         <list-admin
           jenis="pengajar"
@@ -44,7 +44,7 @@ export default {
     return {
       actions: Actions,
       desc: '',
-      tab: null,
+      tab: [],
       items: [
         { tab: 'Pengajar Tambahan (GTK PAUD)', params: { k_unsur_pengajar_paud: 1 } },
         { tab: 'Pengajar Tambahan (Dosen/Akademisi PAUD)', params: { k_unsur_pengajar_paud: 2 } },
