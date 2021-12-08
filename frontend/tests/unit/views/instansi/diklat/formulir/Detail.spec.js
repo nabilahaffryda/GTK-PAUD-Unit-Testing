@@ -87,11 +87,12 @@ describe('Detail.vue', () => {
                         title: "Jadwal Diklat Dasar",
                         url: "https://upload.dev.siap.id/gpo/paud/kelas-jadwal/720003/7-210915041615-94397/sertif-cgp-angkatan1_tk_plb (2).pdf"
                     }
-                }
+                },
             },
             data() {
                 return {
                     tab: [],
+                    search: '',
                     tabItems: [
                         { value: 'peserta', kPetugas: 0, text: 'Peserta' },
                         { value: 'admin', kPetugas: 4, text: 'Admin Kelas' },
@@ -212,28 +213,4 @@ describe('Detail.vue', () => {
         wrapper.vm.onAddPetugas()
     })
 
-    // test('test trash button', () => {
-    //     const wrapper = wrapperFactory()
-    //     expect(wrapper.find('.mdi-trash-can').exists()).toBe(true)
-    //     wrapper.vm.$nextTick()
-    //     const trash = wrapper.find('.mdi-trash-can')
-    //     trash.trigger('click')
-    //     wrapper.vm.onDelete()
-    // })
-
-    // test('Input keyword and check the value of keyword', () => {
-    //     const wrapper = wrapperFactory()
-    //     expect(wrapper.find('.mdi-magnify').exists()).toBe(true);
-    //     wrapper.setData({ keyword: 'WITA' })
-    //     wrapper.find('.mdi-magnify').trigger("click");
-    //     wrapper.vm.onSearch();
-    //     expect(wrapper.vm.keyword).toBe('WITA')
-    // })
-
-    // test('Clear input after search button is clicked', () => {
-    //     const wrapper = wrapperFactory();
-    //     const textInput = wrapper.find('[id="search"]')
-    //     expect(textInput.text()).toMatch('')
-    //     expect(wrapper.vm.keyword).toBe('')
-    // })
 })
