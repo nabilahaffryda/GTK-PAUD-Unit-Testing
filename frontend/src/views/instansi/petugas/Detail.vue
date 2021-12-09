@@ -1,5 +1,5 @@
 <template>
-  <v-card tile flat>
+  <v-card tile flat data-app>
     <v-card-text>
       <template>
         <v-row class="my-5">
