@@ -73,6 +73,18 @@
                         @detil="onPreview"
                       />
                     </v-col>
+                    <v-col cols="12" md="12" sm="12">
+                      <div class="my-2" v-if="Number(detail.k_verval_paud) === 6">
+                        <v-btn
+                          color="success"
+                          depressed
+                          :disabled="!$getDeepObj(detail, 'lms_url')"
+                          small
+                          @click="onLms($getDeepObj(detail, 'lms_url'))"
+                          ><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn
+                        >
+                      </div>
+                    </v-col>
                   </v-row>
                 </v-col>
               </v-row>
@@ -390,6 +402,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.popup.open();
       });
+    },
+
+    onLms(url) {
+      window.open(url, '_blank');
     },
   },
   watch: {
