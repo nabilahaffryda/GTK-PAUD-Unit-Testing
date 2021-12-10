@@ -30,7 +30,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Collection|Akun[] $instansiAkuns
  * @property-read Collection|PaudPetugas[] $instansiPetugases
  * @property-read Collection|Instansi[] $instansis
+ * @property-read Collection|PaudDiklatLuring[] $paudDiklatLurings
  * @property-read Collection|PaudDiklat[] $paudDiklats
+ * @property-read Collection|PaudPesertaNonptk[] $paudPesertaNonptks
  * @property-read Collection|Ptk[] $ptks
  *
  * @method static Builder|MKota whereKKota($value)
@@ -161,9 +163,25 @@ class MKota extends Eloquent
     /**
      * @return HasMany
      */
+    public function paudDiklatLurings()
+    {
+        return $this->hasMany('App\Models\PaudDiklatLuring', 'k_kota', 'k_kota');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function paudDiklats()
     {
         return $this->hasMany('App\Models\PaudDiklat', 'k_kota', 'k_kota');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPesertaNonptks()
+    {
+        return $this->hasMany('App\Models\PaudPesertaNonptk', 'k_kota', 'k_kota');
     }
 
     /**

@@ -13,8 +13,14 @@
             <div class="headline">{{ $getDeepObj(detail, 'nama') || '' }}</div>
             <div class="body-1">
               <v-icon small left>mdi-clock</v-icon>
-              {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) }} s/d
-              {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) }}
+              <template v-if="isDaring">
+                {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) }} s/d
+                {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) }}
+              </template>
+              <template v-else>
+                {{ $localDate($getDeepObj(detail, 'tgl_mulai')) }} s/d
+                {{ $localDate($getDeepObj(detail, 'tgl_selesai')) }}
+              </template>
             </div>
           </v-col>
         </v-row>
@@ -110,7 +116,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content>
                           <div class="label--text">Aksi Selanjutnya</div>
-                          <template v-if="Number(item.k_verval_paud) === 6">
+                          <template v-if="Number(item.k_verval_paud) === 6 && jenis && jenis === 'daring'">
                             <v-btn
                               color="success"
                               small
@@ -183,6 +189,7 @@
         :detail="detail"
         :masters="masters"
         :initValue="formulir.init"
+        :jenis="jenis"
         @reload="onDetail"
       ></component>
     </base-modal-full>
@@ -213,8 +220,19 @@ export default {
       masters: (state) => Object.assign({}, state.masters),
     }),
 
+    jenis() {
+      return (this.$route && this.$route.meta && this.$route.meta.tipe) || 'daring';
+    },
+
+    isDaring() {
+      return this.jenis === 'daring';
+    },
+
     breadcrumbs() {
-      return [{ text: 'Daftar Diklat', to: 'kelola-diklat' }, { text: this.$getDeepObj(this, 'detail.nama') }];
+      return [
+        { text: 'Daftar Diklat', to: `kelola-diklat${this.isDaring ? '' : '-luring'}` },
+        { text: this.$getDeepObj(this, 'detail.nama') },
+      ];
     },
 
     configs() {
@@ -259,6 +277,7 @@ export default {
     },
   },
   created() {
+    Object.assign(this.attr, { jenis: this.jenis });
     this.getMasters({
       name: ['m_propinsi', 'm_kota'].join(';'),
       filter: {

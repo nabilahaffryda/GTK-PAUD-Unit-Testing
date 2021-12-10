@@ -10,6 +10,7 @@ use App\Models\PaudInstansi;
 use App\Remotes\SimpkbAkun;
 use App\Services\AksesService;
 use App\Services\AkunService;
+use App\Services\Instansi\PetugasKelasLuringService;
 use App\Services\Instansi\PetugasKelasService;
 use App\Services\MasterService;
 use Illuminate\Http\Request;
@@ -28,7 +29,8 @@ class IndexController extends Controller
 
         $aktivasi = $akunService->isAktivasi($akunInstansi);
 
-        $konfirmasi = false;
+        $konfirmasi       = false;
+        $konfirmasiLuring = false;
 
         $paudInstansi = PaudInstansi::where([
             'instansi_id' => $instansi->instansi_id,
@@ -39,6 +41,10 @@ class IndexController extends Controller
         $subgroup = $groups->intersectByKeys(array_flip([MGroup::PENGAJAR_DIKLAT_PAUD, MGroup::PENGAJAR_TAMBAHAN_DIKLAT_PAUD, MGroup::PEMBIMBING_PRAKTIK_DIKLAT_PAUD]));
         if ($subgroup->isNotEmpty()) {
             $konfirmasi = app(PetugasKelasService::class)
+                ->listKonfirmasiKesediaan(akunId())
+                ->exists();
+
+            $konfirmasiLuring = app(PetugasKelasLuringService::class)
                 ->listKonfirmasiKesediaan(akunId())
                 ->exists();
         }
@@ -57,7 +63,8 @@ class IndexController extends Controller
                 'paud'   => config('paud'),
             ],
 
-            'konfirmasi_kesediaan' => $konfirmasi,
+            'konfirmasi_kesediaan'        => $konfirmasi,
+            'konfirmasi_kesediaan_luring' => $konfirmasiLuring,
         ];
     }
 

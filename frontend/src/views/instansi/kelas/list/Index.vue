@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5 black--text">
-            <div class="headline">Kelas Diklat</div>
+            <div class="headline">Kelas Diklat {{ $titleCase(jenis) }}</div>
           </v-col>
         </v-row>
       </v-card-text>
@@ -63,11 +63,19 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Jadwal Pelaksanaan</div>
-                          <span>
+                          <span v-if="jenis === 'daring'">
                             {{
                               $durasi(
                                 $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
                                 $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                              )
+                            }}
+                          </span>
+                          <span v-else>
+                            {{
+                              $durasi(
+                                $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
+                                $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
                               )
                             }}
                           </span>
@@ -78,6 +86,7 @@
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
                           <v-btn
+                            v-if="jenis === 'daring'"
                             :disabled="!$getDeepObj(item, 'lms_url') || Number(item.k_verval_paud) < 6"
                             color="primary"
                             depressed
@@ -114,6 +123,7 @@
         :detail="detail"
         :masters="masters"
         :initValue="formulir.init"
+        :jenis="jenis"
       ></component>
     </base-modal-full>
   </div>
@@ -140,6 +150,10 @@ export default {
     ...mapState('master', {
       masters: (state) => Object.assign({}, state.masters),
     }),
+
+    jenis() {
+      return this.$route.meta.jenis;
+    },
 
     configs() {
       const M_PROPINSI = this.masters.m_propinsi || {};
@@ -190,6 +204,7 @@ export default {
         },
       },
     });
+    Object.assign(this.attr, { jenis: this.jenis });
   },
   methods: {
     allow(action, data) {

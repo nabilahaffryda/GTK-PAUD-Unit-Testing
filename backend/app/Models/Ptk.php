@@ -60,6 +60,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property-read MKecamatan $mKecamatan
  * @property-read MKota $mKota
  * @property-read MPropinsi $mPropinsi
+ * @property-read Collection|PaudKelasPesertaLuring[] $paudKelasPesertaLurings
  * @property-read Collection|PaudKelasPeserta[] $paudKelasPesertas
  * @property-read Collection|PtkSekolah[] $ptkSekolahs
  *
@@ -269,6 +270,14 @@ class Ptk extends Authenticatable
     public function mPropinsi()
     {
         return $this->belongsTo('App\Models\MPropinsi', 'k_propinsi', 'k_propinsi');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasPesertaLurings()
+    {
+        return $this->hasMany('App\Models\PaudKelasPesertaLuring', 'ptk_id', 'ptk_id');
     }
 
     /**

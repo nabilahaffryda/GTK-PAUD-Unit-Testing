@@ -3,19 +3,38 @@ import http from '@plugins/axios';
 import kitsu from '@plugins/kitsu';
 let $ajax;
 
+export const state = {
+  jenis: null,
+};
+
+export const mutations = {
+  SET_TIPE(state, newValue) {
+    state.jenis = newValue;
+  },
+};
+
 export const actions = {
-  async fetch({ rootState }, payload) {
+  async fetch({ rootState, commit }, payload) {
     const id = rootState.auth.instansi_id;
+    const tipe = {
+      luring: 'luring/',
+      daring: '',
+    };
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${tipe[payload.attr.jenis]}diklat`,
     });
+    commit('SET_TIPE', tipe[payload.attr.jenis]);
     return await $ajax.get('/', { params: payload.params });
   },
 
   async getDetail({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
+    const tipe = {
+      luring: 'luring/',
+      daring: '',
+    };
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${tipe[payload.jenis]}diklat`,
     });
     return await $ajax.get(`/${payload.id}`);
   },
@@ -28,9 +47,9 @@ export const actions = {
     return await $ajax.get(`/`);
   },
 
-  create({ rootState }, payload) {
+  create({ rootState, state }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `i/${id}/diklat/create`;
+    const url = `i/${id}/${state.jenis}diklat/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 
@@ -38,9 +57,9 @@ export const actions = {
     return dispatch('action', Object.assign({}, payload, { type: 'update' }));
   },
 
-  action({ rootState }, payload) {
+  action({ rootState, state }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `i/${id}/diklat/${payload.id}/${payload.type}`;
+    const url = `i/${id}/${state.jenis}diklat/${payload.id}/${payload.type}`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 };

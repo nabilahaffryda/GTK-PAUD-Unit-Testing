@@ -40,6 +40,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    jenis: {
+      type: String,
+      default: 'daring',
+    },
   },
   data() {
     return {
@@ -122,9 +126,9 @@ export default {
         mPengajar.push({ value: i, text: i });
       }
 
-      return {
+      let temp = {
         diklat: {
-          tambah_diklat: [
+          keterangan_diklat: [
             {
               type: 'VTextField',
               name: 'nama',
@@ -207,6 +211,37 @@ export default {
               labelColor: 'secondary',
             },
           ],
+          pelaksanaan_diklat: [
+            {
+              type: 'VDatePicker',
+              name: 'tgl_mulai',
+              label: 'Tanggal Mulai',
+              dense: true,
+              hint: '',
+              placeholder: '',
+              required: false,
+              hideDetails: false,
+              outlined: true,
+              singleLine: true,
+              grid: { cols: 12, md: 6 },
+              labelColor: 'secondary',
+            },
+            {
+              type: 'VDatePicker',
+              name: 'tgl_selesai',
+              label: 'Tanggal Selesai',
+              dense: true,
+              hint: '',
+              placeholder: '',
+              required: false,
+              hideDetails: false,
+              outlined: true,
+              singleLine: true,
+              min: this.form.tgl_mulai,
+              grid: { cols: 12, md: 6 },
+              labelColor: 'secondary',
+            },
+          ],
         },
         kelas: {
           tambah_kelas: [
@@ -276,6 +311,41 @@ export default {
           ],
         },
       };
+
+      if (this.jenis === 'luring') {
+        temp.diklat.keterangan_diklat.splice(1, 0, {
+          type: 'VSelect',
+          name: 'k_diklat_paud',
+          label: 'Jenis Diklat',
+          hint: 'wajib diisi',
+          required: true,
+          items: this.$mapForMaster(this.$getDeepObj(this.masters, 'm_diklat_paud') || {}),
+          grid: { cols: 12, md: 6 },
+          outlined: true,
+          dense: true,
+          singleLine: true,
+          labelColor: 'secondary',
+        });
+        temp.diklat.keterangan_diklat.splice(2, 0, {
+          type: 'VSelect',
+          name: 'k_jenjang_diklat_paud',
+          label: 'Jenjang Diklat',
+          hint: 'wajib diisi',
+          items: this.$mapForMaster(this.$getDeepObj(this.masters, 'm_jenjang_diklat_paud') || {}),
+          required: true,
+          grid: { cols: 12, md: 6 },
+          outlined: true,
+          dense: true,
+          singleLine: true,
+          labelColor: 'secondary',
+        });
+        temp.diklat.keterangan_diklat.pop();
+        this.$delete(temp.diklat, 'pendaftaran_peserta');
+      } else {
+        this.$delete(temp.diklat, 'pelaksanaan_diklat');
+      }
+
+      return temp;
     },
   },
   methods: {
@@ -293,8 +363,9 @@ export default {
 
     initForm(value) {
       const formulir = [
-        ...(this.schemas.diklat.tambah_diklat || []),
+        ...(this.schemas.diklat.keterangan_diklat || []),
         ...(this.schemas.diklat.pendaftaran_peserta || []),
+        ...(this.schemas.diklat.pelaksanaan_diklat || []),
         ...(this.schemas.kelas.tambah_kelas || []),
         { name: 'k_propinsi' },
         { name: 'k_kota' },

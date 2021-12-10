@@ -13,12 +13,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $k_diklat_paud
  * @property null|string $singkat
  * @property null|string $keterangan
+ * @property null|int $is_luring
  *
+ * @property-read Collection|PaudDiklatLuring[] $paudDiklatLurings
+ * @property-read Collection|PaudPesertaNonptk[] $paudPesertaNonptks
  * @property-read Collection|PaudPetugasDiklat[] $paudPetugasDiklats
  *
  * @method static Builder|MDiklatPaud whereKDiklatPaud($value)
  * @method static Builder|MDiklatPaud whereSingkat($value)
  * @method static Builder|MDiklatPaud whereKeterangan($value)
+ * @method static Builder|MDiklatPaud whereIsLuring($value)
  */
 class MDiklatPaud extends Eloquent
 {
@@ -56,6 +60,7 @@ class MDiklatPaud extends Eloquent
     protected $casts = [
         'singkat'    => 'string',
         'keterangan' => 'string',
+        'is_luring' => 'int',
     ];
 
     /**
@@ -74,7 +79,24 @@ class MDiklatPaud extends Eloquent
         'k_diklat_paud',
         'singkat',
         'keterangan',
+        'is_luring',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function paudDiklatLurings()
+    {
+        return $this->hasMany('App\Models\PaudDiklatLuring', 'k_diklat_paud', 'k_diklat_paud');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPesertaNonptks()
+    {
+        return $this->hasMany('App\Models\PaudPesertaNonptk', 'k_diklat_paud', 'k_diklat_paud');
+    }
 
     /**
      * @return HasMany
