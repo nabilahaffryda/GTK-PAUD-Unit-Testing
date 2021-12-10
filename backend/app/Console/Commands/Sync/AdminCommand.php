@@ -7,8 +7,8 @@ use App\Services\Instansi\KelasService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class AdminCommand extends Command
 {
@@ -60,10 +60,32 @@ class AdminCommand extends Command
                     ->where('paud_periode.tgl_diklat_selesai', '>=', $now)
                     ->where('paud_periode.is_aktif', '1');
             })
+            ->orderBy('paud_kelas_id')
             ->get();
 
+        $this->info('sync: ' . $kelases->pluck('paud_kelas_id')->implode(', '));
+        $gagals = [];
+
         foreach ($kelases as $kelas) {
-            app(KelasService::class)->syncAdmin($kelas);
+            $this->info('proses ' . $kelas->paud_kelas_id);
+
+            $try = 2;
+            while ($try > 0) {
+                try {
+                    app(KelasService::class)->syncAdmin($kelas);
+                    break;
+                } catch (Exception) {
+                }
+
+                $try--;
+                if ($try <= 0) {
+                    $gagals[] = $kelas->paud_kelas_id;
+                }
+            }
+        }
+
+        if ($gagals) {
+            $this->warn('gagal: ' . implode(', ', $gagals));
         }
 
         return 0;
