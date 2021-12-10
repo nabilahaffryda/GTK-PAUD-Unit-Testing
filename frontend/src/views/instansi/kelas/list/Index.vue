@@ -87,7 +87,11 @@
                         <v-list-item-content class="py-0 mt-3">
                           <v-btn
                             v-if="jenis === 'daring'"
-                            :disabled="!$getDeepObj(item, 'lms_url') || Number(item.k_verval_paud) < 6"
+                            :disabled="
+                              !$getDeepObj(item, 'lms_url') ||
+                              Number(item.k_verval_paud) < 6 ||
+                              [1].includes(Number($getDeepObj(item, 'paud_diklat.data.paud_periode_id') || 0))
+                            "
                             color="primary"
                             depressed
                             small
