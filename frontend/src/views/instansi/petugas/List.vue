@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-app>
     <v-card>
       <v-card-title class="pa-0">
         <base-table-header @search="onSearch" :btnFilter="true" @reload="onReload" @filter="onFilter">
