@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-app>
     <v-card tile flat class="my-5">
       <v-card-text class="pa-0">
         <v-row no-gutters>
@@ -19,7 +19,7 @@
       </v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab">
+    <v-tabs-items v-model="tab" id="tab">
       <v-tab-item v-for="item in items" :key="item.tab">
         <list-view :paramsTipe="item.params" :title="item.tab" :jenis="item.jenis" :actions="actions"></list-view>
       </v-tab-item>
@@ -37,7 +37,7 @@ export default {
     return {
       actions: Actions,
       desc: '',
-      tab: null,
+      tab: [],
       items: [
         { tab: 'PPM', params: { k_petugas_paud: 1 }, jenis: 'pengajar' },
         { tab: 'PPTM', params: { k_petugas_paud: 3 }, jenis: 'pengajar' },
