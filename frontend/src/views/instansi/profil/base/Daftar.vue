@@ -199,29 +199,30 @@ export default {
         this.$refs.popup.open();
       });
     },
-    async onPanduan({ type }) {
-      // const url = await this.sertifikatUrl({
-      //   jenis: this.jenis,
-      //   id: this.$getDeepObj(berkas, 'value.paud_instansi_id'),
-      // });
-      // this.$set(this, 'preview', {
-      //   url: window.location.origin + url + '.pdf',
-      //   title: 'Sertifikat',
-      // });
+    async onPanduan({ berkas }) {
+      const url = await this.sertifikatUrl({
+        jenis: this.jenis,
+        id: this.$getDeepObj(berkas, 'value.paud_instansi_id'),
+      });
+
+      this.$set(this, 'preview', {
+        url: url + '.pdf',
+        title: 'Sertifikat',
+      });
+
+      this.$nextTick(() => {
+        this.$refs.popup.open();
+      });
+
+      // const imgUrl = {
+      //   logo:
+      //     'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_logo.png',
+      //   lainnya:
+      //     'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_ttd_stempel.png',
+      // };
       //
-      // this.$nextTick(() => {
-      //   this.$refs.popup.open();
-      // });
-
-      const imgUrl = {
-        logo:
-          'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_logo.png',
-        lainnya:
-          'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_ttd_stempel.png',
-      };
-
-      this.img = imgUrl[type] || imgUrl['lainnya'];
-      this.panduan = true;
+      // this.img = imgUrl[type] || imgUrl['lainnya'];
+      // this.panduan = true;
     },
   },
 };
