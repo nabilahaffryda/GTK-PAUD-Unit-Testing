@@ -121,7 +121,10 @@
                               color="success"
                               small
                               dark
-                              :disabled="!$getDeepObj(item, 'lms_url')"
+                              :disabled="
+                                !$getDeepObj(item, 'lms_url') ||
+                                [1].includes(Number((detail && detail.paud_periode_id) || 0))
+                              "
                               @click="onLms($getDeepObj(item, 'lms_url'))"
                             >
                               <v-icon left>mdi-link</v-icon>

@@ -86,7 +86,9 @@
               <v-btn
                 color="success"
                 depressed
-                :disabled="!$getDeepObj(kelas, 'lms_url')"
+                :disabled="
+                  !$getDeepObj(kelas, 'lms_url') || [1].includes(Number((detail && detail.paud_periode_id) || 0))
+                "
                 small
                 @click="onLms($getDeepObj(kelas, 'lms_url'))"
                 ><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn
