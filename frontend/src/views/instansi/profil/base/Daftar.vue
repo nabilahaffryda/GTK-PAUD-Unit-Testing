@@ -107,7 +107,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-    <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
+    <popup-preview-detail ref="popup" :url="preview && preview.url" :title="$getDeepObj(preview, 'title')" />
     <v-dialog v-model="panduan" max-width="800" :scrollable="false" @keydown.esc="panduan = false">
       <v-card>
         <v-toolbar flat>
@@ -133,6 +133,7 @@ import Berkas from '../formulir/Berkas';
 import Profil from '../formulir/Profil';
 import Collection from '../formulir/Collection';
 import PopupPreviewDetail from '@components/popup/PreviewDetil';
+import { mapActions } from 'vuex';
 export default {
   props: {
     contents: {
@@ -172,12 +173,16 @@ export default {
   data() {
     return {
       panel: [0, 1],
-      preview: {},
+      preview: {
+        url: '',
+        title: '',
+      },
       panduan: false,
       img: '',
     };
   },
   methods: {
+    ...mapActions('profil', ['sertifikatUrl']),
     onDetil(berkas) {
       this.$set(this, 'preview', {});
       this.preview.url = this.$getDeepObj(berkas, 'value.url');
@@ -194,16 +199,30 @@ export default {
         this.$refs.popup.open();
       });
     },
-    onPanduan({ type }) {
-      const imgUrl = {
-        logo:
-          'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_logo.png',
-        lainnya:
-          'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_ttd_stempel.png',
-      };
+    async onPanduan({ berkas }) {
+      const url = await this.sertifikatUrl({
+        jenis: this.jenis,
+        id: this.$getDeepObj(berkas, 'value.paud_instansi_id'),
+      });
 
-      this.img = imgUrl[type] || imgUrl['lainnya'];
-      this.panduan = true;
+      this.$set(this, 'preview', {
+        url: url + '.pdf',
+        title: 'Sertifikat',
+      });
+
+      this.$nextTick(() => {
+        this.$refs.popup.open();
+      });
+
+      // const imgUrl = {
+      //   logo:
+      //     'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_logo.png',
+      //   lainnya:
+      //     'https://cdn.siap.id/s3/simpkb/asset%20img/ayo%20guru%20belajar%20&%20berbagi/GTK-PAUD/Panduan_sertif_ttd_stempel.png',
+      // };
+      //
+      // this.img = imgUrl[type] || imgUrl['lainnya'];
+      // this.panduan = true;
     },
   },
 };

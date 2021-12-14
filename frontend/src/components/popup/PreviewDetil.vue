@@ -9,9 +9,14 @@
         </v-btn>
       </v-toolbar>
       <v-divider></v-divider>
-      <v-card-text class="pa-0" style="height: 500px">
+      <v-card-text class="pa-0" style="min-height: 500px; position: relative">
         <template v-if="type === 'pdf'">
-          <div ref="viewer-pdf" id="pdf-viewer" style="height: 475px"></div>
+          <v-progress-circular indeterminate color="primary" class="center"></v-progress-circular>
+          <div
+            ref="viewer-pdf"
+            id="pdf-viewer"
+            style="position: absolute; width: 100%; height: 100%; z-index: 10"
+          ></div>
         </template>
         <template v-else>
           <viewer :options="imgOpt" :images="images" @inited="inited" class="viewer" ref="viewer">
@@ -128,6 +133,7 @@ export default {
         },
       },
       $viewer: null,
+      myPdf: '',
     };
   },
   computed: {
@@ -146,7 +152,7 @@ export default {
       this.dialog = true;
       if (this.type === 'pdf') {
         this.$nextTick(() => {
-          PDFObject.embed(this.url, '#pdf-viewer');
+          this.myPdf = PDFObject.embed(this.url, '#pdf-viewer');
         });
       }
     },
@@ -175,4 +181,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+</style>

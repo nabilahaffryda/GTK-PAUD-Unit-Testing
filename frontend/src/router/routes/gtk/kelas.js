@@ -8,4 +8,12 @@ export default [
       title: 'Kelas Diklat',
     },
   },
+  {
+    path: '/kelas/:id(\\d+)',
+    name: 'kelas-detail',
+    component: () => lazyLoadView(import('@views/gtk/kelas/Detail')),
+    meta: {
+      title: 'Kelas Diklat',
+    },
+  },
 ];

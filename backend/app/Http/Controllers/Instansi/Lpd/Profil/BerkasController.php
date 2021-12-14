@@ -8,7 +8,9 @@ use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\PaudInstansi;
 use App\Models\PaudInstansiBerkas;
+use App\Remotes\Sertifikat as SertifikatRemote;
 use App\Services\Instansi\LpdService;
+use Carbon\Carbon;
 use Exception;
 
 class BerkasController extends Controller
@@ -42,5 +44,55 @@ class BerkasController extends Controller
 
         $this->service->berkasDelete($berkas);
         return BaseResource::make($berkas);
+    }
+
+    public function previewSertifikat(PaudInstansi $paudInstansi)
+    {
+        $tahun = date('Y');
+
+        $berkases = $paudInstansi->paudInstansiBerkases->keyBy('k_berkas_lpd_paud');
+        $instansi = $paudInstansi->instansi;
+
+        $params = [
+            'k_sertifikat' => '213',
+            'angkatan'     => '1',
+            'user_id'      => $tahun . '99999999',
+            'model_id'     => '1',
+
+            'peran'       => 'Peserta',
+            'nama'        => 'NAMA PESERTA DIKLAT',
+            'nomor_surat' => '1/XX/XX.00.00/' . $tahun,
+            'instansi'    => 'UNIT KERJA',
+
+            'tgl_mulai'   => Carbon::now()->toDateString(),
+            'tgl_selesai' => Carbon::now()->toDateString(),
+            'tgl_cetak'   => Carbon::now()->toDateString(),
+            'predikat'    => 'AMAT BAIK',
+
+            'data' => [
+                'lpd_nama'     => $instansi->nama,
+                'lpd_pimpinan' => $paudInstansi->nama_penanggung_jawab,
+                'lpd_lokasi'   => $instansi->mKota->keterangan,
+
+                'kota'     => 'Kota Unit',
+                'propinsi' => 'Unit',
+                'lokasi'   => 'Kota Unit, Provinsi Unit',
+
+                'diklat_jenis'   => 'Diklat Berjenjang ',
+                'diklat_jenjang' => 'Tingkat Dasar',
+                'diklat_moda'    => 'Moda Daring Kombinasi',
+
+                'lpd_url_logo'    => $berkases[8]?->url ?? '',
+                'lpd_url_ttd'     => $berkases[9]?->url ?? '',
+                'lpd_url_stempel' => $berkases[10]?->url ?? '',
+            ],
+        ];
+
+        $remote   = new SertifikatRemote();
+        $response = $remote->preview($params);
+        return response($response->getBody(), 200, [
+            'Content-Type' => $response->getHeader('Content-Type')[0],
+            'Content-Disposition: inline; filename="sertifikat-preview.pdf"',
+        ]);
     }
 }

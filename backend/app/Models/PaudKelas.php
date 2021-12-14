@@ -43,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|Carbon $wkt_sync
  *
  * @property-read null|string $url_jadwal
+ * @property-read null|int $is_selesai
  *
  * @property-read MKecamatan $mKecamatan
  * @property-read MKelurahan $mKelurahan
@@ -81,6 +82,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudKelas whereLmsUrl($value)
  * @method static Builder|PaudKelas whereSyncStatus($value)
  * @method static Builder|PaudKelas whereWktSync($value)
+ *
+ * @method static Builder|PaudKelas withIsSelesai()
  */
 class PaudKelas extends Eloquent
 {
@@ -237,5 +240,29 @@ class PaudKelas extends Eloquent
     public function getUrlJadwalAttribute()
     {
         return $this->file_jadwal ? sprintf("%s/%s", config('filesystems.disks.kelas-jadwal.url'), $this->file_jadwal) : null;
+    }
+
+    public function getIsSelesaiAttribute()
+    {
+        if (!isset($this->attributes['is_selesai'])) {
+            $this->attributes['is_selesai'] = PaudPeriode::query()
+                ->join('paud_diklat', 'paud_periode.paud_periode_id', '=', 'paud_diklat.paud_periode_id')
+                ->join('paud_kelas', 'paud_diklat.paud_diklat_id', '=', 'paud_kelas.paud_diklat_id')
+                ->where('paud_periode.tgl_diklat_selesai', '<', Carbon::now())
+                ->where('paud_kelas.paud_diklat_id', $this->paud_diklat_id)
+                ->exists();
+        }
+
+        return $this->attributes['is_selesai'];
+    }
+
+    public function scopeWithIsSelesai(Builder $query)
+    {
+        $query->addSelect([
+            'is_selesai' => PaudPeriode::selectRaw(1)
+                ->join('paud_diklat', 'paud_periode.paud_periode_id', '=', 'paud_diklat.paud_periode_id')
+                ->where('paud_periode.tgl_diklat_selesai', '<', Carbon::now())
+                ->whereColumn('paud_diklat.paud_diklat_id', '=', 'paud_kelas.paud_diklat_id'),
+        ]);
     }
 }

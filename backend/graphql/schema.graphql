@@ -30,6 +30,7 @@ extend type Query @guard(with: ["ptk"]) {
 
     ptkFetchKelas(id: Int!): PaudKelas @field(resolver: "App\\GraphQL\\Queries\\Ptk\\Kelas@fetch")
     ptkFetchKelasPeserta(id: Int!): PaudKelasPeserta @field(resolver: "App\\GraphQL\\Queries\\Ptk\\KelasPeserta@fetch")
+    ptkFetchKelasPesertaByKelas(kelasId: Int!): PaudKelasPeserta @field(resolver: "App\\GraphQL\\Queries\\Ptk\\KelasPeserta@fetchByKelas")
 }
 
 type Mutation @guard(with: ["ptk"]) {
@@ -48,6 +49,9 @@ type Mutation @guard(with: ["ptk"]) {
         kelasPesertaId: Int!,
     ): PaudKelasPeserta
     @field(resolver: "App\\GraphQL\\Mutations\\Ptk\\KelasPeserta@konfirmasiBatal")
+
+    ptkValidateSurvey(kelasId: Int!): PtkValidateSurvey @field(resolver: "App\\GraphQL\\Mutations\\Ptk\\KelasPeserta@validateSurvey")
+    ptkValidateSertifikat(kelasId: Int!): PaudKelasPeserta @field(resolver: "App\\GraphQL\\Mutations\\Ptk\\KelasPeserta@validateSertifikat")
 }
 
 type PreferensiAkun {
@@ -64,6 +68,11 @@ type PreferensiPtk {
 
 type PreferensiAkunKonfig {
     simpkb: String
+}
+
+type PtkValidateSurvey {
+    kelasPeserta: PaudKelasPeserta
+    urlSurvey: String
 }
 
 #import master.graphql

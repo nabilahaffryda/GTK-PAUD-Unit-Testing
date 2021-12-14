@@ -62,6 +62,15 @@ export const actions = {
     }/delete`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
+  sertifikatUrl({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const url =
+      process.env.VUE_APP_API_URL +
+      `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/profil/${
+        payload.id
+      }/preview-sertifikat`;
+    return Promise.resolve(url);
+  },
   ajuan({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     const url = `/i/${id}/${['pengajar', 'pembimbing'].includes(payload.jenis) ? 'petugas' : payload.jenis}/${

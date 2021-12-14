@@ -25,4 +25,11 @@ class KelasPeserta
             ->where('paud_kelas_peserta_id', '=', $args['id'])
             ->first();
     }
+
+    public function fetchByKelas($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        return $this->list($rootValue, $args, $context, $resolveInfo)
+            ->where('paud_kelas_id', '=', $args['kelasId'])
+            ->first();
+    }
 }

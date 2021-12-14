@@ -40,6 +40,15 @@ class Sertifikat extends Remote
         return $this->request('api/create', $params);
     }
 
+    public function preview(array $params)
+    {
+        $this->httpMethod = 'POST';
+
+        $request = $this->encode('api/preview', $params);
+
+        return $this->client->send($request);
+    }
+
     public function get(string $noSertifikat)
     {
         $this->httpMethod = 'GET';

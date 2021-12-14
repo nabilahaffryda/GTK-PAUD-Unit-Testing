@@ -84,7 +84,9 @@ export default {
   components: { BasePhotoProfil },
   computed: {
     diklats() {
-      return this.$getDeepObj(this.detail, 'pengalaman') || this.$getDeepObj(this.detail, 'diklat') || [];
+      return (
+        this.$getDeepObj(this.detail, 'pengalaman') || JSON.parse(this.$getDeepObj(this.detail, 'diklat') || []) || []
+      );
     },
 
     profils() {

@@ -38,7 +38,7 @@
               <v-list-item dense class="px-0">
                 <v-list-item-content>
                   <v-row>
-                    <v-col class="py-2" cols="12" md="4">
+                    <v-col class="py-2" cols="12" md="5">
                       <v-list-item class="px-0">
                         <v-list-item-avatar color="primary">
                           <v-icon dark>mdi-teach</v-icon>
@@ -51,7 +51,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="4">
+                    <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Jadwal Pelaksanaan</div>
@@ -61,6 +61,28 @@
                               $getDeepObj(item, 'paud_diklat.paud_periode.tgl_diklat_selesai')
                             )
                           }}
+                          <div>
+                            <template v-if="item.is_selesai">
+                              <span class="green--text caption">
+                                <v-icon dark color="success" left x-small>mdi-check-circle</v-icon> Selesai
+                              </span>
+                            </template>
+                            <template v-else>
+                              <span class="grey--text caption">
+                                <v-icon color="grey" left x-small>mdi-timer-sand</v-icon> Sedang berjalan
+                              </span>
+                            </template>
+                          </div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col class="py-0" cols="12" md="2">
+                      <v-list-item>
+                        <v-list-item-content class="py-0 mt-3">
+                          <v-btn v-if="item.is_selesai" color="success" depressed small block @click="toHasil(item)">
+                            <v-icon left>mdi-file-document-edit</v-icon>
+                            Hasil Kelas
+                          </v-btn>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -110,6 +132,7 @@ export default {
   methods: {
     ...mapActions('diklat', {
       fetch: 'getListKelas',
+      getHasil: 'getHasil',
     }),
 
     fetchData: function () {
@@ -143,6 +166,33 @@ export default {
 
     onLms(url) {
       window.open(url, '_blank');
+    },
+
+    async toHasil(item) {
+      const { ptkValidateSurvey } = await this.getHasil(item && item.paud_kelas_id);
+
+      if (ptkValidateSurvey.kelasPeserta && ptkValidateSurvey.kelasPeserta.is_survey) {
+        this.$router.push({ name: 'kelas-detail', params: { id: item.paud_kelas_id } });
+        return;
+      }
+
+      const title = `Kuesioner Diklat Berjenjang GTK Paud`;
+      const message = `
+      <h2>Evaluasi Penyelenggaraan Diklat Berjenjang Daring Kombinasi</h2>
+      <p>
+      Anda telah menyelesaikan Diklat Berjenjang tingkat dasar PAUD, mohon meluangkan waktu untuk mengisi
+      kuesioner sebagai syarat untuk melihat nilat diklat dan mengunduh sertifikat jika dinyatakan Lulus.
+      </p>
+      `;
+      this.$notifikasi(message, title, {
+        noIcon: true,
+        width: '550px',
+        btnColor: '#37474F',
+        btnLabel: 'Isi Kuesioner',
+        action: () => {
+          window.location.href = `${ptkValidateSurvey.urlSurvey}?${window.location.href}`;
+        },
+      });
     },
   },
 };

@@ -8,10 +8,12 @@ use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Jobs\SyncKelasJob;
 use App\Models\Akun;
+use App\Models\MGroup;
 use App\Models\MKonfirmasiPaud;
 use App\Models\MKota;
 use App\Models\MPetugasPaud;
 use App\Models\MVervalPaud;
+use App\Models\PaudAdmin;
 use App\Models\PaudDiklat;
 use App\Models\PaudKelas;
 use App\Models\PaudKelasPeserta;
@@ -848,5 +850,68 @@ class KelasService
         $kelas->sync_status = null;
         $kelas->wkt_sync    = Carbon::now();
         $kelas->save();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function syncAdmin(PaudKelas $kelas)
+    {
+        $lmsKelas = app(ElearningRemote::class)->kelasFetch($kelas->lms_kelas_id);
+        if (!$lmsKelas || !isset($lmsKelas['id'])) {
+            $message = 'Gagal baca data kelas dari LMS' . (isset($lmsKelas['title']) ? " (Error LMS: {$lmsKelas['title']})" : '');
+            throw new Exception($message, previous: isset($lmsKelas['title']) ? new Exception($lmsKelas['title']) : null);
+        }
+
+        $instansiIds    = config('paud.elearning.instansi-id');
+        $jenisDiklatIds = config('paud.elearning.jenis-diklat-id');
+
+        $index = $kelas->paud_diklat_id % count($instansiIds);
+
+        $instansiId    = $instansiIds[$index];
+        $jenisDiklatId = $jenisDiklatIds[$index];
+
+        $grupId = config('paud.elearning.group-id-admin');
+
+        $userSyncItems    = [];
+        $kelasEnrollItems = [];
+
+        /** @var PaudAdmin[]|Collection $admins */
+        $admins = PaudAdmin::query()
+            ->where('k_group', MGroup::ADM_GTK_PAUD_DIKLAT_PAUD)
+            ->where('is_aktif', 1)
+            ->with('akun')
+            ->get();
+
+        foreach ($admins as $admin) {
+            $userSyncItems[] = new ElearningRemote\UserSyncParamItem(
+                $admin->akun->paspor_id,
+                $admin->akun->nama,
+                $admin->akun->email,
+                $grupId,
+                $jenisDiklatId,
+                $instansiId,
+            );
+
+            $kelasEnrollItems[] = new ElearningRemote\KelasEnrollParamItem(
+                $admin->akun->paspor_id,
+                $grupId,
+            );
+        }
+
+        $userSyncParam    = new ElearningRemote\UserSyncParam(...$userSyncItems);
+        $kelasEnrollParam = new ElearningRemote\KelasEnrollParam(...$kelasEnrollItems);
+
+        $res = app(ElearningRemote::class)->userSync($userSyncParam);
+        if (!$res || ($res['status'] ?? 200) != 200) {
+            $message = 'Error get sync user ke LMS' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : '');
+            throw new Exception($message, previous: isset($res['title']) ? new Exception($res['title']) : null);
+        }
+
+        $res = app(ElearningRemote::class)->kelasEnroll($kelas->lms_kelas_id, $kelasEnrollParam);
+        if (!$res || ($res['status'] ?? 200) != 200) {
+            $message = 'Error enroll user ke kelas' . (isset($res['title']) ? " (Error LMS: {$res['title']})" : '');
+            throw new Exception($message, previous: isset($res['title']) ? new Exception($res['title']) : null);
+        }
     }
 }

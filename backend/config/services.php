@@ -50,7 +50,7 @@ return [
     ],
 
     'sertifikat-api' => [
-        'url'   => env('SERTIFIKAT_API_URL', 'https://sertifikat-api-dev.simpkb.id/backend'),
+        'url'   => env('SERTIFIKAT_API_URL', 'https://sertifikat-api-dev.simpkb.id/backend/'),
         'token' => env('SERTIFIKAT_API_TOKEN', ''),
     ],
 
