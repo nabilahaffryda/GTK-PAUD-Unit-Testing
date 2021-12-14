@@ -70,7 +70,7 @@ describe('List.vue', () => {
     beforeEach(() => {
         vuetify = new Vuetify()
     })
-    function wrappperFactory({ } = {}) {
+    function wrapperFactory({ } = {}) {
         return mount(List, {
             localVue,
             store,
@@ -101,7 +101,7 @@ describe('List.vue', () => {
         })
     }
     test('test filter button', () => {
-        const wrapper = wrappperFactory()
+        const wrapper = wrapperFactory()
         expect(wrapper.findComponent({ ref: 'filter' }).exists()).toBe(true)
         wrapper.vm.$nextTick()
         const filter = wrapper.findComponent({ ref: 'filter' })
@@ -110,7 +110,7 @@ describe('List.vue', () => {
     })
 
     test('test reload button', () => {
-        const wrapper = wrappperFactory()
+        const wrapper = wrapperFactory()
         expect(wrapper.find('.mdi-reload').exists()).toBe(true)
         wrapper.vm.$nextTick()
         const reload = wrapper.find('.mdi-reload')
@@ -119,7 +119,7 @@ describe('List.vue', () => {
     })
 
     test('Enter search text and check the value of keyword', () => {
-        const wrapper = wrappperFactory()
+        const wrapper = wrapperFactory()
         expect(wrapper.find('.mdi-magnify').exists()).toBe(true)
         wrapper.setData({ keyword: 'Bahar' })
         wrapper.vm.$nextTick()
