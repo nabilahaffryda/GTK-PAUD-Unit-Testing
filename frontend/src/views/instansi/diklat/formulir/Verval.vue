@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-5">
+  <div class="mx-5" data-app>
     <v-row>
       <v-col cols="12" md="8" sm="12" :style="$vuetify.breakpoint.mdAndDown ? 'margin-bottom: 200px' : ''">
         <v-card flat style="margin-bottom: 10%">
@@ -78,7 +78,7 @@
               </v-row>
 
               <v-tabs v-model="tab" fixed-tabs>
-                <v-tab v-for="item in tabItems" :key="item.value">
+                <v-tab id="tab-item" v-for="item in tabItems" :key="item.value">
                   {{ item.text }}
                 </v-tab>
               </v-tabs>
@@ -235,7 +235,7 @@ export default {
       form: {},
       pesertas: [],
       pilihan: null,
-      tab: null,
+      tab: [],
       search: '',
       mBtnPilihan: [
         {
