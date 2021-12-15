@@ -33,6 +33,9 @@ export const responseResolve = (response) => {
 export const responseReject = (error) => {
   ajaxRequestCall = 0;
   store.commit('SET_LOADING', false);
+  if (error.response && error.response.config && error.response.config.url === '/layanans') {
+    return Promise.reject(error.response.data && error.response.data.message);
+  }
 
   // cek status error
   const { status = 500 } = error.response ? error.response : {};

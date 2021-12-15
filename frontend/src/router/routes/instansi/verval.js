@@ -28,7 +28,7 @@ export default [
     component: () => lazyLoadView(import('@views/instansi/diklat/list/verval/Index.vue')),
     meta: {
       title: 'Verval Kelas Diklat',
-      tipe: 'kelas'
+      tipe: 'kelas',
     },
   },
 ];

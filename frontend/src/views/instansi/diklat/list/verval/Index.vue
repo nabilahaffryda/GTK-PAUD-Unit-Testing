@@ -269,7 +269,7 @@ export default {
     },
 
     jenis() {
-      return this.$route.meta && this.$route.meta.tipe || 'kelas';
+      return (this.$route.meta && this.$route.meta.tipe) || 'kelas';
     },
   },
   created() {
