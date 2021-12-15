@@ -4,13 +4,17 @@ namespace App\GraphQL\Mutations\Ptk;
 
 use App\Exceptions\FlowException;
 use App\Models\MKonfirmasiPaud;
+use App\Models\MKota;
 use App\Models\MVervalPaud;
 use App\Models\PaudKelasPeserta;
 use App\Models\Sekolah;
 use App\Remotes\Sertifikat as SertifikatRemote;
+use App\Remotes\SimpatikaRemote;
 use Carbon\Carbon;
 use DB;
+use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
+use GuzzleHttp\Exception\GuzzleException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class KelasPeserta
@@ -156,8 +160,23 @@ class KelasPeserta
 
         $instansi = $diklat->instansi;
 
-        /** @var Sekolah $sekolah */
-        $sekolah = $ptk->ptkSekolahs->first()?->sekolah;
+        if ($ptk->k_sumber == 9) {
+            try {
+                $ptks = app(SimpatikaRemote::class)->fetchGuruRA([$ptk->ptk_id]);
+
+                $sekolah = new Sekolah($ptks[0]['instansi']);
+
+                $mKota = MKota::where('k_kota_simpatika', '=', $sekolah->k_kota)->first();
+
+                $sekolah->k_kota     = $mKota->k_kota;
+                $sekolah->k_propinsi = $mKota->k_propinsi;
+            } catch (GuzzleException|Exception) {
+                $sekolah = null;
+            }
+        } else {
+            /** @var Sekolah $sekolah */
+            $sekolah = $ptk->ptkSekolahs->first()?->sekolah;
+        }
 
         $params = [
             'k_sertifikat' => '213',
@@ -168,7 +187,7 @@ class KelasPeserta
             'peran'       => 'Peserta',
             'nama'        => $ptk->nama,
             'nomor_surat' => '2611/B4/GT.00.04/2021',
-            'instansi'    => $sekolah->nama,
+            'instansi'    => $sekolah?->nama,
 
             'tgl_mulai'   => $periode->tgl_diklat_mulai?->toDateString(),
             'tgl_selesai' => $periode->tgl_diklat_selesai?->toDateString(),
