@@ -117,6 +117,18 @@ class KelasPeserta
             $kelasPeserta->save();
         }
 
+        $ptk = ptk();
+        if ($ptk->k_sumber == 9 && !$ptk->instansi) {
+            try {
+                $ptks = app(SimpatikaRemote::class)->fetchGuruRA([$ptk->ptk_id]);
+
+                $ptk->instansi = $ptks[0]['instansi']['nama'] ?? $ptk->instansi;
+                $ptk->save();
+
+            } catch (GuzzleException|Exception) {
+            }
+        }
+
         return [
             'kelasPeserta' => $kelasPeserta,
             'urlSurvey'    => config('simpkb.url') . '/gtk#!/kuesioner/paudjenjangdasar/p/',
