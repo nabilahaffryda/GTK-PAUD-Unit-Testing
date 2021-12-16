@@ -156,7 +156,7 @@ class KelasService
     {
         $this->validateKelas($paudDiklat, $kelas);
 
-        return $kelas->load(['mVervalPaud', 'paudDiklat.instansi', 'paudDiklat.paudInstansi', 'paudMapelKelas']);
+        return $kelas->load(['mVervalPaud', 'mKecamatan', 'mKelurahan', 'paudDiklat.instansi', 'paudDiklat.paudInstansi', 'paudMapelKelas']);
     }
 
     /**
