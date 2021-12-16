@@ -88,7 +88,7 @@ export default {
         this.$getDeepObj(this.detail, 'pengalaman') ||
         (this.$getDeepObj(this.detail, 'diklat') &&
           typeof this.$getDeepObj(this.detail, 'diklat') === 'string' &&
-          JSON.parse(this.$getDeepObj(this.detail, 'diklat') || [])) ||
+          JSON.parse(this.$getDeepObj(this.detail, 'diklat') || '[]')) ||
         this.$getDeepObj(this.detail, 'diklat') ||
         [];
       return diklat;

@@ -102,6 +102,11 @@ const GET_HASIL = gql`
         ptk {
           nama
           instansi
+          ptk_sekolah {
+            sekolah {
+              nama
+            }
+          }
         }
         is_lulus
         is_survey
