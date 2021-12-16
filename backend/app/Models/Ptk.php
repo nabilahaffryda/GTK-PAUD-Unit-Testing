@@ -60,6 +60,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property-read MKecamatan $mKecamatan
  * @property-read MKota $mKota
  * @property-read MPropinsi $mPropinsi
+ * @property-read PtkSekolah $ptkSekolah
  * @property-read Collection|PaudKelasPesertaLuring[] $paudKelasPesertaLurings
  * @property-read Collection|PaudKelasPeserta[] $paudKelasPesertas
  * @property-read Collection|PtkSekolah[] $ptkSekolahs
@@ -294,6 +295,15 @@ class Ptk extends Authenticatable
     public function ptkSekolahs()
     {
         return $this->hasMany('App\Models\PtkSekolah', 'ptk_id', 'ptk_id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function ptkSekolah()
+    {
+        return $this->hasOne('App\Models\PtkSekolah', 'ptk_id', 'ptk_id')
+            ->where('ptk_sekolah.is_aktif', '1');
     }
 
     /**
