@@ -275,7 +275,7 @@ export default {
       let temp = {};
 
       Object.keys(masters).forEach((item) => {
-        if (![1, 3].includes(Number(item))) {
+        if (![1].includes(Number(item))) {
           this.$set(temp, item, masters[item]);
         }
       });
