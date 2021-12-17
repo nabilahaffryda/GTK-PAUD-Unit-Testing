@@ -145,10 +145,14 @@ class PetugasService
             ])
             ->whereHas('paudPetugasPerans', function (Builder $query) use ($params) {
                 $query
+                    ->when($params['k_verval_paud'] ?? null, function (Builder $query, $value) {
+                        $query->whereIn('k_verval_paud', $value);
+                    }, function (Builder $query) {
+                        $query->where('k_verval_paud', '<>', MVervalPaud::KANDIDAT);
+                    })
                     ->where([
                         'tahun'    => Arr::get($params, 'tahun', config('paud.tahun')),
                         'angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
-                        ['k_verval_paud', '<>', MVervalPaud::KANDIDAT],
                     ]);
             })
             ->where('k_unsur_pengajar_paud', $params['k_unsur_pengajar_paud'])
