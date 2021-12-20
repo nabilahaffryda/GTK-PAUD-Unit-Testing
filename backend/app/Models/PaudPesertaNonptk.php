@@ -42,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read null|string $sertifikat_url
  * @property-read null|string $ktp_url
+ * @property-read null|string $sk_instansi_url
  *
  * @property-read Instansi $instansi
  * @property-read MDiklatPaud $mDiklatPaud
