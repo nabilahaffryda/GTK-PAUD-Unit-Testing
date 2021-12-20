@@ -51,10 +51,10 @@ export const actions = {
     return http[payload.method || 'post'](url, payload.params).then(({ data }) => data);
   },
 
-  async getListKelas({ rootState }, payload) {
+  async getListKelas({ rootState, state }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/kelas/${payload.id}/${payload.tipe}`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${state.jenis}kelas/${payload.id}/${payload.tipe}`,
     });
     return await $ajax.get(`/`, { params: payload.params });
   },

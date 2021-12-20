@@ -275,9 +275,9 @@ export default {
       tabItems: [
         { value: 'peserta', kPetugas: 0, text: 'Peserta' },
         { value: 'admin', kPetugas: 4, text: 'Admin Kelas' },
-        { value: 'pembimbing-praktik', kPetugas: 3, text: 'Pembimbing Praktik' },
-        { value: 'pengajar', kPetugas: 1, text: 'Pengajar' },
-        { value: 'pengajar-tambahan', kPetugas: 2, text: 'Pengajar Tambahan' },
+        { value: 'pembimbing-praktik', kPetugas: 3, text: 'PPTM' },
+        { value: 'pengajar', kPetugas: 1, text: 'PPM' },
+        { value: 'pengajar-tambahan', kPetugas: 2, text: 'PPM Tambahan' },
       ],
       formulir: {},
     };
@@ -310,8 +310,16 @@ export default {
     items() {
       return (this.pesertas || []).map((item) => {
         return {
-          nama: this.$getDeepObj(item, 'ptk.data.nama') || this.$getDeepObj(item, 'akun.data.nama') || '-',
-          email: this.$getDeepObj(item, 'ptk.data.email') || this.$getDeepObj(item, 'akun.data.email') || '-',
+          nama:
+            this.$getDeepObj(item, 'ptk.data.nama') ||
+            this.$getDeepObj(item, 'akun.data.nama') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.nama') ||
+            '-',
+          email:
+            this.$getDeepObj(item, 'ptk.data.email') ||
+            this.$getDeepObj(item, 'akun.data.email') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
+            '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
           paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
           paud_kelas_peserta_id: this.$getDeepObj(item, 'paud_kelas_peserta_id') || '',
