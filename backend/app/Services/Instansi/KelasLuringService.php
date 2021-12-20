@@ -441,7 +441,9 @@ class KelasLuringService
             $kelasPetugas->tahun                = $kelas->tahun;
             $kelasPetugas->angkatan             = $kelas->angkatan;
             $kelasPetugas->akun_id              = $petugas->akun_id;
-            $kelasPetugas->k_konfirmasi_paud    = MKonfirmasiPaud::BELUM_KONFIRMASI;
+            $kelasPetugas->k_konfirmasi_paud    = $params['k_petugas_paud'] == MPetugasPaud::ADMIN_KELAS
+                ? MKonfirmasiPaud::BERSEDIA
+                : MKonfirmasiPaud::BELUM_KONFIRMASI;
             $kelasPetugas->created_by           = akunId();
 
             if (!$kelasPetugas->save()) {
