@@ -23,6 +23,7 @@ use DB;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
@@ -205,6 +206,12 @@ class KelasLuringService
 
         return PaudPesertaNonptk::query()
             ->select('paud_peserta_nonptk.*')
+            ->distinct()
+            ->leftJoin('paud_kelas_peserta_luring', function (JoinClause $query) {
+                $query->on('paud_kelas_peserta_luring.paud_peserta_nonptk_id', '=', 'paud_peserta_nonptk.paud_peserta_nonptk_id')
+                    ->where('paud_kelas_peserta_luring.tahun', '=', (int)config('paud.tahun'))
+                    ->where('paud_kelas_peserta_luring.angkatan', '=', (int)config('paud.angkatan'));
+            })
             ->where([
                 'paud_peserta_nonptk.paud_instansi_id'      => $diklat->paud_instansi_id,
                 'paud_peserta_nonptk.k_propinsi'            => $diklat->k_propinsi,
@@ -218,7 +225,8 @@ class KelasLuringService
                     ['paud_peserta_nonptk.nama', 'like', '%' . $keyword . '%'],
                     ['paud_peserta_nonptk.email', 'like', '%' . $keyword . '%'],
                 ], boolean: 'or');
-            });
+            })
+            ->whereNull('paud_kelas_peserta_luring.paud_kelas_peserta_luring_id');
     }
 
     /**
