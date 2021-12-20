@@ -472,14 +472,14 @@ class KelasLuringService
             throw new FlowException("Masih ada petugas yang belum bersedia/belum konfirmasi");
         }
 
-        $tidakBersedia = $kelas
-            ->paudKelasPesertaLurings()
-            ->whereNotIn('k_konfirmasi_paud', [MKonfirmasiPaud::BERSEDIA])
-            ->exists();
-
-        if ($tidakBersedia) {
-            throw new FlowException("Masih ada peserta yang belum bersedia/belum konfirmasi");
-        }
+        // $tidakBersedia = $kelas
+        //     ->paudKelasPesertaLurings()
+        //     ->whereNotIn('k_konfirmasi_paud', [MKonfirmasiPaud::BERSEDIA])
+        //     ->exists();
+        //
+        // if ($tidakBersedia) {
+        //     throw new FlowException("Masih ada peserta yang belum bersedia/belum konfirmasi");
+        // }
 
         $jmlPetugases = $kelas->paudKelasPetugasLurings()
             ->groupBy('k_petugas_paud')
