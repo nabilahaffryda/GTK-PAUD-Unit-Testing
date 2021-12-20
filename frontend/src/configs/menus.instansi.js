@@ -191,6 +191,16 @@ export default [
         link: 'verval-kelas',
         to: { name: 'verval-kelas' },
       },
+      {
+        icon: 'mdi-account-check',
+        title: 'Verval Kelas Diklat Luring',
+        desc: 'Evaluasi dan Verifikasi Kelas Diklat Luring',
+        color: 'red',
+        deepColor: 'darken-1',
+        akses: 'kelas-luring-verval.index',
+        link: 'verval-kelas-luring',
+        to: { name: 'verval-kelas-luring' },
+      },
     ],
   },
   {

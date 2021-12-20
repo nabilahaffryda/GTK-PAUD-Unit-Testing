@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline black--text--text"> Verval Kelas Diklat </h1>
+            <h1 class="headline black--text--text"> Verval Kelas Diklat {{ $titleCase(akses) }}</h1>
             <div> </div>
           </v-col>
         </v-row>
@@ -234,7 +234,7 @@ export default {
     },
 
     formFilter() {
-      return [
+      let temp = [
         {
           label: 'Pilih Status Verval',
           default: true,
@@ -243,14 +243,19 @@ export default {
           master: this.$mapForMaster(this.mapStatusVerval),
           props: ['attach', 'chips', 'deletable-chips', 'multiple', 'small-chips'],
         },
-        {
+      ];
+
+      if (this.akses === 'daring') {
+        temp.push({
           label: 'Periode Diklat',
           type: 'select',
           model: 'paud_periode_id',
           master: this.$mapForMaster(this.mPeriode),
           props: ['attach'],
-        },
-      ];
+        });
+      }
+
+      return temp;
     },
 
     filtersMaster() {
@@ -271,6 +276,13 @@ export default {
     jenis() {
       return (this.$route.meta && this.$route.meta.tipe) || 'kelas';
     },
+
+    akses() {
+      return (this.$route.meta && this.$route.meta.akses) || 'daring';
+    },
+  },
+  mounted() {
+    Object.assign(this.attr, { type: this.akses });
   },
   created() {
     this.getMasters({
