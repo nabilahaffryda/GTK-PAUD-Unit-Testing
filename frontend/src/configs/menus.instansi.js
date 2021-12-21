@@ -183,7 +183,7 @@ export default [
       },
       {
         icon: 'mdi-account-check',
-        title: 'Verval Kelas Diklat',
+        title: 'Verval Kelas Diklat Daring',
         desc: 'Evaluasi dan Verifikasi Kelas Diklat',
         color: 'red',
         deepColor: 'darken-1',

@@ -64,7 +64,12 @@
                             {{ $getDeepObj(item, `nama`) || '-' }}
                           </span>
                           <div class="font-italic">
-                            {{ $getDeepObj(item, `paud_diklat.data.instansi.data.nama`) || '-' }}
+                            {{
+                              $getDeepObj(
+                                item,
+                                `paud_diklat${akses === 'daring' ? '' : '_luring'}.data.instansi.data.nama`
+                              ) || '-'
+                            }}
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -73,16 +78,32 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <div class="label--text">Tanggal Pel aksanaan</div>
+                            <div class="label--text">Tanggal Pelaksanaan</div>
                           </v-list-item-title>
                           <div class="link black--text body-2">
-                            <div>{{ $getDeepObj(item, 'paud_diklat.data.paud_periode.data.nama') }}</div>
-                            {{
-                              $durasi(
-                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
-                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
-                              )
-                            }}
+                            <div>
+                              {{
+                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.nama') ||
+                                $getDeepObj(item, 'paud_diklat_luring.data.nama') ||
+                                ''
+                              }}
+                            </div>
+                            <template v-if="akses === 'daring'">
+                              {{
+                                $durasi(
+                                  $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
+                                  $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                                )
+                              }}
+                            </template>
+                            <template v-else>
+                              {{
+                                $durasi(
+                                  $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
+                                  $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
+                                )
+                              }}
+                            </template>
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -167,6 +188,7 @@
         :initValue="formulir['init']"
         :jenis="jenis"
         :obj="obj"
+        :akses="akses"
       ></form-verval>
     </base-modal-full>
   </div>

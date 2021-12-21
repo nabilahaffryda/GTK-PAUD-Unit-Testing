@@ -24,12 +24,16 @@
                       {{ $getDeepObj(detail, 'nama') || '-' }}
                     </div>
                     <div class="font-italic">
-                      {{ $getDeepObj(detail, `paud_diklat.data.instansi.data.nama`) || '-' }}
+                      {{
+                        $getDeepObj(detail, `paud_diklat.data.instansi.data.nama`) ||
+                        $getDeepObj(detail, `paud_diklat_luring.data.instansi.data.nama`) ||
+                        '-'
+                      }}
                     </div>
                   </div>
                   <div class="my-5">
                     <div class="label--text">Deskripsi Kelas</div>
-                    <div class="body-1"></div>
+                    <div class="body-1">{{ $getDeepObj(detail, 'deskripsi') || '' }}</div>
                   </div>
                   <div class="my-5">
                     <div class="label--text">Lokasi</div>
@@ -38,8 +42,12 @@
                         [
                           $getDeepObj(detail, 'm_kelurahan.data.keterangan') || '',
                           $getDeepObj(detail, 'm_kecamatan.data.keterangan') || '',
-                          $getDeepObj(detail, 'paud_diklat.data.m_kota.data.keterangan') || '',
-                          $getDeepObj(detail, 'paud_diklat.data.m_propinsi.data.keterangan') || '',
+                          $getDeepObj(detail, 'paud_diklat.data.m_kota.data.keterangan') ||
+                            $getDeepObj(detail, 'paud_diklat_luring.data.m_kota.data.keterangan') ||
+                            '',
+                          $getDeepObj(detail, 'paud_diklat.data.m_propinsi.data.keterangan') ||
+                            $getDeepObj(detail, 'paud_diklat_luring.data.m_propinsi.data.keterangan') ||
+                            '',
                         ].join(', ')
                       }}
                     </div>
@@ -48,18 +56,29 @@
                     <v-col>
                       <div class="label--text">Tanggal Mulai Kelas</div>
                       <div class="body-1">
-                        {{
-                          $localDate($getDeepObj(detail, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai')) || '-'
-                        }}
+                        <template v-if="akses === 'daring'">
+                          {{
+                            $localDate($getDeepObj(detail, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai')) ||
+                            '-'
+                          }}
+                        </template>
+                        <template v-else>
+                          {{ $localDate($getDeepObj(detail, 'paud_diklat_luring.data.tgl_mulai') || '') }}
+                        </template>
                       </div>
                     </v-col>
                     <v-col>
                       <div class="label--text">Tanggal Selesai Kelas</div>
                       <div class="body-1">
-                        {{
-                          $localDate($getDeepObj(detail, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')) ||
-                          '-'
-                        }}
+                        <template v-if="akses === 'daring'">
+                          {{
+                            $localDate($getDeepObj(detail, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')) ||
+                            '-'
+                          }}
+                        </template>
+                        <template v-else>
+                          {{ $localDate($getDeepObj(detail, 'paud_diklat_luring.data.tgl_selesai') || '') }}
+                        </template>
                       </div>
                     </v-col>
                   </v-row>
@@ -74,7 +93,7 @@
                       />
                     </v-col>
                     <v-col cols="12" md="12" sm="12">
-                      <div class="my-2" v-if="Number(detail.k_verval_paud) === 6">
+                      <div class="my-2" v-if="Number(detail && detail.k_verval_paud) === 6">
                         <v-btn
                           color="success"
                           depressed
@@ -113,6 +132,11 @@
                       :items="filteredItems"
                       :no-data-text="`Daftar ${item.text} belum ditemukan`"
                     >
+                      <template v-slot:[`item.aksi`]="{ item }">
+                        <template v-if="item && item.dapodik !== 'Dapodik'">
+                          <v-btn depressed dark color="blue" small @click="onDetil(item)"> Detail </v-btn>
+                        </template>
+                      </template>
                     </v-data-table>
                   </div>
                 </v-tab-item>
@@ -194,9 +218,13 @@
       </v-col>
     </v-row>
     <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
+    <base-modal-full ref="modal" colorBtn="primary" generalError :use-save="false" title="Detail Peserta">
+      <info-peserta :init-value="infoPeserta"></info-peserta>
+    </base-modal-full>
   </div>
 </template>
 <script>
+import InfoPeserta from '../../peserta/formulir/InfoPeserta';
 import { ValidationProvider } from 'vee-validate';
 import { mapActions } from 'vuex';
 import Berkases from '../../profil/formulir/Berkas';
@@ -239,8 +267,12 @@ export default {
       type: [String, Number],
       default: null,
     },
+    akses: {
+      type: String,
+      default: 'daring',
+    },
   },
-  components: { ValidationProvider, Berkases, PopupPreviewDetail },
+  components: { ValidationProvider, Berkases, PopupPreviewDetail, InfoPeserta },
   data() {
     return {
       preview: {},
@@ -280,6 +312,7 @@ export default {
         { value: 'pengajar-tambahan', kPetugas: 2, text: 'PPM Tambahan' },
       ],
       formulir: {},
+      infoPeserta: {},
     };
   },
   computed: {
@@ -300,7 +333,17 @@ export default {
         temp.push({ text: 'Kota/Kabupaten', value: 'kota', sortable: false });
       }
 
-      if (this.tab !== 1) {
+      // Tambahkan tab info dapodik
+
+      if (this.tab === 0 && this.akses === 'luring') {
+        temp.push({ text: 'Keterangan', value: 'dapodik', sortable: false });
+        temp.push({ text: '', value: 'aksi', sortable: false });
+      }
+
+      if (
+        (![0, 1].includes(this.tab) && this.akses === 'luring') ||
+        (![1].includes(this.tab) && this.akses === 'daring')
+      ) {
         temp.push({ text: 'Status', value: 'status', sortable: false });
       }
 
@@ -321,8 +364,10 @@ export default {
             this.$getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
             '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
+          dapodik: item && Number(item.is_nonptk) === 1 ? 'Non Dapodik' : 'Dapodik',
           paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
           paud_kelas_peserta_id: this.$getDeepObj(item, 'paud_kelas_peserta_id') || '',
+          paud_kelas_peserta_luring_id: this.$getDeepObj(item, 'paud_kelas_peserta_luring_id') || '',
           ptk_id: this.$getDeepObj(item, 'ptk_id') || '',
           propinsi: this.$getDeepObj(item, 'akun.data.m_propinsi.data.keterangan') || '-',
           kota: this.$getDeepObj(item, 'akun.data.m_kota.data.keterangan') || '-',
@@ -368,7 +413,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('diklatVerval', ['getListKelas']),
+    ...mapActions('diklatVerval', ['getListKelas', 'getDetailPeserta']),
 
     getValue() {
       return { pilihan: this.pilihan, id: this.id, alasan: (this.form && this.form.alasan) || '' };
@@ -379,6 +424,7 @@ export default {
       this.$set(this, 'form', {});
       this.tab = 0;
       this.search = '';
+      this.infoPeserta = {};
     },
 
     initForm(value) {
@@ -414,6 +460,16 @@ export default {
 
     onLms(url) {
       window.open(url, '_blank');
+    },
+
+    async onDetil(data) {
+      const resp = await this.getDetailPeserta({
+        id: this.id,
+        peserta_id: this.$getDeepObj(data, 'paud_kelas_peserta_luring_id'),
+      }).then(({ data }) => data);
+
+      this.infoPeserta = this.$getDeepObj(resp, 'paud_peserta_nonptk.data') || {};
+      this.$refs.modal.open();
     },
   },
   watch: {

@@ -140,13 +140,18 @@ export default {
             {
               key: 'jenjang_diklat',
               label: 'Jenis Diklat',
-              value: this.$getDeepObj(this.masters, `m_diklat_paud.${this.initValue.k_diklat_paud}`) || '',
+              value:
+                this.$getDeepObj(this.initValue, `m_diklat_paud.data.keterangan`) ||
+                this.$getDeepObj(this.masters, `m_diklat_paud.${this.initValue.k_diklat_paud}`) ||
+                '',
             },
             {
               key: 'jenis_diklat',
               label: 'Jenis Diklat',
               value:
-                this.$getDeepObj(this.masters, `m_jenjang_diklat_paud.${this.initValue.k_jenjang_diklat_paud}`) || '',
+                this.$getDeepObj(this.initValue, `m_jenjang_diklat_paud.data.keterangan`) ||
+                this.$getDeepObj(this.masters, `m_jenjang_diklat_paud.${this.initValue.k_jenjang_diklat_paud}`) ||
+                '',
             },
           ],
         ],

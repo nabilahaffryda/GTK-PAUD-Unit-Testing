@@ -17,7 +17,6 @@ export const mutations = {
 export const actions = {
   async fetch({ rootState, commit }, payload) {
     const id = rootState.auth.instansi_id;
-    console.log(payload.attr);
     const mTipe = {
       daring: '',
       luring: 'luring/',
@@ -33,6 +32,14 @@ export const actions = {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
       baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${state.jenis}kelas/${payload.id}`,
+    });
+    return await $ajax.get('/');
+  },
+
+  async getDetailPeserta({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    $ajax = kitsu({
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/luring/kelas/${payload.id}/peserta/${payload.peserta_id}`,
     });
     return await $ajax.get('/');
   },
