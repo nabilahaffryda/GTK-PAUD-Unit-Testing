@@ -232,7 +232,7 @@ export default {
     },
     paramsTipe: {
       type: Object,
-      required: () => {},
+      default: () => {},
     },
   },
   data() {
