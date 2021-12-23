@@ -3,10 +3,10 @@
     <v-card>
       <v-card-text>
         <v-row class="pa-5">
-          <v-col cols="12" md="2" sm="12">
-            <v-img :src="$imgUrl($getDeepObj(instansi, 'foto_url') || 'default_foto_lpd.png')"></v-img>
+          <v-col cols="12" md="2" sm="12" v-if="$getDeepObj(initValue, 'foto_url')">
+            <v-img :src="$imgUrl($getDeepObj(initValue, 'foto_url') || 'default_foto_lpd.png')"></v-img>
           </v-col>
-          <v-col cols="12" md="10" sm="12">
+          <v-col cols="12" :md="$getDeepObj(initValue, 'foto_url') ? 10 : 12" sm="12">
             <div class="mx-3">
               <div class="text-h6 black--text">Data Peserta</div>
               <base-list-info class="px-0" :info="info.umum"></base-list-info>
