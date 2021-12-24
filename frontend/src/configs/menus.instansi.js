@@ -182,7 +182,7 @@ export default [
         to: { name: 'verval-pengajar' },
       },
       {
-        icon: 'mdi-account-check',
+        icon: 'mdi-google-classroom',
         title: 'Verval Kelas Diklat Daring',
         desc: 'Evaluasi dan Verifikasi Kelas Diklat',
         color: 'red',
@@ -192,7 +192,7 @@ export default [
         to: { name: 'verval-kelas' },
       },
       {
-        icon: 'mdi-account-check',
+        icon: 'mdi-google-classroom',
         title: 'Verval Kelas Diklat Luring',
         desc: 'Evaluasi dan Verifikasi Kelas Diklat Luring',
         color: 'red',

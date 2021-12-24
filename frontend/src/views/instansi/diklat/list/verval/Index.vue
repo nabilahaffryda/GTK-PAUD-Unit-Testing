@@ -55,7 +55,7 @@
                     <v-col cols="12" md="4">
                       <v-list-item class="px-0" @click="onVerval(item)">
                         <v-list-item-icon class="mr-1 my-auto">
-                          <v-icon color="primary" size="60">mdi-account-circle</v-icon>
+                          <v-icon color="primary" size="60">mdi-google-classroom</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="py-0 px-1">
                           <p class="caption"> Nama Kelas </p>

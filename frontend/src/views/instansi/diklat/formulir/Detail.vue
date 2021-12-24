@@ -6,7 +6,7 @@
         <v-row dense no-gutters class="my-5">
           <v-col cols="12" md="1" sm="2" class="pa-0">
             <v-avatar color="primary" size="60">
-              <v-icon dark>mdi-teach</v-icon>
+              <v-icon dark>mdi-google-classroom</v-icon>
             </v-avatar>
           </v-col>
           <v-col cols="12" md="11" sm="10" class="px-0">
