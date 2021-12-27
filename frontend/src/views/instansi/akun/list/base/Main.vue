@@ -18,7 +18,9 @@
             <template v-if="akses === 'pembimbing-praktik' && $allow('akun-pembimbing-praktik.set-status')">
               <v-menu bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-bind="attrs" v-on="on" small color="info" class="ml-2 py-5"> set pembimbing praktik</v-btn>
+                  <v-btn v-bind="attrs" v-on="on" id="set-pembimbing" small color="info" class="ml-2 py-5">
+                    set pembimbing praktik</v-btn
+                  >
                 </template>
                 <v-list dense>
                   <v-list-item @click="setMultiInti('inti')">
