@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-app>
     <!--notif jadwal-->
     <v-card tile flat class="my-5">
       <v-card-text class="pa-0">
