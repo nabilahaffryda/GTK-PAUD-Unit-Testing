@@ -53,7 +53,7 @@
                       ><v-icon color="#FFA800" small>mdi-star</v-icon> Nilai Diklat (<b>{{ detail.predikat }}</b
                       >)</p
                     >
-                    <h1 class="green--text py-5" style="font-size: 60px">{{ detail.nilai }}</h1>
+                    <h1 id="detail-nilai" class="green--text py-5" style="font-size: 60px">{{ detail.nilai }}</h1>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -64,7 +64,7 @@
                       ><v-icon color="#FFA800" small>mdi-medal</v-icon> Medali Nilai (<b>{{ detail.medali }}</b
                       >)</p
                     >
-                    <h1 class="green--text py-2" style="font-size: 60px">
+                    <h1 id="detail-medali" class="green--text py-2" style="font-size: 60px">
                       <img :src="medals[(detail.medali || '').toLowerCase()]" width="50" />
                     </h1>
                   </v-card-text>
