@@ -155,6 +155,14 @@ class PetugasService
                         'angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
                     ]);
             })
+            ->when($params['keyword'] ?? null, function ($query, $value) {
+                $query->whereHas('akun', function ($query) use ($value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->orWhere('nama', 'like', '%' . $value . '%')
+                            ->orWhere('email', 'like', '%' . $value . '%');
+                    });
+                });
+            })
             ->where('k_unsur_pengajar_paud', $params['k_unsur_pengajar_paud'])
             ->with(['akun', 'paudPetugasPerans.mVervalPaud',
                     'paudPetugasPerans.akunVerval:akun_id,nama,email,no_telpon,no_hp']);
