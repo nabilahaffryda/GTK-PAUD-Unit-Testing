@@ -1,4 +1,5 @@
 import { mapActions } from 'vuex';
+import { today } from '../../../../utils/format';
 
 export default {
   methods: {
@@ -16,6 +17,16 @@ export default {
         this.$refs.formulir.reset();
         this.$refs.formulir.kelas = data || {};
       });
+    },
+
+    isEndDiklat(item) {
+      const now = new Date(today());
+      const wkt_selesai = new Date(this.$getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai'));
+      return wkt_selesai >= now;
+    },
+
+    onView(item) {
+      this.$router.push({ name: 'kelas-luring-peserta', params: { kelas_id: item.id } });
     },
   },
 };

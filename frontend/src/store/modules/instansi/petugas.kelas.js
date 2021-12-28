@@ -26,6 +26,14 @@ export const actions = {
     return await $ajax.get('/', { params: payload.params });
   },
 
+  async fetchPeserta({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    $ajax = kitsu({
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/petugas-luring/kelas/${payload.attr.id}/peserta`,
+    });
+    return await $ajax.get('/', { params: payload.params });
+  },
+
   async getDetail({ rootState, state }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({

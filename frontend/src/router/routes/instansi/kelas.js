@@ -18,4 +18,13 @@ export default [
       jenis: 'luring',
     },
   },
+  {
+    path: '/i/:id(\\d+)/kelas-luring-peserta/:kelas_id',
+    name: 'kelas-luring-peserta',
+    component: () => lazyLoadView(import('@views/instansi/kelas/Detail')),
+    meta: {
+      title: 'Kelas Diklat',
+      jenis: 'luring',
+    },
+  },
 ];

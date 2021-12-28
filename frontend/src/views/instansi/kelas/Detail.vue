@@ -1,0 +1,213 @@
+<template>
+  <div>
+    <!--notif jadwal-->
+    <v-card tile flat class="my-5">
+      <v-card-text class="pa-0">
+        <v-row no-gutters>
+          <v-col cols="2">
+            <div class="bg-kiri"></div>
+          </v-col>
+          <v-col cols="10" class="pa-5 black--text">
+            <div class="headline">Daftar Peserta Diklat</div>
+            <div class="body-2">
+              Dibawah ini merupakan daftar peserta yang mengikuti diklat, Silakan dapat dilakukan penilaian pada tahap
+              pendalaman materi bagi peserta
+            </div>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title class="pa-0">
+        <base-table-header @search="onSearch" :btnFilter="false" @reload="onReload" @filter="onFilter">
+          <template v-slot:subtitle>
+            <div class="subtitle-1 black--text">
+              <b>{{ total }}</b> Kelas Diklat
+            </div>
+          </template>
+        </base-table-header>
+      </v-card-title>
+      <v-divider />
+      <base-list-filter
+        ref="filter"
+        title="Pilih Filter Status"
+        :filtered="filtered"
+        :filters="formFilter"
+        :paramsFilter="filters"
+        @save="filterSave"
+      />
+      <v-card-text class="pa-0">
+        <base-list-table
+          :hideHeader="true"
+          :loading="loading"
+          :item="data"
+          :total="total"
+          :usePaging="false"
+          @fetch="fetchData"
+        >
+          <template slot-scope="{ item }">
+            <td>
+              <v-list-item dense class="px-0">
+                <v-list-item-content>
+                  <v-row>
+                    <v-col class="py-2" cols="12" md="4">
+                      <v-list-item class="px-0">
+                        <v-list-item-avatar color="primary">
+                          <v-icon dark>mdi-account</v-icon>
+                        </v-list-item-avatar>
+                        <v-list-item-content class="py-0 mt-3">
+                          <div class="label--text">Nama Peserta</div>
+                          <div class="body-2 black--text">
+                            {{
+                              $getDeepObj(item, 'ptk.data.nama') ||
+                              $getDeepObj(item, 'paud_peserta_nonptk.data.nama') ||
+                              ''
+                            }}
+                          </div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col class="py-0" cols="12" md="2">
+                      <v-list-item class="px-0">
+                        <v-list-item-content class="py-0 mt-3">
+                          <div class="label--text">Surel</div>
+                          <div class="black--text">
+                            {{
+                              $getDeepObj(item, 'ptk.data.email') ||
+                              $getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
+                              ''
+                            }}
+                          </div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col class="py-0" cols="12" md="2">
+                      <v-list-item class="px-0">
+                        <v-list-item-content class="py-0 mt-3">
+                          <div class="label--text">Status Nilai</div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col class="py-0" cols="12" md="2">
+                      <v-list-item class="px-0">
+                        <v-list-item-content class="py-0 mt-3">
+                          <div class="label--text">Hasil Nilai</div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col class="py-0" cols="12" md="2">
+                      <v-list-item class="px-0">
+                        <v-list-item-content class="py-0 mt-3">
+                          <div class="label--text">Aksi Selanjutnya</div>
+                          <v-btn small disabled color="success">Mulai Nilai</v-btn>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                  </v-row>
+                </v-list-item-content>
+              </v-list-item>
+            </td>
+          </template>
+        </base-list-table>
+      </v-card-text>
+      <v-card-actions>
+        <base-table-footer :pageTotal="pageTotal" @changePage="onChangePage"></base-table-footer>
+      </v-card-actions>
+    </v-card>
+  </div>
+</template>
+<script>
+import { mapActions, mapState } from 'vuex';
+import list from '@mixins/list';
+export default {
+  mixins: [list],
+  components: {},
+  data() {
+    return {
+      formulir: {},
+      detail: {},
+    };
+  },
+  computed: {
+    ...mapState('master', {
+      masters: (state) => Object.assign({}, state.masters),
+    }),
+
+    id() {
+      return this.$route.params.kelas_id || null;
+    },
+
+    configs() {
+      const M_PROPINSI = this.masters.m_propinsi || {};
+      const M_KOTA = this.masters.m_kota || {};
+      return {
+        selector: ['k_propinsi', 'k_kota'],
+        required: [false, false],
+        label: ['Provinsi', 'Kota/Kabupaten'],
+        options: [M_PROPINSI, M_KOTA],
+        grid: [{ cols: 12 }, { cols: 12 }],
+        disabled: [],
+      };
+    },
+
+    formFilter() {
+      return [
+        {
+          label: 'Lokasi',
+          default: true,
+          type: 'cascade',
+          configs: this.configs,
+          labelColor: 'secondary',
+          grid: { cols: 12, md: 6 },
+        },
+      ];
+    },
+
+    filtersMaster() {
+      return {
+        k_propinsi: this.masters && this.masters.m_propinsi,
+        k_kota: this.masters && this.masters.m_kota,
+      };
+    },
+  },
+  mounted() {
+    Object.assign(this.attr, { id: this.id });
+  },
+  created() {},
+  methods: {
+    ...mapActions('master', ['getMasters']),
+    ...mapActions('petugasKelas', {
+      fetch: 'fetchPeserta',
+    }),
+
+    allow(action, data) {
+      let disabled = false;
+      switch (action.event) {
+        case 'onAktif':
+          disabled = !Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
+          break;
+        case 'onNonAktif':
+          disabled = Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
+          break;
+        default:
+          disabled = this.$allow(action.akses, data.policies);
+          break;
+      }
+      return disabled;
+    },
+
+    toLms(url) {
+      window.open(url, '_blank');
+    },
+  },
+};
+</script>
+<style scoped>
+.bg-kiri {
+  background: #ffab91;
+  height: 100%;
+}
+.sc-notif {
+  background-color: #c8e6c9;
+}
+</style>

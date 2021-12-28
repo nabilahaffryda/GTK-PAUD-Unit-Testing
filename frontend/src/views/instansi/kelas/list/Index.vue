@@ -59,32 +59,41 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="4">
+                    <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Jadwal Pelaksanaan</div>
-                          <span v-if="jenis === 'daring'">
+                          <div v-if="jenis === 'daring'">
                             {{
                               $durasi(
                                 $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
                                 $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
                               )
                             }}
-                          </span>
-                          <span v-else>
+                          </div>
+                          <div v-else>
                             {{
                               $durasi(
                                 $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
                                 $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
                               )
-                            }}
-                          </span>
+                            }}<br />
+                            <span :class="isEndDiklat(item) ? 'success--text' : 'grey--text'">
+                              <v-icon left small :color="isEndDiklat(item) ? 'success' : 'grey'">
+                                {{ isEndDiklat(item) ? 'mdi-check-circle' : 'mdi-timer-sand' }}
+                              </v-icon>
+                              <i>{{ isEndDiklat(item) ? 'Selesai' : 'Sedang Berjalan' }}</i>
+                            </span>
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
+                          <div>
+                            <div class="label--text">Aksi Selanjutnya</div>
+                          </div>
                           <v-btn
                             v-if="jenis === 'daring'"
                             :disabled="
@@ -94,12 +103,20 @@
                             "
                             color="primary"
                             depressed
-                            small
-                            block
                             @click="toLms($getDeepObj(item, 'lms_url'))"
                           >
                             <v-icon left> mdi-link </v-icon>
                             Tautan LMS
+                          </v-btn>
+                          <v-btn
+                            v-else-if="jenis === 'luring' && isEndDiklat(item)"
+                            depressed
+                            small
+                            color="success"
+                            @click="onView(item)"
+                          >
+                            <v-icon left>mdi-file-edit</v-icon>
+                            Penilaian
                           </v-btn>
                         </v-list-item-content>
                       </v-list-item>
