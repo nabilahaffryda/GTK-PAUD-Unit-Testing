@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Yajra\Auditable\AuditableTrait;
 
 /**
  * App\Models\PaudKelasPesertaLuringNilai
@@ -33,6 +34,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class PaudKelasPesertaLuringNilai extends Eloquent
 {
+    use AuditableTrait;
+
     /**
      * The table associated with the model.
      *

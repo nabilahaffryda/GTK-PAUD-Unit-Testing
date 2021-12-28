@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $singkat
  * @property null|string $keterangan
  * @property null|int $urutan
+ * @property null|string $bobot
+ * @property null|float $n_bobot
  *
  * @property-read MTahapNilaiLuringPaud $mTahapNilaiLuringPaud
  * @property-read Collection|PaudKelasPesertaLuringNilai[] $paudKelasPesertaLuringNilais
@@ -25,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|MInstrumenNilaiLuringPaud whereSingkat($value)
  * @method static Builder|MInstrumenNilaiLuringPaud whereKeterangan($value)
  * @method static Builder|MInstrumenNilaiLuringPaud whereUrutan($value)
+ * @method static Builder|MInstrumenNilaiLuringPaud whereBobot($value)
+ * @method static Builder|MInstrumenNilaiLuringPaud whereNBobot($value)
  */
 class MInstrumenNilaiLuringPaud extends Eloquent
 {
@@ -59,6 +63,8 @@ class MInstrumenNilaiLuringPaud extends Eloquent
         'singkat'                   => 'string',
         'keterangan'                => 'string',
         'urutan'                    => 'int',
+        'bobot'                     => 'string',
+        'n_bobot'                   => 'float',
     ];
 
     /**
@@ -79,6 +85,8 @@ class MInstrumenNilaiLuringPaud extends Eloquent
         'singkat',
         'keterangan',
         'urutan',
+        'bobot',
+        'n_bobot',
     ];
 
     /**

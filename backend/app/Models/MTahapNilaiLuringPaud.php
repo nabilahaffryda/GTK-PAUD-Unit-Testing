@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class MTahapNilaiLuringPaud extends Eloquent
 {
+    public const PENDALAMAN_MATERI = 1;
+    public const TUGAS_MANDIRI     = 2;
+
     /**
      * The table associated with the model.
      *
