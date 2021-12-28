@@ -141,9 +141,9 @@ class KelasLuringPesertaService
         }
 
         if ($isPpm) {
-            $peserta->n_pendalaman_materi = 0;
+            $peserta->n_pendalaman_materi = null;
         } else {
-            $peserta->n_tugas_mandiri = 0;
+            $peserta->n_tugas_mandiri = null;
         }
 
         $peserta->nilai = $peserta->n_pendalaman_materi * 0.4 + $peserta->n_tugas_mandiri * 0.6;
