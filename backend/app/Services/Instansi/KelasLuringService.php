@@ -594,4 +594,34 @@ class KelasLuringService
 
         return $kelas;
     }
+
+    public function getIsPpmOrPptm(PaudKelasLuring $kelas, int $akunId)
+    {
+        /** @var PaudKelasPetugasLuring $kelasPetugas */
+        $kelasPetugas = $kelas
+            ->paudKelasPetugasLurings()
+            ->where('akun_id', '=', $akunId)
+            ->first();
+
+        $isPpm  = $kelasPetugas && $kelasPetugas->k_petugas_paud == MPetugasPaud::PENGAJAR;
+        $isPptm = $kelasPetugas && $kelasPetugas->k_petugas_paud == MPetugasPaud::PEMBIMBING_PRAKTIK;
+
+        return [$isPpm, $isPptm];
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateIsPpmOrPptm(PaudKelasLuring $kelas, int $akunId)
+    {
+        [$isPpm, $isPptm] = $this->getIsPpmOrPptm($kelas, $akunId);
+
+        if (!$isPpm && !$isPptm) {
+            throw new FlowException('Akses nilai hanya untuk PPM atau PPTM kelas');
+        }
+
+        return [$isPpm, $isPptm];
+    }
+
+
 }

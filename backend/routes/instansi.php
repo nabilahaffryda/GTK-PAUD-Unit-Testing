@@ -330,6 +330,11 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('', [Petugas\Luring\KelasController::class, 'index']);
         Route::get('{kelas}', [Petugas\Luring\KelasController::class, 'fetch']);
         Route::get('{kelas}/peserta', [Petugas\Luring\KelasController::class, 'peserta']);
+
+        Route::get('{kelas}/nilai', [Petugas\Luring\NilaiController::class, 'index']);
+        Route::get('{kelas}/nilai/{peserta}', [Petugas\Luring\NilaiController::class, 'fetch']);
+        Route::post('{kelas}/nilai/{peserta}/save', [Petugas\Luring\NilaiController::class, 'save']);
+        Route::post('{kelas}/nilai/{peserta}/delete', [Petugas\Luring\NilaiController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'petugas/profil'], function () {
