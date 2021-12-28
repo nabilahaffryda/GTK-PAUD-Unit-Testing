@@ -15917,6 +15917,57 @@
      
 }
 
+    namespace Illuminate\Database\Schema { 
+            /**
+     * 
+     *
+     */ 
+        class Blueprint {
+                    /**
+         * 
+         *
+         * @see \Yajra\Auditable\AuditableServiceProvider::register()
+         * @static 
+         */ 
+        public static function auditable()
+        {
+                        return \Illuminate\Database\Schema\Blueprint::auditable();
+        }
+                    /**
+         * 
+         *
+         * @see \Yajra\Auditable\AuditableServiceProvider::register()
+         * @static 
+         */ 
+        public static function dropAuditable()
+        {
+                        return \Illuminate\Database\Schema\Blueprint::dropAuditable();
+        }
+                    /**
+         * 
+         *
+         * @see \Yajra\Auditable\AuditableServiceProvider::register()
+         * @static 
+         */ 
+        public static function auditableWithDeletes()
+        {
+                        return \Illuminate\Database\Schema\Blueprint::auditableWithDeletes();
+        }
+                    /**
+         * 
+         *
+         * @see \Yajra\Auditable\AuditableServiceProvider::register()
+         * @static 
+         */ 
+        public static function dropAuditableWithDeletes()
+        {
+                        return \Illuminate\Database\Schema\Blueprint::dropAuditableWithDeletes();
+        }
+         
+    }
+     
+}
+
 
 namespace  { 
             class App extends \Illuminate\Support\Facades\App {}
