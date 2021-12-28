@@ -1,6 +1,10 @@
 <template>
   <div>
-    <!--notif jadwal-->
+    <v-card tile flat class="pa-0">
+      <v-card-text class="pa-0">
+        <base-breadcrumbs :items="breadcrumbs" />
+      </v-card-text>
+    </v-card>
     <v-card tile flat class="my-5">
       <v-card-text class="pa-0">
         <v-row no-gutters>
@@ -8,7 +12,10 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5 black--text">
-            <div class="headline">Daftar Peserta Diklat</div>
+            <div class="text-h6">
+              Daftar Peserta Diklat | {{ $getDeepObj(detail, 'paud_diklat_luring.data.nama') }} -
+              {{ $getDeepObj(detail, 'nama') }}
+            </div>
             <div class="body-2">
               Dibawah ini merupakan daftar peserta yang mengikuti diklat, Silakan dapat dilakukan penilaian pada tahap
               pendalaman materi bagi peserta
@@ -85,6 +92,9 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Status Nilai</div>
+                          <div>
+                            {{ getNilai(item) ? 'Sudah dinilai' : 'Belum Dinilai' }}
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -92,6 +102,9 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Hasil Nilai</div>
+                          <div>
+                            {{ getNilai(item) || '-' }}
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -118,20 +131,35 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';
+import BaseBreadcrumbs from '@components/base/BaseBreadcrumbs';
 import list from '@mixins/list';
 export default {
   mixins: [list],
-  components: {},
+  components: { BaseBreadcrumbs },
   data() {
     return {
       formulir: {},
       detail: {},
+      is_ppm: false,
+      is_pptm: false,
     };
   },
   computed: {
     ...mapState('master', {
       masters: (state) => Object.assign({}, state.masters),
     }),
+
+    breadcrumbs() {
+      return [
+        { text: 'Kelas Diklat', to: `kelas-luring` },
+        {
+          text: `${this.$getDeepObj(this, 'detail.paud_diklat_luring.data.nama')} - ${this.$getDeepObj(
+            this,
+            'detail.nama'
+          )}`,
+        },
+      ];
+    },
 
     id() {
       return this.$route.params.kelas_id || null;
@@ -173,12 +201,36 @@ export default {
   mounted() {
     Object.assign(this.attr, { id: this.id });
   },
-  created() {},
+  created() {
+    this.getKelasDiklat();
+  },
   methods: {
     ...mapActions('master', ['getMasters']),
     ...mapActions('petugasKelas', {
       fetch: 'fetchPeserta',
+      getDetail: 'getDetailLuring',
     }),
+
+    fetchData: function () {
+      return new Promise((resolve) => {
+        const params = Object.assign({}, this.params, this.$isObject(this.filters) ? { filter: this.filters } : {});
+        const attr = Object.assign({}, this.attr);
+        this.fetch({ params, attr }).then(({ data, meta, is_ppm, is_pptm }) => {
+          this.data = data || [];
+          this.total = meta?.total || data.length || 0;
+          this.pageTotal = meta?.last_page || 1;
+          this.is_ppm = is_ppm;
+          this.is_pptm = is_pptm;
+          resolve(true);
+        });
+      });
+    },
+
+    async getKelasDiklat() {
+      if (!this.id) return;
+      const data = await this.getDetail({ id: this.id }).then(({ data }) => data);
+      this.detail = data || {};
+    },
 
     allow(action, data) {
       let disabled = false;
@@ -196,8 +248,8 @@ export default {
       return disabled;
     },
 
-    toLms(url) {
-      window.open(url, '_blank');
+    getNilai(item) {
+      return this.$getDeepObj(item, `${this.is_ppm ? 'n_pendalaman_materi' : 'n_tugas_mandiri'}`) || null;
     },
   },
 };
