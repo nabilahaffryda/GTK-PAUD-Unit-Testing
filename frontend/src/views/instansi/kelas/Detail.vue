@@ -112,12 +112,28 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Aksi Selanjutnya</div>
-                          <v-btn small color="success" @click="onNilai(item)">Mulai Nilai</v-btn>
+
+                          <v-btn
+                            v-if="!getNilai(item) && $allow('petugas-luring-nilai.save')"
+                            small
+                            color="success"
+                            @click="onNilai(item)"
+                            >Mulai Nilai</v-btn
+                          >
+                          <v-btn v-else dark small color="grey" @click="onNilai(item)"> Lihat Detail </v-btn>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                   </v-row>
                 </v-list-item-content>
+                <v-list-item-action-text>
+                  <template v-if="getNilai(item) && $allow('petugas-luring-nilai.delete')">
+                    <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
+                  </template>
+                  <template v-else>
+                    <v-icon class="ml-2" color="white">mdi-dots-vertical</v-icon>
+                  </template>
+                </v-list-item-action-text>
               </v-list-item>
             </td>
           </template>
@@ -133,9 +149,17 @@
       generalError
       :use-save="formulir.isEdit"
       :title="formulir.title"
+      :autoClose="false"
+      @close="onClose"
       @save="onSave"
     >
-      <component ref="formulir" :is="'FormNilai'" :kelas="detail" :initValue="formulir.initValue" />
+      <component
+        ref="formulir"
+        :is="'FormNilai'"
+        :kelas="detail"
+        :isEdit="formulir.isEdit"
+        :initValue="formulir.initValue"
+      />
     </base-modal-full>
   </div>
 </template>
@@ -153,6 +177,7 @@ export default {
       detail: {},
       is_ppm: false,
       is_pptm: false,
+      actions: [{ icon: 'mdi-close', title: 'Batal Nilai', event: 'onBatalNilai', akses: true }],
     };
   },
   computed: {
@@ -268,12 +293,16 @@ export default {
     async onNilai(item) {
       const resp = await this.getPeserta({ kelas_id: this.id, id: item.id }).then(({ data }) => data);
       this.$set(this.formulir, 'title', 'Penilaian Peserta');
-      this.$set(this.formulir, 'isEdit', true);
+      this.$set(this.formulir, 'isEdit', !this.getNilai(item) && this.$allow('petugas-luring-nilai.save'));
       this.$refs.modal.open();
 
       this.$nextTick(() => {
         // this.$refs.formulir.reset();
-        this.$set(this.formulir, 'initValue', Object.assign({ peserta: item, instruments: resp }));
+        this.$set(
+          this.formulir,
+          'initValue',
+          Object.assign({ peserta: Object.assign(item, { is_nilai: this.getNilai(item) }), instruments: resp })
+        );
       });
     },
 
@@ -286,10 +315,45 @@ export default {
         name: 'save',
         params: { nilai: formulir },
       })
-        .then(() => {})
+        .then(() => {
+          this.$success('Penilaian berhasil dijalankan');
+          this.onReload();
+        })
         .catch(() => {
           this.$refs.modal.loading = false;
         });
+    },
+
+    onBatalNilai(item) {
+      this.$confirm(`Apakan anda ingin membatalkan penilaian berikut ?`, `Batalkan Penilaian`, {
+        tipe: 'warning',
+      }).then(() => {
+        this.action({
+          kelas_id: this.id,
+          id: item.id,
+          name: 'delete',
+        }).then(() => {
+          this.$success(`Penilaian berhasil dibatalkan`);
+          this.onReload();
+          this.$refs.modal.close();
+        });
+      });
+    },
+
+    onClose() {
+      if (this.formulir.isEdit) {
+        const msg = [
+          '<h3>Apakah Anda yakin ingin keluar dari halaman Penilaian Peserta ?</h3>',
+          'data yang tidak disimpan akan hilang jika Anda keluar dari Halaman ini',
+        ].join(' ');
+        this.$confirm(msg, 'Peringatan', { tipe: 'warning', lblConfirmColor: 'red', lblCancelColor: 'grey' }).then(
+          () => {
+            this.$refs.modal.dialog = false;
+          }
+        );
+      } else {
+        this.$refs.modal.dialog = false;
+      }
     },
   },
 };

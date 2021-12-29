@@ -12,7 +12,12 @@
                   </div>
                 </v-toolbar-title>
                 <v-spacer />
-                <v-chip color="red" dark>Belum Dinilai</v-chip>
+                <template v-if="peserta && peserta.is_nilai">
+                  <v-chip color="success" dark>Sudah Dinilai</v-chip>
+                </template>
+                <template v-else>
+                  <v-chip color="red" dark>Belum Dinilai</v-chip>
+                </template>
               </v-toolbar>
             </div>
           </v-col>
@@ -57,16 +62,37 @@
             </v-alert>
 
             <template v-for="(ins, i) in instruments">
-              <div class="d-flex px-2" :key="i">
-                <div class="pa-2 body-2 black--text">
-                  {{ i + 1 }}. <span v-html="$getDeepObj(ins, 'm_instrumen_nilai_luring_paud.data.keterangan')" />
+              <validation-provider
+                mode="passive"
+                :name="$getDeepObj(ins, 'm_instrumen_nilai_luring_paud.data.keterangan')"
+                rules="required"
+                v-slot="{ errors }"
+                :key="i"
+              >
+                <div class="d-flex px-2">
+                  <div class="pa-2 body-2 black--text">
+                    {{ i + 1 }}. <span v-html="$getDeepObj(ins, 'm_instrumen_nilai_luring_paud.data.keterangan')" />
+                    <div v-if="errors.length" class="red--text caption">{{ errors && errors[0] }}</div>
+                  </div>
+                  <div class="pa-2 ml-auto body-2 black--text">
+                    <v-text-field
+                      dense
+                      outlined
+                      type="number"
+                      :readonly="!isEdit"
+                      v-model="form[ins.k_instrumen_nilai_luring_paud]"
+                    />
+                  </div>
                 </div>
-                <div class="pa-2 ml-auto body-2 black--text">
-                  <v-text-field dense outlined type="number" v-model="form[ins.k_instrumen_nilai_luring_paud]">
-                  </v-text-field>
-                </div>
-              </div>
+              </validation-provider>
             </template>
+          </v-col>
+          <v-col cols="12" md="12" sm="12">
+            <v-divider></v-divider>
+            <div class="d-flex px-2">
+              <div class="pa-2 font-weight-bold body-2 black--text">Total</div>
+              <div class="pa-2 ml-auto font-weight-bold body-2 black--text">{{ total }}</div>
+            </div>
           </v-col>
         </v-row>
       </v-card-text>
@@ -74,7 +100,10 @@
   </div>
 </template>
 <script>
+import { ValidationProvider } from 'vee-validate';
+
 export default {
+  components: { ValidationProvider },
   props: {
     kelas: {
       type: Object,
@@ -84,6 +113,10 @@ export default {
       type: Object,
       default: () => null,
     },
+    isEdit: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -92,25 +125,29 @@ export default {
       form: {},
     };
   },
+  computed: {
+    total() {
+      let result = 0;
+      Object.keys(this.form).forEach((key) => {
+        result += Number(this.form[key] || 0);
+      });
+      return result;
+    },
+  },
   methods: {
     initForm(value) {
       if (!value) return;
       const { instruments, peserta } = value;
       this.$set(this, 'instruments', instruments || []);
       this.$set(this, 'peserta', peserta);
+      this.form = {};
 
       instruments.forEach((item) => {
-        this.$set(this.form, this.$getDeepObj(item, 'k_instrumen_nilai_luring_paud'), '');
+        this.$set(this.form, this.$getDeepObj(item, 'k_instrumen_nilai_luring_paud'), this.$getDeepObj(item, 'nilai'));
       });
     },
 
     getValue() {
-      // const form = this.form;
-      // let result = [];
-      // Object.keys(form).forEach((key) => {
-      //   result.push({ k_instrumen_nilai_luring_paud: key, nilai: 22 });
-      // });
-
       return this.form;
     },
   },
