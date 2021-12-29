@@ -31,4 +31,13 @@ export default [
       tipe: 'kelas',
     },
   },
+  {
+    path: '/i/:id(\\d+)/verval/laporan-pelaksanaan',
+    name: 'verval-laporan-pelaksanaan',
+    component: () => lazyLoadView(import('@views/instansi/verval/laporanPelaksanaan/Index.vue')),
+    meta: {
+      title: 'Verval Laporan Pelaksanaan Diklat Luring',
+      tipe: 'luring',
+    },
+  },
 ];
