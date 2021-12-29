@@ -74,7 +74,7 @@ class NilaiController extends Controller
             ->saveNilai($kelas, $peserta, $request->nilai, $isPpm)
             ->load('mInstrumenNilaiLuringPaud');
 
-        return BaseResource::make($results);
+        return BaseCollection::make($results);
     }
 
     /**
