@@ -29,7 +29,7 @@ class KelasLuringPesertaService
                                 ->whereColumn('paud_kelas_peserta_luring.ptk_id', 'ptk.ptk_id')
                                 ->where('ptk.nama', 'like', "%{$value}%");
                         })
-                        ->orWhereExists(function (Builder $query) use ($value) {
+                        ->orWhereExists(function ($query) use ($value) {
                             $query
                                 ->select(DB::raw(1))
                                 ->from('paud_peserta_nonptk')
