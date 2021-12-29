@@ -46,7 +46,7 @@
               <v-list-item dense class="px-0">
                 <v-list-item-content>
                   <v-row>
-                    <v-col class="py-2" cols="12" md="6">
+                    <v-col cols="12" :md="jenis === 'luring' ? 5 : 6">
                       <v-list-item class="px-0">
                         <v-list-item-avatar color="primary">
                           <v-icon dark>mdi-teach</v-icon>
@@ -59,48 +59,79 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="4">
+                    <v-col cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Jadwal Pelaksanaan</div>
-                          <span v-if="jenis === 'daring'">
+                          <div class="pt-1">
+                            <span v-if="jenis === 'daring'">
                             {{
-                              $durasi(
-                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
-                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
-                              )
-                            }}
+                                $durasi(
+                                  $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
+                                  $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                                )
+                              }}
                           </span>
-                          <span v-else>
+                            <span v-else>
                             {{
-                              $durasi(
-                                $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
-                                $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
-                              )
-                            }}
+                                $durasi(
+                                  $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
+                                  $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
+                                )
+                              }}
                           </span>
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="2">
+                    <v-col cols="12" md="2" v-if="jenis === 'luring'">
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
-                          <v-btn
-                            v-if="jenis === 'daring'"
-                            :disabled="
+                          <div class="label--text">Status Laporan</div>
+                          <div>
+                            <v-chip
+                              color="primary"
+                              small
+                            >
+                              Belum dilengkapi
+                            </v-chip>
+                          </div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col cols="12" md="2">
+                      <v-list-item>
+                        <v-list-item-content class="py-0 mt-3">
+                          <template v-if="jenis === 'daring'">
+                            <v-btn
+                              :disabled="
                               !$getDeepObj(item, 'lms_url') ||
                               Number(item.k_verval_paud) < 6 ||
                               [1].includes(Number($getDeepObj(item, 'paud_diklat.data.paud_periode_id') || 0))
                             "
-                            color="primary"
-                            depressed
-                            small
-                            block
-                            @click="toLms($getDeepObj(item, 'lms_url'))"
-                          >
-                            <v-icon left> mdi-link </v-icon>
-                            Tautan LMS
-                          </v-btn>
+                              color="primary"
+                              depressed
+                              small
+                              block
+                              @click="toLms($getDeepObj(item, 'lms_url'))"
+                            >
+                              <v-icon left> mdi-link </v-icon>
+                              Tautan LMS
+                            </v-btn>
+                          </template>
+                          <template v-if="jenis === 'luring'">
+                            <div class="label--text">Aksi</div>
+                            <v-btn
+                              color="primary"
+                              depressed
+                              small
+                              block
+                              @click="onUploadLaporan(item)"
+                            >
+                              <v-icon left> mdi-upload </v-icon>
+                              Laporan
+                            </v-btn>
+                          </template>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -229,6 +260,10 @@ export default {
     toLms(url) {
       window.open(url, '_blank');
     },
+
+    onUploadLaporan(data) {
+      console.log(data);
+    }
   },
 };
 </script>
