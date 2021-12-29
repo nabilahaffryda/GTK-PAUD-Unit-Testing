@@ -65,21 +65,21 @@
                           <div class="label--text">Jadwal Pelaksanaan</div>
                           <div class="pt-1">
                             <span v-if="jenis === 'daring'">
-                            {{
+                              {{
                                 $durasi(
                                   $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
                                   $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
                                 )
                               }}
-                          </span>
+                            </span>
                             <span v-else>
-                            {{
+                              {{
                                 $durasi(
                                   $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
                                   $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
                                 )
                               }}
-                          </span>
+                            </span>
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -89,12 +89,7 @@
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Status Laporan</div>
                           <div>
-                            <v-chip
-                              color="primary"
-                              small
-                            >
-                              Belum dilengkapi
-                            </v-chip>
+                            <v-chip color="primary" small> Belum dilengkapi </v-chip>
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -105,10 +100,10 @@
                           <template v-if="jenis === 'daring'">
                             <v-btn
                               :disabled="
-                              !$getDeepObj(item, 'lms_url') ||
-                              Number(item.k_verval_paud) < 6 ||
-                              [1].includes(Number($getDeepObj(item, 'paud_diklat.data.paud_periode_id') || 0))
-                            "
+                                !$getDeepObj(item, 'lms_url') ||
+                                Number(item.k_verval_paud) < 6 ||
+                                [1].includes(Number($getDeepObj(item, 'paud_diklat.data.paud_periode_id') || 0))
+                              "
                               color="primary"
                               depressed
                               small
@@ -121,13 +116,7 @@
                           </template>
                           <template v-if="jenis === 'luring'">
                             <div class="label--text">Aksi</div>
-                            <v-btn
-                              color="primary"
-                              depressed
-                              small
-                              block
-                              @click="onUploadLaporan(item)"
-                            >
+                            <v-btn color="primary" depressed small block @click="onUploadLaporan(item)">
                               <v-icon left> mdi-upload </v-icon>
                               Laporan
                             </v-btn>
@@ -159,20 +148,33 @@
         :masters="masters"
         :initValue="formulir.init"
         :jenis="jenis"
+        @upload="onUpload"
+        @unduhTemplate="unduhTemplate"
       ></component>
     </base-modal-full>
+    <popup-upload
+      ref="uploader"
+      :rules="{ format: 'xls', required: true }"
+      label-ok="pilih"
+      format="XLXS/XLS"
+      title="Laporan Pelaksanaan Kelas Luring"
+      @save="setFile"
+      @unduhTemplate="unduhTemplate"
+    ></popup-upload>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex';
 import DetailKelas from '../formulir/Detail';
+import FormUpload from '../formulir/UploadLaporan';
+import PopupUpload from '@components/popup/Upload';
 import BaseBreadcrumbs from '@components/base/BaseBreadcrumbs';
 import list from '@mixins/list';
 import mixin from './mixin';
 import actions from './actions';
 export default {
   mixins: [list, mixin],
-  components: { DetailKelas, BaseBreadcrumbs },
+  components: { DetailKelas, FormUpload, PopupUpload, BaseBreadcrumbs },
   data() {
     return {
       formulir: {},
@@ -257,13 +259,10 @@ export default {
       }
       return disabled;
     },
+
     toLms(url) {
       window.open(url, '_blank');
     },
-
-    onUploadLaporan(data) {
-      console.log(data);
-    }
   },
 };
 </script>
