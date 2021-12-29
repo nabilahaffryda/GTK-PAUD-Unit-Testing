@@ -89,5 +89,50 @@ export default {
         this.$downloadFile(url);
       });
     },
+
+    onAjuan(item) {
+      this.$confirm(`Apakah Anda yakin ingin mengajukan laporan berikut ?`, `Ajuan Laporan`, {
+        tipe: 'info',
+        data: [
+          {
+            icon: 'mdi-file',
+            iconSize: 30,
+            iconColor: 'secondary',
+            title: `${this.$getDeepObj(item, 'nama')}`,
+            subtitles: [`<span>Deskripsi: ${this.$getDeepObj(item, 'deskripsi') || ''}</span>`],
+          },
+        ],
+      }).then(() => {
+        this.action({ id: item.id, diklat_id: this.diklatId, type: 'ajuan/create', name: this.attr.tipe }).then(() => {
+          this.$success(`Laporan pelaksanaan berhasil di ajukan`);
+          this.onReload();
+        });
+      });
+    },
+
+    onBatalAjuan(item) {
+      if ([4, 6].includes(item?.m_verval_paud ?? 1)) {
+        this.$error('Laporan pelaksanaan sudah diverval, untuk pembatalan silahkan menghubungi Admin GTK');
+        return;
+      }
+
+      this.$confirm(`Apakah Anda yakin ingin membatalkan pengajuan laporan berikut ?`, `Batalkan Ajuan Laporan`, {
+        tipe: 'warning',
+        data: [
+          {
+            icon: 'mdi-file',
+            iconSize: 30,
+            iconColor: 'secondary',
+            title: `${this.$getDeepObj(item, 'nama')}`,
+            subtitles: [`<span>Deskripsi: ${this.$getDeepObj(item, 'deskripsi') || ''}</span>`],
+          },
+        ],
+      }).then(() => {
+        this.action({ id: item.id, diklat_id: this.diklatId, type: 'ajuan/delete', name: this.attr.tipe }).then(() => {
+          this.$success(`Ajuan Laporan pelaksanaan berhasil dibatalkan`);
+          this.onReload();
+        });
+      });
+    },
   },
 };
