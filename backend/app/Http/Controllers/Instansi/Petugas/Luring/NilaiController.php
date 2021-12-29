@@ -92,6 +92,6 @@ class NilaiController extends Controller
             ->deleteNilai($kelas, $peserta, $isPpm)
             ->load('mInstrumenNilaiLuringPaud');
 
-        return BaseResource::make($results);
+        return BaseCollection::make($results);
     }
 }
