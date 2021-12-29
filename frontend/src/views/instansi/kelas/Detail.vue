@@ -112,7 +112,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Aksi Selanjutnya</div>
-                          <v-btn small disabled color="success">Mulai Nilai</v-btn>
+                          <v-btn small color="success" @click="onNilai(item)">Mulai Nilai</v-btn>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -127,15 +127,26 @@
         <base-table-footer :pageTotal="pageTotal" @changePage="onChangePage"></base-table-footer>
       </v-card-actions>
     </v-card>
+    <base-modal-full
+      ref="modal"
+      colorBtn="primary"
+      generalError
+      :use-save="formulir.isEdit"
+      :title="formulir.title"
+      @save="onSave"
+    >
+      <component ref="formulir" :is="'FormNilai'" :kelas="detail" :initValue="formulir.initValue" />
+    </base-modal-full>
   </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';
 import BaseBreadcrumbs from '@components/base/BaseBreadcrumbs';
+import FormNilai from './formulir/Form';
 import list from '@mixins/list';
 export default {
   mixins: [list],
-  components: { BaseBreadcrumbs },
+  components: { BaseBreadcrumbs, FormNilai },
   data() {
     return {
       formulir: {},
@@ -209,6 +220,8 @@ export default {
     ...mapActions('petugasKelas', {
       fetch: 'fetchPeserta',
       getDetail: 'getDetailLuring',
+      getPeserta: 'getDetailPesertaNilai',
+      action: 'action',
     }),
 
     fetchData: function () {
@@ -250,6 +263,33 @@ export default {
 
     getNilai(item) {
       return this.$getDeepObj(item, `${this.is_ppm ? 'n_pendalaman_materi' : 'n_tugas_mandiri'}`) || null;
+    },
+
+    async onNilai(item) {
+      const resp = await this.getPeserta({ kelas_id: this.id, id: item.id }).then(({ data }) => data);
+      this.$set(this.formulir, 'title', 'Penilaian Peserta');
+      this.$set(this.formulir, 'isEdit', true);
+      this.$refs.modal.open();
+
+      this.$nextTick(() => {
+        // this.$refs.formulir.reset();
+        this.$set(this.formulir, 'initValue', Object.assign({ peserta: item, instruments: resp }));
+      });
+    },
+
+    onSave() {
+      const formulir = this.$refs.formulir.getValue();
+
+      this.action({
+        kelas_id: this.id,
+        id: this.$getDeepObj(this.formulir, 'initValue.peserta.id'),
+        name: 'save',
+        params: { nilai: formulir },
+      })
+        .then(() => {})
+        .catch(() => {
+          this.$refs.modal.loading = false;
+        });
     },
   },
 };
