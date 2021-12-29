@@ -37,8 +37,22 @@
                             <div class="body-2 label--text"> Surel </div>
                           </v-col>
                           <v-col cols="12" md="6" sm="6">
-                            <div class="body-2 black--text">: {{ $getDeepObj(peserta, 'ptk.data.nama') || '' }} </div>
-                            <div class="body-2 black--text">: {{ $getDeepObj(peserta, 'ptk.data.email') || '' }} </div>
+                            <div class="body-2 black--text"
+                              >:
+                              {{
+                                $getDeepObj(peserta, 'ptk.data.nama') ||
+                                $getDeepObj(peserta, 'paud_peserta_nonptk.data.nama') ||
+                                ''
+                              }}
+                            </div>
+                            <div class="body-2 black--text"
+                              >:
+                              {{
+                                $getDeepObj(peserta, 'ptk.data.email') ||
+                                $getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
+                                ''
+                              }}
+                            </div>
                           </v-col>
                         </v-row>
                       </v-list-item-content>
