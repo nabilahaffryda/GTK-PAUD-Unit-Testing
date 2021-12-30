@@ -318,6 +318,7 @@ export default {
         .then(() => {
           this.$success('Penilaian berhasil dijalankan');
           this.onReload();
+          this.$refs.modal.dialog = false;
         })
         .catch(() => {
           this.$refs.modal.loading = false;
@@ -335,7 +336,7 @@ export default {
         }).then(() => {
           this.$success(`Penilaian berhasil dibatalkan`);
           this.onReload();
-          this.$refs.modal.close();
+          this.$refs.modal.dialog = false;
         });
       });
     },

@@ -49,7 +49,7 @@
                               >:
                               {{
                                 $getDeepObj(peserta, 'ptk.data.email') ||
-                                $getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
+                                $getDeepObj(peserta, 'paud_peserta_nonptk.data.email') ||
                                 ''
                               }}
                             </div>
