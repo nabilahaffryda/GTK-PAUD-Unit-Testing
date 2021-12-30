@@ -147,7 +147,7 @@ export default {
         const bobot = nilai?.m_instrumen_nilai_luring_paud?.data?.n_bobot ?? 0;
         result += Number(this.form[key]) * (bobot / 100);
       });
-      return result.toFixed(2);
+      return (result || 0).toFixed(2);
     },
   },
   methods: {
