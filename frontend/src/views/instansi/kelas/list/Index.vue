@@ -91,33 +91,35 @@
                     <v-col class="py-0" cols="12" md="2">
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
-                          <div>
-                            <div class="label--text">Aksi Selanjutnya</div>
-                          </div>
-                          <v-btn
-                            v-if="jenis === 'daring'"
-                            :disabled="
-                              !$getDeepObj(item, 'lms_url') ||
-                              Number(item.k_verval_paud) < 6 ||
-                              [1].includes(Number($getDeepObj(item, 'paud_diklat.data.paud_periode_id') || 0))
-                            "
-                            color="primary"
-                            depressed
-                            @click="toLms($getDeepObj(item, 'lms_url'))"
+                          <template v-if="jenis === 'daring'">
+                            <div>
+                              <div class="label--text">Aksi Selanjutnya</div>
+                            </div>
+                            <v-btn
+                              :disabled="
+                                !$getDeepObj(item, 'lms_url') ||
+                                Number(item.k_verval_paud) < 6 ||
+                                [1].includes(Number($getDeepObj(item, 'paud_diklat.data.paud_periode_id') || 0))
+                              "
+                              color="primary"
+                              depressed
+                              @click="toLms($getDeepObj(item, 'lms_url'))"
+                            >
+                              <v-icon left> mdi-link </v-icon>
+                              Tautan LMS
+                            </v-btn>
+                          </template>
+                          <template
+                            v-else-if="jenis === 'luring' && isEndDiklat(item) && $allow('petugas-luring-nilai.index')"
                           >
-                            <v-icon left> mdi-link </v-icon>
-                            Tautan LMS
-                          </v-btn>
-                          <v-btn
-                            v-else-if="jenis === 'luring' && isEndDiklat(item)"
-                            depressed
-                            small
-                            color="success"
-                            @click="onView(item)"
-                          >
-                            <v-icon left>mdi-file-edit</v-icon>
-                            Penilaian
-                          </v-btn>
+                            <div>
+                              <div class="label--text">Aksi Selanjutnya</div>
+                            </div>
+                            <v-btn depressed small color="success" @click="onView(item)">
+                              <v-icon left>mdi-file-edit</v-icon>
+                              Penilaian
+                            </v-btn>
+                          </template>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
