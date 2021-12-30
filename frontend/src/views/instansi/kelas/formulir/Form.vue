@@ -79,7 +79,7 @@
               <validation-provider
                 mode="passive"
                 :name="$getDeepObj(ins, 'm_instrumen_nilai_luring_paud.data.keterangan')"
-                rules="required"
+                :rules="{ required: true, min: 1, max: 100 }"
                 v-slot="{ errors }"
                 :key="i"
               >
@@ -117,6 +117,7 @@
 import { ValidationProvider } from 'vee-validate';
 
 export default {
+  name: 'FormPenilaianPesertaLuring',
   components: { ValidationProvider },
   props: {
     kelas: {
