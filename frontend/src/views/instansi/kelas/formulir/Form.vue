@@ -143,9 +143,11 @@ export default {
     total() {
       let result = 0;
       Object.keys(this.form).forEach((key) => {
-        result += Number(this.form[key] || 0);
+        const nilai = this.instruments.find((s) => Number(s.k_instrumen_nilai_luring_paud) === Number(key)) || {};
+        const bobot = nilai?.m_instrumen_nilai_luring_paud?.data?.n_bobot ?? 0;
+        result += Number(this.form[key]) * (bobot / 100);
       });
-      return result;
+      return result.toFixed(2);
     },
   },
   methods: {
