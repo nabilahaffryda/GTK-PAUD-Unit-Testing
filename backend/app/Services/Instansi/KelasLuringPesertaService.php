@@ -102,7 +102,7 @@ class KelasLuringPesertaService
         foreach ($mInstruments as $kInstrumen => $mInstrument) {
             /** @var PaudKelasPesertaLuringNilai $nilai */
             $nilai = PaudKelasPesertaLuringNilai::create([
-                'paud_kelas_peserta_luring_id'  => $kelas->paud_kelas_luring_id,
+                'paud_kelas_peserta_luring_id'  => $peserta->paud_kelas_peserta_luring_id,
                 'k_instrumen_nilai_luring_paud' => $kInstrumen,
                 'nilai'                         => $newNilais[$kInstrumen] ?? 0,
             ]);
