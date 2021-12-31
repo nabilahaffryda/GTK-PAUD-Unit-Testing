@@ -22,7 +22,7 @@ export default {
     isEndDiklat(item) {
       const now = new Date(today());
       const wkt_selesai = new Date(this.$getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai'));
-      return wkt_selesai >= now;
+      return now >= wkt_selesai;
     },
 
     onView(item) {

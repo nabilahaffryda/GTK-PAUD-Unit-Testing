@@ -78,13 +78,19 @@
                                   $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
                                   $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
                                 )
-                              }}
+                              }}<br />
+                              <span :class="isEndDiklat(item) ? 'success--text' : 'grey--text'">
+                                <v-icon left small :color="isEndDiklat(item) ? 'success' : 'grey'">
+                                  {{ isEndDiklat(item) ? 'mdi-check-circle' : 'mdi-timer-sand' }}
+                                </v-icon>
+                                <i>{{ isEndDiklat(item) ? 'Selesai' : 'Sedang Berjalan' }}</i>
+                              </span>
                             </span>
                           </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col cols="12" md="2" v-if="jenis === 'luring'">
+                    <v-col cols="12" md="2" v-if="jenis === 'luring' && item && item.is_admin === 1">
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Status Laporan</div>
@@ -115,10 +121,33 @@
                             </v-btn>
                           </template>
                           <template v-if="jenis === 'luring'">
-                            <div class="label--text">Aksi</div>
-                            <v-btn color="primary" depressed small block @click="onUploadLaporan(item)">
+                            <div
+                              v-if="
+                                item.is_admin === 1 || (isEndDiklat(item) && (item.is_ppm === 1 || item.is_pptm === 1))
+                              "
+                              class="label--text"
+                              >Aksi</div
+                            >
+                            <v-btn
+                              v-if="item.is_admin === 1"
+                              color="primary"
+                              depressed
+                              small
+                              block
+                              @click="onUploadLaporan(item)"
+                            >
                               <v-icon left> mdi-upload </v-icon>
                               Laporan
+                            </v-btn>
+                            <v-btn
+                              v-else-if="isEndDiklat(item) && (item.is_ppm === 1 || item.is_pptm === 1)"
+                              depressed
+                              small
+                              color="success"
+                              @click="onView(item)"
+                            >
+                              <v-icon left>mdi-file-edit</v-icon>
+                              Penilaian
                             </v-btn>
                           </template>
                         </v-list-item-content>
