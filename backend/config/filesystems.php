@@ -102,6 +102,16 @@ return [
             'url'      => env('KELAS_JADWAL_URL', 'https://upload.dev.siap.id/gpo/paud/kelas-jadwal'),
         ],
 
+        'kelas-laporan' => [
+            'driver'   => 'ftp',
+            'passive'  => env('KELAS_LAPORAN_PASSIVE', env('FTP_PASSIVE', true)),
+            'host'     => env('KELAS_LAPORAN_HOST', env('FTP_HOST', '172.17.1.20')),
+            'username' => env('KELAS_LAPORAN_USER', env('FTP_USER', 'webmaster')),
+            'password' => env('KELAS_LAPORAN_PASS', env('FTP_PASS', 'w3bmaster')),
+            'path'     => env('KELAS_LAPORAN_PATH', '/upload/gpo/paud/kelas-laporan'),
+            'url'      => env('KELAS_LAPORAN_URL', 'https://upload.dev.siap.id/gpo/paud/kelas-laporan'),
+        ],
+
         'peserta-nonptk' => [
             'driver'   => 'ftp',
             'passive'  => env('PESERTA_NONPTK_PASSIVE', env('FTP_PASSIVE', true)),

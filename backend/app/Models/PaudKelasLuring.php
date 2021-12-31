@@ -29,12 +29,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $alasan
  * @property null|string $catatan
  * @property null|Carbon $wkt_verval
+ * @property null|int $laporan_k_verval_paud
+ * @property null|Carbon $laporan_wkt_ajuan
+ * @property null|string $laporan_akun_id_verval
+ * @property null|string $file_laporan
+ * @property null|string $laporan_alasan
+ * @property null|string $laporan_catatan
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|string $created_by
  * @property null|string $updated_by
  *
  * @property-read null|string $url_jadwal
+ * @property-read null|string $url_laporan
  *
  * @property-read MKecamatan $mKecamatan
  * @property-read MKelurahan $mKelurahan
@@ -62,6 +69,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudKelasLuring whereAlasan($value)
  * @method static Builder|PaudKelasLuring whereCatatan($value)
  * @method static Builder|PaudKelasLuring whereWktVerval($value)
+ * @method static Builder|PaudKelasLuring whereLaporanKVervalPaud($value)
+ * @method static Builder|PaudKelasLuring whereLaporanWktAjuan($value)
+ * @method static Builder|PaudKelasLuring whereLaporanAkunIdVerval($value)
+ * @method static Builder|PaudKelasLuring whereFileLaporan($value)
+ * @method static Builder|PaudKelasLuring whereLaporanAlasan($value)
+ * @method static Builder|PaudKelasLuring whereLaporanCatatan($value)
  * @method static Builder|PaudKelasLuring whereCreatedAt($value)
  * @method static Builder|PaudKelasLuring whereUpdatedAt($value)
  * @method static Builder|PaudKelasLuring whereCreatedBy($value)
@@ -106,6 +119,12 @@ class PaudKelasLuring extends Eloquent
         'alasan' => 'string',
         'catatan' => 'string',
         'wkt_verval' => 'datetime',
+        'laporan_k_verval_paud' => 'int',
+        'laporan_wkt_ajuan' => 'datetime',
+        'laporan_akun_id_verval' => 'string',
+        'file_laporan' => 'string',
+        'laporan_alasan' => 'string',
+        'laporan_catatan' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'created_by' => 'string',
@@ -119,6 +138,7 @@ class PaudKelasLuring extends Eloquent
      */
     protected $appends = [
         'url_jadwal',
+        'url_laporan',
     ];
 
     /**
@@ -145,6 +165,12 @@ class PaudKelasLuring extends Eloquent
         'alasan',
         'catatan',
         'wkt_verval',
+        'laporan_k_verval_paud',
+        'laporan_wkt_ajuan',
+        'laporan_akun_id_verval',
+        'file_laporan',
+        'laporan_alasan',
+        'laporan_catatan',
         'created_by',
         'updated_by',
     ];
@@ -208,5 +234,10 @@ class PaudKelasLuring extends Eloquent
     public function getUrlJadwalAttribute()
     {
         return $this->file_jadwal ? sprintf("%s/%s", config('filesystems.disks.kelas-jadwal.url'), $this->file_jadwal) : null;
+    }
+
+    public function getUrlLaporanAttribute()
+    {
+        return $this->file_laporan ? sprintf("%s/%s", config('filesystems.disks.kelas-laporan.url'), $this->file_laporan) : null;
     }
 }
