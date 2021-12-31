@@ -201,6 +201,16 @@ export default [
         link: 'verval-kelas-luring',
         to: { name: 'verval-kelas-luring' },
       },
+      {
+        icon: 'mdi-account-check',
+        title: 'Verval Laporan Pelaksanaan Diklat Luring',
+        desc: 'Evaluasi dan Verifikasi Laporan Pelaksanaan Diklat Luring',
+        color: 'orange',
+        deepColor: 'darken-1',
+        akses: true,
+        link: 'verval-laporan-pelaksanaan',
+        to: { name: 'verval-laporan-pelaksanaan' },
+      },
     ],
   },
   {

@@ -46,7 +46,7 @@
               <v-list-item dense class="px-0">
                 <v-list-item-content>
                   <v-row>
-                    <v-col class="py-2" cols="12" md="6">
+                    <v-col cols="12" :md="jenis === 'luring' ? 5 : 6">
                       <v-list-item class="px-0">
                         <v-list-item-avatar color="primary">
                           <v-icon dark>mdi-teach</v-icon>
@@ -59,42 +59,45 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="3">
+                    <v-col cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Jadwal Pelaksanaan</div>
-                          <div v-if="jenis === 'daring'">
-                            {{
-                              $durasi(
-                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
-                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
-                              )
-                            }}
-                          </div>
-                          <div v-else>
-                            {{
-                              $durasi(
-                                $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
-                                $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
-                              )
-                            }}<br />
-                            <span :class="isEndDiklat(item) ? 'success--text' : 'grey--text'">
-                              <v-icon left small :color="isEndDiklat(item) ? 'success' : 'grey'">
-                                {{ isEndDiklat(item) ? 'mdi-check-circle' : 'mdi-timer-sand' }}
-                              </v-icon>
-                              <i>{{ isEndDiklat(item) ? 'Selesai' : 'Sedang Berjalan' }}</i>
+                          <div class="pt-1">
+                            <span v-if="jenis === 'daring'">
+                              {{
+                                $durasi(
+                                  $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
+                                  $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                                )
+                              }}
+                            </span>
+                            <span v-else>
+                              {{
+                                $durasi(
+                                  $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
+                                  $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
+                                )
+                              }}
                             </span>
                           </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="2">
+                    <v-col cols="12" md="2" v-if="jenis === 'luring'">
+                      <v-list-item>
+                        <v-list-item-content class="py-0 mt-3">
+                          <div class="label--text">Status Laporan</div>
+                          <div>
+                            <v-chip color="primary" small> Belum dilengkapi </v-chip>
+                          </div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col cols="12" md="2">
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
                           <template v-if="jenis === 'daring'">
-                            <div>
-                              <div class="label--text">Aksi Selanjutnya</div>
-                            </div>
                             <v-btn
                               :disabled="
                                 !$getDeepObj(item, 'lms_url') ||
@@ -103,21 +106,19 @@
                               "
                               color="primary"
                               depressed
+                              small
+                              block
                               @click="toLms($getDeepObj(item, 'lms_url'))"
                             >
                               <v-icon left> mdi-link </v-icon>
                               Tautan LMS
                             </v-btn>
                           </template>
-                          <template
-                            v-else-if="jenis === 'luring' && isEndDiklat(item) && $allow('petugas-luring-nilai.index')"
-                          >
-                            <div>
-                              <div class="label--text">Aksi Selanjutnya</div>
-                            </div>
-                            <v-btn depressed small color="success" @click="onView(item)">
-                              <v-icon left>mdi-file-edit</v-icon>
-                              Penilaian
+                          <template v-if="jenis === 'luring'">
+                            <div class="label--text">Aksi</div>
+                            <v-btn color="primary" depressed small block @click="onUploadLaporan(item)">
+                              <v-icon left> mdi-upload </v-icon>
+                              Laporan
                             </v-btn>
                           </template>
                         </v-list-item-content>
@@ -147,20 +148,33 @@
         :masters="masters"
         :initValue="formulir.init"
         :jenis="jenis"
+        @upload="onUpload"
+        @unduhTemplate="unduhTemplate"
       ></component>
     </base-modal-full>
+    <popup-upload
+      ref="uploader"
+      :rules="{ format: 'xls', required: true }"
+      label-ok="pilih"
+      format="XLXS/XLS"
+      title="Laporan Pelaksanaan Kelas Luring"
+      @save="setFile"
+      @unduhTemplate="unduhTemplate"
+    ></popup-upload>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex';
 import DetailKelas from '../formulir/Detail';
+import FormUpload from '../formulir/UploadLaporan';
+import PopupUpload from '@components/popup/Upload';
 import BaseBreadcrumbs from '@components/base/BaseBreadcrumbs';
 import list from '@mixins/list';
 import mixin from './mixin';
 import actions from './actions';
 export default {
   mixins: [list, mixin],
-  components: { DetailKelas, BaseBreadcrumbs },
+  components: { DetailKelas, FormUpload, PopupUpload, BaseBreadcrumbs },
   data() {
     return {
       formulir: {},
@@ -245,6 +259,7 @@ export default {
       }
       return disabled;
     },
+
     toLms(url) {
       window.open(url, '_blank');
     },

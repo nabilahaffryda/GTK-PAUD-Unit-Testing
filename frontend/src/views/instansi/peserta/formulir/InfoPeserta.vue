@@ -4,7 +4,7 @@
       <v-card-text>
         <v-row class="pa-5">
           <v-col cols="12" md="2" sm="12" v-if="!noFoto">
-            <v-img :src="$imgUrl($getDeepObj(instansi, 'foto_url') || 'default_foto_lpd.png')"></v-img>
+            <v-img :src="$imgUrl($getDeepObj(initValue, 'foto_url') || 'default_foto_lpd.png')"></v-img>
           </v-col>
           <v-col cols="12" :md="noFoto ? 12 : 10" sm="12">
             <div class="mx-3">
