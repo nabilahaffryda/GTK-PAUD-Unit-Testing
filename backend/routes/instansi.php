@@ -335,6 +335,13 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('{kelas}/nilai/{peserta}', [Petugas\Luring\NilaiController::class, 'fetch']);
         Route::post('{kelas}/nilai/{peserta}/save', [Petugas\Luring\NilaiController::class, 'save']);
         Route::post('{kelas}/nilai/{peserta}/delete', [Petugas\Luring\NilaiController::class, 'delete']);
+
+        Route::post('{kelas}/laporan/unggah', [Petugas\Luring\LaporanController::class, 'upload']);
+        Route::post('{kelas}/laporan/delete-unggah', [Petugas\Luring\LaporanController::class, 'deleteUpload']);
+        Route::post('{kelas}/laporan/kirim', [Petugas\Luring\LaporanController::class, 'kirim']);
+        Route::post('{kelas}/laporan/batal', [Petugas\Luring\LaporanController::class, 'batal']);
+        Route::get('{kelas}/laporan/peserta', [Petugas\Luring\LaporanController::class, 'peserta']);
+        Route::get('{kelas}/laporan/nilai/{peserta}', [Petugas\Luring\LaporanController::class, 'nilai']);
     });
 
     Route::group(['prefix' => 'petugas/profil'], function () {

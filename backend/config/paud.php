@@ -25,4 +25,8 @@ return [
     'kelas-jadwal' => [
         'hapus-file-lama' => false,
     ],
+
+    'kelas-laporan' => [
+        'hapus-file-lama' => false,
+    ],
 ];
