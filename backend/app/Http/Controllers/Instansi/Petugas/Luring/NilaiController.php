@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Instansi\Petugas\Luring\Nilai\IndexRequest;
 use App\Http\Requests\Instansi\Petugas\Luring\Nilai\SaveRequest;
 use App\Http\Resources\BaseCollection;
-use App\Http\Resources\BaseResource;
 use App\Models\PaudKelasLuring;
 use App\Models\PaudKelasPesertaLuring;
 use App\Services\Instansi\KelasLuringPesertaService;
@@ -36,8 +35,10 @@ class NilaiController extends Controller
 
         return BaseCollection::make($pesertas->paginate((int)$request->get('count', 10)))
             ->additional([
-                'is_ppm'  => $isPpm,
-                'is_pptm' => $isPptm,
+                'meta' => [
+                    'is_ppm'   => $isPpm,
+                    'is_pptm'  => $isPptm,
+                ],
             ]);
     }
 
