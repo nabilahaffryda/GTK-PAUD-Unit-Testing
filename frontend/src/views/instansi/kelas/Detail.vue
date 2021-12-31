@@ -12,13 +12,21 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5 black--text">
-            <div class="text-h6">
-              Daftar Peserta Diklat | {{ $getDeepObj(detail, 'paud_diklat_luring.data.nama') }} -
-              {{ $getDeepObj(detail, 'nama') }}
-            </div>
-            <div class="body-2">
-              Dibawah ini merupakan daftar peserta yang mengikuti diklat, Silakan dapat dilakukan penilaian pada tahap
-              pendalaman materi bagi peserta
+            <div class="d-flex px-2">
+              <div class="mr-5">
+                <div class="text-h6">
+                  Daftar Peserta Diklat | {{ $getDeepObj(detail, 'paud_diklat_luring.data.nama') }} -
+                  {{ $getDeepObj(detail, 'nama') }}
+                </div>
+                <div class="body-2">
+                  Dibawah ini merupakan daftar peserta yang mengikuti diklat, Silakan dapat dilakukan penilaian pada
+                  tahap pendalaman materi bagi peserta
+                </div>
+              </div>
+              <div>
+                <v-chip v-if="is_ppm" class="pa-4" color="black" dark>PPM</v-chip>
+                <v-chip v-if="is_pptm" class="pa-4" color="black" dark>PPTM</v-chip>
+              </div>
             </div>
           </v-col>
         </v-row>
@@ -74,7 +82,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="2">
+                    <v-col class="py-0" cols="12" :md="use_action ? 2 : 4">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Surel</div>
@@ -88,7 +96,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="2">
+                    <v-col class="py-0" cols="12" :md="use_action ? 2 : 4">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Status Nilai</div>
@@ -98,36 +106,38 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" md="2">
-                      <v-list-item class="px-0">
-                        <v-list-item-content class="py-0 mt-3">
-                          <div class="label--text">Hasil Nilai</div>
-                          <div>
-                            {{ getNilai(item) || '-' }}
-                          </div>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-col>
-                    <v-col class="py-0" cols="12" md="2">
-                      <v-list-item class="px-0">
-                        <v-list-item-content class="py-0 mt-3">
-                          <div class="label--text">Aksi Selanjutnya</div>
+                    <template v-if="use_action">
+                      <v-col class="py-0" cols="12" md="2">
+                        <v-list-item class="px-0">
+                          <v-list-item-content class="py-0 mt-3">
+                            <div class="label--text">Hasil Nilai</div>
+                            <div>
+                              {{ getNilai(item) || '-' }}
+                            </div>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col class="py-0" cols="12" md="2">
+                        <v-list-item class="px-0">
+                          <v-list-item-content class="py-0 mt-3">
+                            <div class="label--text">Aksi Selanjutnya</div>
 
-                          <v-btn
-                            v-if="!getNilai(item) && $allow('petugas-luring-nilai.save')"
-                            small
-                            color="success"
-                            @click="onNilai(item)"
-                            >Mulai Nilai</v-btn
-                          >
-                          <v-btn v-else dark small color="grey" @click="onNilai(item)"> Lihat Detail </v-btn>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-col>
+                            <v-btn
+                              v-if="!getNilai(item) && $allow('petugas-luring-nilai.save')"
+                              small
+                              color="success"
+                              @click="onNilai(item)"
+                              >Mulai Nilai</v-btn
+                            >
+                            <v-btn v-else dark small color="grey" @click="onNilai(item)"> Lihat Detail </v-btn>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                    </template>
                   </v-row>
                 </v-list-item-content>
                 <v-list-item-action-text>
-                  <template v-if="getNilai(item) && $allow('petugas-luring-nilai.delete')">
+                  <template v-if="getNilai(item) && $allow('petugas-luring-nilai.delete') && use_action">
                     <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
                   </template>
                   <template v-else>
@@ -177,6 +187,7 @@ export default {
       detail: {},
       is_ppm: false,
       is_pptm: false,
+      use_action: false,
       actions: [{ icon: 'mdi-close', title: 'Batal Nilai', event: 'onBatalNilai', akses: true }],
     };
   },
@@ -259,6 +270,7 @@ export default {
           this.pageTotal = meta?.last_page || 1;
           this.is_ppm = is_ppm;
           this.is_pptm = is_pptm;
+          this.use_action = is_ppm || is_pptm;
           resolve(true);
         });
       });
@@ -287,7 +299,9 @@ export default {
     },
 
     getNilai(item) {
-      return this.$getDeepObj(item, `${this.is_ppm ? 'n_pendalaman_materi' : 'n_tugas_mandiri'}`) || null;
+      return this.use_action
+        ? this.$getDeepObj(item, 'n_pendalaman_materi') || this.$getDeepObj(item, 'n_tugas_mandiri') || null
+        : this.$getDeepObj(item, `${this.is_ppm ? 'n_pendalaman_materi' : 'n_tugas_mandiri'}`) || null;
     },
 
     async onNilai(item) {

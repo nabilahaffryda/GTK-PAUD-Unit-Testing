@@ -79,7 +79,7 @@
               <validation-provider
                 mode="passive"
                 :name="$getDeepObj(ins, 'm_instrumen_nilai_luring_paud.data.keterangan')"
-                :rules="{ required: true, min: 1, max: 100 }"
+                :rules="{ required: true, min: 0, max: 100 }"
                 v-slot="{ errors }"
                 :key="i"
               >
@@ -160,7 +160,7 @@ export default {
       this.form = {};
 
       instruments.forEach((item) => {
-        this.$set(this.form, this.$getDeepObj(item, 'k_instrumen_nilai_luring_paud'), this.$getDeepObj(item, 'nilai'));
+        this.$set(this.form, this.$getDeepObj(item, 'k_instrumen_nilai_luring_paud'), (item && item.nilai) || '');
       });
     },
 
