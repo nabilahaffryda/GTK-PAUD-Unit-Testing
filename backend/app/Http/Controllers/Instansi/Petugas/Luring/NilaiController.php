@@ -12,17 +12,10 @@ use App\Models\PaudKelasPesertaLuring;
 use App\Services\Instansi\DiklatLuringService;
 use App\Services\Instansi\KelasLuringPesertaService;
 use App\Services\Instansi\KelasLuringService;
-use App\Services\Instansi\PetugasKelasLuringService;
 use Symfony\Component\HttpFoundation\Response;
 
 class NilaiController extends Controller
 {
-    public function __construct(
-        protected PetugasKelasLuringService $service,
-    )
-    {
-    }
-
     public function index(PaudKelasLuring $kelas, IndexRequest $request)
     {
         $pesertas = app(KelasLuringPesertaService::class)
@@ -37,8 +30,8 @@ class NilaiController extends Controller
         return BaseCollection::make($pesertas->paginate((int)$request->get('count', 10)))
             ->additional([
                 'meta' => [
-                    'is_ppm'   => $isPpm,
-                    'is_pptm'  => $isPptm,
+                    'is_ppm'  => $isPpm,
+                    'is_pptm' => $isPptm,
                 ],
             ]);
     }
