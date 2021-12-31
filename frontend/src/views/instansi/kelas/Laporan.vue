@@ -14,16 +14,14 @@
           <v-col cols="10" class="pa-5 black--text">
             <div class="d-flex px-2">
               <div class="mr-5">
-                <h2 class="text-h6">
-                  Laporan Peserta Diklat Luring
-                </h2>
+                <h2 class="text-h6"> Laporan Peserta Diklat Luring </h2>
                 <h3>
                   {{ $getDeepObj(detail, 'paud_diklat_luring.data.nama') }} -
                   {{ $getDeepObj(detail, 'nama') }}
                 </h3>
-                <div class="body-2">
-                  Silakan unggah Laporan dengan menekan tombol <b>Unggah Laporan</b>.
-                  Template laporan dapat diakses pada link di bawah atau dapat diunduh
+                <div class="body-2 my-2">
+                  Silakan unggah Laporan dengan menekan tombol <b>Unggah Laporan</b>. Template laporan dapat diakses
+                  pada link di bawah atau dapat diunduh
                   <a>disini</a>
                 </div>
               </div>
@@ -31,16 +29,10 @@
                 <v-chip class="pa-4" color="grey" dark>Belum Unggah</v-chip>
               </div>
             </div>
-            <v-divider></v-divider>
-            <div class="d-flex px-2">
+            <v-divider class="my-4"></v-divider>
+            <div class="d-flex px-2" style="justify-content: space-between">
               <div class="mr-5">
-                <v-btn
-                  color="primary"
-                  depressed
-                  small
-                  block
-                  @click="onUploadLaporan(item)"
-                >
+                <v-btn color="info" depressed small block @click="onUploadLaporan(item)">
                   <v-icon left> mdi-upload </v-icon>
                   Unggah Laporan
                 </v-btn>
@@ -104,7 +96,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" :md="use_action ? 2 : 4">
+                    <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Surel</div>
@@ -118,7 +110,7 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col class="py-0" cols="12" :md="use_action ? 2 : 4">
+                    <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Status Nilai</div>
@@ -128,43 +120,20 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <template v-if="use_action">
-                      <v-col class="py-0" cols="12" md="2">
-                        <v-list-item class="px-0">
-                          <v-list-item-content class="py-0 mt-3">
-                            <div class="label--text">Hasil Nilai</div>
-                            <div>
-                              {{ getNilai(item) || '-' }}
-                            </div>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-col>
-                      <v-col class="py-0" cols="12" md="2">
-                        <v-list-item class="px-0">
-                          <v-list-item-content class="py-0 mt-3">
-                            <div class="label--text">Aksi Selanjutnya</div>
-
-                            <v-btn
-                              v-if="!getNilai(item) && $allow('petugas-luring-nilai.save')"
-                              small
-                              color="success"
-                              @click="onNilai(item)"
-                            >Mulai Nilai</v-btn
-                            >
-                            <v-btn v-else dark small color="grey" @click="onNilai(item)"> Lihat Detail </v-btn>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-col>
-                    </template>
+                    <v-col class="py-0" cols="12" md="2">
+                      <v-list-item class="px-0">
+                        <v-list-item-content class="py-0 mt-3">
+                          <div class="label--text">Hasil Nilai</div>
+                          <div>
+                            {{ item.predikat || '-' }}
+                          </div>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
                   </v-row>
                 </v-list-item-content>
                 <v-list-item-action-text>
-                  <template v-if="getNilai(item) && $allow('petugas-luring-nilai.delete') && use_action">
-                    <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
-                  </template>
-                  <template v-else>
-                    <v-icon class="ml-2" color="white">mdi-dots-vertical</v-icon>
-                  </template>
+                  <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
                 </v-list-item-action-text>
               </v-list-item>
             </td>
@@ -179,19 +148,20 @@
       ref="modal"
       colorBtn="primary"
       generalError
-      :use-save="formulir.isEdit"
       :title="formulir.title"
-      :autoClose="false"
-      @close="onClose"
+      :useSave="formulir.useSave"
       @save="onSave"
     >
       <component
         ref="formulir"
-        :is="'FormNilai'"
-        :kelas="detail"
-        :isEdit="formulir.isEdit"
-        :initValue="formulir.initValue"
-      />
+        :is="formulir.form"
+        :type="formulir.type"
+        :detail="detail"
+        :masters="masters"
+        :initValue="formulir.init"
+        :jenis="jenis"
+        @unduhTemplate="unduhTemplate"
+      ></component>
     </base-modal-full>
   </div>
 </template>
@@ -199,10 +169,12 @@
 import { mapActions, mapState } from 'vuex';
 import BaseBreadcrumbs from '@components/base/BaseBreadcrumbs';
 import FormNilai from './formulir/Form';
+import FormUpload from './formulir/UploadLaporan';
 import list from '@mixins/list';
+import mixin from './list/mixin';
 export default {
-  mixins: [list],
-  components: { BaseBreadcrumbs, FormNilai },
+  mixins: [list, mixin],
+  components: { BaseBreadcrumbs, FormNilai, FormUpload },
   data() {
     return {
       formulir: {},
@@ -210,13 +182,17 @@ export default {
       is_ppm: false,
       is_pptm: false,
       use_action: false,
-      actions: [{ icon: 'mdi-close', title: 'Batal Nilai', event: 'onBatalNilai', akses: true }],
+      actions: [{ icon: 'mdi-file-eye', title: 'Lihat Nilai', event: 'onViewNilai', akses: true }],
     };
   },
   computed: {
     ...mapState('master', {
       masters: (state) => Object.assign({}, state.masters),
     }),
+
+    jenis() {
+      return this.$route.meta.jenis;
+    },
 
     breadcrumbs() {
       return [
@@ -318,9 +294,7 @@ export default {
     },
 
     getNilai(item) {
-      return this.use_action
-        ? this.$getDeepObj(item, 'n_pendalaman_materi') || this.$getDeepObj(item, 'n_tugas_mandiri') || null
-        : this.$getDeepObj(item, `${this.is_ppm ? 'n_pendalaman_materi' : 'n_tugas_mandiri'}`) || null;
+      return this.$getDeepObj(item, 'n_pendalaman_materi') || this.$getDeepObj(item, 'n_tugas_mandiri') || null;
     },
 
     async onNilai(item) {
@@ -337,57 +311,6 @@ export default {
           Object.assign({ peserta: Object.assign(item, { is_nilai: this.getNilai(item) }), instruments: resp })
         );
       });
-    },
-
-    onSave() {
-      const formulir = this.$refs.formulir.getValue();
-
-      this.action({
-        kelas_id: this.id,
-        id: this.$getDeepObj(this.formulir, 'initValue.peserta.id'),
-        name: 'save',
-        params: { nilai: formulir },
-      })
-        .then(() => {
-          this.$success('Penilaian berhasil dijalankan');
-          this.onReload();
-          this.$refs.modal.dialog = false;
-        })
-        .catch(() => {
-          this.$refs.modal.loading = false;
-        });
-    },
-
-    onBatalNilai(item) {
-      this.$confirm(`Apakan anda ingin membatalkan penilaian berikut ?`, `Batalkan Penilaian`, {
-        tipe: 'warning',
-      }).then(() => {
-        this.action({
-          kelas_id: this.id,
-          id: item.id,
-          name: 'delete',
-        }).then(() => {
-          this.$success(`Penilaian berhasil dibatalkan`);
-          this.onReload();
-          this.$refs.modal.dialog = false;
-        });
-      });
-    },
-
-    onClose() {
-      if (this.formulir.isEdit) {
-        const msg = [
-          '<h3>Apakah Anda yakin ingin keluar dari halaman Penilaian Peserta ?</h3>',
-          'data yang tidak disimpan akan hilang jika Anda keluar dari Halaman ini',
-        ].join(' ');
-        this.$confirm(msg, 'Peringatan', { tipe: 'warning', lblConfirmColor: 'red', lblCancelColor: 'grey' }).then(
-          () => {
-            this.$refs.modal.dialog = false;
-          }
-        );
-      } else {
-        this.$refs.modal.dialog = false;
-      }
     },
   },
 };

@@ -45,7 +45,7 @@
             <td>
               <v-list-item dense class="px-0">
                 <v-list-item-content>
-                  <v-row>
+                  <v-row dense>
                     <v-col cols="12" :md="jenis === 'luring' ? 5 : 6">
                       <v-list-item class="px-0">
                         <v-list-item-avatar color="primary">
@@ -95,7 +95,12 @@
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Status Laporan</div>
                           <div>
-                            <v-chip color="primary" small> Belum dilengkapi </v-chip>
+                            <template v-if="!item.laporan_k_verval_paud">
+                              <span class="caption grey--text">Silakan Unggah Laporan</span>
+                            </template>
+                            <template v-else>
+                              <v-chip color="primary" small> Belum dilengkapi </v-chip>
+                            </template>
                           </div>
                         </v-list-item-content>
                       </v-list-item>
