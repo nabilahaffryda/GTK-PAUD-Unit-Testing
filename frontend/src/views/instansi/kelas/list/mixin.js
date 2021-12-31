@@ -29,6 +29,10 @@ export default {
       this.$router.push({ name: 'kelas-luring-peserta', params: { kelas_id: item.id } });
     },
 
+    onLaporan(item) {
+      this.$router.push({ name: 'kelas-luring-laporan', params: { kelas_id: item.id } });
+    },
+
     onUploadLaporan(data) {
       this.kelasId = data && data.id;
       this.$set(this.formulir, 'title', 'Unggah Laporan Pelaksanaan');

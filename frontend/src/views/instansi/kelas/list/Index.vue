@@ -79,7 +79,7 @@
                                   $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
                                 )
                               }}<br />
-                              <span :class="isEndDiklat(item) ? 'success--text' : 'grey--text'">
+                              <span :class="['caption', isEndDiklat(item) ? 'success--text' : 'grey--text']">
                                 <v-icon left small :color="isEndDiklat(item) ? 'success' : 'grey'">
                                   {{ isEndDiklat(item) ? 'mdi-check-circle' : 'mdi-timer-sand' }}
                                 </v-icon>
