@@ -6,8 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Instansi\Petugas\Kelas\IndexRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
+use App\Models\MPetugasPaud;
+use App\Models\PaudDiklatLuring;
 use App\Models\PaudKelasLuring;
+use App\Models\PaudKelasPetugasLuring;
 use App\Services\Instansi\PetugasKelasLuringService;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -24,6 +28,19 @@ class KelasController extends Controller
         return BaseCollection::make($this
             ->service
             ->listKelas(akunId())
+            ->addSelect([
+                'is_ppm'     => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::PENGAJAR . ' then 1 else 0 end')
+                    ->where('paud_kelas_petugas_luring.akun_id', '=', akunId())
+                    ->whereColumn('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', 'paud_kelas_luring.paud_kelas_luring_id'),
+                'is_pptm'    => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::PENGAJAR_TAMBAHAN . ' then 1 else 0 end')
+                    ->where('paud_kelas_petugas_luring.akun_id', '=', akunId())
+                    ->whereColumn('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', 'paud_kelas_luring.paud_kelas_luring_id'),
+                'is_admin'   => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::ADMIN_KELAS . ' then 1 else 0 end')
+                    ->where('paud_kelas_petugas_luring.akun_id', '=', akunId())
+                    ->whereColumn('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', 'paud_kelas_luring.paud_kelas_luring_id'),
+                'is_selesai' => PaudDiklatLuring::selectRaw('case when `paud_diklat_luring`.`tgl_selesai` < ' . Carbon::now()->toDateString() . ' then 1 else 0 end')
+                    ->whereColumn('paud_diklat_luring.paud_diklat_luring_id', '=', 'paud_kelas_luring.paud_diklat_luring_id'),
+            ])
             ->with([
                 'paudDiklatLuring',
             ])
