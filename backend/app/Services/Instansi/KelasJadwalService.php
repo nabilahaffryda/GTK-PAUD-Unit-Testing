@@ -23,7 +23,7 @@ class KelasJadwalService
         $timestamp = date('ymdhis');
         $random    = random_int(10000, 99999);
 
-        $name = "{$kelasId}-{$timestamp}-{$random}." . $ext;
+        $name = "luring-{$kelasId}-{$timestamp}-{$random}." . $ext;
         $path = "{$instansiId}";
 
         $ftpPath = config('filesystems.disks.kelas-jadwal.path') . "/" . $path;
