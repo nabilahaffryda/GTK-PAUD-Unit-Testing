@@ -626,11 +626,11 @@ class KelasLuringService
     /**
      * @throws FlowException
      */
-    public function validateVervalLaporanIs(PaudKelasLuring $kelas, int ...$kVervals)
+    public function validateLaporanBaru(PaudKelasLuring $kelas)
     {
         $kVerval = $kelas->laporan_k_verval_paud ?: MVervalPaud::KANDIDAT;
-        if (!in_array($kVerval, $kVervals)) {
-            throw new FlowException('Laporan kelas lurang sudah diajukan atau diproses');
+        if ($kVerval != MVervalPaud::KANDIDAT) {
+            throw new FlowException("Laporan kelas luring sudah diajukan atau diverval");
         }
     }
 }

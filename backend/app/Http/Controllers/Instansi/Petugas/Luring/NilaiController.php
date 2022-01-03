@@ -65,7 +65,7 @@ class NilaiController extends Controller
         }
 
         app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
-        app(KelasLuringService::class)->validateVervalLaporanIs($kelas, MVervalPaud::KANDIDAT);
+        app(KelasLuringService::class)->validateLaporanBaru($kelas);
 
         [$isPpm,] = app(KelasLuringService::class)->validateIsPpmOrPptm($kelas, akunId());
 
@@ -86,7 +86,7 @@ class NilaiController extends Controller
         }
 
         app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
-        app(KelasLuringService::class)->validateVervalLaporanIs($kelas, MVervalPaud::KANDIDAT);
+        app(KelasLuringService::class)->validateLaporanBaru($kelas);
 
         [$isPpm,] = app(KelasLuringService::class)->validateIsPpmOrPptm($kelas, akunId());
 
