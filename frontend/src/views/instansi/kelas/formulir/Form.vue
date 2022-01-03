@@ -72,7 +72,9 @@
           </v-col>
           <v-col cols="12" md="12" sm="12">
             <v-alert type="info" text>
-              <span class="body-2"> Penilaian pada tahap <b>Pendalaman Materi</b></span>
+              <span class="body-2">
+                Penilaian pada tahap <b>{{ is_pptm ? 'pelaksanaan tugas mandiri' : 'pendalaman materi' }}</b>
+              </span>
             </v-alert>
 
             <template v-for="(ins, i) in instruments">
@@ -93,8 +95,11 @@
                       dense
                       outlined
                       type="number"
+                      min="0"
+                      max="100"
                       :readonly="!isEdit"
                       v-model="form[ins.k_instrumen_nilai_luring_paud]"
+                      @input="checkNumber(form[ins.k_instrumen_nilai_luring_paud], ins.k_instrumen_nilai_luring_paud)"
                     />
                   </div>
                 </div>
@@ -138,6 +143,7 @@ export default {
       instruments: [],
       peserta: {},
       form: {},
+      is_pptm: false,
     };
   },
   computed: {
@@ -154,9 +160,10 @@ export default {
   methods: {
     initForm(value) {
       if (!value) return;
-      const { instruments, peserta } = value;
+      const { instruments, peserta, is_pptm } = value;
       this.$set(this, 'instruments', instruments || []);
       this.$set(this, 'peserta', peserta);
+      this.$set(this, 'is_pptm', is_pptm);
       this.form = {};
 
       instruments.forEach((item) => {
@@ -166,6 +173,12 @@ export default {
 
     getValue() {
       return this.form;
+    },
+
+    checkNumber(value, id) {
+      if (Number(value) < 0 || Number(value) > 100) {
+        this.form[id] = '';
+      }
     },
   },
   watch: {

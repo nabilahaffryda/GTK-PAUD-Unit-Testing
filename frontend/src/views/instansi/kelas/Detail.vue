@@ -300,8 +300,8 @@ export default {
 
     getNilai(item) {
       return this.use_action
-        ? this.$getDeepObj(item, 'n_pendalaman_materi') || this.$getDeepObj(item, 'n_tugas_mandiri') || null
-        : this.$getDeepObj(item, `${this.is_ppm ? 'n_pendalaman_materi' : 'n_tugas_mandiri'}`) || null;
+        ? this.$getDeepObj(item, `${this.is_ppm ? 'n_pendalaman_materi' : 'n_tugas_mandiri'}`) || null
+        : this.$getDeepObj(item, 'n_pendalaman_materi') || this.$getDeepObj(item, 'n_tugas_mandiri') || null;
     },
 
     async onNilai(item) {
@@ -315,7 +315,11 @@ export default {
         this.$set(
           this.formulir,
           'initValue',
-          Object.assign({ peserta: Object.assign(item, { is_nilai: this.getNilai(item) }), instruments: resp })
+          Object.assign({
+            peserta: Object.assign(item, { is_nilai: this.getNilai(item) }),
+            instruments: resp,
+            is_pptm: this.is_pptm,
+          })
         );
       });
     },
