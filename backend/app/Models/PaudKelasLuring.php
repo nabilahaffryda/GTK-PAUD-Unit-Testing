@@ -43,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read null|string $url_jadwal
  * @property-read null|string $url_laporan
  *
+ * @property-read MVervalPaud $laporanVervalPaud
  * @property-read MKecamatan $mKecamatan
  * @property-read MKelurahan $mKelurahan
  * @property-read MVervalPaud $mVervalPaud
@@ -174,6 +175,14 @@ class PaudKelasLuring extends Eloquent
         'created_by',
         'updated_by',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function laporanVervalPaud()
+    {
+        return $this->belongsTo('App\Models\MVervalPaud', 'laporan_k_verval_paud', 'k_verval_paud');
+    }
 
     /**
      * @return BelongsTo
