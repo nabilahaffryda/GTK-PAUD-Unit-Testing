@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto">
+  <div class="mx-auto" data-app>
     <v-card flat>
       <v-card-text class="black--text">
         <div class="font-weight-bold headline">Daftar Konfirmasi Kesediaan</div>
@@ -8,16 +8,16 @@
         <div class="mt-5">
           <v-row v-if="$vuetify.breakpoint.mdAndUp">
             <v-col cols="12" md="3" sm="12">
-              <span class="font-weight-medium">Nama Instansi</span>
+              <span class="font-weight-medium" id="nama-instansi">Nama Instansi</span>
             </v-col>
             <v-col cols="12" md="3" sm="12">
-              <span class="font-weight-medium">Nama Kelas</span>
+              <span class="font-weight-medium" id="nama-kelas">Nama Kelas</span>
             </v-col>
             <v-col cols="12" md="2" sm="12">
-              <span class="font-weight-medium">Jadwal Pelaksanaan</span>
+              <span class="font-weight-medium" id="jadwal">Jadwal Pelaksanaan</span>
             </v-col>
             <v-col cols="12" md="2" sm="12">
-              <span class="font-weight-medium">Status</span>
+              <span class="font-weight-medium" id="status">Status</span>
             </v-col>
           </v-row>
           <v-row v-for="(item, i) in items" :key="i">
