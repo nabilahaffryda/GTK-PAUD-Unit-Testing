@@ -30,9 +30,9 @@
       <form-unggah
         ref="formulir"
         :title="title"
-        format="XLXS/XLS"
+        format="PDF"
         uimodel="row"
-        :rules="{ format: 'xls', required: true }"
+        :rules="{ format: 'pdf', required: true }"
       ></form-unggah>
     </v-card-text>
   </v-card>
@@ -54,7 +54,6 @@ export default {
     return {
       id: null,
       form: {},
-      stepUnggah: 1,
       file: null,
     };
   },
@@ -63,7 +62,6 @@ export default {
     reset() {
       this.$set(this, 'id', null);
       this.$set(this, 'form', {});
-      this.stepUnggah = 1;
       this.file = null;
     },
 

@@ -26,13 +26,15 @@
                 </div>
               </div>
               <div>
-                <v-chip class="pa-4" color="grey" dark>Belum Unggah</v-chip>
+                <v-chip class="pa-4" :color="$getDeepObj(detail, 'url_laporan') ? 'success' : 'grey'">
+                  {{ $getDeepObj(detail, 'url_laporan') ? 'Sudah Unggah' : 'Belum Unggah' }}
+                </v-chip>
               </div>
             </div>
             <v-divider class="my-4"></v-divider>
             <div class="d-flex px-2" style="justify-content: space-between">
               <div class="mr-5">
-                <v-btn color="info" depressed small block @click="onUploadLaporan(item)">
+                <v-btn color="info" depressed small block @click="onUploadLaporan(detail)">
                   <v-icon left> mdi-upload </v-icon>
                   Unggah Laporan
                 </v-btn>
@@ -48,7 +50,14 @@
     </v-card>
     <v-card>
       <v-card-title class="pa-0">
-        <base-table-header @search="onSearch" :btnFilter="false" @reload="onReload" @filter="onFilter">
+        <base-table-header
+          @search="onSearch"
+          :btnFilter="false"
+          :btnDownload="true"
+          @reload="onReload"
+          @filter="onFilter"
+          @download="onDownload"
+        >
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text">
               <b>{{ total }}</b> Kelas Diklat
@@ -252,8 +261,55 @@ export default {
       fetch: 'getListPesertaLaporan',
       getDetail: 'getDetailLuring',
       getPeserta: 'getDetailPesertaNilai',
-      action: 'action',
+      action: 'LaporanAction',
     }),
+
+    onDownload() {
+      const M_LAPORAN = [
+        {
+          key: 'download',
+          label: `Laporan Pelaksanaan Diklat Luring`,
+          acl: this.$getDeepObj(this.detail, 'url_laporan') ? true : false,
+        },
+      ];
+
+      let url = {};
+      this.$confirm('Pilih jenis Berkas yang ingin di Unduh?', 'Unduh Berkas', {
+        tipe: 'secondary',
+        form: {
+          desc: 'Laporan Berkas',
+          render: (h) => {
+            return h(
+              'select',
+              {
+                class: 'custom-select',
+                domProps: {
+                  value: '',
+                },
+                on: {
+                  input: function (event) {
+                    url.dokumen = event.target.value;
+                  },
+                },
+              },
+              [
+                h('option', { attrs: { value: '' } }, '-- Pilih Jenis Unduhan --'),
+                M_LAPORAN.filter((laporan) => this.$allow(laporan.acl)).map((item) =>
+                  h('option', { attrs: { value: item.key } }, item.label)
+                ),
+              ]
+            );
+          },
+        },
+        lblConfirmButton: 'Unduh',
+      }).then(() => {
+        if (!url.dokumen) {
+          this.$error('Silakan pilih laporan yang ingin diunduh!');
+          return;
+        }
+        this.$downloadFile(this.$getDeepObj(this.detail, 'url_laporan'));
+      });
+    },
 
     fetchData: function () {
       return new Promise((resolve) => {

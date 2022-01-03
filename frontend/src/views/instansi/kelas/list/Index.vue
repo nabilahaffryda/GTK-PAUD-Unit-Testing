@@ -90,16 +90,22 @@
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
-                    <v-col cols="12" md="2" v-if="jenis === 'luring' && item && item.is_admin === 1">
+                    <v-col
+                      cols="12"
+                      md="2"
+                      v-if="jenis === 'luring' && item && isEndDiklat(item) && item.is_admin === 1"
+                    >
                       <v-list-item>
                         <v-list-item-content class="py-0 mt-3">
                           <div class="label--text">Status Laporan</div>
                           <div>
-                            <template v-if="!item.laporan_k_verval_paud">
+                            <template v-if="!item.url_laporan">
                               <span class="caption grey--text">Silakan Unggah Laporan</span>
                             </template>
                             <template v-else>
-                              <v-chip color="primary" small> Belum dilengkapi </v-chip>
+                              <v-chip :color="M_LAPORAN[item.laporan_k_verval_paud || 1]" small dark>
+                                {{ $getDeepObj(item, 'laporan_verval_paud.data.keterangan') || 'Draft' }}
+                              </v-chip>
                             </template>
                           </div>
                         </v-list-item-content>
@@ -128,22 +134,36 @@
                           <template v-if="jenis === 'luring'">
                             <div
                               v-if="
-                                item.is_admin === 1 || (isEndDiklat(item) && (item.is_ppm === 1 || item.is_pptm === 1))
+                                (isEndDiklat(item) && item.is_admin === 1 && item.url_laporan) ||
+                                (isEndDiklat(item) && (item.is_ppm === 1 || item.is_pptm === 1))
                               "
                               class="label--text"
                               >Aksi</div
                             >
-                            <v-btn
-                              v-if="item.is_admin === 1"
-                              color="primary"
-                              depressed
-                              small
-                              block
-                              @click="onUploadLaporan(item)"
-                            >
-                              <v-icon left> mdi-upload </v-icon>
-                              Laporan
-                            </v-btn>
+                            <template v-if="item.is_admin === 1">
+                              <v-btn
+                                v-if="item.url_laporan && (item.laporan_k_verval_paud || 1) === 1"
+                                color="success"
+                                depressed
+                                small
+                                block
+                                @click="onAjuan(item)"
+                              >
+                                <v-icon left> mdi-send </v-icon>
+                                Kirim Laporan
+                              </v-btn>
+                              <v-btn
+                                v-else-if="item.laporan_k_verval_paud === 2"
+                                color="error"
+                                depressed
+                                small
+                                block
+                                @click="onBatalAjuan(item)"
+                              >
+                                <v-icon left> mdi-close </v-icon>
+                                Batal Laporan
+                              </v-btn>
+                            </template>
                             <v-btn
                               v-else-if="isEndDiklat(item) && (item.is_ppm === 1 || item.is_pptm === 1)"
                               depressed
@@ -182,39 +202,33 @@
         :masters="masters"
         :initValue="formulir.init"
         :jenis="jenis"
-        @upload="onUpload"
-        @unduhTemplate="unduhTemplate"
       ></component>
     </base-modal-full>
-    <popup-upload
-      ref="uploader"
-      :rules="{ format: 'xls', required: true }"
-      label-ok="pilih"
-      format="XLXS/XLS"
-      title="Laporan Pelaksanaan Kelas Luring"
-      @save="setFile"
-      @unduhTemplate="unduhTemplate"
-    ></popup-upload>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex';
 import DetailKelas from '../formulir/Detail';
-import FormUpload from '../formulir/UploadLaporan';
-import PopupUpload from '@components/popup/Upload';
 import BaseBreadcrumbs from '@components/base/BaseBreadcrumbs';
 import list from '@mixins/list';
 import mixin from './mixin';
 import actions from './actions';
 export default {
   mixins: [list, mixin],
-  components: { DetailKelas, FormUpload, PopupUpload, BaseBreadcrumbs },
+  components: { DetailKelas, BaseBreadcrumbs },
   data() {
     return {
       formulir: {},
       actions: actions,
       mapels: [],
       detail: {},
+      M_LAPORAN: {
+        1: 'grey',
+        2: 'info',
+        3: 'success',
+        4: 'warning',
+        5: 'error',
+      },
     };
   },
   computed: {
@@ -280,12 +294,19 @@ export default {
   methods: {
     allow(action, data) {
       let disabled = false;
+      let isAdmin = false;
+      let selesai = false;
       switch (action.event) {
         case 'onAktif':
           disabled = !Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
           break;
         case 'onNonAktif':
           disabled = Number(this.$getDeepObj(data, 'akun.is_aktif') || 0);
+          break;
+        case 'onLaporan':
+          selesai = Number(this.$getDeepObj(data, 'is_selesai') || 0) === 1;
+          isAdmin = Number(this.$getDeepObj(data, 'is_admin') || 0) === 1;
+          disabled = selesai && isAdmin && this.$allow(action.akses, data.policies);
           break;
         default:
           disabled = this.$allow(action.akses, data.policies);

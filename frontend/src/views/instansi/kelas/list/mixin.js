@@ -4,7 +4,7 @@ import { mapActions } from 'vuex';
 export default {
   methods: {
     ...mapActions('master', ['getMasters']),
-    ...mapActions('petugasKelas', ['fetch', 'getDetail']),
+    ...mapActions('petugasKelas', ['fetch', 'getDetail', 'upload', 'LaporanAction']),
 
     async onDetail(item) {
       const data = await this.getDetail({ id: item.id }).then(({ data }) => data);
@@ -35,8 +35,14 @@ export default {
       this.$router.push({ name: 'kelas-luring-laporan', params: { kelas_id: item.id } });
     },
 
-    onUploadLaporan(data) {
-      this.kelasId = data && data.id;
+    onUploadLaporan(item) {
+      if ([2].includes(item?.laporan_k_verval_paud ?? 1)) {
+        this.$error(
+          'Laporan pelaksanaan diklat Luring sudah di ajukan, untuk pembatalan silakan Batal Ajuan Laporan terlebih dahulu'
+        );
+        return;
+      }
+
       this.$set(this.formulir, 'title', 'Unggah Laporan Pelaksanaan');
       this.$set(this.formulir, 'form', 'FormUpload');
       this.$set(this.formulir, 'useSave', true);
@@ -57,7 +63,7 @@ export default {
     },
 
     onSave() {
-      const file = this.$refs.formulir.file || {};
+      const file = this.$refs.formulir.$refs.formulir.form || {};
       this.uploadSave(file);
     },
 
@@ -69,27 +75,13 @@ export default {
 
       const params = {
         params: formData,
-        tipe: this.akses,
+        id: this.id,
+        jenis: this.jenis,
       };
 
       this.upload(params)
-        .then(({ data }) => {
-          if (data && data.errors) {
-            const error = Object.values(data.errors) || [];
-            // this.$refs.uploader.step = 1;
-            // this.$refs.uploader.errorFile.push(...error);
-            if (error.length) {
-              this.$error(error.join('<br/>'));
-            } else {
-              this.$error(
-                'Terdapat kesalahan pada Data pada berkas yang diunggah, silakan periksa berkas Anda dan pastikan tidak ada Data yang sama kemudian coba kembali!'
-              );
-            }
-            this.$refs.modal.loading = false;
-            return;
-          }
-
-          this.$refs.uploader.step = 1;
+        .then(() => {
+          this.$refs.modal.loading = false;
           this.$refs.modal.close();
           this.fetchData();
         })
@@ -120,7 +112,7 @@ export default {
           },
         ],
       }).then(() => {
-        this.action({ id: item.id, diklat_id: this.diklatId, type: 'ajuan/create', name: this.attr.tipe }).then(() => {
+        this.LaporanAction({ id: item.id, jenis: this.jenis, aksi: 'kirim' }).then(() => {
           this.$success(`Laporan pelaksanaan berhasil di ajukan`);
           this.onReload();
         });
@@ -134,7 +126,7 @@ export default {
       }
 
       this.$confirm(`Apakah Anda yakin ingin membatalkan pengajuan laporan berikut ?`, `Batalkan Ajuan Laporan`, {
-        tipe: 'warning',
+        tipe: 'error',
         data: [
           {
             icon: 'mdi-file',
@@ -145,7 +137,7 @@ export default {
           },
         ],
       }).then(() => {
-        this.action({ id: item.id, diklat_id: this.diklatId, type: 'ajuan/delete', name: this.attr.tipe }).then(() => {
+        this.LaporanAction({ id: item.id, jenis: this.jenis, aksi: 'batal' }).then(() => {
           this.$success(`Ajuan Laporan pelaksanaan berhasil dibatalkan`);
           this.onReload();
         });

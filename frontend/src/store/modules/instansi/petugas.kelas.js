@@ -54,7 +54,9 @@ export const actions = {
   async getDetailPesertaNilai({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/petugas-luring/kelas/${payload.kelas_id}${payload.page ? `/${payload.page}` : ''}/nilai`,
+      baseURL:
+        process.env.VUE_APP_API_URL +
+        `/i/${id}/petugas-luring/kelas/${payload.kelas_id}${payload.page ? `/${payload.page}` : ''}/nilai`,
     });
     return await $ajax.get(`/${payload.id}`);
   },
@@ -91,5 +93,11 @@ export const actions = {
         'Content-Type': 'multipart/form-data',
       },
     });
+  },
+
+  LaporanAction({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const url = `/i/${id}/petugas-${payload.jenis}/kelas/${payload.id}/laporan/${payload.aksi}`;
+    return http[payload.method || 'post'](url, payload.params).then(({ data }) => data);
   },
 };
