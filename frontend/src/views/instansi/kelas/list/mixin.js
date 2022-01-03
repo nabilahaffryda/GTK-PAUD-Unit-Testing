@@ -83,7 +83,7 @@ export default {
         .then(() => {
           this.$refs.modal.loading = false;
           this.$refs.modal.close();
-          this.fetchData();
+          this.getKelasDiklat();
         })
         .catch(() => {
           this.$refs.modal.loading = false;
