@@ -38,7 +38,7 @@ class KelasController extends Controller
                 'is_admin'   => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::ADMIN_KELAS . ' then 1 else 0 end')
                     ->where('paud_kelas_petugas_luring.akun_id', '=', akunId())
                     ->whereColumn('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', 'paud_kelas_luring.paud_kelas_luring_id'),
-                'is_selesai' => PaudDiklatLuring::selectRaw('case when `paud_diklat_luring`.`tgl_selesai` < ' . Carbon::now()->toDateString() . ' then 1 else 0 end')
+                'is_selesai' => PaudDiklatLuring::selectRaw('case when `paud_diklat_luring`.`tgl_selesai` < "' . Carbon::now()->toDateString() . '" then 1 else 0 end')
                     ->whereColumn('paud_diklat_luring.paud_diklat_luring_id', '=', 'paud_kelas_luring.paud_diklat_luring_id'),
             ])
             ->with([
