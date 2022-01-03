@@ -43,6 +43,7 @@ class KelasController extends Controller
             ])
             ->with([
                 'paudDiklatLuring',
+                'laporanVervalPaud',
             ])
             ->get()
         );
