@@ -8,14 +8,10 @@ use App\Http\Requests\Instansi\Petugas\Luring\Laporan\IndexRequest;
 use App\Http\Requests\Instansi\Petugas\Luring\Laporan\UploadRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
-use App\Models\MVervalPaud;
 use App\Models\PaudKelasLuring;
 use App\Models\PaudKelasPesertaLuring;
-use App\Services\Instansi\DiklatLuringService;
 use App\Services\Instansi\KelasLuringPesertaService;
-use Carbon\Carbon;
-use Exception;
-use Storage;
+use App\Services\Instansi\KelasLuringService;
 use Symfony\Component\HttpFoundation\Response;
 
 class LaporanController extends Controller
@@ -25,42 +21,7 @@ class LaporanController extends Controller
      */
     public function upload(PaudKelasLuring $kelas, UploadRequest $request)
     {
-        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
-
-        $file       = $request->file;
-        $kelasId    = $kelas->paud_kelas_luring_id;
-        $instansiId = $kelas->paudDiklatLuring->instansi_id;
-        $fileOld    = $kelas->file_laporan;
-
-        $ext = strtolower($file->getClientOriginalExtension());
-        if (!in_array($ext, ['pdf', 'jpeg', 'jpg', 'png'])) {
-            throw new FlowException("Jenis berkas jadwal tidak dikenali");
-        }
-
-        $timestamp = date('ymdhis');
-        $random    = random_int(10000, 99999);
-
-        $name = "{$kelasId}-{$timestamp}-{$random}." . $ext;
-        $path = "{$instansiId}";
-
-        $ftpPath = config('filesystems.disks.kelas-laporan.path') . "/" . $path;
-        if (!Storage::disk('kelas-laporan')->putFileAs($ftpPath, $file, $name)) {
-            throw new FlowException("Unggah berkas jadwal tidak berhasil");
-        }
-
-        $hapusOld = config('paud.kelas-laporan.hapus-file-lama');
-        if ($fileOld && $hapusOld) {
-            try {
-                Storage::disk('kelas-laporan')->delete($fileOld);
-            } catch (Exception) {
-            }
-        }
-
-        $filename = "{$path}/{$name}";
-
-        $kelas->file_laporan = $filename;
-        $kelas->save();
-
+        app(KelasLuringService::class)->uploadLaporan($kelas, $request->file);
         return BaseResource::make($kelas);
     }
 
@@ -69,16 +30,7 @@ class LaporanController extends Controller
      */
     public function deleteUpload(PaudKelasLuring $kelas)
     {
-        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
-
-        try {
-            Storage::disk('kelas-laporan')->delete($kelas->file_laporan);
-        } catch (Exception) {
-        }
-
-        $kelas->file_laporan = null;
-        $kelas->save();
-
+        app(KelasLuringService::class)->deleteUpload($kelas);
         return BaseResource::make($kelas);
     }
 
@@ -87,15 +39,7 @@ class LaporanController extends Controller
      */
     public function kirim(PaudKelasLuring $kelas)
     {
-        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
-        if (!$kelas->file_laporan) {
-            throw new FlowException("Berkas laporan belum diunggah");
-        }
-
-        $kelas->laporan_k_verval_paud = MVervalPaud::DIAJUKAN;
-        $kelas->laporan_wkt_ajuan     = Carbon::now();
-        $kelas->save();
-
+        app(KelasLuringService::class)->ajuanLaporan($kelas);
         return BaseResource::make($kelas);
     }
 
@@ -104,19 +48,7 @@ class LaporanController extends Controller
      */
     public function batal(PaudKelasLuring $kelas)
     {
-        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
-        if (!$kelas->file_laporan) {
-            throw new FlowException("Berkas laporan belum diunggah");
-        }
-
-        if ($kelas->laporan_k_verval_paud != MVervalPaud::DIAJUKAN) {
-            throw new FlowException("Berkas laporan belum diajukan");
-        }
-
-        $kelas->laporan_k_verval_paud = null;
-        $kelas->laporan_wkt_ajuan     = null;
-        $kelas->save();
-
+        app(KelasLuringService::class)->batalAjuanLaporan($kelas);
         return BaseResource::make($kelas);
     }
 

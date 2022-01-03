@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Storage;
 
 class KelasLuringService
 {
@@ -632,5 +633,124 @@ class KelasLuringService
         if ($kVerval != MVervalPaud::KANDIDAT) {
             throw new FlowException("Laporan kelas luring sudah diajukan atau diverval");
         }
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateLaporanAjuan(PaudKelasLuring $kelas)
+    {
+        $kVerval = $kelas->laporan_k_verval_paud ?: MVervalPaud::KANDIDAT;
+        if ($kVerval == MVervalPaud::KANDIDAT) {
+            throw new FlowException("Laporan kelas belum diajukan");
+        }
+
+        if (!in_array($kVerval, [MVervalPaud::DIAJUKAN, MVervalPaud::REVISI])) {
+            throw new FlowException('Laporan kelas sudah diverval');
+        }
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function uploadLaporan(PaudKelasLuring $kelas, UploadedFile $file)
+    {
+        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        $this->validateLaporanBaru($kelas);
+
+        $kelasId    = $kelas->paud_kelas_luring_id;
+        $instansiId = $kelas->paudDiklatLuring->instansi_id;
+        $fileOld    = $kelas->file_laporan;
+
+        $ext = strtolower($file->getClientOriginalExtension());
+        if (!in_array($ext, ['pdf', 'jpeg', 'jpg', 'png'])) {
+            throw new FlowException("Jenis berkas jadwal tidak dikenali");
+        }
+
+        $timestamp = date('ymdhis');
+        $random    = random_int(10000, 99999);
+
+        $name = "{$kelasId}-{$timestamp}-{$random}." . $ext;
+        $path = "{$instansiId}";
+
+        $ftpPath = config('filesystems.disks.kelas-laporan.path') . "/" . $path;
+        if (!Storage::disk('kelas-laporan')->putFileAs($ftpPath, $file, $name)) {
+            throw new FlowException("Unggah berkas jadwal tidak berhasil");
+        }
+
+        $hapusOld = config('paud.kelas-laporan.hapus-file-lama');
+        if ($fileOld && $hapusOld) {
+            try {
+                Storage::disk('kelas-laporan')->delete($fileOld);
+            } catch (Exception) {
+            }
+        }
+
+        $filename = "{$path}/{$name}";
+
+        $kelas->file_laporan = $filename;
+        $kelas->save();
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function deleteUpload(PaudKelasLuring $kelas)
+    {
+        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        $this->validateLaporanBaru($kelas);
+
+        try {
+            Storage::disk('kelas-laporan')->delete($kelas->file_laporan);
+        } catch (Exception) {
+        }
+
+        $kelas->file_laporan = null;
+        $kelas->save();
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function ajuanLaporan(PaudKelasLuring $kelas)
+    {
+        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        $this->validateLaporanBaru($kelas);
+
+        if (!$kelas->file_laporan) {
+            throw new FlowException("Berkas laporan belum diunggah");
+        }
+
+        foreach ($kelas->paudKelasPesertaLurings as $peserta) {
+            if ($peserta->n_pendalaman_materi === null || $peserta->n_tugas_mandiri) {
+                throw new FlowException("Nilai peserta ada yang belum dinilai");
+            }
+        }
+
+        $kelas->laporan_k_verval_paud = MVervalPaud::DIAJUKAN;
+        $kelas->laporan_wkt_ajuan     = Carbon::now();
+        $kelas->save();
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function batalAjuanLaporan(PaudKelasLuring $kelas)
+    {
+        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        $this->validateLaporanAjuan($kelas);
+
+        $kelas->file_laporan          = null;
+        $kelas->laporan_k_verval_paud = MVervalPaud::KANDIDAT;
+        $kelas->laporan_wkt_ajuan     = null;
+        $kelas->save();
+
+        return $kelas;
     }
 }
