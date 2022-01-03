@@ -45,9 +45,7 @@ export const actions = {
 
   downloadList({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `${process.env.VUE_APP_API_URL}/i/${id}/kelas/${payload.url}?${queryString(
-      payload.params
-    )}`;
+    const url = `${process.env.VUE_APP_API_URL}/i/${id}/kelas/${payload.url}?${queryString(payload.params)}`;
     return Promise.resolve(url);
   },
 };

@@ -6,13 +6,16 @@ export default {
 
     fetchDiklat() {
       if (!this.diklatId) return;
-      this.getDiklat({ id: this.diklatId }).then(({ data }) => {
+      this.getDiklat({ id: this.diklatId, jenis: this.jenis }).then(({ data }) => {
         this.detail = data || {};
       });
     },
 
     onDetailDiklat(item) {
-      this.$router.push({ name: 'diklat-kelas', params: { diklat_id: item.id } });
+      this.$router.push({
+        name: `diklat-kelas${!this.isDaring ? '-luring' : ''}`,
+        params: { diklat_id: item.id },
+      });
     },
 
     async onDetail(item, reload = true) {
@@ -123,11 +126,15 @@ export default {
             iconSize: 30,
             iconColor: 'secondary',
             title: `${this.$getDeepObj(item, 'nama')}`,
-            subtitles: [`<span>Email: ${this.$getDeepObj(item, 'singkatan')}</span>`],
+            subtitles: [],
           },
         ],
       }).then(() => {
-        this.action({ id: item.paud_diklat_id, type: 'delete', name: this.attr.tipe }).then(() => {
+        this.action({
+          id: this.$getDeepObj(item, this.isDaring ? 'paud_diklat_id' : 'paud_diklat_luring_id'),
+          type: 'delete',
+          name: this.attr.tipe,
+        }).then(() => {
           this.$success(`Data diklat berhasil di hapus`);
           this.fetchData();
         });
@@ -188,13 +195,13 @@ export default {
     },
 
     listPeriodes() {
-      this.getPeriode().then(({ data }) => {
+      this.getPeriode(this.jenis).then(({ data }) => {
         this.periodes = data || [];
       });
     },
 
     listMapels() {
-      this.getMapels().then(({ data }) => {
+      this.getMapels(this.jenis).then(({ data }) => {
         this.mapels = data || [];
       });
     },

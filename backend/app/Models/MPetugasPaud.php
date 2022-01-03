@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $singkat
  * @property null|string $keterangan
  *
+ * @property-read Collection|PaudKelasPetugasLuring[] $paudKelasPetugasLurings
  * @property-read Collection|PaudKelasPetugas[] $paudKelasPetugases
  * @property-read Collection|PaudPetugas[] $paudPetugases
  *
@@ -76,6 +77,14 @@ class MPetugasPaud extends Eloquent
         'singkat',
         'keterangan',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function paudKelasPetugasLurings()
+    {
+        return $this->hasMany('App\Models\PaudKelasPetugasLuring', 'k_petugas_paud', 'k_petugas_paud');
+    }
 
     /**
      * @return HasMany

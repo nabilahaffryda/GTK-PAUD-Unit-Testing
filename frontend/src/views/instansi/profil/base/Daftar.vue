@@ -204,8 +204,9 @@ export default {
         jenis: this.jenis,
         id: this.$getDeepObj(berkas, 'value.paud_instansi_id'),
       });
+
       this.$set(this, 'preview', {
-        url: window.location.origin + url + '.pdf',
+        url: url + '.pdf',
         title: 'Sertifikat',
       });
 

@@ -46,6 +46,7 @@ type Ptk {
     is_aktif: Int
     akun_id: String
 
+    ptk_sekolah: PtkSekolah @hasOne(relation: "ptkSekolah")
     m_kecamatan: MKecamatan @belongsTo(relation: "mKecamatan")
     m_kota: MKota @belongsTo(relation: "mKota")
     m_propinsi: MPropinsi @belongsTo(relation: "mPropinsi")

@@ -106,7 +106,12 @@ export default {
       return [
         { label: 'Nama Peserta', value: this.$getDeepObj(this.detail, 'ptk.nama') },
         { label: 'Nomor Peserta', value: this.$getDeepObj(this.detail, 'ptk_id') },
-        { label: 'Instansi LPD', value: this.$getDeepObj(this.detail, 'ptk.instansi') },
+        {
+          label: 'Instansi',
+          value:
+            this.$getDeepObj(this.detail, 'ptk.ptk_sekolah.sekolah.nama') ||
+            this.$getDeepObj(this.detail, 'ptk.instansi'),
+        },
         { label: 'Angkatan Diklat', value: `Angkatan ${this.$getDeepObj(this.detail, 'angkatan')}` },
       ];
     },

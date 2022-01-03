@@ -26,7 +26,10 @@
                 <v-list-item-content class="pa-0">
                   <div>
                     {{
-                      $getDeepObj(item, 'paud_kelas.data.paud_diklat.data.paud_instansi.data.instansi.data.nama') || '-'
+                      $getDeepObj(
+                        item,
+                        `paud_kelas${label}.data.paud_diklat${label}.data.paud_instansi.data.instansi.data.nama`
+                      ) || '-'
                     }}
                   </div>
                 </v-list-item-content>
@@ -38,9 +41,12 @@
                   <div class="black--text">
                     {{ $getDeepObj(item, 'nama') || '-' }}
                   </div>
-                  <div v-if="$getDeepObj(item, 'paud_kelas.data.url_jadwal')" class="blue--text caption">
+                  <div v-if="$getDeepObj(item, `paud_kelas${label}.data.url_jadwal`)" class="blue--text caption">
                     <v-icon left small>mdi-file</v-icon>
-                    <a class="blue--text" :href="$getDeepObj(item, 'paud_kelas.data.url_jadwal')" target="_blank"
+                    <a
+                      class="blue--text"
+                      :href="$getDeepObj(item, `paud_kelas${label}.data.url_jadwal`)"
+                      target="_blank"
                       >Dokumen Jadwal Diklat</a
                     >
                   </div>
@@ -50,11 +56,19 @@
             <v-col class="py-0" cols="12" md="2">
               <v-list-item class="px-0">
                 <v-list-item-content class="pa-0">
-                  <div>
+                  <div v-if="jenis === 'daring'">
                     {{
                       $durasi(
                         $getDeepObj(item, 'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
                         $getDeepObj(item, 'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                      )
+                    }}
+                  </div>
+                  <div v-else>
+                    {{
+                      $durasi(
+                        $getDeepObj(item, 'paud_kelas_luring.data.paud_diklat_luring.data.tgl_mulai'),
+                        $getDeepObj(item, 'paud_kelas_luring.data.paud_diklat_luring.data.tgl_selesai')
                       )
                     }}
                   </div>
@@ -103,7 +117,7 @@
         </div>
       </v-card-text>
     </v-card>
-    <v-dialog v-model="dialog" max-width="650" persistent transition="dialog-bottom-transition" scrollable>
+    <v-dialog v-model="dialog" max-width="800" persistent transition="dialog-bottom-transition" scrollable>
       <v-card>
         <v-card-title class="pa-0">
           <v-toolbar flat dark color="secondary">
@@ -119,24 +133,26 @@
             <v-card-title>
               <v-toolbar flat>
                 <div class="font-weight-medium body-1">
-                  {{ $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.nama') || '-' }} -
-                  {{ $getDeepObj(diklat, 'paud_kelas.data.nama') || '-' }}<br />
+                  {{ $getDeepObj(diklat, `paud_kelas${label}.data.paud_diklat${label}.data.nama`) || '-' }} -
+                  {{ $getDeepObj(diklat, `paud_kelas${label}.data.nama`) || '-' }}<br />
                   <span class="body-2">
                     {{
-                      $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.paud_instansi.data.instansi.data.nama') ||
-                      '-'
+                      $getDeepObj(
+                        diklat,
+                        `paud_kelas${label}.data.paud_diklat${label}.data.paud_instansi.data.instansi.data.nama`
+                      ) || '-'
                     }}
                   </span>
                 </div>
+                <v-spacer></v-spacer>
+                <v-chip
+                  :color="+diklat.k_konfirmasi_paud === 3 ? 'success' : +diklat.k_konfirmasi_paud === 4 ? 'red' : ''"
+                  small
+                  dark
+                >
+                  {{ $getDeepObj(diklat, 'm_konfirmasi_paud.data.keterangan') }}
+                </v-chip>
               </v-toolbar>
-              <v-spacer></v-spacer>
-              <v-chip
-                :color="+diklat.k_konfirmasi_paud === 3 ? 'success' : +diklat.k_konfirmasi_paud === 4 ? 'red' : ''"
-                small
-                dark
-              >
-                {{ $getDeepObj(diklat, 'm_konfirmasi_paud.data.keterangan') }}
-              </v-chip>
             </v-card-title>
             <v-card-text>
               <v-row>
@@ -148,12 +164,28 @@
                     <v-list-item-content class="py-0 mt-3">
                       <div class="label--text">Jadwal Diklat</div>
                       <div class="body-1 black--text">
-                        {{
-                          $durasi(
-                            $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
-                            $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
-                          )
-                        }}
+                        <template v-if="jenis === 'daring'">
+                          {{
+                            $durasi(
+                              $getDeepObj(
+                                diklat,
+                                'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_mulai'
+                              ),
+                              $getDeepObj(
+                                diklat,
+                                'paud_kelas.data.paud_diklat.data.paud_periode.data.tgl_diklat_selesai'
+                              )
+                            )
+                          }}
+                        </template>
+                        <template v-else>
+                          {{
+                            $durasi(
+                              $getDeepObj(diklat, 'paud_kelas_luring.data.paud_diklat_luring.data.tgl_mulai'),
+                              $getDeepObj(diklat, 'paud_kelas_luring.data.paud_diklat_luring.data.tgl_selesai')
+                            )
+                          }}
+                        </template>
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -166,7 +198,12 @@
                     <v-list-item-content class="py-0 mt-3">
                       <div class="label--text">Kota/Kab</div>
                       <div class="body-1 black--text">
-                        {{ $getDeepObj(diklat, 'paud_kelas.data.paud_diklat.data.m_kota.data.keterangan') || '-' }}
+                        {{
+                          $getDeepObj(
+                            diklat,
+                            `paud_kelas${label}.data.paud_diklat${label}.data.m_kota.data.keterangan`
+                          ) || '-'
+                        }}
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -176,7 +213,7 @@
                     <v-list-item-content class="py-0 mt-3">
                       <div class="label--text">Kecamatan</div>
                       <div class="body-1 black--text">
-                        {{ $getDeepObj(diklat, 'paud_kelas.data.m_kecamatan.data.keterangan') || '-' }}
+                        {{ $getDeepObj(diklat, `paud_kelas${label}.data.m_kecamatan.data.keterangan`) || '-' }}
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -186,7 +223,7 @@
                     <v-list-item-content class="py-0 mt-3">
                       <div class="label--text">Kelurahan</div>
                       <div class="body-1 black--text">
-                        {{ $getDeepObj(diklat, 'paud_kelas.data.m_kelurahan.data.keterangan') || '-' }}
+                        {{ $getDeepObj(diklat, `paud_kelas${label}.data.m_kelurahan.data.keterangan`) || '-' }}
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -227,6 +264,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    jenis: {
+      type: String,
+      default: 'daring',
+    },
   },
   data() {
     return {
@@ -234,7 +275,11 @@ export default {
       diklat: {},
     };
   },
-  computed: {},
+  computed: {
+    label() {
+      return this.jenis === 'daring' ? '' : '_luring';
+    },
+  },
   methods: {
     ...mapActions('petugasKonfirmasi', ['getDetail', 'actions']),
 
@@ -243,9 +288,7 @@ export default {
     },
 
     async onDetail(data) {
-      const resp = await this.getDetail({ id: this.$getDeepObj(data, 'paud_kelas_petugas_id') }).then(
-        ({ data }) => data
-      );
+      const resp = await this.getDetail({ id: this.$getDeepObj(data, 'id') }).then(({ data }) => data);
       this.dialog = true;
       this.$nextTick(() => {
         this.$set(this, 'diklat', resp);
@@ -253,7 +296,7 @@ export default {
     },
 
     onKonfirmasi(status) {
-      this.actions({ id: this.$getDeepObj(this.diklat, 'paud_kelas_petugas_id'), name: status }).then(() => {
+      this.actions({ id: this.$getDeepObj(this.diklat, 'id'), name: status }).then(() => {
         this.$success('Aksi berhasil dijalankan');
         this.dialog = false;
         this.$emit('reload');

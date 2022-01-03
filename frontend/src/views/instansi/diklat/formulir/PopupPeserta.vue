@@ -37,7 +37,7 @@
                   <v-row>
                     <v-col v-if="multiselect" cols="12" md="1" sm="1" class="px-5">
                       <v-checkbox
-                        v-model="select[$getDeepObj(item, id)]"
+                        v-model="select[$getDeepObj(item, Number(tab) === 3 ? 'paud_peserta_nonptk_id' : id)]"
                         :disabled="Number(tab) === 2 ? !item.is_baru : false"
                       ></v-checkbox>
                     </v-col>
@@ -114,6 +114,10 @@ export default {
           url: 'peserta/kandidat-simpatika',
           text: 'SIMPKB RA',
         },
+        {
+          url: 'peserta/kandidat-nonptk',
+          text: 'Kandidat Non Dapodik',
+        },
       ],
     };
   },
@@ -149,6 +153,11 @@ export default {
       this.select = {};
       this.tab = 0;
       this.fetchData();
+
+      if (params.jenis === 'daring') {
+        const find = this.items.findIndex((s) => s.url === 'peserta/kandidat-nonptk');
+        if (find > -1) this.items.splice(find, 1);
+      }
 
       return new Promise((resolve, reject) => {
         this.resolve = resolve;

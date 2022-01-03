@@ -76,6 +76,7 @@ const KELAS = gql`
         lms_url
         is_selesai
         paud_diklat {
+          paud_periode_id
           paud_periode {
             tgl_diklat_mulai
             tgl_diklat_selesai
@@ -101,6 +102,11 @@ const GET_HASIL = gql`
         ptk {
           nama
           instansi
+          ptk_sekolah {
+            sekolah {
+              nama
+            }
+          }
         }
         is_lulus
         is_survey

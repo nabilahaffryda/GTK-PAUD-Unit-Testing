@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline black--text--text"> Diklatku </h1>
+            <h1 class="headline black--text--text"> {{ isDaring ? 'Diklat Daring' : 'Diklat Luring' }} </h1>
             <div> </div>
           </v-col>
         </v-row>
@@ -19,7 +19,7 @@
         <base-table-header
           @search="onSearch"
           :btnFilter="false"
-          :btnAdd="$allow('lpd-diklat.create')"
+          :btnAdd="$allow(`${akses}.create`)"
           @add="onAddDiklat"
           @reload="onReload"
           @filter="onFilter"
@@ -70,22 +70,34 @@
                     <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <div class="label--text">Tahapan Diklat</div>
-                          <div class="body-2">{{ $getDeepObj(item, 'paud_periode.data.nama') || '-' }}</div>
+                          <div class="label--text">{{ isDaring ? 'Tahapan Diklat' : 'Jenjang Diklat' }}</div>
+                          <div class="body-2">
+                            <template v-if="isDaring">
+                              {{ $getDeepObj(item, 'paud_periode.data.nama') || '-' }}
+                            </template>
+                            <template v-else>
+                              {{ $getDeepObj(item, 'm_jenjang_diklat_paud.data.keterangan') || '-' }}
+                            </template>
+                          </div>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                     <v-col class="py-0" cols="12" md="3">
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0 mt-3">
-                          <span class="caption">Tanggal Pendaftaran</span>
+                          <span class="caption">{{ isDaring ? 'Tanggal Pendaftaran' : 'Tanggal Pelaksanaan' }}</span>
                           <p>
-                            <span>{{
-                              $durasi(
-                                $getDeepObj(item, 'paud_periode.data.tgl_daftar_mulai'),
-                                $getDeepObj(item, 'paud_periode.data.tgl_daftar_selesai')
-                              )
-                            }}</span>
+                            <span v-if="isDaring">
+                              {{
+                                $durasi(
+                                  $getDeepObj(item, 'paud_periode.data.tgl_daftar_mulai'),
+                                  $getDeepObj(item, 'paud_periode.data.tgl_daftar_selesai')
+                                )
+                              }}
+                            </span>
+                            <span v-else>
+                              {{ $durasi($getDeepObj(item, 'tgl_mulai'), $getDeepObj(item, 'tgl_selesai')) }}
+                            </span>
                           </p>
                         </v-list-item-content>
                       </v-list-item>
@@ -136,6 +148,7 @@
         :type="formulir.type"
         :periodes="periodes"
         :initValue="formulir.init"
+        :jenis="jenis"
       ></component>
     </base-modal-full>
   </div>
@@ -146,14 +159,26 @@ import FormDiklat from '../../formulir/FormDiklat';
 import DetilKelas from '../../formulir/Detail';
 import mixin from '../base/mixin';
 import list from '@mixins/list';
-import actions from './actions';
 export default {
   mixins: [list, mixin],
   components: { FormDiklat, DetilKelas },
+  props: {
+    jenis: {
+      type: String,
+      default: 'daring',
+    },
+    actions: {
+      type: Array,
+      default: () => [],
+    },
+    akses: {
+      type: String,
+      default: 'lpd-diklat',
+    },
+  },
   data() {
     return {
       formulir: {},
-      actions: actions,
       akun: {},
       groups: {},
       periodes: [],
@@ -196,10 +221,16 @@ export default {
         k_kota: this.masters && this.masters.m_kota,
       };
     },
+
+    isDaring() {
+      return this.jenis === 'daring';
+    },
   },
   created() {
+    Object.assign(this.attr, { jenis: this.jenis });
+
     this.getMasters({
-      name: ['m_propinsi', 'm_kota'].join(';'),
+      name: ['m_propinsi', 'm_kota', 'm_diklat_paud', 'm_jenjang_diklat_paud'].join(';'),
       filter: {
         0: {
           k_propinsi: {

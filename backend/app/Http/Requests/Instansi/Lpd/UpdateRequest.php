@@ -10,7 +10,6 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property-read $nama
  * @property-read $email
  * @property-read $ratio_pengajar_tambahan
- * @property-read $jml_pembimbing
  *
  * @package App\Http\Requests\Instansi\PaudInstansi
  */
@@ -27,7 +26,6 @@ class UpdateRequest extends FormRequest
             'nama'                    => ['required', 'string', 'max:100'],
             'email'                   => ['required', 'email', 'max:100'],
             'ratio_pengajar_tambahan' => ['required', 'integer', 'min:10', 'max:100'],
-            'jml_pembimbing'          => ['required', 'integer', 'min:0'],
             'k_lpd_paud'              => ['required', 'integer', 'exists:m_lpd_paud,k_lpd_paud'],
         ];
     }

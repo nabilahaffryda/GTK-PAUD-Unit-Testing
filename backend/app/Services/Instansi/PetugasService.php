@@ -8,6 +8,7 @@ use App\Models\Akun;
 use App\Models\MBerkasPetugasPaud;
 use App\Models\MDiklatPaud;
 use App\Models\MGroup;
+use App\Models\MKonfirmasiPaud;
 use App\Models\MPetugasPaud;
 use App\Models\MUnsurPengajarPaud;
 use App\Models\MVervalPaud;
@@ -144,11 +145,23 @@ class PetugasService
             ])
             ->whereHas('paudPetugasPerans', function (Builder $query) use ($params) {
                 $query
+                    ->when($params['k_verval_paud'] ?? null, function (Builder $query, $value) {
+                        $query->whereIn('k_verval_paud', $value);
+                    }, function (Builder $query) {
+                        $query->where('k_verval_paud', '<>', MVervalPaud::KANDIDAT);
+                    })
                     ->where([
                         'tahun'    => Arr::get($params, 'tahun', config('paud.tahun')),
                         'angkatan' => Arr::get($params, 'angkatan', config('paud.angkatan')),
-                        ['k_verval_paud', '<>', MVervalPaud::KANDIDAT],
                     ]);
+            })
+            ->when($params['keyword'] ?? null, function ($query, $value) {
+                $query->whereHas('akun', function ($query) use ($value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->orWhere('nama', 'like', '%' . $value . '%')
+                            ->orWhere('email', 'like', '%' . $value . '%');
+                    });
+                });
             })
             ->where('k_unsur_pengajar_paud', $params['k_unsur_pengajar_paud'])
             ->with(['akun', 'paudPetugasPerans.mVervalPaud',
@@ -672,5 +685,176 @@ class PetugasService
         $petugas->save();
 
         return $petugas;
+    }
+
+    public function queryKandidat(int $instansiId, int $kKota, int $kPetugasPaud, ?int $periodeId = null, ?int $kelasId = null, ?int $kelasLuringId = null, ?Carbon $tglMulai = null, ?Carbon $tglSelesai = null)
+    {
+        return PaudPetugas::query()
+            ->when($kPetugasPaud == MPetugasPaud::PENGAJAR, function (Builder $query) {
+                $query->where('paud_petugas.is_refreshment', '=', 1);
+            })
+            ->when($kPetugasPaud == MPetugasPaud::PENGAJAR_TAMBAHAN, function (Builder $query) use ($instansiId) {
+                $query->where('paud_petugas.is_refreshment', '=', 1)
+                    ->where('paud_petugas.instansi_id', '=', $instansiId);
+            })
+            ->when($kPetugasPaud == MPetugasPaud::PEMBIMBING_PRAKTIK, function (Builder $query) use ($instansiId, $kKota) {
+                $query->where('paud_petugas.is_refreshment', '=', 1)
+                    ->where(function (Builder $query) use ($instansiId, $kKota) {
+                        $query
+                            // PPTM yang ditambahkan oleh LPD hanya bisa dipilih oleh LPD yang menambahkan tersebu
+                            ->orWhere('paud_petugas.instansi_id', '=', $instansiId)
+                            // PPTM inti yang ditambahkan oleh GTK bisa dipilih oleh LPD yang berada satu wilayah kota/kab dengan PPTM nya
+                            ->orWhere(function (Builder $query) use ($kKota) {
+                                $query->where('paud_petugas.instansi_id', '=', 800006)
+                                    ->whereHas('akun', function (Builder $query) use ($kKota) {
+                                        $query->where('akun.k_kota', '=', $kKota);
+                                    });
+                            })
+                            ->orWhere('paud_petugas.instansi_k_kota', '=', $kKota);
+                    });
+            })
+            ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($instansiId) {
+                $query->where('paud_petugas.instansi_id', '=', $instansiId);
+            })
+            ->when($periodeId, function (Builder $query) use ($periodeId, $kelasId, $kPetugasPaud) {
+                $query->whereDoesntHave('paudKelasPetugases', function (Builder $query) use ($periodeId, $kelasId, $kPetugasPaud) {
+                    $query
+                        ->join('paud_kelas', 'paud_kelas.paud_kelas_id', '=', 'paud_kelas_petugas.paud_kelas_id')
+                        ->join('paud_diklat', 'paud_diklat.paud_diklat_id', '=', 'paud_kelas.paud_diklat_id')
+                        ->where('paud_diklat.paud_periode_id', '=', $periodeId)
+                        ->when($kelasId, function ($query) use ($kelasId, $kPetugasPaud) {
+                            $query
+                                ->where(function ($query) use ($kelasId) {
+                                    $query
+                                        ->orWhere('paud_kelas_petugas.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA)
+                                        ->orWhere('paud_kelas_petugas.paud_kelas_id', '=', $kelasId);
+                                })
+                                ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasId, $kPetugasPaud) {
+                                    $query
+                                        ->where('paud_kelas_petugas.k_petugas_paud', '=', $kPetugasPaud)
+                                        ->where('paud_kelas_petugas.paud_kelas_id', '=', $kelasId);
+                                });
+                        }, function ($query) {
+                            $query->where('paud_kelas_petugas.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA);
+                        });
+                });
+            })
+            ->when($tglSelesai && $tglMulai, function (Builder $query) use ($tglMulai, $tglSelesai, $kelasLuringId, $kPetugasPaud) {
+                $query->whereDoesntHave('paudKelasPetugasLurings', function (Builder $query) use ($tglMulai, $tglSelesai, $kelasLuringId, $kPetugasPaud) {
+                    $query
+                        ->join('paud_kelas_luring', 'paud_kelas_luring.paud_kelas_luring_id', '=', 'paud_kelas_petugas_luring.paud_kelas_luring_id')
+                        ->join('paud_diklat_luring', 'paud_diklat_luring.paud_diklat_luring_id', '=', 'paud_kelas_luring.paud_diklat_luring_id')
+                        ->where('paud_diklat_luring.tgl_mulai', '<=', $tglSelesai)
+                        ->where('paud_diklat_luring.tgl_selesai', '>=', $tglMulai)
+                        ->when($kelasLuringId, function ($query) use ($kelasLuringId, $kPetugasPaud) {
+                            $query
+                                ->where(function ($query) use ($kelasLuringId) {
+                                    $query
+                                        ->orWhere('paud_kelas_petugas_luring.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA)
+                                        ->orWhere('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', $kelasLuringId);
+                                })
+                                ->when($kPetugasPaud == MPetugasPaud::ADMIN_KELAS, function ($query) use ($kelasLuringId, $kPetugasPaud) {
+                                    $query
+                                        ->where('paud_kelas_petugas_luring.k_petugas_paud', '=', $kPetugasPaud)
+                                        ->where('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', $kelasLuringId);
+                                });
+                        }, function ($query) {
+                            $query->Where('paud_kelas_petugas_luring.k_konfirmasi_paud', '=', MKonfirmasiPaud::BERSEDIA);
+                        });
+                });
+            })
+            ->where('paud_petugas.k_petugas_paud', '=', $kPetugasPaud);
+    }
+
+    public function getBatasanPetugasKelas(int $jmlPeserta, int $maxPengajar, int $ratioPengajarTambahan)
+    {
+        $maxPengajarTambahan = floor($maxPengajar * $ratioPengajarTambahan / 100);
+        $minPengajar         = $maxPengajar - $maxPengajarTambahan;
+
+        return [
+            MPetugasPaud::PENGAJAR           => [$minPengajar, $maxPengajar],
+            MPetugasPaud::PENGAJAR_TAMBAHAN  => [0, $maxPengajarTambahan],
+            MPetugasPaud::PEMBIMBING_PRAKTIK => [floor($jmlPeserta / 10), floor($jmlPeserta / 5)],
+            MPetugasPaud::ADMIN_KELAS        => [1, 1],
+        ];
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateNewPetugasKelas(
+        int      $kPetugasPaud,
+        int      $jmlPetugas,
+        int      $jmlPeserta,
+        int      $maxPengajar,
+        int      $ratioPengajarTambahan,
+        array    $akunIds,
+
+        callable $getJmlPetugasLain,
+        callable $queryKandidat,
+    )
+    {
+        $jmlPetugas += count($akunIds);
+
+        $batasan = $this->getBatasanPetugasKelas($jmlPeserta, $maxPengajar, $ratioPengajarTambahan);
+        if (isset($batasan[$kPetugasPaud][1]) && $jmlPetugas > $batasan[$kPetugasPaud][1]) {
+            throw new FlowException("Jumlah petugas maksimal adalah {$batasan[$kPetugasPaud][1]} orang");
+        }
+
+        if (in_array($kPetugasPaud, [MPetugasPaud::PENGAJAR, MPetugasPaud::PENGAJAR_TAMBAHAN])) {
+            $jmlPetugasLain = $getJmlPetugasLain($kPetugasPaud == MPetugasPaud::PENGAJAR ? MPetugasPaud::PENGAJAR_TAMBAHAN : MPetugasPaud::PENGAJAR);
+
+            $jmlPengajar = $jmlPetugasLain + $jmlPetugas;
+            if ($jmlPengajar > $maxPengajar) {
+                throw new FlowException("Jumlah pengajar dan pengajar tambahan maksimal adalah {$maxPengajar} orang");
+            }
+        }
+
+        $petugases = $queryKandidat()
+            ->whereIn('akun_id', $akunIds)
+            ->get();
+
+        if ($diff = array_diff($akunIds, $petugases->pluck('akun_id')->all())) {
+            $akuns = Akun::whereIn('akun_id', $diff)->pluck('email')->unique()->all();
+            $namas = implode(', ', $akuns);
+
+            throw new FlowException("Petugas dengan email {$namas} tidak ditemukan");
+        }
+
+        return $petugases;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validatePetugasKelas(
+        int   $jmlPeserta,
+        int   $maxPengajar,
+        int   $ratioPengajarTambahan,
+        array $jmlPetugases,
+    )
+    {
+        $batasan = $this->getBatasanPetugasKelas($jmlPeserta, $maxPengajar, $ratioPengajarTambahan);
+
+        foreach ($batasan as $kPetugasPaud => $jml) {
+            [$jmlMin, $jmlMax] = $jml;
+
+            $jmlPetugas = $jmlPetugases[$kPetugasPaud] ?? 0;
+            if ($jmlPetugas < $jmlMin) {
+                $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
+                throw new FlowException("Petugas {$mPetugasPaud->keterangan} minimal {$jmlMin} orang");
+            }
+
+            if ($jmlPetugas > $jmlMax) {
+                $mPetugasPaud = MPetugasPaud::find($kPetugasPaud);
+                throw new FlowException("Petugas {$mPetugasPaud->keterangan} maksimal {$jmlMin} orang");
+            }
+        }
+
+        $jmlPengajar = $jmlPetugases[MPetugasPaud::PENGAJAR] ?? 0;
+        $jmlTambahan = $jmlPetugases[MPetugasPaud::PENGAJAR_TAMBAHAN] ?? 0;
+        if (($jmlPengajar + $jmlTambahan) > $maxPengajar) {
+            throw new FlowException("Pengajar dan pengajar tambahan maksimal {$maxPengajar} orang");
+        }
     }
 }

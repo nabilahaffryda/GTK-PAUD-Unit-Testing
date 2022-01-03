@@ -18,6 +18,11 @@ return [
             4 => 5, // admin kelas
         ],
 
+        'group-id-admin'   => 1,
         'group-id-peserta' => 8,
+    ],
+
+    'kelas-jadwal' => [
+        'hapus-file-lama' => false,
     ],
 ];

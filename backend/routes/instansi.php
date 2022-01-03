@@ -104,7 +104,7 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
             Route::get('kelas/{kelas}/petugas', [Lpd\Kelas\PetugasController::class, 'index']);
             Route::get('kelas/{kelas}/petugas/kandidat', [Lpd\Kelas\PetugasKandidatController::class, 'index']);
             Route::post('kelas/{kelas}/petugas/create', [Lpd\Kelas\PetugasController::class, 'create']);
-            Route::get('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Kelas\PetugasController::class, 'delete']);
+            Route::post('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Kelas\PetugasController::class, 'delete']);
         });
     });
 
@@ -119,6 +119,43 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
             Route::get('petugas', [Kelas\VervalController::class, 'petugas']);
             Route::post('verval', [Kelas\VervalController::class, 'updateVerval']);
             Route::post('batal-verval', [Kelas\VervalController::class, 'batalVerval']);
+        });
+    });
+
+    Route::group(['prefix' => 'luring/diklat'], function () {
+        Route::get('mapel-kelas', [Lpd\Luring\Diklat\MapelKelasController::class, 'index']);
+
+        Route::get('', [Lpd\Luring\DiklatController::class, 'index']);
+        Route::post('create', [Lpd\Luring\DiklatController::class, 'create']);
+        Route::get('{diklat}', [Lpd\Luring\DiklatController::class, 'fetch']);
+        Route::post('{diklat}/update', [Lpd\Luring\DiklatController::class, 'update']);
+        Route::post('{diklat}/delete', [Lpd\Luring\DiklatController::class, 'delete']);
+
+        Route::group(['prefix' => '{diklat}'], function () {
+            Route::get('kelas', [Lpd\Luring\KelasController::class, 'index']);
+            Route::post('kelas/create', [Lpd\Luring\KelasController::class, 'create']);
+            Route::get('kelas/{kelas}', [Lpd\Luring\KelasController::class, 'fetch']);
+            Route::post('kelas/{kelas}/update', [Lpd\Luring\KelasController::class, 'update']);
+            Route::post('kelas/{kelas}/upload-jadwal', [Lpd\Luring\KelasController::class, 'uploadJadwal']);
+
+            Route::post('kelas/{kelas}/ajuan/create', [Lpd\Luring\Kelas\AjuanController::class, 'create']);
+            Route::post('kelas/{kelas}/ajuan/delete', [Lpd\Luring\Kelas\AjuanController::class, 'delete']);
+
+            Route::get('kelas/{kelas}/peserta', [Lpd\Luring\Kelas\PesertaController::class, 'index']);
+            Route::get('kelas/{kelas}/peserta/kandidat', [Lpd\Luring\Kelas\PesertaController::class, 'candidate']);
+            Route::get('kelas/{kelas}/peserta/kandidat-simpatika', [Lpd\Luring\Kelas\PesertaController::class, 'candidateSimpatika']);
+            Route::get('kelas/{kelas}/peserta/kandidat-sd', [Lpd\Luring\Kelas\PesertaController::class, 'candidateSd']);
+            Route::get('kelas/{kelas}/peserta/kandidat-nonptk', [Lpd\Luring\Kelas\PesertaController::class, 'candidateNonPtk']);
+            Route::post('kelas/{kelas}/peserta/create', [Lpd\Luring\Kelas\PesertaController::class, 'create']);
+            Route::post('kelas/{kelas}/peserta/create-simpatika', [Lpd\Luring\Kelas\PesertaController::class, 'createSimpatika']);
+            Route::post('kelas/{kelas}/peserta/create-sd', [Lpd\Luring\Kelas\PesertaController::class, 'createSd']);
+            Route::post('kelas/{kelas}/peserta/create-nonptk', [Lpd\Luring\Kelas\PesertaController::class, 'createNonPtk']);
+            Route::post('kelas/{kelas}/peserta/{peserta}/delete', [Lpd\Luring\Kelas\PesertaController::class, 'delete']);
+
+            Route::get('kelas/{kelas}/petugas', [Lpd\Luring\Kelas\PetugasController::class, 'index']);
+            Route::get('kelas/{kelas}/petugas/kandidat', [Lpd\Luring\Kelas\PetugasController::class, 'candidate']);
+            Route::post('kelas/{kelas}/petugas/create', [Lpd\Luring\Kelas\PetugasController::class, 'create']);
+            Route::post('kelas/{kelas}/petugas/{petugas}/delete', [Lpd\Luring\Kelas\PetugasController::class, 'delete']);
         });
     });
 
@@ -267,6 +304,20 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('{kelas}/peserta', [Petugas\KelasController::class, 'peserta']);
     });
 
+    Route::group(['prefix' => 'petugas-luring/konfirmasi'], function () {
+        Route::get('', [Petugas\Luring\KonfirmasiController::class, 'index']);
+        Route::get('{kelasPetugas}', [Petugas\Luring\KonfirmasiController::class, 'fetch']);
+        Route::get('{kelasPetugas}/setuju', [Petugas\Luring\KonfirmasiController::class, 'setuju']);
+        Route::get('{kelasPetugas}/tidak-setuju', [Petugas\Luring\KonfirmasiController::class, 'tidakSetuju']);
+        Route::get('{kelasPetugas}/reset', [Petugas\Luring\KonfirmasiController::class, 'reset']);
+    });
+
+    Route::group(['prefix' => 'petugas-luring/kelas'], function () {
+        Route::get('', [Petugas\Luring\KelasController::class, 'index']);
+        Route::get('{kelas}', [Petugas\Luring\KelasController::class, 'fetch']);
+        Route::get('{kelas}/peserta', [Petugas\Luring\KelasController::class, 'peserta']);
+    });
+
     Route::group(['prefix' => 'petugas/profil'], function () {
         Route::get('', [Petugas\ProfilController::class, 'index']);
         Route::post('{petugas}/update', [Petugas\ProfilController::class, 'update']);
@@ -291,5 +342,13 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
     Route::group(['prefix' => 'admin-kelas/profil'], function () {
         Route::get('', [AdminKelas\ProfilController::class, 'index']);
         Route::post('{admin}/update', [AdminKelas\ProfilController::class, 'update']);
+    });
+
+    Route::group(['prefix' => 'peserta/nonptk'], function () {
+        Route::get('', [Lpd\Peserta\NonPtkController::class, 'index']);
+        Route::get('{peserta}', [Lpd\Peserta\NonPtkController::class, 'fetch']);
+        Route::post('create', [Lpd\Peserta\NonPtkController::class, 'create']);
+        Route::post('{peserta}/update', [Lpd\Peserta\NonPtkController::class, 'update']);
+        Route::post('{peserta}/delete', [Lpd\Peserta\NonPtkController::class, 'delete']);
     });
 });

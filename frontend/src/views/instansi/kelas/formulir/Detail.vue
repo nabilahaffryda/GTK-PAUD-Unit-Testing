@@ -32,13 +32,23 @@
               <v-col>
                 <div class="label--text">Tanggal Mulai Kelas</div>
                 <div class="body-1">
-                  {{ $localDate($getDeepObj(kelas, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai')) || '-' }}
+                  <template v-if="jenis === 'daring'">
+                    {{ $localDate($getDeepObj(kelas, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai')) || '-' }}
+                  </template>
+                  <template v-else>
+                    {{ $localDate($getDeepObj(kelas, 'paud_diklat_luring.data.tgl_mulai')) || '-' }}
+                  </template>
                 </div>
               </v-col>
               <v-col>
                 <div class="label--text">Tanggal Selesai Kelas</div>
                 <div class="body-1">
-                  {{ $localDate($getDeepObj(kelas, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')) || '-' }}
+                  <template v-if="jenis === 'daring'">
+                    {{ $localDate($getDeepObj(kelas, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')) || '-' }}
+                  </template>
+                  <template v-else>
+                    {{ $localDate($getDeepObj(kelas, 'paud_diklat_luring.data.tgl_selesai')) || '-' }}
+                  </template>
                 </div>
               </v-col>
             </v-row>
@@ -90,6 +100,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    jenis: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -120,8 +134,16 @@ export default {
     items() {
       return (this.pesertas || []).map((item) => {
         return {
-          nama: this.$getDeepObj(item, 'ptk.data.nama') || this.$getDeepObj(item, 'akun.data.nama') || '-',
-          email: this.$getDeepObj(item, 'ptk.data.email') || this.$getDeepObj(item, 'akun.data.email') || '-',
+          nama:
+            this.$getDeepObj(item, 'ptk.data.nama') ||
+            this.$getDeepObj(item, 'akun.data.nama') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.nama') ||
+            '-',
+          email:
+            this.$getDeepObj(item, 'ptk.data.email') ||
+            this.$getDeepObj(item, 'akun.data.email') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
+            '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
           paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
           paud_kelas_peserta_id: this.$getDeepObj(item, 'paud_kelas_peserta_id') || '',
@@ -131,7 +153,11 @@ export default {
     },
 
     kelasId() {
-      return this.$getDeepObj(this.kelas, 'paud_kelas_id');
+      return this.$getDeepObj(this.kelas, 'id');
+    },
+
+    label() {
+      return this.jenis === 'daring' ? '' : '_luring';
     },
   },
   methods: {

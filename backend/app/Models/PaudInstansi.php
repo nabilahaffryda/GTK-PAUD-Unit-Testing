@@ -43,8 +43,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read MLpdPaud $mLpdPaud
  * @property-read MVervalPaud $mVervalPaud
  * @property-read Akun $akunVerval
+ * @property-read Collection|PaudDiklatLuring[] $paudDiklatLurings
  * @property-read Collection|PaudDiklat[] $paudDiklats
  * @property-read Collection|PaudInstansiBerkas[] $paudInstansiBerkases
+ * @property-read Collection|PaudPesertaNonptk[] $paudPesertaNonptks
  *
  * @method static Builder|PaudInstansi wherePaudInstansiId($value)
  * @method static Builder|PaudInstansi whereInstansiId($value)
@@ -188,6 +190,14 @@ class PaudInstansi extends Eloquent
     /**
      * @return HasMany
      */
+    public function paudDiklatLurings()
+    {
+        return $this->hasMany('App\Models\PaudDiklatLuring', 'paud_instansi_id', 'paud_instansi_id');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function paudDiklats()
     {
         return $this->hasMany('App\Models\PaudDiklat', 'paud_instansi_id', 'paud_instansi_id');
@@ -199,6 +209,14 @@ class PaudInstansi extends Eloquent
     public function paudInstansiBerkases()
     {
         return $this->hasMany('App\Models\PaudInstansiBerkas', 'paud_instansi_id', 'paud_instansi_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function paudPesertaNonptks()
+    {
+        return $this->hasMany('App\Models\PaudPesertaNonptk', 'paud_instansi_id', 'paud_instansi_id');
     }
 
     public function admins()

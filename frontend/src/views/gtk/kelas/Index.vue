@@ -92,7 +92,10 @@
                           <v-btn
                             color="success"
                             small
-                            :disabled="!$getDeepObj(item, 'lms_url')"
+                            :disabled="
+                              !$getDeepObj(item, 'lms_url') ||
+                              [1].includes(Number($getDeepObj(item, 'paud_diklat.paud_periode_id') || 0))
+                            "
                             @click="onLms($getDeepObj(item, 'lms_url'))"
                           >
                             <v-icon left>mdi-link</v-icon>

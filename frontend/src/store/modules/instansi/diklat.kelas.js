@@ -3,34 +3,54 @@ import http from '@plugins/axios';
 import kitsu from '@plugins/kitsu';
 let $ajax;
 
+export const state = {
+  jenis: null,
+};
+
+export const mutations = {
+  SET_TIPE(state, newValue) {
+    state.jenis = newValue;
+  },
+};
+
 export const actions = {
-  async fetch({ rootState }, payload) {
+  async fetch({ rootState, commit }, payload) {
     const id = rootState.auth.instansi_id;
+    const tipe = {
+      luring: 'luring/',
+      daring: '',
+    };
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat/${payload.attr.diklat_id}/kelas`,
+      baseURL:
+        process.env.VUE_APP_API_URL + `/i/${id}/${tipe[payload.attr.jenis]}diklat/${payload.attr.diklat_id}/kelas`,
     });
+    commit('SET_TIPE', tipe[payload.attr.jenis]);
     return await $ajax.get('/', { params: payload.params });
   },
 
-  async getDetail({ rootState }, payload) {
+  async getDetail({ rootState, state }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat/${payload.diklat_id}/kelas`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${state.jenis}diklat/${payload.diklat_id}/kelas`,
     });
     return await $ajax.get(`/${payload.id}`);
   },
 
-  async getMapels({ rootState }) {
+  async getMapels({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
+    const tipe = {
+      luring: 'luring/',
+      daring: '',
+    };
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat/mapel-kelas`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/${tipe[payload]}diklat/mapel-kelas`,
     });
     return await $ajax.get(`/`);
   },
 
-  create({ rootState }, payload) {
+  create({ rootState, state }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `i/${id}/diklat/${payload.diklat_id}/kelas/create`;
+    const url = `i/${id}/${state.jenis}diklat/${payload.diklat_id}/kelas/create`;
     return http.post(url, payload.params).then(({ data }) => data);
   },
 
@@ -38,24 +58,28 @@ export const actions = {
     return dispatch('action', Object.assign({}, payload, { type: 'update' }));
   },
 
-  action({ rootState }, payload) {
+  action({ rootState, state }, payload) {
     const id = rootState.auth.instansi_id;
-    const url = `i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.type}`;
+    const url = `i/${id}/${state.jenis}diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.type}`;
     return http[payload.method || 'post'](url, payload.params, payload.config || {}).then(({ data }) => data);
   },
 
-  async getListKelas({ rootState }, payload) {
+  async getListKelas({ rootState, state }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}`,
+      baseURL:
+        process.env.VUE_APP_API_URL +
+        `/i/${id}/${state.jenis}diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}`,
     });
     return await $ajax.get(`/`, { params: payload.params });
   },
 
-  async getListKandidat({ rootState }, payload) {
+  async getListKandidat({ rootState, state }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}`,
+      baseURL:
+        process.env.VUE_APP_API_URL +
+        `/i/${id}/${state.jenis}diklat/${payload.diklat_id}/kelas/${payload.id}/${payload.tipe}`,
     });
 
     let params = Object.assign({}, payload.params, { page: payload.page || 1 });

@@ -19,12 +19,19 @@
               <div class="body-1">{{ $getDeepObj(kelas, 'deskripsi') || '-' }}</div>
             </div>
             <v-row class="my-5">
-              <!--              <v-col>-->
-              <!--                <div class="label&#45;&#45;text">Lokasi</div>-->
-              <!--                <div class="body-1">-->
-              <!--                  {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) || '-' }}-->
-              <!--                </div>-->
-              <!--              </v-col>-->
+              <v-col>
+                <div class="label--text">Lokasi</div>
+                <div class="body-1">
+                  {{
+                    [
+                      $getDeepObj(kelas, `m_kelurahan.data.keterangan`) || '-',
+                      $getDeepObj(kelas, `m_kecamatan.data.keterangan`) || '-',
+                      $getDeepObj(detail, `m_kota.data.keterangan`) || '',
+                      $getDeepObj(detail, `m_propinsi.data.keterangan`) || '',
+                    ].join(', ')
+                  }}
+                </div>
+              </v-col>
               <v-col>
                 <div class="label--text">Jumlah Pengajar</div>
                 <div class="body-1">
@@ -38,13 +45,23 @@
               <v-col>
                 <div class="label--text">Tanggal Mulai Kelas</div>
                 <div class="body-1">
-                  {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) || '-' }}
+                  <template v-if="jenis === 'daring'">
+                    {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_mulai')) || '-' }}
+                  </template>
+                  <template v-else>
+                    {{ $localDate($getDeepObj(detail, 'tgl_mulai') || '') }}
+                  </template>
                 </div>
               </v-col>
               <v-col>
                 <div class="label--text">Tanggal Selesai Kelas</div>
                 <div class="body-1">
-                  {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) || '-' }}
+                  <template v-if="jenis === 'daring'">
+                    {{ $localDate($getDeepObj(detail, 'paud_periode.data.tgl_diklat_selesai')) || '-' }}
+                  </template>
+                  <template v-else>
+                    {{ $localDate($getDeepObj(detail, 'tgl_selesai') || '') }}
+                  </template>
                 </div>
               </v-col>
             </v-row>
@@ -71,11 +88,13 @@
                 >
               </v-col>
             </v-row>
-            <div class="my-5" v-if="Number(kelas.k_verval_paud) === 6">
+            <div class="my-5" v-if="Number(kelas.k_verval_paud) === 6 && jenis === 'daring'">
               <v-btn
                 color="success"
                 depressed
-                :disabled="!$getDeepObj(kelas, 'lms_url')"
+                :disabled="
+                  !$getDeepObj(kelas, 'lms_url') || [1].includes(Number((detail && detail.paud_periode_id) || 0))
+                "
                 small
                 @click="onLms($getDeepObj(kelas, 'lms_url'))"
                 ><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn
@@ -119,7 +138,7 @@
             <v-alert dense text type="info" v-if="tab > 1">
               <template v-if="tab === 2">
                 Penambahan <b>{{ tabItems[tab]['text'] }}</b> pada kelas sebanyak
-                {{ $getDeepObj(kelas, 'paud_diklat.data.paud_instansi.data.jml_pembimbing') || 0 }}
+                {{ $getDeepObj(kelas, `${tipediklat}.data.paud_instansi.data.jml_pembimbing`) || 0 }}
               </template>
               <template v-else>
                 Penambahan <b>{{ tabItems[tab]['text'] }}</b> pada kelas sebanyak
@@ -128,10 +147,12 @@
                     tab === 3
                       ? `${
                           100 -
-                          Number($getDeepObj(kelas, 'paud_diklat.data.paud_instansi.data.ratio_pengajar_tambahan') || 0)
+                          Number(
+                            $getDeepObj(kelas, `${tipediklat}.data.paud_instansi.data.ratio_pengajar_tambahan`) || 0
+                          )
                         }%`
                       : `${Number(
-                          $getDeepObj(kelas, 'paud_diklat.data.paud_instansi.data.ratio_pengajar_tambahan') || 0
+                          $getDeepObj(kelas, `${tipediklat}.data.paud_instansi.data.ratio_pengajar_tambahan`) || 0
                         )}%`
                   }}
                 </b>
@@ -220,6 +241,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    jenis: {
+      type: String,
+      default: 'daring',
+    },
   },
 
   data() {
@@ -232,9 +257,9 @@ export default {
       tabItems: [
         { value: 'peserta', kPetugas: 0, text: 'Peserta' },
         { value: 'admin', kPetugas: 4, text: 'Admin Kelas' },
-        { value: 'pembimbing-praktik', kPetugas: 3, text: 'Pembimbing Praktik' },
-        { value: 'pengajar', kPetugas: 1, text: 'Pengajar' },
-        { value: 'pengajar-tambahan', kPetugas: 2, text: 'Pengajar Tambahan' },
+        { value: 'pembimbing-praktik', kPetugas: 3, text: 'PPTM' },
+        { value: 'pengajar', kPetugas: 1, text: 'PPM' },
+        { value: 'pengajar-tambahan', kPetugas: 2, text: 'PPM Tambahan' },
       ],
       search: '',
       meta: {},
@@ -261,7 +286,10 @@ export default {
         temp.push({ text: 'Kota/Kabupaten', value: 'kota', sortable: false });
       }
 
-      if (this.tab !== 1) {
+      if (
+        (![0, 1].includes(this.tab) && this.jenis === 'luring') ||
+        (![1].includes(this.tab) && this.jenis === 'daring')
+      ) {
         temp.push({ text: 'Status', value: 'status', sortable: false });
       }
 
@@ -273,12 +301,23 @@ export default {
     items() {
       return (this.pesertas || []).map((item) => {
         return {
-          nama: this.$getDeepObj(item, 'ptk.data.nama') || this.$getDeepObj(item, 'akun.data.nama') || '-',
-          email: this.$getDeepObj(item, 'ptk.data.email') || this.$getDeepObj(item, 'akun.data.email') || '-',
+          nama:
+            this.$getDeepObj(item, 'ptk.data.nama') ||
+            this.$getDeepObj(item, 'akun.data.nama') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.nama') ||
+            '-',
+          email:
+            this.$getDeepObj(item, 'ptk.data.email') ||
+            this.$getDeepObj(item, 'akun.data.email') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
+            '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
-          k_konfirmasi_paud: (item && item.k_konfirmasi_paud) || 1,
-          paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
-          paud_kelas_peserta_id: this.$getDeepObj(item, 'paud_kelas_peserta_id') || '',
+          k_konfirmasi_paud:
+            [0].includes(Number(this.tab)) && this.jenis === 'luring' ? 1 : (item && item.k_konfirmasi_paud) || 1,
+          paud_kelas_petugas_id:
+            this.$getDeepObj(item, 'paud_kelas_petugas_id') || this.$getDeepObj(item, 'paud_kelas_petugas_luring_id'),
+          paud_kelas_peserta_id:
+            this.$getDeepObj(item, 'paud_kelas_peserta_id') || this.$getDeepObj(item, 'paud_kelas_peserta_luring_id'),
           ptk_id: this.$getDeepObj(item, 'ptk_id') || '',
           propinsi: this.$getDeepObj(item, 'akun.data.m_propinsi.data.keterangan') || '-',
           kota: this.$getDeepObj(item, 'akun.data.m_kota.data.keterangan') || '-',
@@ -296,6 +335,10 @@ export default {
 
     isPeserta() {
       return this.tab === 0;
+    },
+
+    tipediklat() {
+      return this.jenis === 'daring' ? 'paud_diklat' : 'paud_diklat_luring';
     },
 
     berkas() {
@@ -328,8 +371,8 @@ export default {
       if (this.search) this.$set(params, 'keyword', this.search);
 
       this.getListKelas({
-        diklat_id: this.detail.paud_diklat_id,
-        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
+        diklat_id: this.$getDeepObj(this.detail, `id`),
+        id: this.$getDeepObj(this.kelas, 'id'),
         tipe: tipe,
         params: params,
       }).then(({ data, meta }) => {
@@ -366,10 +409,10 @@ export default {
           ptk_id: [item.ptk_id],
         };
         this.action({
-          id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
-          diklat_id: this.detail.paud_diklat_id,
+          id: this.$getDeepObj(this.kelas, 'id'),
+          diklat_id: this.$getDeepObj(this.detail, 'id'),
           type: url,
-          method: this.isPeserta ? 'post' : 'get',
+          method: this.isPeserta ? 'post' : this.jenis === 'Daring' ? 'get' : 'post',
           params: this.isPeserta ? params : {},
         }).then(() => {
           this.$success(`${this.isPeserta ? 'Peserta' : 'Petugas'} berhasil dihapus`);
@@ -423,12 +466,13 @@ export default {
       };
 
       const params = {
-        diklat_id: this.detail.paud_diklat_id,
-        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
+        diklat_id: this.$getDeepObj(this.detail, 'id'),
+        id: this.$getDeepObj(this.kelas, 'id'),
         tipe: this.tab === 0 ? 'peserta/kandidat' : 'petugas/kandidat',
         params: {
           k_petugas_paud: this.tabItems[+this.tab]['kPetugas'],
         },
+        jenis: this.jenis,
       };
 
       this.$refs.popup.open(fields[this.tab === 0 ? 'kandidat' : 'petugas'], params).then((data) => {
@@ -446,8 +490,8 @@ export default {
     onSavePetugas() {
       const petugas = this.petugas;
       this.action({
-        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
-        diklat_id: this.detail.paud_diklat_id,
+        id: this.$getDeepObj(this.kelas, 'id'),
+        diklat_id: this.$getDeepObj(this.detail, 'id'),
         type: 'petugas/create',
         params: {
           k_petugas_paud: this.tabItems[+this.tab]['kPetugas'],
@@ -464,17 +508,22 @@ export default {
         0: 'peserta/create',
         1: 'peserta/create-sd',
         2: 'peserta/create-simpatika',
+        3: 'peserta/create-nonptk',
       };
       const petugas = this.petugas;
       const jenis = mAksi[Number(this.$refs.popup.tab)];
+      let params = {};
+      if (Number(this.$refs.popup.tab) === 3) {
+        params = { paud_peserta_nonptk_id: petugas };
+      } else {
+        params = { ptk_id: petugas };
+      }
 
       this.action({
-        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
-        diklat_id: this.detail.paud_diklat_id,
+        id: this.$getDeepObj(this.kelas, 'id'),
+        diklat_id: this.$getDeepObj(this.detail, 'id'),
         type: jenis,
-        params: {
-          ptk_id: petugas,
-        },
+        params: params,
       }).then(() => {
         this.$success(`Data peserta berhasil ditambahkan`);
         this.onReload();
@@ -523,8 +572,8 @@ export default {
       formData.append('file', params['file']);
 
       this.action({
-        diklat_id: this.detail.paud_diklat_id,
-        id: this.$getDeepObj(this.kelas, 'paud_kelas_id'),
+        diklat_id: this.$getDeepObj(this.detail, 'id'),
+        id: this.$getDeepObj(this.kelas, 'id'),
         type: 'upload-jadwal',
         params: formData,
         config: {
@@ -580,7 +629,7 @@ export default {
     },
     kelas: {
       handler(value) {
-        if (value && value.paud_kelas_id) {
+        if (value && value.id) {
           this.fetch('peserta');
         }
       },
