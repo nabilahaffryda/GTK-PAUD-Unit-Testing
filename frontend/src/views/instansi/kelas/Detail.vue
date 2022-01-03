@@ -121,9 +121,12 @@
                         <v-list-item class="px-0">
                           <v-list-item-content class="py-0 mt-3">
                             <div class="label--text">Aksi Selanjutnya</div>
-
                             <v-btn
-                              v-if="!getNilai(item) && $allow('petugas-luring-nilai.save')"
+                              v-if="
+                                !getNilai(item) &&
+                                $allow('petugas-luring-nilai.save') &&
+                                [null, 1].includes(detail.laporan_k_verval_paud)
+                              "
                               small
                               color="success"
                               @click="onNilai(item)"
@@ -307,7 +310,13 @@ export default {
     async onNilai(item) {
       const resp = await this.getPeserta({ kelas_id: this.id, id: item.id }).then(({ data }) => data);
       this.$set(this.formulir, 'title', 'Penilaian Peserta');
-      this.$set(this.formulir, 'isEdit', !this.getNilai(item) && this.$allow('petugas-luring-nilai.save'));
+      this.$set(
+        this.formulir,
+        'isEdit',
+        !this.getNilai(item) &&
+          this.$allow('petugas-luring-nilai.save') &&
+          [null, 1].includes(this.detail?.laporan_k_verval_paud ?? null)
+      );
       this.$refs.modal.open();
 
       this.$nextTick(() => {
