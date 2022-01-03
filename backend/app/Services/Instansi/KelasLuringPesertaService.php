@@ -68,6 +68,25 @@ class KelasLuringPesertaService
         return PaudKelasPesertaLuringNilai::make()->newCollection($results);
     }
 
+    public function updateNilai(PaudKelasPesertaLuring $peserta)
+    {
+        $peserta->nilai = $peserta->n_pendalaman_materi * 0.4 + $peserta->n_tugas_mandiri * 0.6;
+
+        if ($peserta->n_pendalaman_materi === null || $peserta->n_tugas_mandiri === null) {
+            [$peserta->predikat, $peserta->medali] = ['-', '-'];
+
+        } else {
+            [$peserta->predikat, $peserta->medali] = match (true) {
+                $peserta->nilai >= 90 => ['Amat Baik', 'Gold'],
+                $peserta->nilai >= 80 => ['Baik', 'Silver'],
+                $peserta->nilai >= 70 => ['Cukup', 'Bronze'],
+                default               => ['-', '-'],
+            };
+        }
+
+        $peserta->save();
+    }
+
     /**
      * @throws FlowException
      */
@@ -118,8 +137,7 @@ class KelasLuringPesertaService
             $peserta->n_tugas_mandiri = min(round($total, 2), 100);
         }
 
-        $peserta->nilai = $peserta->n_pendalaman_materi * 0.4 + $peserta->n_tugas_mandiri * 0.6;
-        $peserta->save();
+        $this->updateNilai($peserta);
 
         return $results;
     }
@@ -146,8 +164,7 @@ class KelasLuringPesertaService
             $peserta->n_tugas_mandiri = null;
         }
 
-        $peserta->nilai = $peserta->n_pendalaman_materi * 0.4 + $peserta->n_tugas_mandiri * 0.6;
-        $peserta->save();
+        $this->updateNilai($peserta);
 
         return $this->listNilai($kelas, $peserta, $isPpm);
     }
