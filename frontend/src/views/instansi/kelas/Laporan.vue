@@ -158,7 +158,7 @@
         :type="formulir.type"
         :detail="detail"
         :masters="masters"
-        :initValue="formulir.init"
+        :initValue="formulir.initValue"
         :jenis="jenis"
         @unduhTemplate="unduhTemplate"
       ></component>
@@ -168,13 +168,13 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import BaseBreadcrumbs from '@components/base/BaseBreadcrumbs';
-import FormNilai from './formulir/Form';
 import FormUpload from './formulir/UploadLaporan';
+import DetailNilai from './formulir/DetailNilai';
 import list from '@mixins/list';
 import mixin from './list/mixin';
 export default {
   mixins: [list, mixin],
-  components: { BaseBreadcrumbs, FormNilai, FormUpload },
+  components: { BaseBreadcrumbs, DetailNilai, FormUpload },
   data() {
     return {
       formulir: {},
@@ -241,7 +241,7 @@ export default {
     },
   },
   mounted() {
-    Object.assign(this.attr, { id: this.id });
+    Object.assign(this.attr, { id: this.id, jenis: this.jenis });
   },
   created() {
     this.getKelasDiklat();
@@ -249,7 +249,7 @@ export default {
   methods: {
     ...mapActions('master', ['getMasters']),
     ...mapActions('petugasKelas', {
-      fetch: 'fetchPeserta',
+      fetch: 'getListPesertaLaporan',
       getDetail: 'getDetailLuring',
       getPeserta: 'getDetailPesertaNilai',
       action: 'action',
@@ -259,7 +259,7 @@ export default {
       return new Promise((resolve) => {
         const params = Object.assign({}, this.params, this.$isObject(this.filters) ? { filter: this.filters } : {});
         const attr = Object.assign({}, this.attr);
-        this.fetch({ params, attr }).then(({ data, meta, is_ppm, is_pptm }) => {
+        this.fetch({ id: this.id, jenis: this.jenis, params, attr }).then(({ data, meta, is_ppm, is_pptm }) => {
           this.data = data || [];
           this.total = meta?.total || data.length || 0;
           this.pageTotal = meta?.last_page || 1;
@@ -297,10 +297,11 @@ export default {
       return this.$getDeepObj(item, 'n_pendalaman_materi') || this.$getDeepObj(item, 'n_tugas_mandiri') || null;
     },
 
-    async onNilai(item) {
-      const resp = await this.getPeserta({ kelas_id: this.id, id: item.id }).then(({ data }) => data);
+    async onViewNilai(item) {
+      const resp = await this.getPeserta({ kelas_id: this.id, id: item.id, page: 'laporan' }).then(({ data }) => data);
       this.$set(this.formulir, 'title', 'Penilaian Peserta');
-      this.$set(this.formulir, 'isEdit', !this.getNilai(item) && this.$allow('petugas-luring-nilai.save'));
+      this.$set(this.formulir, 'form', 'DetailNilai');
+      this.$set(this.formulir, 'useSave', false);
       this.$refs.modal.open();
 
       this.$nextTick(() => {
@@ -308,7 +309,10 @@ export default {
         this.$set(
           this.formulir,
           'initValue',
-          Object.assign({ peserta: Object.assign(item, { is_nilai: this.getNilai(item) }), instruments: resp })
+          Object.assign({
+            peserta: Object.assign(item, { is_nilai: this.getNilai(item) }),
+            instruments: resp,
+          })
         );
       });
     },

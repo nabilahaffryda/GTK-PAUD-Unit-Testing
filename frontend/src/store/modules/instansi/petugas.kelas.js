@@ -54,7 +54,7 @@ export const actions = {
   async getDetailPesertaNilai({ rootState }, payload) {
     const id = rootState.auth.instansi_id;
     $ajax = kitsu({
-      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/petugas-luring/kelas/${payload.kelas_id}/nilai`,
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/petugas-luring/kelas/${payload.kelas_id}${payload.page ? `/${payload.page}` : ''}/nilai`,
     });
     return await $ajax.get(`/${payload.id}`);
   },
@@ -72,5 +72,24 @@ export const actions = {
     const id = rootState.auth.instansi_id;
     const url = `/i/${id}/petugas-luring/kelas/${payload.kelas_id}/nilai/${payload.id}/${payload.name}`;
     return http[payload.method || 'post'](url, payload.params).then(({ data }) => data);
+  },
+
+  async getListPesertaLaporan({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const params = Object.assign({}, payload.params || {}, { page: payload.page || 1 });
+    $ajax = kitsu({
+      baseURL: process.env.VUE_APP_API_URL + `/i/${id}/petugas-${payload.jenis}/kelas/${payload.id}/laporan/peserta`,
+    });
+    return await $ajax.get(`/`, { params });
+  },
+
+  upload({ rootState }, payload) {
+    const id = rootState.auth.instansi_id;
+    const url = `/i/${id}/petugas-${payload.jenis}/kelas/${payload.id}/laporan/unggah`;
+    return http.post(url, payload.params, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
   },
 };
