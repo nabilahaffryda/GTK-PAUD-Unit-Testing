@@ -93,7 +93,7 @@
                       />
                     </v-col>
                     <v-col cols="12" md="12" sm="12">
-                      <div class="my-2" v-if="Number(detail && detail.k_verval_paud) === 6">
+                      <div class="my-2" v-if="Number(detail && detail.k_verval_paud) === 6 && akses === 'daring'">
                         <v-btn
                           color="success"
                           depressed
