@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Instansi\Petugas\Luring\Nilai\IndexRequest;
 use App\Http\Requests\Instansi\Petugas\Luring\Nilai\SaveRequest;
 use App\Http\Resources\BaseCollection;
+use App\Models\MVervalPaud;
 use App\Models\PaudKelasLuring;
 use App\Models\PaudKelasPesertaLuring;
 use App\Services\Instansi\DiklatLuringService;
@@ -64,6 +65,7 @@ class NilaiController extends Controller
         }
 
         app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        app(KelasLuringService::class)->validateIsPpmOrPptm($kelas, MVervalPaud::KANDIDAT);
 
         [$isPpm,] = app(KelasLuringService::class)->validateIsPpmOrPptm($kelas, akunId());
 
@@ -84,6 +86,7 @@ class NilaiController extends Controller
         }
 
         app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        app(KelasLuringService::class)->validateIsPpmOrPptm($kelas, MVervalPaud::KANDIDAT);
 
         [$isPpm,] = app(KelasLuringService::class)->validateIsPpmOrPptm($kelas, akunId());
 

@@ -623,5 +623,14 @@ class KelasLuringService
         return [$isPpm, $isPptm];
     }
 
-
+    /**
+     * @throws FlowException
+     */
+    public function validateVervalLaporanIs(PaudKelasLuring $kelas, int ...$kVervals)
+    {
+        $kVerval = $kelas->laporan_k_verval_paud ?: MVervalPaud::KANDIDAT;
+        if (!in_array($kVerval, $kVervals)) {
+            throw new FlowException('Laporan kelas lurang sudah diajukan atau diproses');
+        }
+    }
 }
