@@ -264,13 +264,13 @@ export default {
       return new Promise((resolve) => {
         const params = Object.assign({}, this.params, this.$isObject(this.filters) ? { filter: this.filters } : {});
         const attr = Object.assign({}, this.attr);
-        this.fetch({ params, attr }).then(({ data, meta, is_ppm, is_pptm }) => {
+        this.fetch({ params, attr }).then(({ data, meta }) => {
           this.data = data || [];
           this.total = meta?.total || data.length || 0;
           this.pageTotal = meta?.last_page || 1;
-          this.is_ppm = is_ppm;
-          this.is_pptm = is_pptm;
-          this.use_action = is_ppm || is_pptm;
+          this.is_ppm = meta?.is_ppm ?? false;
+          this.is_pptm = meta?.is_pptm ?? false;
+          this.use_action = this.is_ppm || this.is_pptm;
           resolve(true);
         });
       });

@@ -1,5 +1,5 @@
 import { mapActions } from 'vuex';
-import { today } from '../../../../utils/format';
+// import { today } from '../../../../utils/format';
 
 export default {
   methods: {
@@ -20,9 +20,11 @@ export default {
     },
 
     isEndDiklat(item) {
-      const now = new Date(today());
-      const wkt_selesai = new Date(this.$getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai'));
-      return now >= wkt_selesai;
+      // const now = new Date(today());
+      // const wkt_selesai = new Date(this.$getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai'));
+      // return now >= wkt_selesai;
+
+      return Number(item?.is_selesai ?? 0) === 1;
     },
 
     onView(item) {
