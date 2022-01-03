@@ -746,7 +746,6 @@ class KelasLuringService
         app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
         $this->validateLaporanAjuan($kelas);
 
-        $kelas->file_laporan          = null;
         $kelas->laporan_k_verval_paud = MVervalPaud::KANDIDAT;
         $kelas->laporan_wkt_ajuan     = null;
         $kelas->save();
