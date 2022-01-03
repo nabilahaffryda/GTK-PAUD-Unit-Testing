@@ -117,7 +117,7 @@ class DiklatLuringService
      */
     public function validateSelesai(PaudDiklatLuring $diklat)
     {
-        if ($diklat->tgl_selesai && $diklat->tgl_selesai->isBefore(Carbon::now()->startOfDay())) {
+        if ($diklat->tgl_selesai && $diklat->tgl_selesai->isAfter(Carbon::now()->endOfDay())) {
             throw new FlowException('Diklat akan berakhir pada ' . $diklat->tgl_selesai->toDateString());
         }
     }
