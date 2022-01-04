@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" data-app>
     <v-row>
       <v-col>
         <v-card tile flat class="my-5">
@@ -35,7 +35,9 @@
           </span>
         </v-col>
         <v-col class="shrink">
-          <v-btn class="mt-4" color="orange" depressed dark @click="onKonfirmasi(true, 'daring')">konfirmasi</v-btn>
+          <v-btn class="mt-4" id="konfirmasi-daring" color="orange" depressed dark @click="onKonfirmasi(true, 'daring')"
+            >konfirmasi</v-btn
+          >
         </v-col>
       </v-row>
     </v-alert>
@@ -58,7 +60,9 @@
           </span>
         </v-col>
         <v-col class="shrink">
-          <v-btn class="mt-4" color="blue" depressed dark @click="onKonfirmasi(true, 'luring')">konfirmasi</v-btn>
+          <v-btn class="mt-4" id="konfirmasi-luring" color="blue" depressed dark @click="onKonfirmasi(true, 'luring')"
+            >konfirmasi</v-btn
+          >
         </v-col>
       </v-row>
     </v-alert>
@@ -112,8 +116,8 @@ export default {
   },
   computed: {
     ...mapState('preferensi', {
-      is_kesediaan: (state) => state?.data.konfirmasi_kesediaan ?? false,
-      is_kesediaan_luring: (state) => state?.data.konfirmasi_kesediaan_luring ?? false,
+      is_kesediaan: (state) => state?.data?.konfirmasi_kesediaan ?? true,
+      is_kesediaan_luring: (state) => state?.data?.konfirmasi_kesediaan_luring ?? true,
       groups: (state) => state?.data?.groups ?? {},
     }),
 
