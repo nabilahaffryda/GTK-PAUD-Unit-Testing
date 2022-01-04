@@ -207,7 +207,7 @@ export default [
         desc: 'Evaluasi dan Verifikasi Laporan Pelaksanaan Diklat Luring',
         color: 'orange',
         deepColor: 'darken-1',
-        akses: true,
+        akses: 'kelas-luring-laporan.index',
         link: 'verval-laporan-pelaksanaan',
         to: { name: 'verval-laporan-pelaksanaan' },
       },

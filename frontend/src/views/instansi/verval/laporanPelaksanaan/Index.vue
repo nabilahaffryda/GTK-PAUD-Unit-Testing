@@ -76,7 +76,6 @@
                             <div class="label--text">Tanggal Pelaksanaan</div>
                           </v-list-item-title>
                           <div class="link black--text body-2">
-                            <div>{{ $getDeepObj(item, 'paud_diklat_luring.data.nama') || '' }}</div>
                             {{
                               $durasi(
                                 $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
@@ -94,8 +93,8 @@
                             <div class="label--text">Status</div>
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
-                            <v-chip :color="getColor($getDeepObj(item, 'k_verval_paud'))" dark small>
-                              {{ $getDeepObj(item, 'm_verval_paud.data.keterangan') }}
+                            <v-chip :color="getColor($getDeepObj(item, 'laporan_k_verval_paud'))" dark small>
+                              {{ $getDeepObj(item, 'laporan_verval_paud.data.keterangan') }}
                             </v-chip>
                           </v-list-item-subtitle>
                         </v-list-item-content>
@@ -109,7 +108,9 @@
                           </v-list-item-title>
                           <v-list-item-subtitle class="link black--text body-2">
                             <v-btn
-                              v-if="[2].includes(item.k_verval_paud) && $allow('kelas-verval.update-verval')"
+                              v-if="
+                                [2].includes(item.laporan_k_verval_paud) && $allow('kelas-luring-laporan.update-verval')
+                              "
                               color="primary"
                               small
                               block
@@ -126,7 +127,7 @@
                 </v-list-item-content>
                 <v-list-item-action-text>
                   <base-list-action
-                    v-if="$allow('kelas-verval.batal-verval') && getKVerval(item) > 2"
+                    v-if="$allow('kelas-luring-laporan.batal-verval') && getKVerval(item) > 2"
                     :data="item"
                     :actions="actions"
                     :allow="allow"
@@ -213,14 +214,6 @@ export default {
       };
     },
 
-    mapTimVerval() {
-      let temp = {};
-      for (const akun of this.listTimVerval) {
-        temp[this.$getDeepObj(akun, 'akun.data.akun_id')] = this.$getDeepObj(akun, 'akun.data.nama');
-      }
-      return temp;
-    },
-
     mapStatusVerval() {
       const masters = (this.masters && this.masters.m_verval_paud) || {};
       let temp = {};
@@ -240,24 +233,16 @@ export default {
           label: 'Pilih Status Verval',
           default: true,
           type: 'checkbox',
-          model: 'k_verval_paud',
+          model: 'laporan_k_verval_paud',
           master: this.$mapForMaster(this.mapStatusVerval),
           props: ['attach', 'chips', 'deletable-chips', 'multiple', 'small-chips'],
-        },
-        {
-          label: 'Periode Diklat',
-          type: 'select',
-          model: 'paud_periode_id',
-          master: this.$mapForMaster(this.mPeriode),
-          props: ['attach'],
         },
       ];
     },
 
     filtersMaster() {
       return {
-        k_verval_paud: this.mapStatusVerval,
-        paud_periode_id: this.mPeriode,
+        laporan_k_verval_paud: this.mapStatusVerval,
       };
     },
 
@@ -284,25 +269,9 @@ export default {
     this.getMasters({
       name: ['m_verval_paud'].join(';'),
     });
-    this.getPeriode({}).then(({ data }) => {
-      this.mPeriode = {};
-      const items = data || [];
-
-      items.forEach((item) => {
-        this.$set(this.mPeriode, item.id, item.nama);
-      });
-    });
   },
   methods: {
-    ...mapActions('diklatVerval', [
-      'fetch',
-      'getDetail',
-      'action',
-      'downloadList',
-      'getKinerja',
-      'getTimVerval',
-      'getPeriode',
-    ]),
+    ...mapActions('luringLaporanVerval', ['fetch', 'getDetail', 'action']),
     ...mapActions('master', ['getMasters']),
 
     allowMenu(data) {
@@ -334,23 +303,11 @@ export default {
 
     allowVerval(item) {
       const kVerval = this.getKVerval(item);
-      return this.$allow('kelas-verval.update-verval') && kVerval <= 3;
+      return this.$allow('kelas-luring-laporan.update-verval') && kVerval <= 3;
     },
 
     getKVerval(item) {
-      return Number(item.k_verval_paud);
-    },
-
-    getAkunVerval(item) {
-      return this.jenis === 'petugas'
-        ? this.$getDeepObj(item, 'paud_petugas_perans.data.0.akun_verval')
-        : this.$getDeepObj(item, 'akun_verval');
-    },
-
-    getAkunIdVerval(item) {
-      return this.jenis === 'petugas'
-        ? Number(this.$getDeepObj(item, 'paud_petugas_perans.data.0.akun_id_verval'))
-        : Number(this.$getDeepObj(item, 'akun_id_verval'));
+      return Number(item.laporan_k_verval_paud);
     },
 
     onClose() {
@@ -370,25 +327,11 @@ export default {
       window.open(url, '_blank');
     },
 
-    isAllowAkses(policies) {
-      let enable = false;
-      let akses = ['psp-peserta-berkas.setuju', 'psp-peserta-berkas.tolak', 'psp-peserta-berkas.tolak-revisi'];
-
-      akses.forEach((key) => {
-        if (this.$allow(key, policies)) {
-          enable = true;
-          return;
-        }
-      });
-
-      return enable;
-    },
-
     async onVerval(item) {
-      const kVerval = item.k_verval_paud;
+      const kVerval = item.laporan_k_verval_paud;
       const status = {
         color: this.getColor(kVerval),
-        keterangan: this.$getDeepObj(item, 'm_verval_paud.data.keterangan') || '-',
+        keterangan: this.$getDeepObj(item, 'laporan_verval_paud.data.keterangan') || '-',
       };
 
       let init = {};
@@ -429,10 +372,17 @@ export default {
           status === 1 ? 'menolak' : status === 2 ? 'menerima' : 'menyatakan perbaikan'
         }</strong> ajuan verval berikut ?</span>`;
 
+        let params = { k_verval_paud: aksi, alasan };
+
+        if (status === 2) {
+          this.$set(params, 'no_sertifikat', this.$getDeepObj(formulir, 'no_sertifikat'));
+          this.$set(params, 'tgl_sertifikat', this.$getDeepObj(formulir, 'tgl_sertifikat'));
+        }
+
         this.$confirm(html, 'Konfirmasi', { tipe: status === 1 ? 'error' : status === 2 ? 'success' : 'warning' }).then(
           () => {
             this.$refs.modal.loading = true;
-            this.action({ id: id, params: { k_verval_paud: aksi, alasan }, type: 'verval' })
+            this.action({ id: id, params: params, type: 'verval' })
               .then(() => {
                 this.$success('Ajuan berhasil di verifikasi');
                 this.$refs.modal.dialog = false;
@@ -448,31 +398,6 @@ export default {
         this.$error('Silakan tentukan hasil verifikasi data sebelum simpan');
         this.$refs.modal.loading = false;
       }
-    },
-
-    onKunci(data) {
-      this.id = data.id;
-      this.$confirm(`Anda yakin ingin mengunci Ajuan di atas agar bisa diverifikasi?`, `Kunci Ajuan`, {
-        tipe: 'warning',
-        data: this.confirmHtml(data),
-      }).then(() => {
-        this.action({ id: this.id, jenis: this.jenis, type: 'kunci', method: 'get' }).then(() => {
-          this.$success(`Ajuan Peserta berhasil dikunci`);
-          this.onReload();
-        });
-      });
-    },
-
-    onBatalKunci(data) {
-      this.$confirm(`Anda yakin ingin membatalkan Kunci Verifikasi Ajuan Peserta di atas?`, `Batal Kunci Ajuan`, {
-        tipe: 'error',
-        data: this.confirmHtml(data),
-      }).then(() => {
-        this.action({ id: data.id, jenis: this.jenis, type: 'batal-kunci', method: 'get' }).then(() => {
-          this.$success(`Batal kunci Ajuan Peserta berhasil`);
-          this.onReload();
-        });
-      });
     },
 
     onBatalVerval(data) {
@@ -493,61 +418,10 @@ export default {
           icon: 'mdi-account-circle',
           iconSize: 50,
           iconColor: 'primary',
-          title: `<b class='primary--text'>${this.$getDeepObj(data, `paud_mapel_kelas.data.nama`) || ''}</b>`,
-          subtitles: [`<span class="text--primary">${this.$getDeepObj(data, `nama`)}</span>`],
+          title: `<b class='primary--text'>${this.$getDeepObj(data, `nama`) || ''}</b>`,
+          subtitles: [],
         },
       ];
-    },
-
-    async onKinerja() {
-      const params = {
-        angkatan: this.params.angkatan,
-        count: 100,
-      };
-
-      const resp = await this.getKinerja({ params });
-      const nilais = (resp && resp.data) || [];
-      const statistik = this.statistik || {};
-      const limit = Number(this.$getDeepObj(resp, 'meta.total')) || 0;
-
-      const items = nilais.map((key, index) => {
-        return {
-          no: index + 1,
-          nama: key.nama,
-          diproses: key.diproses,
-          disetujui: key.disetujui,
-          revisi: key.revisi,
-          ditolak: key.ditolak,
-          jumlah: Number(key.diproses) + Number(key.disetujui) + Number(key.revisi) + Number(key.ditolak),
-        };
-      });
-
-      const headers = [
-        {
-          text: 'NO',
-          align: 'start',
-          sortable: false,
-          value: 'no',
-        },
-        { text: 'Tim Verval', value: 'nama' },
-        { text: 'Diproses', value: 'diproses' },
-        { text: 'Disetujui', value: 'disetujui' },
-        { text: 'Revisi', value: 'revisi' },
-        { text: 'Ditolak', value: 'ditolak' },
-        { text: 'Jumlah', value: 'jumlah' },
-      ];
-
-      this.$refs.kinerja.open();
-
-      this.$nextTick(() => {
-        this.$refs.formkinerja.reset();
-        this.$refs.formkinerja.headers = headers;
-        this.$refs.formkinerja.data = (resp && resp.nilais) || [];
-        this.$refs.formkinerja.items = items || [];
-        this.$refs.formkinerja.kinerja = (resp && resp.kinerja) || null;
-        this.$refs.formkinerja.statistik = statistik;
-        this.$refs.formkinerja.limit = limit;
-      });
     },
 
     onDownload() {
