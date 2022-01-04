@@ -73,7 +73,7 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <div class="label--text">Tanggal Pel aksanaan</div>
+                            <div class="label--text">Tanggal Pelaksanaan</div>
                           </v-list-item-title>
                           <div class="link black--text body-2">
                             <div>{{ $getDeepObj(item, 'paud_diklat.data.paud_periode.data.nama') }}</div>

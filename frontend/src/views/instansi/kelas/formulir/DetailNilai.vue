@@ -42,7 +42,9 @@
           </div>
         </div>
         <div>
-          <v-chip class="pa-4" color="success">Sudah dinilai</v-chip>
+          <v-chip class="pa-4" :color="getTotal(tab + 1) > 0 ? 'success' : 'grey'" dark>
+            {{ getTotal(tab + 1) > 0 ? 'Sudah dinilai' : 'Belum dinilai' }}
+          </v-chip>
         </div>
       </div>
       <v-tabs v-model="tab" grow color="secondary">
