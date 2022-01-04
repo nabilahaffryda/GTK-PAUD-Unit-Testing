@@ -23,8 +23,10 @@ use DB;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Storage;
 
 class KelasLuringService
 {
@@ -205,6 +207,12 @@ class KelasLuringService
 
         return PaudPesertaNonptk::query()
             ->select('paud_peserta_nonptk.*')
+            ->distinct()
+            ->leftJoin('paud_kelas_peserta_luring', function (JoinClause $query) {
+                $query->on('paud_kelas_peserta_luring.paud_peserta_nonptk_id', '=', 'paud_peserta_nonptk.paud_peserta_nonptk_id')
+                    ->where('paud_kelas_peserta_luring.tahun', '=', (int)config('paud.tahun'))
+                    ->where('paud_kelas_peserta_luring.angkatan', '=', (int)config('paud.angkatan'));
+            })
             ->where([
                 'paud_peserta_nonptk.paud_instansi_id'      => $diklat->paud_instansi_id,
                 'paud_peserta_nonptk.k_propinsi'            => $diklat->k_propinsi,
@@ -218,7 +226,8 @@ class KelasLuringService
                     ['paud_peserta_nonptk.nama', 'like', '%' . $keyword . '%'],
                     ['paud_peserta_nonptk.email', 'like', '%' . $keyword . '%'],
                 ], boolean: 'or');
-            });
+            })
+            ->whereNull('paud_kelas_peserta_luring.paud_kelas_peserta_luring_id');
     }
 
     /**
@@ -433,7 +442,9 @@ class KelasLuringService
             $kelasPetugas->tahun                = $kelas->tahun;
             $kelasPetugas->angkatan             = $kelas->angkatan;
             $kelasPetugas->akun_id              = $petugas->akun_id;
-            $kelasPetugas->k_konfirmasi_paud    = MKonfirmasiPaud::BELUM_KONFIRMASI;
+            $kelasPetugas->k_konfirmasi_paud    = $params['k_petugas_paud'] == MPetugasPaud::ADMIN_KELAS
+                ? MKonfirmasiPaud::BERSEDIA
+                : MKonfirmasiPaud::BELUM_KONFIRMASI;
             $kelasPetugas->created_by           = akunId();
 
             if (!$kelasPetugas->save()) {
@@ -462,14 +473,14 @@ class KelasLuringService
             throw new FlowException("Masih ada petugas yang belum bersedia/belum konfirmasi");
         }
 
-        $tidakBersedia = $kelas
-            ->paudKelasPesertaLurings()
-            ->whereNotIn('k_konfirmasi_paud', [MKonfirmasiPaud::BERSEDIA])
-            ->exists();
-
-        if ($tidakBersedia) {
-            throw new FlowException("Masih ada peserta yang belum bersedia/belum konfirmasi");
-        }
+        // $tidakBersedia = $kelas
+        //     ->paudKelasPesertaLurings()
+        //     ->whereNotIn('k_konfirmasi_paud', [MKonfirmasiPaud::BERSEDIA])
+        //     ->exists();
+        //
+        // if ($tidakBersedia) {
+        //     throw new FlowException("Masih ada peserta yang belum bersedia/belum konfirmasi");
+        // }
 
         $jmlPetugases = $kelas->paudKelasPetugasLurings()
             ->groupBy('k_petugas_paud')
@@ -580,6 +591,163 @@ class KelasLuringService
         $filename = app(KelasJadwalService::class)->uploadJadwal($diklat->instansi_id, $kelas->paud_diklat_luring_id, $kelas->file_jadwal, $file);
 
         $kelas->file_jadwal = $filename;
+        $kelas->save();
+
+        return $kelas;
+    }
+
+    public function getIsPpmOrPptm(PaudKelasLuring $kelas, int $akunId)
+    {
+        /** @var PaudKelasPetugasLuring $kelasPetugas */
+        $kelasPetugas = $kelas
+            ->paudKelasPetugasLurings()
+            ->where('akun_id', '=', $akunId)
+            ->first();
+
+        $isPpm  = $kelasPetugas && $kelasPetugas->k_petugas_paud == MPetugasPaud::PENGAJAR;
+        $isPptm = $kelasPetugas && $kelasPetugas->k_petugas_paud == MPetugasPaud::PEMBIMBING_PRAKTIK;
+
+        return [$isPpm, $isPptm];
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateIsPpmOrPptm(PaudKelasLuring $kelas, int $akunId)
+    {
+        [$isPpm, $isPptm] = $this->getIsPpmOrPptm($kelas, $akunId);
+
+        if (!$isPpm && !$isPptm) {
+            throw new FlowException('Akses nilai hanya untuk PPM atau PPTM kelas');
+        }
+
+        return [$isPpm, $isPptm];
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateLaporanBaru(PaudKelasLuring $kelas)
+    {
+        $kVerval = $kelas->laporan_k_verval_paud ?: MVervalPaud::KANDIDAT;
+        if ($kVerval != MVervalPaud::KANDIDAT) {
+            throw new FlowException("Laporan kelas luring sudah diajukan atau diverval");
+        }
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateLaporanAjuan(PaudKelasLuring $kelas)
+    {
+        $kVerval = $kelas->laporan_k_verval_paud ?: MVervalPaud::KANDIDAT;
+        if ($kVerval == MVervalPaud::KANDIDAT) {
+            throw new FlowException("Laporan kelas belum diajukan");
+        }
+
+        if (!in_array($kVerval, [MVervalPaud::DIAJUKAN, MVervalPaud::REVISI])) {
+            throw new FlowException('Laporan kelas sudah diverval');
+        }
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function uploadLaporan(PaudKelasLuring $kelas, UploadedFile $file)
+    {
+        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        $this->validateLaporanBaru($kelas);
+
+        $kelasId    = $kelas->paud_kelas_luring_id;
+        $instansiId = $kelas->paudDiklatLuring->instansi_id;
+        $fileOld    = $kelas->file_laporan;
+
+        $ext = strtolower($file->getClientOriginalExtension());
+        if (!in_array($ext, ['pdf', 'jpeg', 'jpg', 'png'])) {
+            throw new FlowException("Jenis berkas jadwal tidak dikenali");
+        }
+
+        $timestamp = date('ymdhis');
+        $random    = random_int(10000, 99999);
+
+        $name = "{$kelasId}-{$timestamp}-{$random}." . $ext;
+        $path = "{$instansiId}";
+
+        $ftpPath = config('filesystems.disks.kelas-laporan.path') . "/" . $path;
+        if (!Storage::disk('kelas-laporan')->putFileAs($ftpPath, $file, $name)) {
+            throw new FlowException("Unggah berkas jadwal tidak berhasil");
+        }
+
+        $hapusOld = config('paud.kelas-laporan.hapus-file-lama');
+        if ($fileOld && $hapusOld) {
+            try {
+                Storage::disk('kelas-laporan')->delete($fileOld);
+            } catch (Exception) {
+            }
+        }
+
+        $filename = "{$path}/{$name}";
+
+        $kelas->file_laporan = $filename;
+        $kelas->save();
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function deleteUpload(PaudKelasLuring $kelas)
+    {
+        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        $this->validateLaporanBaru($kelas);
+
+        try {
+            Storage::disk('kelas-laporan')->delete($kelas->file_laporan);
+        } catch (Exception) {
+        }
+
+        $kelas->file_laporan = null;
+        $kelas->save();
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function ajuanLaporan(PaudKelasLuring $kelas)
+    {
+        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        $this->validateLaporanBaru($kelas);
+
+        if (!$kelas->file_laporan) {
+            throw new FlowException("Berkas laporan belum diunggah");
+        }
+
+        foreach ($kelas->paudKelasPesertaLurings as $peserta) {
+            if ($peserta->n_pendalaman_materi === null || $peserta->n_tugas_mandiri) {
+                throw new FlowException("Nilai peserta ada yang belum dinilai");
+            }
+        }
+
+        $kelas->laporan_k_verval_paud = MVervalPaud::DIAJUKAN;
+        $kelas->laporan_wkt_ajuan     = Carbon::now();
+        $kelas->save();
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function batalAjuanLaporan(PaudKelasLuring $kelas)
+    {
+        app(DiklatLuringService::class)->validateSelesai($kelas->paudDiklatLuring);
+        $this->validateLaporanAjuan($kelas);
+
+        $kelas->laporan_k_verval_paud = MVervalPaud::KANDIDAT;
+        $kelas->laporan_wkt_ajuan     = null;
         $kelas->save();
 
         return $kelas;

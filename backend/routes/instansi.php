@@ -159,6 +159,20 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         });
     });
 
+    Route::group(['prefix' => 'luring/kelas'], function () {
+        Route::get('', [Kelas\Luring\VervalController::class, 'index']);
+        Route::get('download', [Kelas\Luring\VervalController::class, 'download']);
+
+        Route::group(['prefix' => '{kelas}'], function () {
+            Route::get('', [Kelas\Luring\VervalController::class, 'fetch']);
+            Route::get('peserta', [Kelas\Luring\VervalController::class, 'peserta']);
+            Route::get('peserta/{peserta}', [Kelas\Luring\VervalController::class, 'pesertaDetil']);
+            Route::get('petugas', [Kelas\Luring\VervalController::class, 'petugas']);
+            Route::post('verval', [Kelas\Luring\VervalController::class, 'updateVerval']);
+            Route::post('batal-verval', [Kelas\Luring\VervalController::class, 'batalVerval']);
+        });
+    });
+
     Route::group(['prefix' => 'akun/admin-program'], function () {
         Route::get('', [Akun\AdminProgramController::class, 'index']);
         Route::get('download', [Akun\AdminProgramController::class, 'download']);
@@ -316,6 +330,18 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         Route::get('', [Petugas\Luring\KelasController::class, 'index']);
         Route::get('{kelas}', [Petugas\Luring\KelasController::class, 'fetch']);
         Route::get('{kelas}/peserta', [Petugas\Luring\KelasController::class, 'peserta']);
+
+        Route::get('{kelas}/nilai', [Petugas\Luring\NilaiController::class, 'index']);
+        Route::get('{kelas}/nilai/{peserta}', [Petugas\Luring\NilaiController::class, 'fetch']);
+        Route::post('{kelas}/nilai/{peserta}/save', [Petugas\Luring\NilaiController::class, 'save']);
+        Route::post('{kelas}/nilai/{peserta}/delete', [Petugas\Luring\NilaiController::class, 'delete']);
+
+        Route::post('{kelas}/laporan/unggah', [Petugas\Luring\LaporanController::class, 'upload']);
+        Route::post('{kelas}/laporan/delete-unggah', [Petugas\Luring\LaporanController::class, 'deleteUpload']);
+        Route::post('{kelas}/laporan/kirim', [Petugas\Luring\LaporanController::class, 'kirim']);
+        Route::post('{kelas}/laporan/batal', [Petugas\Luring\LaporanController::class, 'batal']);
+        Route::get('{kelas}/laporan/peserta', [Petugas\Luring\LaporanController::class, 'peserta']);
+        Route::get('{kelas}/laporan/nilai/{peserta}', [Petugas\Luring\LaporanController::class, 'nilai']);
     });
 
     Route::group(['prefix' => 'petugas/profil'], function () {

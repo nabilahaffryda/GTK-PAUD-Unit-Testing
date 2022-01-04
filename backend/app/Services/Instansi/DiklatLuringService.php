@@ -4,12 +4,14 @@
 namespace App\Services\Instansi;
 
 
+use App\Exceptions\FlowException;
 use App\Exceptions\SaveException;
 use App\Models\MKota;
 use App\Models\MLpdPaud;
 use App\Models\PaudDiklatLuring;
 use App\Models\PaudInstansi;
 use Arr;
+use Carbon\Carbon;
 
 class DiklatLuringService
 {
@@ -108,5 +110,15 @@ class DiklatLuringService
         $diklat->delete();
 
         return $diklat;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function validateSelesai(PaudDiklatLuring $diklat)
+    {
+        if ($diklat->tgl_selesai && $diklat->tgl_selesai->isAfter(Carbon::now()->endOfDay())) {
+            throw new FlowException('Diklat akan berakhir pada ' . $diklat->tgl_selesai->toDateString());
+        }
     }
 }

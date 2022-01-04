@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline black--text--text"> Verval Kelas Diklat {{ $titleCase(akses) }}</h1>
+            <h1 class="headline black--text--text"> Verval Kelas Diklat </h1>
             <div> </div>
           </v-col>
         </v-row>
@@ -55,7 +55,7 @@
                     <v-col cols="12" md="4">
                       <v-list-item class="px-0" @click="onVerval(item)">
                         <v-list-item-icon class="mr-1 my-auto">
-                          <v-icon color="primary" size="60">mdi-google-classroom</v-icon>
+                          <v-icon color="primary" size="60">mdi-account-circle</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="py-0 px-1">
                           <p class="caption"> Nama Kelas </p>
@@ -64,12 +64,7 @@
                             {{ $getDeepObj(item, `nama`) || '-' }}
                           </span>
                           <div class="font-italic">
-                            {{
-                              $getDeepObj(
-                                item,
-                                `paud_diklat${akses === 'daring' ? '' : '_luring'}.data.instansi.data.nama`
-                              ) || '-'
-                            }}
+                            {{ $getDeepObj(item, `paud_diklat.data.instansi.data.nama`) || '-' }}
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -78,32 +73,16 @@
                       <v-list-item class="px-0">
                         <v-list-item-content class="py-0">
                           <v-list-item-title>
-                            <div class="label--text">Tanggal Pelaksanaan</div>
+                            <div class="label--text">Tanggal Pel aksanaan</div>
                           </v-list-item-title>
                           <div class="link black--text body-2">
-                            <div>
-                              {{
-                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.nama') ||
-                                $getDeepObj(item, 'paud_diklat_luring.data.nama') ||
-                                ''
-                              }}
-                            </div>
-                            <template v-if="akses === 'daring'">
-                              {{
-                                $durasi(
-                                  $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
-                                  $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
-                                )
-                              }}
-                            </template>
-                            <template v-else>
-                              {{
-                                $durasi(
-                                  $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
-                                  $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
-                                )
-                              }}
-                            </template>
+                            <div>{{ $getDeepObj(item, 'paud_diklat.data.paud_periode.data.nama') }}</div>
+                            {{
+                              $durasi(
+                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
+                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                              )
+                            }}
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -138,9 +117,7 @@
                             >
                               Verval Ajuan
                             </v-btn>
-                            <v-btn v-else small data-testid="btn-detail" block color="primary" @click="onVerval(item)">
-                              Detail
-                            </v-btn>
+                            <v-btn v-else small block color="primary" @click="onVerval(item)"> Detail </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -190,7 +167,6 @@
         :initValue="formulir['init']"
         :jenis="jenis"
         :obj="obj"
-        :akses="akses"
       ></form-verval>
     </base-modal-full>
   </div>
@@ -200,7 +176,7 @@
 import actions from './actions';
 import { mapActions, mapState } from 'vuex';
 import list from '@mixins/list';
-import FormVerval from '../../formulir/Verval';
+import FormVerval from '../formulir/Verval';
 export default {
   name: 'Index',
   mixins: [list],
@@ -258,7 +234,7 @@ export default {
     },
 
     formFilter() {
-      let temp = [
+      return [
         {
           label: 'Pilih Status Verval',
           default: true,
@@ -267,19 +243,14 @@ export default {
           master: this.$mapForMaster(this.mapStatusVerval),
           props: ['attach', 'chips', 'deletable-chips', 'multiple', 'small-chips'],
         },
-      ];
-
-      if (this.akses === 'daring') {
-        temp.push({
+        {
           label: 'Periode Diklat',
           type: 'select',
           model: 'paud_periode_id',
           master: this.$mapForMaster(this.mPeriode),
           props: ['attach'],
-        });
-      }
-
-      return temp;
+        },
+      ];
     },
 
     filtersMaster() {
@@ -300,13 +271,6 @@ export default {
     jenis() {
       return (this.$route.meta && this.$route.meta.tipe) || 'kelas';
     },
-
-    akses() {
-      return (this.$route.meta && this.$route.meta.akses) || 'daring';
-    },
-  },
-  mounted() {
-    Object.assign(this.attr, { type: this.akses });
   },
   created() {
     this.getMasters({

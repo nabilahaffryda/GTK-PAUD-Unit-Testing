@@ -21,6 +21,7 @@
         "pda/pheanstalk": "^4.0",
         "sentry/sentry-laravel": "^2.4",
         "subfission/cas": "^4.0",
+        "yajra/laravel-auditable": "^4.3",
         "yaumil/log-akses": "dev-master"
     },
     "require-dev": {
@@ -36,7 +37,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": false
+        }
     },
     "extra": {
         "laravel": {

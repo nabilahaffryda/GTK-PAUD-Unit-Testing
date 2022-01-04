@@ -3,10 +3,10 @@
     <v-card>
       <v-card-text>
         <v-row class="pa-5">
-          <v-col cols="12" md="2" sm="12" v-if="$getDeepObj(initValue, 'foto_url')">
+          <v-col cols="12" md="2" sm="12" v-if="!noFoto">
             <v-img :src="$imgUrl($getDeepObj(initValue, 'foto_url') || 'default_foto_lpd.png')"></v-img>
           </v-col>
-          <v-col cols="12" :md="$getDeepObj(initValue, 'foto_url') ? 10 : 12" sm="12">
+          <v-col cols="12" :md="noFoto ? 12 : 10" sm="12">
             <div class="mx-3">
               <div class="text-h6 black--text">Data Peserta</div>
               <base-list-info class="px-0" :info="info.umum"></base-list-info>
@@ -47,6 +47,10 @@ export default {
     initValue: {
       type: Object,
       default: () => {},
+    },
+    noFoto: {
+      type: Boolean,
+      default: false,
     },
     masters: {
       type: Object,
@@ -140,13 +144,18 @@ export default {
             {
               key: 'jenjang_diklat',
               label: 'Jenis Diklat',
-              value: this.$getDeepObj(this.masters, `m_diklat_paud.${this.initValue.k_diklat_paud}`) || '',
+              value:
+                this.$getDeepObj(this.initValue, `m_diklat_paud.data.keterangan`) ||
+                this.$getDeepObj(this.masters, `m_diklat_paud.${this.initValue.k_diklat_paud}`) ||
+                '',
             },
             {
               key: 'jenis_diklat',
               label: 'Jenis Diklat',
               value:
-                this.$getDeepObj(this.masters, `m_jenjang_diklat_paud.${this.initValue.k_jenjang_diklat_paud}`) || '',
+                this.$getDeepObj(this.initValue, `m_jenjang_diklat_paud.data.keterangan`) ||
+                this.$getDeepObj(this.masters, `m_jenjang_diklat_paud.${this.initValue.k_jenjang_diklat_paud}`) ||
+                '',
             },
           ],
         ],

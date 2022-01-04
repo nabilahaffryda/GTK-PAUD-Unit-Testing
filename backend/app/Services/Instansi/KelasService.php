@@ -707,7 +707,7 @@ class KelasService
         $filename  = "{$diklat->instansi_id}/{$kelas->paud_kelas_id}-{$timestamp}-{$random}";
 
         $path = sprintf("%s/%s", $ftpPath, $filename);
-        if (!Storage::disk('instansi-foto')->putFileAs($path, $file, $name)) {
+        if (!Storage::disk('kelas-jadwal')->putFileAs($path, $file, $name)) {
             throw new FlowException("Unggah berkas jadwal tidak berhasil");
         }
 
