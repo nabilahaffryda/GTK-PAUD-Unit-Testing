@@ -137,7 +137,14 @@
                   </v-row>
                 </v-list-item-content>
                 <v-list-item-action-text>
-                  <template v-if="getNilai(item) && $allow('petugas-luring-nilai.delete') && use_action">
+                  <template
+                    v-if="
+                      getNilai(item) &&
+                      $allow('petugas-luring-nilai.delete') &&
+                      use_action &&
+                      [null, 1].includes(detail.laporan_k_verval_paud)
+                    "
+                  >
                     <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
                   </template>
                   <template v-else>
