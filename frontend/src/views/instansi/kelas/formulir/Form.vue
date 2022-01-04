@@ -94,11 +94,11 @@
                     <v-text-field
                       dense
                       outlined
-                      type="number"
                       min="0"
                       max="100"
                       :readonly="!isEdit"
                       v-model="form[ins.k_instrumen_nilai_luring_paud]"
+                      @keypress="checkFormat"
                       @input="checkNumber(form[ins.k_instrumen_nilai_luring_paud], ins.k_instrumen_nilai_luring_paud)"
                     />
                   </div>
@@ -173,6 +173,26 @@ export default {
 
     getValue() {
       return this.form;
+    },
+
+    checkFormat(evt) {
+      var theEvent = evt || window.event;
+
+      // Handle paste
+      if (theEvent.type === 'paste') {
+        key = event.clipboardData.getData('text/plain');
+      } else {
+        // Handle key press
+        var key = theEvent.keyCode || theEvent.which;
+        key = String.fromCharCode(key);
+      }
+      var regex = /[0-9]|\./;
+      if (!regex.test(key)) {
+        theEvent.returnValue = false;
+        if (theEvent.preventDefault) theEvent.preventDefault();
+      }
+
+      key = String.fromCharCode(theEvent.keyCode || theEvent.which);
     },
 
     checkNumber(value, id) {
