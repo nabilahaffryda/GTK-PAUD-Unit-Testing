@@ -173,6 +173,19 @@ Route::group(['middleware' => ['auth:akun', 'forcejson', 'valid.instansi', 'vali
         });
     });
 
+    Route::group(['prefix' => 'luring/kelas-laporan'], function () {
+        Route::get('', [Kelas\Luring\LaporanController::class, 'index']);
+
+        Route::group(['prefix' => '{kelas}'], function () {
+            Route::get('', [Kelas\Luring\LaporanController::class, 'fetch']);
+            Route::get('petugas', [Kelas\Luring\LaporanController::class, 'petugas']);
+            Route::get('peserta', [Kelas\Luring\LaporanController::class, 'peserta']);
+            Route::get('peserta/{peserta}/nilai', [Kelas\Luring\LaporanController::class, 'pesertaNilai']);
+            Route::post('verval', [Kelas\Luring\LaporanController::class, 'updateVerval']);
+            Route::post('batal-verval', [Kelas\Luring\LaporanController::class, 'batalVerval']);
+        });
+    });
+
     Route::group(['prefix' => 'akun/admin-program'], function () {
         Route::get('', [Akun\AdminProgramController::class, 'index']);
         Route::get('download', [Akun\AdminProgramController::class, 'download']);
