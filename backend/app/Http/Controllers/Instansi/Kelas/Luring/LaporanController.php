@@ -8,9 +8,11 @@ use App\Http\Requests\Instansi\Kelas\Luring\Laporan\IndexRequest;
 use App\Http\Requests\Instansi\Kelas\Luring\Laporan\VervalRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
+use App\Models\MInstrumenNilaiLuringPaud;
 use App\Models\MVervalPaud;
 use App\Models\PaudKelasLuring;
 use App\Models\PaudKelasPesertaLuring;
+use App\Models\PaudKelasPesertaLuringNilai;
 use App\Services\Instansi\KelasLuringService;
 use Illuminate\Http\Request;
 
@@ -118,15 +120,24 @@ class LaporanController extends Controller
             abort(404);
         }
 
-        $peserta
-            ->load([
-                'paudKelasLuring',
-                'paudPesertaNonptk',
-                'ptk',
-                'paudKelasPesertaLuringNilais',
-            ]);
+        $mInstruments = MInstrumenNilaiLuringPaud::query()
+            ->orderBy('urutan')
+            ->get()
+            ->keyBy('k_instrumen_nilai_luring_paud');
 
-        return BaseResource::make($peserta);
+        $nilais = $peserta->paudKelasPesertaLuringNilais()
+            ->get()
+            ->keyBy('k_instrumen_nilai_luring_paud');
+
+        $results = PaudKelasPesertaLuringNilai::make()->newCollection();
+        foreach ($mInstruments as $kInstrumen => $mInstrument) {
+            $results[] = $nilais->get($kInstrumen, fn() => PaudKelasPesertaLuringNilai::make([
+                'paud_kelas_peserta_luring_id'  => $kelas->paud_kelas_luring_id,
+                'k_instrumen_nilai_luring_paud' => $kInstrumen,
+            ]));
+        }
+
+        return BaseCollection::make($results->load(['MInstrumenNilaiLuringPaud']));
     }
 
     /**
