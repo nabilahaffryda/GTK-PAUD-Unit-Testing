@@ -32,7 +32,7 @@ class KelasController extends Controller
                 'is_ppm'     => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::PENGAJAR . ' then 1 else 0 end')
                     ->where('paud_kelas_petugas_luring.akun_id', '=', akunId())
                     ->whereColumn('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', 'paud_kelas_luring.paud_kelas_luring_id'),
-                'is_pptm'    => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::PENGAJAR_TAMBAHAN . ' then 1 else 0 end')
+                'is_pptm'    => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::PEMBIMBING_PRAKTIK . ' then 1 else 0 end')
                     ->where('paud_kelas_petugas_luring.akun_id', '=', akunId())
                     ->whereColumn('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', 'paud_kelas_luring.paud_kelas_luring_id'),
                 'is_admin'   => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::ADMIN_KELAS . ' then 1 else 0 end')
