@@ -24,7 +24,7 @@
                       {{ $getDeepObj(detail, 'nama') || '-' }}
                     </div>
                     <div class="font-italic">
-                      {{ $getDeepObj(detail, `paud_diklat.data.instansi.data.nama`) || '-' }}
+                      {{ $getDeepObj(detail, `paud_diklat_luring.data.instansi.data.nama`) || '-' }}
                     </div>
                   </div>
                   <div class="my-5">
@@ -38,8 +38,8 @@
                         [
                           $getDeepObj(detail, 'm_kelurahan.data.keterangan') || '',
                           $getDeepObj(detail, 'm_kecamatan.data.keterangan') || '',
-                          $getDeepObj(detail, 'paud_diklat.data.m_kota.data.keterangan') || '',
-                          $getDeepObj(detail, 'paud_diklat.data.m_propinsi.data.keterangan') || '',
+                          $getDeepObj(detail, 'paud_diklat_luring.data.m_kota.data.keterangan') || '',
+                          $getDeepObj(detail, 'paud_diklat_luring.data.m_propinsi.data.keterangan') || '',
                         ].join(', ')
                       }}
                     </div>
@@ -48,18 +48,13 @@
                     <v-col>
                       <div class="label--text">Tanggal Mulai Kelas</div>
                       <div class="body-1">
-                        {{
-                          $localDate($getDeepObj(detail, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai')) || '-'
-                        }}
+                        {{ $localDate($getDeepObj(detail, 'paud_diklat_luring.data.tgl_mulai') || '') }}
                       </div>
                     </v-col>
                     <v-col>
                       <div class="label--text">Tanggal Selesai Kelas</div>
                       <div class="body-1">
-                        {{
-                          $localDate($getDeepObj(detail, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')) ||
-                          '-'
-                        }}
+                        {{ $localDate($getDeepObj(detail, 'paud_diklat_luring.data.tgl_selesai') || '') }}
                       </div>
                     </v-col>
                   </v-row>
@@ -72,18 +67,6 @@
                         :value="berkases"
                         @detil="onPreview"
                       />
-                    </v-col>
-                    <v-col cols="12" md="12" sm="12">
-                      <div class="my-2" v-if="Number(detail.k_verval_paud) === 6">
-                        <v-btn
-                          color="success"
-                          depressed
-                          :disabled="!$getDeepObj(detail, 'lms_url')"
-                          small
-                          @click="onLms($getDeepObj(detail, 'lms_url'))"
-                          ><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn
-                        >
-                      </div>
                     </v-col>
                   </v-row>
                 </v-col>
@@ -113,6 +96,11 @@
                       :items="filteredItems"
                       :no-data-text="`Daftar ${item.text} belum ditemukan`"
                     >
+                      <template v-slot:[`item.aksi`]="{ item }">
+                        <template>
+                          <v-btn depressed dark color="blue" small @click="onDetil(item)"> detail </v-btn>
+                        </template>
+                      </template>
                     </v-data-table>
                   </div>
                 </v-tab-item>
@@ -300,8 +288,9 @@ export default {
         temp.push({ text: 'Kota/Kabupaten', value: 'kota', sortable: false });
       }
 
-      if (this.tab !== 1) {
-        temp.push({ text: 'Status', value: 'status', sortable: false });
+      if (Number(this.tab) === 0) {
+        temp.push({ text: 'Nilai', value: 'nilai', sortable: false });
+        temp.push({ text: '', value: 'aksi', sortable: false });
       }
 
       return temp;
@@ -310,11 +299,22 @@ export default {
     items() {
       return (this.pesertas || []).map((item) => {
         return {
-          nama: this.$getDeepObj(item, 'ptk.data.nama') || this.$getDeepObj(item, 'akun.data.nama') || '-',
-          email: this.$getDeepObj(item, 'ptk.data.email') || this.$getDeepObj(item, 'akun.data.email') || '-',
+          nama:
+            this.$getDeepObj(item, 'ptk.data.nama') ||
+            this.$getDeepObj(item, 'akun.data.nama') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.nama') ||
+            '-',
+          email:
+            this.$getDeepObj(item, 'ptk.data.email') ||
+            this.$getDeepObj(item, 'akun.data.email') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
+            '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
+          nilai: this.$getDeepObj(item, 'nilai'),
+          dapodik: item && Number(item.is_nonptk) === 1 ? 'Non Dapodik' : 'Dapodik',
           paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
           paud_kelas_peserta_id: this.$getDeepObj(item, 'paud_kelas_peserta_id') || '',
+          paud_kelas_peserta_luring_id: this.$getDeepObj(item, 'paud_kelas_peserta_luring_id') || '',
           ptk_id: this.$getDeepObj(item, 'ptk_id') || '',
           propinsi: this.$getDeepObj(item, 'akun.data.m_propinsi.data.keterangan') || '-',
           kota: this.$getDeepObj(item, 'akun.data.m_kota.data.keterangan') || '-',
@@ -361,6 +361,7 @@ export default {
 
   methods: {
     ...mapActions('diklatVerval', ['getListKelas']),
+    ...mapActions('petugasKelas', ['fetchPeserta']),
 
     getValue() {
       return { pilihan: this.pilihan, id: this.id, alasan: (this.form && this.form.alasan) || '' };
@@ -379,7 +380,7 @@ export default {
 
     fetch(tipe, k_petugas = null) {
       if (!this.$getDeepObj(this.detail, 'id')) return;
-      this.getListKelas({
+      this[Number(this.tab) === 0 ? 'fetchPeserta' : 'getListKelas']({
         id: this.$getDeepObj(this.detail, 'id'),
         tipe: tipe,
         params: {
@@ -406,6 +407,10 @@ export default {
 
     onLms(url) {
       window.open(url, '_blank');
+    },
+
+    onDetil() {
+      // console.log(item);
     },
   },
   watch: {

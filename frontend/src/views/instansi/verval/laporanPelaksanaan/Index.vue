@@ -8,7 +8,7 @@
             <div class="bg-kiri"></div>
           </v-col>
           <v-col cols="10" class="pa-5">
-            <h1 class="headline black--text--text"> Verval Kelas Diklat </h1>
+            <h1 class="headline black--text--text"> Verval Laporan Diklat Luring </h1>
             <div> </div>
           </v-col>
         </v-row>
@@ -55,7 +55,7 @@
                     <v-col cols="12" md="4">
                       <v-list-item class="px-0" @click="onVerval(item)">
                         <v-list-item-icon class="mr-1 my-auto">
-                          <v-icon color="primary" size="60">mdi-account-circle</v-icon>
+                          <v-icon color="primary" size="60">mdi-google-classroom</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content class="py-0 px-1">
                           <p class="caption"> Nama Kelas </p>
@@ -64,7 +64,7 @@
                             {{ $getDeepObj(item, `nama`) || '-' }}
                           </span>
                           <div class="font-italic">
-                            {{ $getDeepObj(item, `paud_diklat.data.instansi.data.nama`) || '-' }}
+                            {{ $getDeepObj(item, `paud_diklat_luring.data.instansi.data.nama`) || '-' }}
                           </div>
                         </v-list-item-content>
                       </v-list-item>
@@ -76,11 +76,11 @@
                             <div class="label--text">Tanggal Pelaksanaan</div>
                           </v-list-item-title>
                           <div class="link black--text body-2">
-                            <div>{{ $getDeepObj(item, 'paud_diklat.data.paud_periode.data.nama') }}</div>
+                            <div>{{ $getDeepObj(item, 'paud_diklat_luring.data.nama') || '' }}</div>
                             {{
                               $durasi(
-                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai'),
-                                $getDeepObj(item, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')
+                                $getDeepObj(item, 'paud_diklat_luring.data.tgl_mulai'),
+                                $getDeepObj(item, 'paud_diklat_luring.data.tgl_selesai')
                               )
                             }}
                           </div>
@@ -167,6 +167,7 @@
         :initValue="formulir['init']"
         :jenis="jenis"
         :obj="obj"
+        :akses="akses"
       ></form-verval>
     </base-modal-full>
   </div>
@@ -271,6 +272,13 @@ export default {
     jenis() {
       return (this.$route.meta && this.$route.meta.tipe) || 'kelas';
     },
+
+    akses() {
+      return 'luring';
+    },
+  },
+  mounted() {
+    Object.assign(this.attr, { type: this.akses });
   },
   created() {
     this.getMasters({
