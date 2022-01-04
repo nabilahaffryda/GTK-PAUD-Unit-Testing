@@ -24,6 +24,7 @@
                       {{
                         $getDeepObj(peserta, 'ptk.data.nama') ||
                         $getDeepObj(peserta, 'paud_peserta_nonptk.data.nama') ||
+                        $getDeepObj(peserta, 'nama') ||
                         ''
                       }}
                     </div>
@@ -32,6 +33,7 @@
                       {{
                         $getDeepObj(peserta, 'ptk.data.email') ||
                         $getDeepObj(peserta, 'paud_peserta_nonptk.data.email') ||
+                        $getDeepObj(peserta, 'email') ||
                         ''
                       }}
                     </div>

@@ -182,12 +182,30 @@
       </v-col>
     </v-row>
     <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
+    <base-modal-full
+      ref="modal"
+      colorBtn="primary"
+      generalError
+      :title="formulir.title"
+      :useSave="formulir.useSave"
+    >
+      <component
+        ref="formulir"
+        :is="formulir.form"
+        :type="formulir.type"
+        :detail="detail"
+        :masters="masters"
+        :initValue="formulir.initValue"
+        :jenis="jenis"
+      ></component>
+    </base-modal-full>
   </div>
 </template>
 <script>
 import { ValidationProvider } from 'vee-validate';
 import { mapActions } from 'vuex';
 import Berkases from '../../profil/formulir/Berkas';
+import DetailNilai from '../../kelas/formulir/DetailNilai';
 import PopupPreviewDetail from '@components/popup/PreviewDetil';
 export default {
   props: {
@@ -228,7 +246,7 @@ export default {
       default: null,
     },
   },
-  components: { ValidationProvider, Berkases, PopupPreviewDetail },
+  components: { ValidationProvider, Berkases, PopupPreviewDetail, DetailNilai },
   data() {
     return {
       preview: {},
@@ -361,7 +379,7 @@ export default {
 
   methods: {
     ...mapActions('diklatVerval', ['getListKelas']),
-    ...mapActions('petugasKelas', ['fetchPeserta']),
+    ...mapActions('petugasKelas', ['getListPesertaLaporan', 'getDetailPesertaNilai']),
 
     getValue() {
       return { pilihan: this.pilihan, id: this.id, alasan: (this.form && this.form.alasan) || '' };
@@ -380,9 +398,10 @@ export default {
 
     fetch(tipe, k_petugas = null) {
       if (!this.$getDeepObj(this.detail, 'id')) return;
-      this[Number(this.tab) === 0 ? 'fetchPeserta' : 'getListKelas']({
+      this[Number(this.tab) === 0 ? 'getListPesertaLaporan' : 'getListKelas']({
         id: this.$getDeepObj(this.detail, 'id'),
         tipe: tipe,
+        jenis: 'luring',
         params: {
           k_petugas_paud: k_petugas,
           count: 50,
@@ -409,8 +428,33 @@ export default {
       window.open(url, '_blank');
     },
 
-    onDetil() {
-      // console.log(item);
+    getNilai(item) {
+      return this.$getDeepObj(item, 'n_pendalaman_materi') || this.$getDeepObj(item, 'n_tugas_mandiri') || null;
+    },
+
+    async onDetil(item) {
+      const resp = await this.getDetailPesertaNilai({
+        kelas_id: this.$getDeepObj(this.detail, 'id'),
+        id: this.$getDeepObj(item, 'paud_kelas_peserta_luring_id'),
+        page: 'laporan',
+      }).then(({ data }) => data);
+
+      this.$set(this.formulir, 'title', 'Penilaian Peserta');
+      this.$set(this.formulir, 'form', 'DetailNilai');
+      this.$set(this.formulir, 'useSave', false);
+      this.$refs.modal.open();
+
+      this.$nextTick(() => {
+        // this.$refs.formulir.reset();
+        this.$set(
+          this.formulir,
+          'initValue',
+          Object.assign({
+            peserta: Object.assign(item, { is_nilai: this.getNilai(item) }),
+            instruments: resp,
+          })
+        );
+      });
     },
   },
   watch: {
