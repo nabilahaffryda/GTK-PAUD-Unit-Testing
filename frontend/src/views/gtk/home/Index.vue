@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" data-app>
     <v-row>
       <v-col>
         <v-card tile flat class="my-5">
@@ -27,7 +27,9 @@
           </span>
         </v-col>
         <v-col class="shrink">
-          <v-btn class="mt-4" color="orange" depressed dark @click="onKonfirmasi(true)">konfirmasi</v-btn>
+          <v-btn class="mt-4" id="konfirmasi" color="orange" depressed dark @click="onKonfirmasi(true)"
+            >konfirmasi</v-btn
+          >
         </v-col>
       </v-row>
     </v-alert>
@@ -80,7 +82,7 @@ export default {
   },
   computed: {
     ...mapState('preferensi', {
-      is_konfirmasi: (state) => state?.data?.preferensiPtk?.konfirmasiKesediaan ?? false,
+      is_konfirmasi: (state) => state?.data?.preferensiPtk?.konfirmasiKesediaan ?? true,
     }),
 
     menus() {
