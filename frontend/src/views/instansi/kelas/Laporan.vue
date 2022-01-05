@@ -14,11 +14,7 @@
           <v-col cols="10" class="pa-5 black--text">
             <div class="d-flex px-2">
               <div class="mr-5">
-                <h2 class="text-h6"> Laporan Peserta Diklat Luring </h2>
-                <h3>
-                  {{ $getDeepObj(detail, 'paud_diklat_luring.data.nama') }} -
-                  {{ $getDeepObj(detail, 'nama') }}
-                </h3>
+                <h2 class="text-h6">Laporan Pelaksanaan Diklat Luring</h2>
                 <div class="body-2 my-2">
                   Silakan unggah Laporan dengan menekan tombol <b>Unggah Laporan</b>. Template laporan dapat diakses
                   pada link di bawah atau dapat diunduh
@@ -207,7 +203,9 @@ export default {
       return [
         { text: 'Kelas Diklat', to: `kelas-luring` },
         {
-          text: `Laporan Pelaksanaan Diklat Luring`,
+          text: `
+           ${this.$getDeepObj(this.detail, 'paud_diklat_luring.data.nama')} -
+           ${this.$getDeepObj(this.detail, 'nama')}`,
         },
       ];
     },

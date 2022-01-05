@@ -11,7 +11,7 @@
               <li>Silakan isi data sesuai format yang tersedia pada template</li>
               <li>
                 Unggah Berkas yang sudah Anda isi pada langkah selanjutnya. Silakan tekan
-                <b>tombol selanjutnya</b>
+                <b>tombol SIMPAN</b>
               </li>
             </ol>
             <v-btn
