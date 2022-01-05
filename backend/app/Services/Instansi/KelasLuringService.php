@@ -727,7 +727,7 @@ class KelasLuringService
 
         foreach ($kelas->paudKelasPesertaLurings as $peserta) {
             if ($peserta->n_pendalaman_materi === null || $peserta->n_tugas_mandiri) {
-                throw new FlowException("Nilai peserta ada yang belum dinilai");
+                throw new FlowException("Peserta ada yang belum dinilai");
             }
         }
 
