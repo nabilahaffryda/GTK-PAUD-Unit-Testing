@@ -187,7 +187,7 @@
           <span class="my-2">
             Silakan isikan no sertifikat dan tanggal sertifikat untuk laporan kelas diklat luring dibawah ini.
           </span>
-          <div class="mt-4">
+          <div class="mt-4" v-if="Number(pilihan) === 2">
             <validation-observer ref="observer" v-slot="{ errors }">
               <span class="label--text" v-show="false"> {{ errors }}</span>
               <base-form-generator v-model="form" :schema="formSertifikat" />
