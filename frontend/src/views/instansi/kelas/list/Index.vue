@@ -134,7 +134,10 @@
                           <template v-if="jenis === 'luring'">
                             <div
                               v-if="
-                                (isEndDiklat(item) && item.is_admin === 1 && item.url_laporan) ||
+                                (isEndDiklat(item) &&
+                                  item.is_admin === 1 &&
+                                  item.url_laporan &&
+                                  [1, 2].includes(item.laporan_k_verval_paud || 1)) ||
                                 (isEndDiklat(item) && (item.is_ppm === 1 || item.is_pptm === 1))
                               "
                               class="label--text"
@@ -225,9 +228,10 @@ export default {
       M_LAPORAN: {
         1: 'grey',
         2: 'info',
-        3: 'success',
-        4: 'warning',
-        5: 'error',
+        3: 'info',
+        4: 'error',
+        5: 'warning',
+        6: 'success',
       },
     };
   },

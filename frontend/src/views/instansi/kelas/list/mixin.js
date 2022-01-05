@@ -36,10 +36,12 @@ export default {
     },
 
     onUploadLaporan(item) {
-      if ([2].includes(item?.laporan_k_verval_paud ?? 1)) {
-        this.$error(
-          'Laporan pelaksanaan diklat Luring sudah di ajukan, untuk pembatalan silakan Batal Ajuan Laporan terlebih dahulu'
-        );
+      if (![1, 5].includes(item?.laporan_k_verval_paud ?? 1)) {
+        const message =
+          item.laporan_k_verval_paud === 2
+            ? 'Laporan pelaksanaan diklat Luring sudah di ajukan, untuk pembatalan silakan Batal Ajuan Laporan terlebih dahulu'
+            : 'Laporan pelaksanaan sudah diverval, untuk pembatalan silahkan menghubungi Admin GTK';
+        this.$error(message);
         return;
       }
 
@@ -120,7 +122,7 @@ export default {
     },
 
     onBatalAjuan(item) {
-      if ([4, 6].includes(item?.m_verval_paud ?? 1)) {
+      if ([4, 6].includes(item?.laporan_k_verval_paud ?? 1)) {
         this.$error('Laporan pelaksanaan sudah diverval, untuk pembatalan silahkan menghubungi Admin GTK');
         return;
       }
