@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-app>
     <v-card tile flat class="pa-0">
       <v-card-text class="pa-0">
         <base-breadcrumbs :items="breadcrumbs" />
