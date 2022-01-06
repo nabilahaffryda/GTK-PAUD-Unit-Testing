@@ -19,7 +19,7 @@
                     <div class="body-2 label--text"> Surel </div>
                   </v-col>
                   <v-col cols="12" md="6" sm="6">
-                    <div class="body-2 black--text"
+                    <div class="body-2 black--text" id="nama"
                       >:
                       {{
                         $getDeepObj(peserta, 'ptk.data.nama') ||
@@ -28,7 +28,7 @@
                         ''
                       }}
                     </div>
-                    <div class="body-2 black--text"
+                    <div class="body-2 black--text" id="email"
                       >:
                       {{
                         $getDeepObj(peserta, 'ptk.data.email') ||
@@ -50,7 +50,7 @@
         </div>
       </div>
       <v-tabs v-model="tab" grow color="secondary">
-        <v-tab v-for="item in items" :key="item">
+        <v-tab v-for="item in items" :key="item" id="tab">
           {{ item }}
         </v-tab>
       </v-tabs>
