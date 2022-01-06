@@ -14,10 +14,7 @@
           <v-col cols="10" class="pa-5 black--text">
             <div class="d-flex px-2">
               <div class="mr-5">
-                <div class="text-h6">
-                  Daftar Peserta Diklat | {{ $getDeepObj(detail, 'paud_diklat_luring.data.nama') }} -
-                  {{ $getDeepObj(detail, 'nama') }}
-                </div>
+                <div class="text-h6"> PENILAIAN PESERTA DIKLAT </div>
                 <div class="body-2">
                   Dibawah ini merupakan daftar peserta yang mengikuti diklat, Silakan dapat dilakukan penilaian pada
                   tahap pendalaman materi bagi peserta
@@ -37,7 +34,7 @@
         <base-table-header @search="onSearch" :btnFilter="false" @reload="onReload" @filter="onFilter">
           <template v-slot:subtitle>
             <div class="subtitle-1 black--text">
-              <b>{{ total }}</b> Kelas Diklat
+              <b>{{ total }}</b> Daftar Peserta
             </div>
           </template>
         </base-table-header>
@@ -140,7 +137,14 @@
                   </v-row>
                 </v-list-item-content>
                 <v-list-item-action-text>
-                  <template v-if="getNilai(item) && $allow('petugas-luring-nilai.delete') && use_action">
+                  <template
+                    v-if="
+                      getNilai(item) &&
+                      $allow('petugas-luring-nilai.delete') &&
+                      use_action &&
+                      [null, 1].includes(detail.laporan_k_verval_paud)
+                    "
+                  >
                     <base-list-action :data="item" :actions="actions" :allow="allow" @action="onAction" />
                   </template>
                   <template v-else>

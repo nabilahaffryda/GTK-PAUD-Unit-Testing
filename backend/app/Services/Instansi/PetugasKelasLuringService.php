@@ -103,7 +103,7 @@ class PetugasKelasLuringService
             ->where('paud_kelas_petugas_luring.akun_id', '=', $akunId);
     }
 
-    public function listKelas(int $akunId): Builder
+    public function listKelas(array $args, int $akunId): Builder
     {
         return PaudKelasLuring::query()
             ->whereHas('paudKelasPetugasLurings', function ($query) use ($akunId) {

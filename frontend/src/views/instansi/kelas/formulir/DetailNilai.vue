@@ -24,6 +24,7 @@
                       {{
                         $getDeepObj(peserta, 'ptk.data.nama') ||
                         $getDeepObj(peserta, 'paud_peserta_nonptk.data.nama') ||
+                        $getDeepObj(peserta, 'nama') ||
                         ''
                       }}
                     </div>
@@ -32,6 +33,7 @@
                       {{
                         $getDeepObj(peserta, 'ptk.data.email') ||
                         $getDeepObj(peserta, 'paud_peserta_nonptk.data.email') ||
+                        $getDeepObj(peserta, 'email') ||
                         ''
                       }}
                     </div>
@@ -42,7 +44,9 @@
           </div>
         </div>
         <div>
-          <v-chip class="pa-4" color="success">Sudah dinilai</v-chip>
+          <v-chip class="pa-4" :color="getTotal(tab + 1) > 0 ? 'success' : 'grey'" dark>
+            {{ getTotal(tab + 1) > 0 ? 'Sudah dinilai' : 'Belum dinilai' }}
+          </v-chip>
         </div>
       </div>
       <v-tabs v-model="tab" grow color="secondary">

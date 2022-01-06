@@ -727,7 +727,7 @@ class KelasLuringService
 
         foreach ($kelas->paudKelasPesertaLurings as $peserta) {
             if ($peserta->n_pendalaman_materi === null || $peserta->n_tugas_mandiri) {
-                throw new FlowException("Nilai peserta ada yang belum dinilai");
+                throw new FlowException("Peserta ada yang belum dinilai");
             }
         }
 
@@ -749,6 +749,59 @@ class KelasLuringService
         $kelas->laporan_k_verval_paud = MVervalPaud::KANDIDAT;
         $kelas->laporan_wkt_ajuan     = null;
         $kelas->save();
+
+        return $kelas;
+    }
+
+
+    /**
+     * @throws FlowException
+     */
+    public function vervalLaporan(Akun $akun, PaudKelasLuring $kelas, array $params): PaudKelasLuring
+    {
+        if (in_array($kelas->laporan_k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
+            throw new FlowException('Laporan kelas sudah diverval');
+        }
+
+        if ($kelas->laporan_k_verval_paud != MVervalPaud::DIAJUKAN) {
+            throw new FlowException('Laporan kelas belum diajukan');
+        }
+
+        $kelas->laporan_k_verval_paud  = $params['k_verval_paud'];
+        $kelas->laporan_wkt_verval     = Carbon::now();
+        $kelas->laporan_akun_id_verval = $akun->akun_id;
+        $kelas->laporan_alasan         = $params['alasan'] ?? null;
+        $kelas->no_sertifikat          = $params['no_sertifikat'] ?? null;
+        $kelas->tgl_sertifikat         = $params['tgl_sertifikat'] ?? null;
+
+        if (!$kelas->save()) {
+            throw new FlowException('Proses simpan status verval laporan tidak berhasil');
+        }
+
+        return $kelas;
+    }
+
+    /**
+     * @throws FlowException
+     */
+    public function batalVervalLaporan(Akun $akun, PaudKelasLuring $kelas): PaudKelasLuring
+    {
+        if ($kelas->laporan_k_verval_paud == MVervalPaud::DIAJUKAN) {
+            throw new FlowException('Kelas masih diajukan');
+        }
+
+        if (!in_array($kelas->laporan_k_verval_paud, [MVervalPaud::DITOLAK, MVervalPaud::REVISI, MVervalPaud::DISETUJUI])) {
+            throw new FlowException('Kelas belum diverval');
+        }
+
+        $kelas->laporan_k_verval_paud  = MVervalPaud::DIAJUKAN;
+        $kelas->laporan_wkt_verval     = Carbon::now();
+        $kelas->laporan_akun_id_verval = $akun->akun_id;
+        $kelas->laporan_alasan         = null;
+
+        if (!$kelas->save()) {
+            throw new FlowException('Proses simpan status verval laporan tidak berhasil');
+        }
 
         return $kelas;
     }

@@ -24,45 +24,20 @@
                       {{ $getDeepObj(detail, 'nama') || '-' }}
                     </div>
                     <div class="font-italic">
-                      {{ $getDeepObj(detail, `paud_diklat.data.instansi.data.nama`) || '-' }}
+                      {{ $getDeepObj(detail, `paud_diklat_luring.data.instansi.data.nama`) || '-' }}
                     </div>
                   </div>
-                  <div class="my-5">
-                    <div class="label--text">Deskripsi Kelas</div>
-                    <div class="body-1"></div>
-                  </div>
-                  <div class="my-5">
-                    <div class="label--text">Lokasi</div>
-                    <div class="body-1">
-                      {{
-                        [
-                          $getDeepObj(detail, 'm_kelurahan.data.keterangan') || '',
-                          $getDeepObj(detail, 'm_kecamatan.data.keterangan') || '',
-                          $getDeepObj(detail, 'paud_diklat.data.m_kota.data.keterangan') || '',
-                          $getDeepObj(detail, 'paud_diklat.data.m_propinsi.data.keterangan') || '',
-                        ].join(', ')
-                      }}
+                  <div class="my-2">
+                    <div v-if="form.no_sertifikat">
+                      <span class="label--text">Nomor Sertifikat : </span>
+                      {{ $getDeepObj(form, 'no_sertifikat') || '' }}
+                    </div>
+                    <div v-if="form.tgl_sertifikat">
+                      <span class="label--text">Tanggal Sertifikat : </span>
+                      {{ $localDate($getDeepObj(form, 'tgl_sertifikat')) || '' }}
                     </div>
                   </div>
-                  <v-row class="my-5">
-                    <v-col>
-                      <div class="label--text">Tanggal Mulai Kelas</div>
-                      <div class="body-1">
-                        {{
-                          $localDate($getDeepObj(detail, 'paud_diklat.data.paud_periode.data.tgl_diklat_mulai')) || '-'
-                        }}
-                      </div>
-                    </v-col>
-                    <v-col>
-                      <div class="label--text">Tanggal Selesai Kelas</div>
-                      <div class="body-1">
-                        {{
-                          $localDate($getDeepObj(detail, 'paud_diklat.data.paud_periode.data.tgl_diklat_selesai')) ||
-                          '-'
-                        }}
-                      </div>
-                    </v-col>
-                  </v-row>
+
                   <v-row>
                     <v-col cols="12" md="12" sm="12">
                       <berkases
@@ -72,18 +47,6 @@
                         :value="berkases"
                         @detil="onPreview"
                       />
-                    </v-col>
-                    <v-col cols="12" md="12" sm="12">
-                      <div class="my-2" v-if="Number(detail.k_verval_paud) === 6">
-                        <v-btn
-                          color="success"
-                          depressed
-                          :disabled="!$getDeepObj(detail, 'lms_url')"
-                          small
-                          @click="onLms($getDeepObj(detail, 'lms_url'))"
-                          ><v-icon left>mdi-link</v-icon> Menuju LMS</v-btn
-                        >
-                      </div>
                     </v-col>
                   </v-row>
                 </v-col>
@@ -113,6 +76,11 @@
                       :items="filteredItems"
                       :no-data-text="`Daftar ${item.text} belum ditemukan`"
                     >
+                      <template v-slot:[`item.aksi`]="{ item }">
+                        <template>
+                          <v-btn depressed dark color="blue" small @click="onDetil(item)"> detail </v-btn>
+                        </template>
+                      </template>
                     </v-data-table>
                   </div>
                 </v-tab-item>
@@ -194,13 +162,54 @@
       </v-col>
     </v-row>
     <popup-preview-detail ref="popup" :url="$getDeepObj(preview, 'url')" :title="$getDeepObj(preview, 'title')" />
+    <base-modal-full ref="modal" colorBtn="primary" generalError :title="formulir.title" :useSave="formulir.useSave">
+      <component
+        ref="formulir"
+        :is="formulir.form"
+        :type="formulir.type"
+        :detail="detail"
+        :masters="masters"
+        :initValue="formulir.initValue"
+        :jenis="jenis"
+      ></component>
+    </base-modal-full>
+    <v-dialog v-model="dialog" max-width="600px">
+      <v-card flat>
+        <v-card-title class="pa-0">
+          <v-toolbar color="secondary" dark>
+            <v-toolbar-title>Generate Sertifikat</v-toolbar-title>
+            <v-spacer />
+            <v-btn text icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
+          </v-toolbar>
+        </v-card-title>
+        <v-card-text class="pt-2 black--text">
+          <div class="body-1 font-weight-bold">Input Kebutuhan Sertifikat</div>
+          <span class="my-2">
+            Silakan isikan no sertifikat dan tanggal sertifikat untuk laporan kelas diklat luring dibawah ini.
+          </span>
+          <div class="mt-4" v-if="Number(pilihan) === 2">
+            <validation-observer ref="observer" v-slot="{ errors }">
+              <span class="label--text" v-show="false"> {{ errors }}</span>
+              <base-form-generator v-model="form" :schema="formSertifikat" />
+            </validation-observer>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click.native="dialog = false"> Batal </v-btn>
+          <v-btn depressed color="primary" @click="saveSertifikat"> Simpan </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
-import { ValidationProvider } from 'vee-validate';
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import { mapActions } from 'vuex';
 import Berkases from '../../profil/formulir/Berkas';
+import DetailNilai from '../../kelas/formulir/DetailNilai';
 import PopupPreviewDetail from '@components/popup/PreviewDetil';
+import BaseFormGenerator from '../../../../components/base/BaseFormGenerator';
 export default {
   props: {
     detail: {
@@ -240,7 +249,7 @@ export default {
       default: null,
     },
   },
-  components: { ValidationProvider, Berkases, PopupPreviewDetail },
+  components: { BaseFormGenerator, ValidationObserver, ValidationProvider, Berkases, PopupPreviewDetail, DetailNilai },
   data() {
     return {
       preview: {},
@@ -280,6 +289,7 @@ export default {
         { value: 'pengajar-tambahan', kPetugas: 2, text: 'Pengajar Tambahan' },
       ],
       formulir: {},
+      dialog: false,
     };
   },
   computed: {
@@ -300,8 +310,9 @@ export default {
         temp.push({ text: 'Kota/Kabupaten', value: 'kota', sortable: false });
       }
 
-      if (this.tab !== 1) {
-        temp.push({ text: 'Status', value: 'status', sortable: false });
+      if (Number(this.tab) === 0) {
+        temp.push({ text: 'Nilai', value: 'nilai', sortable: false });
+        temp.push({ text: '', value: 'aksi', sortable: false });
       }
 
       return temp;
@@ -310,11 +321,22 @@ export default {
     items() {
       return (this.pesertas || []).map((item) => {
         return {
-          nama: this.$getDeepObj(item, 'ptk.data.nama') || this.$getDeepObj(item, 'akun.data.nama') || '-',
-          email: this.$getDeepObj(item, 'ptk.data.email') || this.$getDeepObj(item, 'akun.data.email') || '-',
+          nama:
+            this.$getDeepObj(item, 'ptk.data.nama') ||
+            this.$getDeepObj(item, 'akun.data.nama') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.nama') ||
+            '-',
+          email:
+            this.$getDeepObj(item, 'ptk.data.email') ||
+            this.$getDeepObj(item, 'akun.data.email') ||
+            this.$getDeepObj(item, 'paud_peserta_nonptk.data.email') ||
+            '-',
           status: this.$getDeepObj(item, 'm_konfirmasi_paud.data.keterangan') || '-',
+          nilai: this.$getDeepObj(item, 'nilai'),
+          dapodik: item && Number(item.is_nonptk) === 1 ? 'Non Dapodik' : 'Dapodik',
           paud_kelas_petugas_id: this.$getDeepObj(item, 'paud_kelas_petugas_id'),
           paud_kelas_peserta_id: this.$getDeepObj(item, 'paud_kelas_peserta_id') || '',
+          paud_kelas_peserta_luring_id: this.$getDeepObj(item, 'paud_kelas_peserta_luring_id') || '',
           ptk_id: this.$getDeepObj(item, 'ptk_id') || '',
           propinsi: this.$getDeepObj(item, 'akun.data.m_propinsi.data.keterangan') || '-',
           kota: this.$getDeepObj(item, 'akun.data.m_kota.data.keterangan') || '-',
@@ -342,6 +364,36 @@ export default {
       };
     },
 
+    formSertifikat() {
+      return [
+        {
+          type: 'VTextField',
+          name: 'no_sertifikat',
+          label: `Nomor Sertifikat`,
+          labelColor: 'secondary',
+          hideDetails: false,
+          placeholder: 'Nomor Sertifikat',
+          hint: 'wajib diisi',
+          grid: { cols: 12 },
+          required: true,
+          outlined: true,
+          dense: true,
+          singleLine: true,
+        },
+        {
+          type: 'VDatePicker',
+          name: 'tgl_sertifikat',
+          label: 'Tanggal Sertifikat',
+          dense: true,
+          hint: 'wajib diisi',
+          grid: { cols: 12 },
+          required: true,
+          outlined: true,
+          singleLine: true,
+        },
+      ];
+    },
+
     catatan() {
       const catatan =
         this.jenis === 'lpd'
@@ -360,10 +412,15 @@ export default {
   },
 
   methods: {
-    ...mapActions('diklatVerval', ['getListKelas']),
+    ...mapActions('luringLaporanVerval', ['getListKelas', 'getDetailPesertaNilai']),
 
     getValue() {
-      return { pilihan: this.pilihan, id: this.id, alasan: (this.form && this.form.alasan) || '' };
+      let params = { pilihan: this.pilihan, id: this.id, alasan: (this.form && this.form.alasan) || '' };
+      if (this.pilihan === 2) {
+        Object.assign(params, { no_sertifikat: this.form.no_sertifikat, tgl_sertifikat: this.form.tgl_sertifikat });
+      }
+
+      return params;
     },
 
     reset() {
@@ -382,6 +439,7 @@ export default {
       this.getListKelas({
         id: this.$getDeepObj(this.detail, 'id'),
         tipe: tipe,
+        jenis: 'luring',
         params: {
           k_petugas_paud: k_petugas,
           count: 50,
@@ -392,7 +450,14 @@ export default {
     },
 
     onSelected(value) {
-      this.$set(this, 'pilihan', value);
+      if (+value === 2) {
+        this.dialog = true;
+        if (this.$refs.observer) this.$refs.observer.reset();
+        this.$set(this.form, 'no_sertifikat', '');
+        this.$set(this.form, 'tgl_sertifikat', '');
+      } else {
+        this.$set(this, 'pilihan', value);
+      }
     },
 
     onPreview(berkas) {
@@ -406,6 +471,42 @@ export default {
 
     onLms(url) {
       window.open(url, '_blank');
+    },
+
+    getNilai(item) {
+      return this.$getDeepObj(item, 'n_pendalaman_materi') || this.$getDeepObj(item, 'n_tugas_mandiri') || null;
+    },
+
+    async onDetil(item) {
+      const resp = await this.getDetailPesertaNilai({
+        kelas_id: this.$getDeepObj(this.detail, 'id'),
+        id: this.$getDeepObj(item, 'paud_kelas_peserta_luring_id'),
+      }).then(({ data }) => data);
+
+      this.$set(this.formulir, 'title', 'Penilaian Peserta');
+      this.$set(this.formulir, 'form', 'DetailNilai');
+      this.$set(this.formulir, 'useSave', false);
+      this.$refs.modal.open();
+
+      this.$nextTick(() => {
+        // this.$refs.formulir.reset();
+        this.$set(
+          this.formulir,
+          'initValue',
+          Object.assign({
+            peserta: Object.assign(item, { is_nilai: this.getNilai(item) }),
+            instruments: resp,
+          })
+        );
+      });
+    },
+
+    async saveSertifikat() {
+      const valid = await this.$refs.observer.validate();
+      if (valid) {
+        this.dialog = false;
+        this.pilihan = 2;
+      }
     },
   },
   watch: {

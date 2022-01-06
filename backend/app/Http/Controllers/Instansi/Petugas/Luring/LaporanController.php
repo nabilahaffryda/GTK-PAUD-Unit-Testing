@@ -8,8 +8,10 @@ use App\Http\Requests\Instansi\Petugas\Luring\Laporan\IndexRequest;
 use App\Http\Requests\Instansi\Petugas\Luring\Laporan\UploadRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
+use App\Models\MInstrumenNilaiLuringPaud;
 use App\Models\PaudKelasLuring;
 use App\Models\PaudKelasPesertaLuring;
+use App\Models\PaudKelasPesertaLuringNilai;
 use App\Services\Instansi\KelasLuringPesertaService;
 use App\Services\Instansi\KelasLuringService;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,13 +72,23 @@ class LaporanController extends Controller
             abort(Response::HTTP_NOT_FOUND);
         }
 
-        $nilais = $peserta->paudKelasPesertaLuringNilais()
-            ->select('paud_kelas_peserta_luring_nilai.*')
-            ->join('m_instrumen_nilai_luring_paud', 'm_instrumen_nilai_luring_paud.k_instrumen_nilai_luring_paud', '=', 'paud_kelas_peserta_luring_nilai.k_instrumen_nilai_luring_paud')
-            ->orderBy('m_instrumen_nilai_luring_paud.urutan')
-            ->with('MInstrumenNilaiLuringPaud')
-            ->get();
+        $mInstruments = MInstrumenNilaiLuringPaud::query()
+            ->orderBy('urutan')
+            ->get()
+            ->keyBy('k_instrumen_nilai_luring_paud');
 
-        return BaseCollection::make($nilais);
+        $nilais = $peserta->paudKelasPesertaLuringNilais()
+            ->get()
+            ->keyBy('k_instrumen_nilai_luring_paud');
+
+        $results = PaudKelasPesertaLuringNilai::make()->newCollection();
+        foreach ($mInstruments as $kInstrumen => $mInstrument) {
+            $results[] = $nilais->get($kInstrumen, fn() => PaudKelasPesertaLuringNilai::make([
+                'paud_kelas_peserta_luring_id'  => $kelas->paud_kelas_luring_id,
+                'k_instrumen_nilai_luring_paud' => $kInstrumen,
+            ]));
+        }
+
+        return BaseCollection::make($results->load(['MInstrumenNilaiLuringPaud']));
     }
 }

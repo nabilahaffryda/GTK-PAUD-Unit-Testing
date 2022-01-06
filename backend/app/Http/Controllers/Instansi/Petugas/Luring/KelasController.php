@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Instansi\Petugas\Luring;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Instansi\Petugas\Kelas\IndexRequest;
+use App\Http\Requests\Instansi\Petugas\Luring\Kelas\IndexRequest;
+use App\Http\Requests\Instansi\Petugas\Luring\Kelas\PesertaRequest;
 use App\Http\Resources\BaseCollection;
 use App\Http\Resources\BaseResource;
 use App\Models\MPetugasPaud;
@@ -23,16 +24,16 @@ class KelasController extends Controller
     {
     }
 
-    public function index()
+    public function index(IndexRequest $request)
     {
         return BaseCollection::make($this
             ->service
-            ->listKelas(akunId())
+            ->listKelas($request->all(), akunId())
             ->addSelect([
                 'is_ppm'     => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::PENGAJAR . ' then 1 else 0 end')
                     ->where('paud_kelas_petugas_luring.akun_id', '=', akunId())
                     ->whereColumn('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', 'paud_kelas_luring.paud_kelas_luring_id'),
-                'is_pptm'    => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::PENGAJAR_TAMBAHAN . ' then 1 else 0 end')
+                'is_pptm'    => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::PEMBIMBING_PRAKTIK . ' then 1 else 0 end')
                     ->where('paud_kelas_petugas_luring.akun_id', '=', akunId())
                     ->whereColumn('paud_kelas_petugas_luring.paud_kelas_luring_id', '=', 'paud_kelas_luring.paud_kelas_luring_id'),
                 'is_admin'   => PaudKelasPetugasLuring::selectRaw('case when `paud_kelas_petugas_luring`.`k_petugas_paud` = ' . MPetugasPaud::ADMIN_KELAS . ' then 1 else 0 end')
@@ -45,7 +46,7 @@ class KelasController extends Controller
                 'paudDiklatLuring',
                 'laporanVervalPaud',
             ])
-            ->get()
+            ->paginate((int)$request->get('count', 10))
         );
     }
 
@@ -60,7 +61,7 @@ class KelasController extends Controller
         return BaseResource::make($kelas);
     }
 
-    public function peserta(PaudKelasLuring $kelas, IndexRequest $request)
+    public function peserta(PaudKelasLuring $kelas, PesertaRequest $request)
     {
         $pesertas = $kelas
             ->paudKelasPesertaLurings()

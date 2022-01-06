@@ -35,6 +35,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property null|string $file_laporan
  * @property null|string $laporan_alasan
  * @property null|string $laporan_catatan
+ * @property null|Carbon $laporan_wkt_verval
+ * @property null|string $no_sertifikat
+ * @property null|Carbon $tgl_sertifikat
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|string $created_by
@@ -76,6 +79,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|PaudKelasLuring whereFileLaporan($value)
  * @method static Builder|PaudKelasLuring whereLaporanAlasan($value)
  * @method static Builder|PaudKelasLuring whereLaporanCatatan($value)
+ * @method static Builder|PaudKelasLuring whereLaporanWktVerval($value)
+ * @method static Builder|PaudKelasLuring whereNoSertifikat($value)
+ * @method static Builder|PaudKelasLuring whereTglSertifikat($value)
  * @method static Builder|PaudKelasLuring whereCreatedAt($value)
  * @method static Builder|PaudKelasLuring whereUpdatedAt($value)
  * @method static Builder|PaudKelasLuring whereCreatedBy($value)
@@ -126,6 +132,9 @@ class PaudKelasLuring extends Eloquent
         'file_laporan' => 'string',
         'laporan_alasan' => 'string',
         'laporan_catatan' => 'string',
+        'laporan_wkt_verval' => 'datetime',
+        'no_sertifikat' => 'string',
+        'tgl_sertifikat' => 'date:Y-m-d',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'created_by' => 'string',
@@ -172,6 +181,9 @@ class PaudKelasLuring extends Eloquent
         'file_laporan',
         'laporan_alasan',
         'laporan_catatan',
+        'laporan_wkt_verval',
+        'no_sertifikat',
+        'tgl_sertifikat',
         'created_by',
         'updated_by',
     ];
