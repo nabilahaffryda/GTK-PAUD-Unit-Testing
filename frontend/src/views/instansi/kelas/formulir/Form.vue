@@ -37,7 +37,7 @@
                             <div class="body-2 label--text"> Surel </div>
                           </v-col>
                           <v-col cols="12" md="6" sm="6">
-                            <div class="body-2 black--text"
+                            <div class="body-2 black--text" id="nama"
                               >:
                               {{
                                 $getDeepObj(peserta, 'ptk.data.nama') ||
@@ -45,7 +45,7 @@
                                 ''
                               }}
                             </div>
-                            <div class="body-2 black--text"
+                            <div class="body-2 black--text" id="email"
                               >:
                               {{
                                 $getDeepObj(peserta, 'ptk.data.email') ||
@@ -72,7 +72,7 @@
           </v-col>
           <v-col cols="12" md="12" sm="12">
             <v-alert type="info" text>
-              <span class="body-2">
+              <span class="body-2" id="tahap">
                 Penilaian pada tahap <b>{{ is_pptm ? 'pelaksanaan tugas mandiri' : 'pendalaman materi' }}</b>
               </span>
             </v-alert>
@@ -110,7 +110,7 @@
             <v-divider></v-divider>
             <div class="d-flex px-2">
               <div class="pa-2 font-weight-bold body-2 black--text">Total</div>
-              <div class="pa-2 ml-auto font-weight-bold body-2 black--text">{{ total }}</div>
+              <div class="pa-2 ml-auto font-weight-bold body-2 black--text" id="total">{{ total }}</div>
             </div>
           </v-col>
         </v-row>
