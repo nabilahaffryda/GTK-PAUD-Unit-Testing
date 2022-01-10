@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-app>
     <!--notif jadwal-->
     <v-card tile flat class="my-5">
       <v-card-text class="pa-0">
@@ -28,7 +28,7 @@
           @download="onDownload"
         >
           <template v-slot:subtitle>
-            <div class="subtitle-1 black--text">
+            <div class="subtitle-1 black--text" id="total">
               Daftar Peserta Luring <b>{{ total }} </b>
             </div>
           </template>
