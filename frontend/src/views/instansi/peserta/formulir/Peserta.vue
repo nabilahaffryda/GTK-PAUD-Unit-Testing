@@ -148,8 +148,10 @@
                 <v-card-actions class="pa-0">
                   <span class="grey--text font-italic">Form dengan tanda (*) wajib di isi</span>
                   <v-spacer></v-spacer>
-                  <v-btn v-if="step !== 1" class="text-md-right" right text> Kembali </v-btn>
-                  <v-btn class="text-md-right" right color="primary" @click="onValidate(true)"> Selanjutnya </v-btn>
+                  <v-btn v-if="step !== 1" class="text-md-right" id="back" right text> Kembali </v-btn>
+                  <v-btn class="text-md-right" right color="primary" id="next" @click="onValidate(true)">
+                    Selanjutnya
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
@@ -167,7 +169,15 @@
                       <base-list-info class="px-0" tipe="row" :info="info"></base-list-info>
                       <div>
                         <span class="caption">File Sertifikat : </span>
-                        <v-btn class="mx-2" color="blue" outlined small depressed @click="onView('sertifikat')">
+                        <v-btn
+                          class="mx-2"
+                          color="blue"
+                          id="view"
+                          outlined
+                          small
+                          depressed
+                          @click="onView('sertifikat')"
+                        >
                           Lihat Sertifikat
                         </v-btn>
                       </div>
@@ -179,6 +189,7 @@
                   <v-btn
                     right
                     text
+                    id="back2"
                     @click="
                       () => {
                         step--;
