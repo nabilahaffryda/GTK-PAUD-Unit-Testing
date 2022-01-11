@@ -1,5 +1,5 @@
 <template>
-  <div class="verval">
+  <div class="verval" data-app>
     <!--daftar-->
     <v-card tile flat class="my-5">
       <v-card-text class="pa-0">
@@ -25,7 +25,7 @@
           @reload="onReload"
         >
           <template v-slot:subtitle>
-            <div class="body-1 black--text">
+            <div class="body-1 black--text" id="total">
               Daftar Ajuan Verval <b>{{ total }}</b>
             </div>
           </template>
