@@ -53,7 +53,7 @@
               </v-row>
 
               <v-tabs v-model="tab" fixed-tabs>
-                <v-tab v-for="item in tabItems" :key="item.value">
+                <v-tab v-for="item in tabItems" :key="item.value" id="tab">
                   {{ item.text }}
                 </v-tab>
               </v-tabs>
