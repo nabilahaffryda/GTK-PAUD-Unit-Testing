@@ -46,28 +46,11 @@ localVue.mixin({
             if (!array || !array.length) return {};
             return arrayToObject(array, key);
         },
-        $allow(akses, policy) {
-            // cek jika tidak ada akses
-            if (!akses || (akses && typeof akses === 'boolean')) return typeof akses === 'boolean' ? akses : true;
-
-            // jika ada ambil preferensi akses
-            const akseses = store.getters['preferensi/akseses'] || [];
-
-            let allow = false;
-            const pathAkses = akses && typeof akses === 'string' && akses.split('|');
-            if (pathAkses.length) {
-                pathAkses.forEach((path) => {
-                    if (allow) return;
-                    if (!allow && policy) {
-                        allow =
-                            !path || path === 'true' || ((akseses || []).filter((item) => item === path).length > 0 && policy[path]);
-                    } else if (!allow && !policy) {
-                        allow = !path || path === 'true' || (akseses || []).filter((item) => item === path).length > 0;
-                    }
-                });
-            }
-
-            return allow;
+        $allow() {
+            return true;
+        },
+        $titleCase(kata) {
+            return (kata && kata.charAt(0).toUpperCase() + kata.slice(1)) || '';
         },
         $durasi(start, end, options) {
             return duration(start, end, options);

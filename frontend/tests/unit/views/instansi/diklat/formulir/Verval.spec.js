@@ -2,6 +2,7 @@ import { createLocalVue, mount } from "@vue/test-utils";
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Vuetify from "vuetify";
+import BaseModalFull from "@/components/base/BaseModalFull.vue";
 import Vuex from "vuex";
 import { getDeepObj, localDate } from '@utils/format';
 import Verval from "@/views/instansi/diklat/formulir/Verval.vue";
@@ -71,6 +72,9 @@ describe('Verval.vue', () => {
             store,
             stubs: {
                 Viewer: true
+            },
+            components: {
+                BaseModalFull
             },
             computed: {
                 berkases() {

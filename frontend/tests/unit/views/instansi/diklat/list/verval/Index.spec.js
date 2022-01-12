@@ -45,6 +45,9 @@ const store = new Vuex.Store({
                 getTimVerval() {
                     return true
                 },
+                getPeriode() {
+                    return true
+                },
             }
         },
     },
@@ -62,6 +65,9 @@ localVue.mixin({
         },
         $durasi(start, end, options) {
             return duration(start, end, options);
+        },
+        $titleCase(kata) {
+            return (kata && kata.charAt(0).toUpperCase() + kata.slice(1)) || '';
         },
         $mapForMaster(data, text = false) {
             // cek type data
