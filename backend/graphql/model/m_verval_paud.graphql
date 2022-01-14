@@ -1,5 +1,0 @@
-type MVervalPaud {
-    k_verval_paud: Int!
-    singkat: String
-    keterangan: String
-}

@@ -1,5 +1,0 @@
-type MKonfirmasiPaud {
-    k_konfirmasi_paud: Int!
-    singkat: String
-    keterangan: String
-}

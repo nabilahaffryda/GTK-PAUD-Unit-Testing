@@ -1,5 +1,0 @@
-type MUnsurPengajarPaud {
-    k_unsur_pengajar_paud: Int!
-    singkat: String
-    keterangan: String
-}

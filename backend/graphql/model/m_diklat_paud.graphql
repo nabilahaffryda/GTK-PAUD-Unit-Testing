@@ -1,5 +1,0 @@
-type MDiklatPaud {
-    k_diklat_paud: Int!
-    singkat: String
-    keterangan: String
-}

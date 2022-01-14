@@ -1,5 +1,0 @@
-type MPetugasPaud {
-    k_petugas_paud: Int!
-    singkat: String
-    keterangan: String
-}

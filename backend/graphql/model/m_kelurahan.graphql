@@ -1,9 +1,0 @@
-type MKelurahan {
-    k_kelurahan: Int!
-    k_kecamatan: Int!
-    singkat: String
-    keterangan: String!
-    kode_dagri: Int
-
-    m_kecamatan: MKecamatan @belongsTo(relation: "mKecamatan")
-}
